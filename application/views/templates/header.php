@@ -21,7 +21,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <head>
     <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url(); ?>assets/images/Logo-min.png">
-    <title>TravelExp</title>
+    <title>SIRCT</title>
     <!-- CSS Requerido -->
     <script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/jquery/jquery.min.js"></script>
@@ -150,11 +150,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <style>
     .animacion_nueva { animation : scales 4.0s ease infinite; -webkit-animation: scales 1.9s ease-in infinite alternate; -moz-animation: scales 1.9s ease-in infinite alternate; animation: scales 1.9s ease-in infinite alternate; }
     @-moz-keyframes scales {
-      from { -webkit-transform: scale(0.8); -moz-transform: scale(0.8); transform: scale(0.8); 
+      from { -webkit-transform: scale(0.8); -moz-transform: scale(0.8); transform: scale(0.8);
       } to { -webkit-transform: scale(1.1); -moz-transform: scale(1.1); transform: scale(1.1); }
     }
     @-webkit-keyframes scales {
-        from { -webkit-transform: scale(1.0); -moz-transform: scale(1.0); transform: scale(1.0); 
+        from { -webkit-transform: scale(1.0); -moz-transform: scale(1.0); transform: scale(1.0);
         } to { -webkit-transform: scale(1.2); -moz-transform: scale(1.2); transform: scale(1.2); }
     }
     @-o-keyframes scales {
@@ -307,7 +307,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     </ul>
                 </div>
             </div>
-            
+
         </nav>
     </header>
     <!-- ============================================================== -->

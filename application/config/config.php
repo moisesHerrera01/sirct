@@ -24,9 +24,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$config['nombre_base'] = 'establecimientos'; //nombre base del proyecto (SICBAF, viaticos, seguridad, etc.)
+$config['nombre_base'] = 'sirct'; //nombre base del proyecto (SICBAF, viaticos, seguridad, etc.)
 $config['base_url'] = 'http://'.$_SERVER['SERVER_NAME'].'/'.$config['nombre_base'].'/'; //Ruta base del proyecto
-$config['id_sistema'] = "15"; //Id del sistema en la base de datos
+$config['id_sistema'] = "20"; //Id del sistema en la base de datos
 
 /*
 |--------------------------------------------------------------------------
@@ -544,7 +544,7 @@ function getBrowser(){
     elseif (preg_match('/windows|win32/i', $u_agent)) {
         $platform = 'windows';
     }
-   
+
     // Next get the name of the useragent yes seperately and for good reason
     if(preg_match('/MSIE/i',$u_agent) && !preg_match('/Opera/i',$u_agent))
     {
@@ -576,7 +576,7 @@ function getBrowser(){
         $bname = 'Netscape';
         $ub = "Netscape";
     }
-   
+
     // finally get the correct version number
     $known = array('Version', $ub, 'other');
     $pattern = '#(?<browser>' . join('|', $known) .
@@ -584,7 +584,7 @@ function getBrowser(){
     if (!preg_match_all($pattern, $u_agent, $matches)) {
         // we have no matching number just continue
     }
-   
+
     // see how many we have
     $i = count($matches['browser']);
     if ($i != 1) {
@@ -600,10 +600,10 @@ function getBrowser(){
     else {
         $version= $matches['version'][0];
     }
-   
+
     // check if we have a number
     if ($version==null || $version=="") {$version="?";}
-   
+
     return array(
         'userAgent' => $u_agent,
         'name'      => $bname,

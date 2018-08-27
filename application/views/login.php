@@ -22,11 +22,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <style>
     .animacion_nueva { animation : scales 4.0s ease infinite; -webkit-animation: scales 1.9s ease-in infinite alternate; -moz-animation: scales 1.9s ease-in infinite alternate; animation: scales 1.9s ease-in infinite alternate; }
     @-moz-keyframes scales {
-      from { -webkit-transform: scale(0.8); -moz-transform: scale(0.8); transform: scale(0.8); 
+      from { -webkit-transform: scale(0.8); -moz-transform: scale(0.8); transform: scale(0.8);
       } to { -webkit-transform: scale(1.1); -moz-transform: scale(1.1); transform: scale(1.1); }
     }
     @-webkit-keyframes scales {
-        from { -webkit-transform: scale(1.0); -moz-transform: scale(1.0); transform: scale(1.0); 
+        from { -webkit-transform: scale(1.0); -moz-transform: scale(1.0); transform: scale(1.0);
         } to { -webkit-transform: scale(1.2); -moz-transform: scale(1.2); transform: scale(1.2); }
     }
     @-o-keyframes scales {
@@ -55,30 +55,30 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <nav class="navbar top-navbar navbar-light" style="justify-content: space-between;">
 
             <div class="pull-left">
-                
+
                 <span class="nav-item" style="position: inline-block;"> <a class="nav-link sidebartoggler text-white waves-effect waves-dark" href="javascript:void(0)" style="font-size: 20px;"> <span class="mdi mdi-login-variant"></span> INICIO DE SESIÓN</a> </span>
             </div>
             <div class="pull-right">
                 <div class="navbar-collapse">
 
                     <ul class="navbar-nav my-lg-0">
-                            <li class="nav-item pull-right"><a id="initial_user" data-toggle="tooltip" title="" data-original-title="Acerca de TravelExp" class="nav-link waves-effect waves-dark" onclick="swal({ title: 'TravelExp V1.0', text: 'Su nombre proviene del inglés << Travel Expensive >> y significa << Viáticos >>. Esto se debe al propósito por el que se llevó a cabo su desarrollado, de modo que, es correcto referirse a la herramienta como: (Sistema de viáticos)', showConfirmButton: true });" href="javascript:void(0)"><span class="round round-inverse bg-inverse"><span class="mdi mdi-help" style="font-size: 35px;"></span></span></a> </li>
+                            <li class="nav-item pull-right"><a id="initial_user" data-toggle="tooltip" title="" data-original-title="Acerca de SIRCT" class="nav-link waves-effect waves-dark" onclick="swal({ title: 'SIRCT V1.0', text: 'Sistema Informático para el seguimiento de Resolución Interna de Conflictos de Trabajo', showConfirmButton: true });" href="javascript:void(0)"><span class="round round-inverse bg-inverse"><span class="mdi mdi-help" style="font-size: 35px;"></span></span></a> </li>
                     </ul>
                 </div>
             </div>
-            
+
         </nav>
     </header>
-    
-    <section id="wrapper" class="login-register img-responsive login-sidebar" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/viaticos2.jpg);">
+
+    <section id="wrapper" class="login-register img-responsive login-sidebar" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/resolucion.jpg);">
   <div class="login-box card">
     <div class="card-body">
-     <?php 
-        if($navegatorless){ 
+     <?php
+        if($navegatorless){
             echo form_open('', array('id' => 'loginform', 'style' => 'margin-top: 0px;', 'class' => ''));
         }else{
             echo form_open('', array('id' => 'loginform', 'style' => 'margin-top: 0px;', 'class' => 'form-horizontal form-material'));
-        } 
+        }
      ?>
         <a href="javascript:void(0)" class="text-center db"><img height="160px;" src="<?php echo base_url(); ?>assets/images/Logo.png" alt="Home" /></a>
        <div class="form-group m-t-40">
@@ -90,7 +90,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <div class="form-group" style="margin-top: 10px;">
             <div class="col-lg-12">
                 <div class="switch" align="center" style="height: 28px;">
-                    <label>Ocultar 
+                    <label>Ocultar
                         <input type="checkbox" id="cheque_pass" onclick="showhidepassword();"><span class="lever"></span>Mostrar contraseña</label>
                 </div>
             </div>
@@ -107,7 +107,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 </section>
 <script>
-$(function(){     
+$(function(){
     $("#loginform").on("submit", function(e){
         e.preventDefault(); var f = $(this);
         $("#Save_info").find("small").text("Espere. Estamos buscando en el sistema...");
@@ -151,7 +151,7 @@ $(function(){
             $("#Save_info").hide(0);
             console.log(res);
         });
-            
+
     });
 });
 </script>
