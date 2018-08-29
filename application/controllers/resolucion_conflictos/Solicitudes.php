@@ -16,6 +16,6 @@ class Solicitudes extends CI_Controller {
   }
 
   public function tabla_solicitudes(){
-    $this->load->view('viaticos/resolucion_conflictos/tabla_solicitudes');
+    $this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_solicitudes');
   }
 }
