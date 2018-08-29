@@ -1,6 +1,6 @@
 <?php $ruta_segmento = trim(obtener_segmentos(2)); ?>
 </div>
-   
+
     <script src="<?php echo base_url(); ?>assets/plugins/jquery/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/viaticos_validation.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bootstrap/js/popper.min.js"></script>
@@ -19,7 +19,10 @@
     <script src="<?php echo base_url(); ?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/moment.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/moment-with-locales.min.js"></script>
-    
+    <script src="<?php echo base_url(); ?>assets/js/mask.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+
     <script src="<?php echo base_url(); ?>assets/plugins/toast-master/js/jquery.toast.js"></script>
 
 <?php if($ruta_segmento == "configuraciones/informacion_empleado"){ ?>
@@ -31,14 +34,12 @@
 <?php } ?>
 
 <?php if($ruta_segmento == "viaticos/solicitud_viatico"){ ?>
-    <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
-    <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/dropify/dist/js/dropify.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/mask.js"></script>
+
 <?php } ?>
- 
+
 <?php if($ruta_segmento == "informes/menu_reportes"){ ?>
     <!-- JS para reportes  -->
     <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>

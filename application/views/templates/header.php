@@ -32,6 +32,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/colors/blue.css" id="theme" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <!--
     <link href="<?php echo base_url(); ?>assets/plugins/switchery/dist/switchery.min.css" rel="stylesheet" />
     -->
@@ -44,8 +46,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <?php } ?>
 
 <?php if($ruta_segmento == "viaticos/solicitud_viatico"){ ?>
-    <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
-    <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/dropify/dist/css/dropify.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet">
 <?php } ?>

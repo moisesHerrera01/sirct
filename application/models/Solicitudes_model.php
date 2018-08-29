@@ -7,22 +7,19 @@ class Solicitudes_model extends CI_Model {
 		parent::__construct();
 	}
 
-	function insertar_establecimiento($data){
-		if($this->db->insert('sge_empresa', array(
-			'tiposolicitud_empresa' => $data['tiposolicitud_empresa'],
-			'id_oficina' => $data['id_oficina'],
-			'nombre_empresa' => $data['nombre_empresa'],
-			'numtotal_empresa' => $data['numtotal_empresa'],
-			'id_catalogociiu' => $data['id_catalogociiu'],
-			'nit_empresa' => $data['nit_empresa'],
+	function insertar_solicitud($data){
+		if($this->db->insert('sct_personaci', array(
+			'nombre_personaci' => $data['nombre_personaci'],
+			'apellido_personaci' => $data['apellido_personaci'],
+			'dui' => $data['dui'],
+			'telefono_personaci' => $data['telefono_personaci'],
 			'id_municipio' => $data['id_municipio'],
-			'correoelectronico_empresa' => $data['correoelectronico_empresa'],
-			'direccion_empresa' => $data['direccion_empresa'],
-			'activobalance_empresa' => $data['activobalance_empresa'],
-			'capitalsocial_empresa' => $data['capitalsocial_empresa'],
-			'trabajadores_adomicilio_empresa' => $data['trabajadores_adomicilio_empresa'],
-			'tipo_empresa' => $data['tipo_empresa'],
-			'estado_empresa' => $data['estado_empresa']
+			'direccion_personaci' => $data['direccion_personaci'],
+			'fnacimiento_personaci' => $data['fnacimiento_personaci'],
+			'sexo_personaci' => $data['sexo_personaci'],
+			'estudios_personaci' => $data['estudios_personaci'],
+			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
+			'discapacidad_personaci' => $data['discapacidad_personaci']
 		))){
 			return "exito,".$this->db->insert_id();
 		}else{
@@ -30,29 +27,26 @@ class Solicitudes_model extends CI_Model {
 		}
 	}
 
-	function mostrar_actividad(){
-		$query = $this->db->get("vyp_actividades");
+	function mostrar_solicitud(){
+		$query = $this->db->get("sct_personaci");
 		if($query->num_rows() > 0) return $query;
 		else return false;
 	}
 
-	function editar_establecimiento($data){
-		$this->db->where("id_empresa",$data["id_empresa"]);
-		if($this->db->update('sge_empresa', array(
-			'tiposolicitud_empresa' => $data['tiposolicitud_empresa'],
-			'id_oficina' => $data['id_oficina'],
-			'nombre_empresa' => $data['nombre_empresa'],
-			'numtotal_empresa' => $data['numtotal_empresa'],
-			'id_catalogociiu' => $data['id_catalogociiu'],
-			'nit_empresa' => $data['nit_empresa'],
+	function editar_solicitud($data){
+		$this->db->where("id_personaci",$data["id_personaci"]);
+		if($this->db->update('sct_personaci', array(
+			'nombre_personaci' => $data['nombre_personaci'],
+			'apellido_personaci' => $data['apellido_personaci'],
+			'dui' => $data['dui'],
+			'telefono_personaci' => $data['telefono_personaci'],
 			'id_municipio' => $data['id_municipio'],
-			'correoelectronico_empresa' => $data['correoelectronico_empresa'],
-			'direccion_empresa' => $data['direccion_empresa'],
-			'activobalance_empresa' => $data['activobalance_empresa'],
-			'capitalsocial_empresa' => $data['capitalsocial_empresa'],
-			'trabajadores_adomicilio_empresa' => $data['trabajadores_adomicilio_empresa'],
-			'tipo_empresa' => $data['tipo_empresa'],
-			'estado_empresa' => $data['estado_empresa']
+			'direccion_personaci' => $data['direccion_personaci'],
+			'fnacimiento_personaci' => $data['fnacimiento_personaci'],
+			'sexo_personaci' => $data['sexo_personaci'],
+			'estudios_personaci' => $data['estudios_personaci'],
+			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
+			'discapacidad_personaci' => $data['discapacidad_personaci']
 		))){
 			return "exito";
 		}else{
@@ -60,15 +54,15 @@ class Solicitudes_model extends CI_Model {
 		}
 	}
 
-	function eliminar_actividad($data){
-  		if($this->db->delete("sge_empresa",array('id_empresa' => $data['id_empresa']))){
+	function eliminar_solicitud($data){
+  		if($this->db->delete("sct_personaci",array('id_personaci' => $data['id_personaci']))){
   			return "exito";
   		}else{
   			return "fracaso";
   		}
 	}
 
-	function insertar_representante($data){
+	/*function insertar_representante($data){
 		if($this->db->insert('sge_representante', array(
 			'id_empresa' => $data['id_empresa'],
 			'nombres_representante' => $data['nombres_representante'],
@@ -101,7 +95,7 @@ class Solicitudes_model extends CI_Model {
   		}else{
   			return "fracaso";
   		}
-	}
+	}*/
 
 	function obtener_ultimo_id($tabla,$nombreid){
 		$this->db->order_by($nombreid, "asc");

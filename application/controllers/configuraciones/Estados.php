@@ -18,10 +18,6 @@ class Estados extends CI_Controller {
 		$this->load->view('configuraciones/estados_ajax/tabla_estados');
 	}
 
-	public function combo_viatico_hora(){
-		$this->load->view('configuraciones/estados_ajax/combo_viatico_hora');
-	}
-
 	public function gestionar_estados(){
 
 		if($this->input->post('band') == "save"){
