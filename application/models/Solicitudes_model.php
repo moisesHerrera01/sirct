@@ -11,7 +11,7 @@ class Solicitudes_model extends CI_Model {
 		if($this->db->insert('sct_personaci', array(
 			'nombre_personaci' => $data['nombre_personaci'],
 			'apellido_personaci' => $data['apellido_personaci'],
-			'dui' => $data['dui'],
+			'dui_personaci' => $data['dui_personaci'],
 			'telefono_personaci' => $data['telefono_personaci'],
 			'id_municipio' => $data['id_municipio'],
 			'direccion_personaci' => $data['direccion_personaci'],
@@ -38,7 +38,7 @@ class Solicitudes_model extends CI_Model {
 		if($this->db->update('sct_personaci', array(
 			'nombre_personaci' => $data['nombre_personaci'],
 			'apellido_personaci' => $data['apellido_personaci'],
-			'dui' => $data['dui'],
+			'dui_personaci' => $data['dui_personaci'],
 			'telefono_personaci' => $data['telefono_personaci'],
 			'id_municipio' => $data['id_municipio'],
 			'direccion_personaci' => $data['direccion_personaci'],

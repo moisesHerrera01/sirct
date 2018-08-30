@@ -20,7 +20,7 @@
                     $add = "";
 
                     if(!empty($nr)){
-                        $add .= "AND l.nr_empleado = '".$nr."'";
+                        $add .= "AND l.nr/*l.nr_empleado*/ = '".$nr."'";
                     }
 
                     if(!empty($id_estadoci)){
@@ -51,7 +51,8 @@
                                               JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                               JOIN sct_personaci p ON p.id_personaci=e.id_personaci
                                               JOIN sge_empleador em ON em.id_empleador=p.id_empleador
-                                              JOIN lista_empleados_estado l on l.id_empleado=e.id_personal
+                                              /*JOIN lista_empleados_estado l on l.id_empleado=e.id_personal*/
+                                              JOIN sir_empleado l on l.id_empleado=e.id_personal
                                               ".$add." ORDER BY e.id_expedienteci DESC");
 
                     if($solicitudes->num_rows() > 0){

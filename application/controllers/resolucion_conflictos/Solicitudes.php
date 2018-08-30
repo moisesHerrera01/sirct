@@ -21,22 +21,22 @@ class Solicitudes extends CI_Controller {
 
 	public function gestionar_solicitudes(){
 
-		if($this->input->post('band') == "save"){
 
+		if($this->input->post('band') == "save"){
 			$data = array(
       'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
-			'dui' => $this->input->post('dui'),
+			'dui_personaci' => $this->input->post('dui'),
 			'telefono_personaci' => $this->input->post('telefono'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion'),
-			'fnacimiento_personaci' => $this->input->post('fecha_nacimiento'),
+			'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
 			'sexo_personaci' => $this->input->post('sexo'),
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad')
 			);
-			echo $this->solicitudes_model->insertar_estado($data);
+			echo $this->solicitudes_model->insertar_solicitud($data);
 
 		}else if($this->input->post('band') == "edit"){
 
@@ -44,7 +44,7 @@ class Solicitudes extends CI_Controller {
 			'id_personaci' => $this->input->post('id_personaci'),
 			'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
-			'dui' => $this->input->post('dui'),
+			'dui_personaci' => $this->input->post('dui'),
 			'telefono_personaci' => $this->input->post('telefono'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion'),
@@ -63,5 +63,31 @@ class Solicitudes extends CI_Controller {
 			);
 			echo $this->solicitudes_model->eliminar_estado($data);
 		}
+	}
+
+	public function combo_establecimiento() {
+
+		$this->db->select("*");
+		$this->db->group_by('e.nombre_empresa');
+		$query = $this->db->get('sge_empresa e');
+
+		$data = $query->result();
+
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_establecimiento',
+			array(
+				'id' => $this->input->post('id'),
+				'establecimiento' => $query
+			)
+		);
+	}
+
+	public function combo_ocupacion() {
+		$data = $this->db->get('sge_catalogociuo');
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_ocupacion',
+			array(
+				'id' => $this->input->post('id'),
+				'ocupacion' => $data
+			)
+		);
 	}
 }

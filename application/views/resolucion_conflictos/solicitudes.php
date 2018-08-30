@@ -26,6 +26,37 @@ function cambiar_pestana(tipo){
     tablasolicitudes();
 }
 
+function combo_establecimiento(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_establecimiento').html(res);
+    $(".select2").select2();
+  });
+
+}
+
+
+function combo_ocupacion(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_ocupacion",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_ocupacion').html(res);
+    $(".select2").select2();
+  });
+
+}
+
 function open_form(num){
     $(".cnt_form").hide(0);
     $("#cnt_form"+num).show(0);
@@ -95,6 +126,7 @@ function alertFunc() {
 }
 
 function cambiar_nuevo(){
+    /*Inicio Solicitante*/
     $("#id_personaci").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
     $("#nombres").val('');
@@ -108,6 +140,12 @@ function cambiar_nuevo(){
     $("#estudios").val('');
     $("#nacionalidad").val('');
     $("#discapacidad").val('');
+    /*Fin Solicitante*/
+
+    /*Inicio Solicitado*/
+    combo_establecimiento('');
+    combo_ocupacion('');
+    /*Fin Solicitado*/
 
     $("#band").val('save');
 
@@ -253,46 +291,120 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
                                   <div class="help-block"></div>
                               </div>
 
-                              <div class="form-group col-lg-3" style="height: 83px;">
+                              <div class="form-group col-lg-4" style="height: 83px;">
                                   <h5>Nacionalidad:</h5>
                                   <input type="text" id="nacionalidad" name="nacionalidad" class="form-control" placeholder="Nacionalidad">
                                   <div class="help-block"></div>
                               </div>
 
-                              <div class="form-group col-lg-3" style="height: 83px;">
+                              <div class="form-group col-lg-2" style="height: 83px;">
                                   <h5>Sexo:</h5>
-                                  <input name="sexo" type="radio" id="masculino" checked="">
+                                  <input name="sexo" type="radio" id="masculino" checked="" value="M">
                                   <label for="masculino">Masculino</label>
-                                  <input name="sexo" type="radio" id="femenino">
+                                  <input name="sexo" type="radio" id="femenino" value="F">
                                   <label for="femenino">Femenino</label>
                                   <div class="help-block"></div>
                             </div>
-
-                              <div class="form-group col-lg-2" style="height: 83px;">
-                                  <h5>Discapacidad:</h5>
-                                  <input name="discapacidad" type="radio" id="si">
-                                  <label for="si">Si</label>
-                                  <input name="discapacidad" type="radio" id="no" checked="">
-                                  <label for="no">No</label>
-                             <div class="help-block"></div>
-                           </div>
                         </div>
-
                         <div class="row">
-                          <div class="form-group col-lg-12" style="height: 83px;">
+                          <div class="form-group col-lg-8" style="height: 83px;">
                               <h5>Dirección:</h5>
                               <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
                               <div class="help-block"></div>
                           </div>
+
+                          <div class="form-group col-lg-2" style="height: 83px;">
+                              <h5>Discapacidad:</h5>
+                              <input name="discapacidad" type="radio" id="si" value="SI">
+                              <label for="si">Si </label><Br>
+                              <input name="discapacidad" type="radio" id="no" checked="" value="NO">
+                              <label for="no">No</label>
+                         <div class="help-block"></div>
+                       </div>
                         </div>
                           </blockquote>
-                            <div align="right" id="btnadd">
+
+                        <div align="right" id="btnadd2" class="pull-right">
                             <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                        </div>
+                        <div align="right" id="btnedit2" style="display: none;" class="pull-right">
+                            <button type="submit" class="btn waves-effect waves-light btn-info">Siguiente <i class="mdi mdi-chevron-right"></i></button>
                         </div>
                         </div>
                         <?php echo form_close(); ?>
                         <!-- ============================================================== -->
                         <!-- Fin del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITADO -->
+                        <!-- ============================================================== -->
+                        <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+                          <div id="cnt_form2" class="cnt_form" style="/*display: none;*/">
+                            <h3 class="box-title" style="margin: 0px;">
+                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
+                                Información de la solicitud
+                              </h3><hr class="m-t-0 m-b-30">
+                              <span class="etiqueta">Expediente</span>
+                              <blockquote class="m-t-0">
+
+                                <div class="row">
+                                  <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
+
+                                  <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                      <h5>Fecha del conflicto: <span class="text-danger">*</span></h5>
+                                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy" readonly="">
+                                      <div class="help-block"></div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                      <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
+                                      <div class="controls">
+                                        <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
+                                          <option value="">[Seleccione]</option>
+                                          <option value="Indemnización">Indemnización</option>
+                                          <option value="Inasistencia Laboral">Inasistencia Laboral</option>
+                                          <option value="Despido Injustificado">Despido Injustificado</option>
+                                          <option value="Exige indeminización">Exige indeminización</option>
+                                          <option value="Insubordinación">Insubordinación</option>
+                                        </select>
+                                      </div>
+                                  </div>
+
+                                  <div class="form-group col-lg-8" style="height: 83px;">
+                                      <h5>Descripción del motivo:<span class="text-danger">*</h5>
+                                      <textarea type="text" id="descripcion_motivo" name="descripcion_motivo" class="form-control" placeholder="Descipción del motivo"></textarea>
+                                      <div class="help-block"></div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_ocupacion"></div>
+
+                                  <div class="form-group col-lg-4" style="height: 83px;">
+                                      <h5>Salario($):<span class="text-danger">*</h5>
+                                      <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01"></textarea>
+                                      <div class="help-block"></div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="form-group col-lg-8" style="height: 83px;">
+                                      <h5>Funciones:<span class="text-danger">*</h5>
+                                      <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones laborales" required=""></textarea>
+                                      <div class="help-block"></div>
+                                  </div>
+                                </div>
+
+                            </blockquote>
+                              <div align="right" id="btnadd">
+                              <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                          </div>
+                          </div>
+                          <?php echo form_close(); ?>
+                        <!-- ============================================================== -->
+                        <!-- Fin del FORMULARIO INFORMACIÓN DEL SOLICITADO -->
                         <!-- ============================================================== -->
                     </div>
                 </div>
@@ -430,41 +542,6 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
     </div>
     <!-- /.modal-dialog -->
 </div>
-
-<div id="modal_rutas_mapa" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Asistente de rutas almacenadas</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                 <div class="row container">
-                    <div class="col-lg-12">
-                        <select id="municipios_rutas" name="municipios_rutas" class="select2" onchange="tabla_rutas_almacenadas();" style="width: 100%" required>
-                            <option value=''>[Elija el municipio]</option>
-                            <?php
-                                $municipio = $this->db->query("SELECT * FROM org_municipio");
-                                if($municipio->num_rows() > 0){
-                                    foreach ($municipio->result() as $fila2) {
-                                       echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
-                                    }
-                                }
-                             ?>
-                        </select>
-                    </div>
-                 </div>
-                <div id="cnt_rutas_almacenadas"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info waves-effect text-white" data-dismiss="modal">Aceptar</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
 <script>
 $(function(){
   $("#formajax").on("submit", function(e){
@@ -482,14 +559,15 @@ $(function(){
           processData: false
       })
       .done(function(res){
-        console.log(res)
+        //console.log(res)
         res = res.split(",");
           if(res[0] == "exito"){
               if($("#band").val() == "save"){
                   $("#id_personaci").val(res[1])
-                  alert(res[1])
-                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                  //open_form(3);
+                  //alert(res[1])
+                  //swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                  tablasolicitudes();
+                  open_form(2);
                   //tabla_representantes();
               }else if($("#band").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
@@ -512,6 +590,7 @@ $(function(){
     $(document).ready(function(){
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
+        $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
     });
     });
 </script>
