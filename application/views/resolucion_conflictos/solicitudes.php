@@ -163,14 +163,9 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">
-                	<?php
-                		echo $titulo = ucfirst("Solicitud de Resolución de Conflictos de Trabajo");
-                	?>
-                	</h3>
+                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de Resolución de Conflictos de Trabajo</h3>
             </div>
         </div>
-
         <!-- ============================================================== -->
         <!-- Fin TITULO de la página de sección -->
         <!-- ============================================================== -->
@@ -178,37 +173,40 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
         <!-- Inicio del CUERPO DE LA SECCIÓN -->
         <!-- ============================================================== -->
         <div class="row" <?php if($navegatorless){ echo "style='margin-right: 80px;'"; } ?>>
+            <!-- ============================================================== -->
+            <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
+            <!-- ============================================================== -->
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10" id="cnt_form_main" style="display: none;">
+                <div class="card">
+                    <div class="card-header bg-success2" id="ttl_form">
+                        <div class="card-actions text-white">
+                            <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
+                        </div>
+                        <h4 class="card-title m-b-0 text-white">Listado de Solicitudes</h4>
+                    </div>
+                    <div class="card-body b-t">
 
-          <div class="col-lg-1"></div>
-          <div class="col-lg-10" id="cnt_form_main" style="display: none;">
-              <div class="card">
-                  <div class="card-header bg-success2" id="ttl_form">
-                      <div class="card-actions text-white">
-                          <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
-                      </div>
-                      <h4 class="card-title m-b-0 text-white">Listado de establecimientos</h4>
-                  </div>
-                  <div class="card-body b-t">
-                        <!-- ============================================================== -->
-                        <!-- Inicio del FORMULARIO DATOS DE MISIÓN -->
-                        <!-- ============================================================== -->
-                        <div id="cnt_mision">
-                            <h3 class="box-title" style="margin: 0px;">
-                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
-                                Información del Solicitante
-                            </h3>
-                            <hr class="m-t-0 m-b-30">
-                            <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+                      <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+                        <div id="cnt_form1" class="cnt_form">
+                          <h3 class="box-title" style="margin: 0px;">
+                              <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
+                              Información del solicitante
+                            </h3><hr class="m-t-0 m-b-30">
                             <input type="hidden" id="band" name="band" value="save">
                             <input type="hidden" id="id_personaci" name="id_personaci" value="">
+                            <input type="hidden" id="estado" name="estado" value="1">
+
+                            <span class="etiqueta">Expediente</span>
+                            <blockquote class="m-t-0">
 
                             <div class="row">
-                                <div class="form-group col-lg-4" style="height: 83px;">
+                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                     <h5>Nombres: <span class="text-danger">*</span></h5>
                                     <input type="text" id="nombres" name="nombres" class="form-control" placeholder="Nombres de la persona" required="">
                                     <div class="help-block"></div>
                                 </div>
-                                <div class="form-group col-lg-4" style="height: 83px;">
+                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                     <h5>Apellidos: <span class="text-danger">*</span></h5>
                                     <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos de la persona" required="">
                                     <div class="help-block"></div>
@@ -249,140 +247,52 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
                             </div>
 
                             <div class="row">
-                              <div class="form-group col-lg-12" style="height: 83px;">
-                                  <h5>Dirección:</h5>
-                                  <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
+                              <div class="form-group col-lg-4" style="height: 83px;">
+                                  <h5>Estudios realizados:</h5>
+                                  <input type="text" id="estudios" name="estudios" class="form-control" placeholder="Estudios realizados">
                                   <div class="help-block"></div>
                               </div>
+
+                              <div class="form-group col-lg-3" style="height: 83px;">
+                                  <h5>Nacionalidad:</h5>
+                                  <input type="text" id="nacionalidad" name="nacionalidad" class="form-control" placeholder="Nacionalidad">
+                                  <div class="help-block"></div>
+                              </div>
+
+                              <div class="form-group col-lg-3" style="height: 83px;">
+                                  <h5>Sexo:</h5>
+                                  <input name="sexo" type="radio" id="masculino" checked="">
+                                  <label for="masculino">Masculino</label>
+                                  <input name="sexo" type="radio" id="femenino">
+                                  <label for="femenino">Femenino</label>
+                                  <div class="help-block"></div>
                             </div>
 
-                            <div class="row">
-                              <div class="form-group col-lg-12" style="height: 83px;">
-                                  <h5>Sexo:</h5>
-                              <input type="checkbox" name="sexo" id="masculino" class="filled-in chk-col-light-blue" >
-                              <label for="masculino">Masculino</label>
-                              <input type="checkbox" name="sexo" id="femenino" class="filled-in chk-col-light-blue" >
-                              <label for="femenino">Femenino</label>
+                              <div class="form-group col-lg-2" style="height: 83px;">
+                                  <h5>Discapacidad:</h5>
+                                  <input name="discapacidad" type="radio" id="si">
+                                  <label for="si">Si</label>
+                                  <input name="discapacidad" type="radio" id="no" checked="">
+                                  <label for="no">No</label>
+                             <div class="help-block"></div>
+                           </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="form-group col-lg-12" style="height: 83px;">
+                              <h5>Dirección:</h5>
+                              <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
                               <div class="help-block"></div>
                           </div>
                         </div>
-
-                            <button type="submit" id="submit_button" style="display: none;" class="btn waves-effect waves-light btn-success2">Continuar <i class="mdi mdi-chevron-right"></i></button>
-                            <!-- /.modal-justificacion -->
-                            <div class="pull-left" id="subiendo_mision" style="display: none;">
-                                <span class="fa fa-spin text-success fa-2x"><span class="mdi mdi-sync"></span></span>
-                                Guardando los cambios...
-                            </div>
+                          </blockquote>
                             <div align="right" id="btnadd">
-                                <button type="submit" class="btn waves-effect waves-light btn-success2">Continuar <i class="mdi mdi-chevron-right"></i></button>
-                            </div>
-                            <div align="right" id="btnedit" style="display: none;">
-                                <button type="button" onclick="editar_mision()" class="btn waves-effect waves-light btn-success2">Continuar <i class="mdi mdi-chevron-right"></i></button>
-                            </div>
-                            <?php echo form_close(); ?>
-                            <hr>
-                            <div id="cnt_justificacion" class="row"></div>
+                            <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
                         </div>
-                        <!-- ============================================================== -->
-                        <!-- Fin del FORMULARIO DATOS DE MISIÓN -->
-                        <!-- ============================================================== -->
-
-                        <!-- ============================================================== -->
-                        <!-- Inicio del FORMULARIO EMPRESAS VISITADAS -->
-                        <!-- ============================================================== -->
-                        <div id="cnt_rutas" style="display: none;">
-                            <h3 class="box-title" style="margin: 0px;">
-                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
-                                Empresas visitadas
-                            </h3>
-                            <hr class="m-t-0 m-b-30">
-                            <div id="fechas_repetidas2"></div>
-                            <?php echo form_open('', array('id' => 'form_empresas_visitadas', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-                                <input type="hidden" id="band2" name="band2" value="save">
-                                <input type="hidden" id="id_ruta_visitada" name="id_ruta_visitada" value="">
-                            <div class="row">
-                                <div class="form-group col-lg-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Opciones de destino: <span class="text-danger">*</span></h5>
-                                    <input type="radio" id="destino_oficina" checked="" name="r_destino" value="destino_oficina">
-                                    <label for="destino_oficina" onclick="form_oficinas();">Oficina MTPS</label>&emsp;
-                                    <input type="radio" id="destino_municipio" name="r_destino" value="destino_municipio">
-                                    <label for="destino_municipio" onclick="form_folleto_viaticos();">Municipio</label>&emsp;
-                                    <input type="radio" id="destino_mapa" name="r_destino" value="destino_mapa">
-                                    <label for="destino_mapa" onclick="form_mapa();">Buscar en mapa</label>
-                                </div>
-                            </div>
-                            <div id="combo_municipio"></div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Municipio: <span class="text-danger">*</span></h5>
-                                    <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
-                                        <option value=''>[Elija la municipio]</option>
-                                        <?php
-                                            $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
-                                            if($municipio->num_rows() > 0){
-                                                foreach ($municipio->result() as $fila2) {
-                                                   echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
-                                                }
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>" id="combo_departamento"></div>
-                                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>" id="input_distancia"></div>
-                                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Nombre de la empresa: <span class="text-danger">*</span></h5>
-                                    <div class="input-group">
-                                        <input type="text" id="nombre_empresa" name="nombre_empresa" class="form-control" placeholder="Ingrese el nombre de la empresa" required>
-                                        <div id="bntmap1" class="input-group-addon btn btn-default" onclick="form_mapa();" data-toggle="tooltip" title="" data-original-title="Buscar en mapa"><i class="mdi mdi-google-maps"></i></div>
-                                        <div id="bntmap2" class="input-group-addon btn btn-default" onclick="rutas_almacenadas();" data-toggle="tooltip" title="" data-original-title="Buscar en registros almacenados"><i class="mdi mdi-map-marker-radius"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Dirección: <span class="text-danger">*</span></h5>
-                                    <textarea id="direccion_empresa" name="direccion_empresa" class="form-control" placeholder="Ingrese la dirección de la empresa" rows="2" required></textarea>
-                                </div>
-                            </div>
-
-                            <div>
-                                <button style="display: none;" type="submit" id="btn_submit" class="btn waves-effect waves-light btn-success2">submit</button>
-                                <div align="right" id="btnadd2">
-                                    <button type="button" onclick="limpiar_empresas_visitadas();" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
-                                    <button type="button" onclick="gestionar_destino('save')" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Agregar destino</button>
-                                </div>
-                                <div align="right" id="btnedit2" style="display: none;">
-                                    <button type="button" onclick="limpiar_empresas_visitadas();" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
-                                    <button type="button" onclick="editar_mision()" class="btn waves-effect waves-light btn-success2">Continuar <i class="mdi mdi-chevron-right"></i></button>
-                                </div>
-                            </div>
-                            <?php echo form_close(); ?>
-                            <!-- Inicio de la TABLA EMPRESAS VISITADAS -->
-                                <div id="cnt_empresas" class="row"></div>
-
-                            <!-- Fin de la TABLA EMPRESAS VISITADAS -->
                         </div>
+                        <?php echo form_close(); ?>
                         <!-- ============================================================== -->
-                        <!-- Fin del FORMULARIO EMPRESAS VISITADAS -->
-                        <!-- ============================================================== -->
-
-                        <!-- ============================================================== -->
-                        <!-- Inicio del FORMULARIO DE VIÁTICOS Y PASAJES -->
-                        <!-- ============================================================== -->
-                        <div id="cnt_viaticos" style="display: none;">
-                            <h3 class="box-title" style="margin: 0px;">
-                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
-                                Detalle de viáticos y pasajes
-                            </h3>
-                            <hr class="m-t-0 m-b-10">
-                            <div id="fechas_repetidas3"></div>
-                            <?php echo form_open('', array('id' => 'form_empresas_viaticos', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40', 'enctype' => 'multipart/form-data')); ?>
-                            <div id="cnt_form_viaticos" class="row"></div>
-                            <?php echo form_close(); ?>
-                            <div id="tabla_viaticos" class="row"></div>
-                        </div>
-                        <!-- ============================================================== -->
-                        <!-- Fin del FORMULARIO DE VIÁTICOS Y PASAJES -->
+                        <!-- Fin del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
                         <!-- ============================================================== -->
                     </div>
                 </div>
@@ -557,6 +467,48 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
 
 <script>
 $(function(){
+  $("#formajax").on("submit", function(e){
+      e.preventDefault();
+      var f = $(this);
+      var formData = new FormData(document.getElementById("formajax"));
+      formData.append("dato", "valor");
+      $.ajax({
+          url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_solicitudes",
+          type: "post",
+          dataType: "html",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false
+      })
+      .done(function(res){
+        console.log(res)
+        res = res.split(",");
+          if(res[0] == "exito"){
+              if($("#band").val() == "save"){
+                  $("#id_personaci").val(res[1])
+                  alert(res[1])
+                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                  //open_form(3);
+                  //tabla_representantes();
+              }else if($("#band").val() == "edit"){
+                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                  //open_form(3);
+                  //tabla_representantes();
+              }else{
+                  /*if($("#estado_empresa").val() == '1'){
+                      swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
+                  }else{
+                      swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
+                  }*/
+                  tablasolicitudes();
+              }
+          }else{
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+          }
+      });
+  });
+
     $(document).ready(function(){
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
