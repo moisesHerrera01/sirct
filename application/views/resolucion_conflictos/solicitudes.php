@@ -384,7 +384,7 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
 
                                   <div class="form-group col-lg-4" style="height: 83px;">
                                       <h5>Salario($):<span class="text-danger">*</h5>
-                                      <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01"></textarea>
+                                      <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01">
                                       <div class="help-block"></div>
                                   </div>
                                 </div>
@@ -395,8 +395,40 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
                                       <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones laborales" required=""></textarea>
                                       <div class="help-block"></div>
                                   </div>
+
+                                  <div class="form-group col-lg-4" style="height: 83px;">
+                                      <h5>Forma de pago:<span class="text-danger">*</h5>
+                                      <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Forma de pago">
+                                      <div class="help-block"></div>
+                                  </div>
                                 </div>
 
+                                <div class="row">
+                                  <div class="form-group col-lg-8" style="height: 83px;">
+                                      <h5>Horario laboral:<span class="text-danger">*</h5>
+                                      <textarea type="text" id="horario" name="horario" class="form-control" placeholder="Horario laboral"></textarea>
+                                      <div class="help-block"></div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                        <h5>Nombres de jefe inmediato: </h5>
+                                        <input type="text" id="nombres_jefe" name="nombres_jefe" class="form-control" placeholder="Nombres de jefe inmediato" required="">
+                                        <div class="help-block"></div>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                        <h5>Apellidos de jefe inmediato:</h5>
+                                        <input type="text" id="apellidos_jefe" name="apellidos_jefe" class="form-control" placeholder="Apellidos de jefe inmediato" required="">
+                                        <div class="help-block"></div>
+                                    </div>
+
+                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                        <h5>Cargo de jefe inmediato: </h5>
+                                        <input type="text" id="cargo_jefe" name="cargo_jefe" class="form-control" placeholder="Cargo de jefe inmediato" required="">
+                                        <div class="help-block"></div>
+                                    </div>
+                              </div>
                             </blockquote>
                               <div align="right" id="btnadd">
                               <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
