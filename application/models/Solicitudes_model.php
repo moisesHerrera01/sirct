@@ -19,9 +19,10 @@ class Solicitudes_model extends CI_Model {
 			'sexo_personaci' => $data['sexo_personaci'],
 			'estudios_personaci' => $data['estudios_personaci'],
 			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
-			'discapacidad_personaci' => $data['discapacidad_personaci']
+			'discapacidad_personaci' => $data['discapacidad_personaci'],
+			'tipopeticion_personaci' => 0
 		))){
-			return "exito,".$this->db->insert_id();
+			return $this->db->insert_id();
 		}else{
 			return "fracaso";
 		}
@@ -46,7 +47,15 @@ class Solicitudes_model extends CI_Model {
 			'sexo_personaci' => $data['sexo_personaci'],
 			'estudios_personaci' => $data['estudios_personaci'],
 			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
-			'discapacidad_personaci' => $data['discapacidad_personaci']
+			'discapacidad_personaci' => $data['discapacidad_personaci'],
+			'salario_personaci' => $data['salario_personaci'],
+			'funciones_personaci'=> $data['funciones_personaci'],
+			'formapago_personaci'=>$data['formapago_personaci'] ,
+			'horarios_personaci' => $data['horarios_personaci'],
+			'fechaconflicto_personaci'=>	$data['fechaconflicto_personaci'],
+			'id_catalogociuo'=>$data['id_catalogociuo'],
+			'id_empleador'=>$data['id_empleador'],
+			'tipopeticion_personaci' => $data['tipopeticion_personaci']
 		))){
 			return "exito";
 		}else{
@@ -96,6 +105,21 @@ class Solicitudes_model extends CI_Model {
   			return "fracaso";
   		}
 	}*/
+
+	public function obtener_persona($id) {
+
+			$this->db->select('')
+						 ->from('sct_personaci')
+						 ->where('id_personaci', $id);
+			$query=$this->db->get();
+			if ($query->num_rows() > 0) {
+					return $query;
+			}
+			else {
+					return FALSE;
+			}
+
+	}
 
 	function obtener_ultimo_id($tabla,$nombreid){
 		$this->db->order_by($nombreid, "asc");

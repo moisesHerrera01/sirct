@@ -22,7 +22,7 @@ class Solicitudes extends CI_Controller {
 	public function gestionar_solicitudes(){
 
 
-		if($this->input->post('band') == "save"){
+		if($this->input->post('band1') == "save"){
 			$data = array(
       'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
@@ -38,7 +38,7 @@ class Solicitudes extends CI_Controller {
 			);
 			echo $this->solicitudes_model->insertar_solicitud($data);
 
-		}else if($this->input->post('band') == "edit"){
+		}else if($this->input->post('band1') == "edit"){
 
 			$data = array(
 			'id_personaci' => $this->input->post('id_personaci'),
@@ -54,15 +54,15 @@ class Solicitudes extends CI_Controller {
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad')
 			);
-			echo $this->solicitudes_model->editar_estado($data);
+			echo $this->solicitudes_model->editar_solicitud($data);
 
-		}else if($this->input->post('band') == "delete"){
+		}/*else if($this->input->post('band') == "delete"){
 			$data = array(
 			'id_personaci' => $this->input->post('id_personaci'),
 			'id_estadosci' => $this->input->post('id_estadosci')
 			);
 			echo $this->solicitudes_model->eliminar_estado($data);
-		}
+		}*/
 	}
 
 	public function combo_establecimiento() {

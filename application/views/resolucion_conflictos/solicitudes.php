@@ -43,7 +43,6 @@ function combo_establecimiento(seleccion){
 
 
 function combo_ocupacion(seleccion){
-
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_ocupacion",
     type: "post",
@@ -52,6 +51,21 @@ function combo_ocupacion(seleccion){
   })
   .done(function(res){
     $('#div_combo_ocupacion').html(res);
+    $(".select2").select2();
+  });
+
+}
+
+function combo_delegado(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_delegado').html(res);
     $(".select2").select2();
   });
 
@@ -142,12 +156,26 @@ function cambiar_nuevo(){
     $("#discapacidad").val('');
     /*Fin Solicitante*/
 
-    /*Inicio Solicitado*/
+    /*Inicio Expediente*/
     combo_establecimiento('');
     combo_ocupacion('');
-    /*Fin Solicitado*/
+    combo_delegado('');
+    $("#id_empleador").val($("#id_empleador").val()).trigger('change.select2');
+    $("#nombres_jefe").val('');
+    $("#apellidos_jefe").val('');
+    $("#cargo_jefe").val('');
+    $("#motivo").val("").trigger('change.select2');
+    $("#id_personal").val('');
+    $("#establecimiento").val('');
+    $("#salario").val('');
+    $("#funciones").val('');
+    $("#horario").val('');
+    $("#fecha_conflicto").val('');
+    /*Fin expediente*/
 
-    $("#band").val('save');
+    $("#band").val("save");
+    $("#band1").val("save");
+    $("#band2").val("save");
 
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
@@ -232,8 +260,9 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
                               Información del solicitante
                             </h3><hr class="m-t-0 m-b-30">
                             <input type="hidden" id="band" name="band" value="save">
-                            <input type="hidden" id="id_personaci" name="id_personaci" value="">
+                            <input type="hidden" id="band1" name="band1" value="save">
                             <input type="hidden" id="estado" name="estado" value="1">
+                            <input type="hidden" id="id_personaci" name="id_personaci" value="">
 
                             <span class="etiqueta">Expediente</span>
                             <blockquote class="m-t-0">
@@ -324,12 +353,20 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
                         </div>
                           </blockquote>
 
-                        <div align="right" id="btnadd2" class="pull-right">
-                            <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
-                        </div>
-                        <div align="right" id="btnedit2" style="display: none;" class="pull-right">
-                            <button type="submit" class="btn waves-effect waves-light btn-info">Siguiente <i class="mdi mdi-chevron-right"></i></button>
-                        </div>
+                          <div align="right" id="btnadd1">
+                            <button type="reset" class="btn waves-effect waves-light btn-success">
+                              <i class="mdi mdi-recycle"></i> Limpiar</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-success2">
+                              Siguiente <i class="mdi mdi-chevron-right"></i>
+                            </button>
+                          </div>
+                          <div align="right" id="btnedit1" style="display: none;">
+                            <button type="reset" class="btn waves-effect waves-light btn-success">
+                              <i class="mdi mdi-recycle"></i> Limpiar</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-info">
+                              Siguiente <i class="mdi mdi-chevron-right"></i>
+                            </button>
+                          </div>
                         </div>
                         <?php echo form_close(); ?>
                         <!-- ============================================================== -->
@@ -339,10 +376,13 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
                         <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITADO -->
                         <!-- ============================================================== -->
                         <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-                          <div id="cnt_form2" class="cnt_form" style="/*display: none;*/">
+                          <div id="cnt_form2" class="cnt_form" style="display: none;">
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
                                 Información de la solicitud
+                                <input type="hidden" id="band2" name="band2" value="save">
+                                <input type="hidden" id="id_persona" name="id_persona" value="">
+
                               </h3><hr class="m-t-0 m-b-30">
                               <span class="etiqueta">Expediente</span>
                               <blockquote class="m-t-0">
@@ -409,6 +449,9 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
                                       <textarea type="text" id="horario" name="horario" class="form-control" placeholder="Horario laboral"></textarea>
                                       <div class="help-block"></div>
                                   </div>
+
+                                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
+
                                 </div>
 
                                 <div class="row">
@@ -430,9 +473,19 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
                                     </div>
                               </div>
                             </blockquote>
-                              <div align="right" id="btnadd">
-                              <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
-                          </div>
+                            <div align="right" id="btnadd2">
+                              <button type="reset" class="btn waves-effect waves-light btn-success">
+                                <i class="mdi mdi-recycle"></i> Limpiar
+                              </button>
+                              <button type="submit" class="btn waves-effect waves-light btn-success2">Finalizar
+                                <i class="mdi mdi-chevron-right"></i></button>
+                            </div>
+                            <div align="right" id="btnedit2" style="display: none;">
+                              <button type="reset" class="btn waves-effect waves-light btn-success">
+                                <i class="mdi mdi-recycle"></i> Limpiar</button>
+                              <button type="submit" class="btn waves-effect waves-light btn-info">Finalizar
+                                <i class="mdi mdi-chevron-right"></i></button>
+                            </div>
                           </div>
                           <?php echo form_close(); ?>
                         <!-- ============================================================== -->
@@ -451,7 +504,7 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
                     <div>
                         <div class="pull-left">
                             <div class="form-group" style="width: 400px;">
-                                <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablasolicitudes();">
+                                <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="">
                                     <option value="">[Todos los empleados]</option>
                                 <?php
                                     $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
@@ -575,50 +628,76 @@ function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,tel
     <!-- /.modal-dialog -->
 </div>
 <script>
+
 $(function(){
-  $("#formajax").on("submit", function(e){
-      e.preventDefault();
-      var f = $(this);
-      var formData = new FormData(document.getElementById("formajax"));
-      formData.append("dato", "valor");
-      $.ajax({
-          url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_solicitudes",
+    $("#formajax").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax"));
+        formData.append("dato", "valor");
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_solicitudes",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+        .done(function(res){
+            if(res == "fracaso"){
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }else{
+              open_form(2);
+              $("#id_personaci").val(res);
+              $("#id_persona").val(res);
+              $("#band1").val( $("#band").val() );
+              $("#band2").val( $("#band").val() );
+              if($("#band").val() == "delete"){
+                swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+              }
+            }
+        });
+
+    });
+});
+
+$(function(){
+    $("#formajax2").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax2"));
+
+        $.ajax({
+          url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_expediente",
           type: "post",
           dataType: "html",
           data: formData,
           cache: false,
           contentType: false,
           processData: false
-      })
-      .done(function(res){
-        //console.log(res)
-        res = res.split(",");
-          if(res[0] == "exito"){
-              if($("#band").val() == "save"){
-                  $("#id_personaci").val(res[1])
-                  //alert(res[1])
-                  //swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                  tablasolicitudes();
-                  open_form(2);
-                  //tabla_representantes();
-              }else if($("#band").val() == "edit"){
-                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                  //open_form(3);
-                  //tabla_representantes();
-              }else{
-                  /*if($("#estado_empresa").val() == '1'){
-                      swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
-                  }else{
-                      swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
-                  }*/
-                  tablasolicitudes();
-              }
-          }else{
+        })
+        .done(function(res){
+            if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-          }
-      });
-  });
+            }else{
+              cerrar_mantenimiento();
+              if($("#band2").val() == "save"){
+                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+              }else if($("#band2").val() == "edit"){
+                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+              }else{
+                  swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+              }
+              tablasolicitudes();
+            }
+        });
 
+    });
+});
+
+$(function(){
     $(document).ready(function(){
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());

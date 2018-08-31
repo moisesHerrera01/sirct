@@ -62,6 +62,9 @@
                             echo "<td>".$fila->nombre_personaci."</td>";
                             echo "<td>".$fila->nombre_empleador."</td>";
                             echo "<td>".$fila->tipo."</td>";
+                            if ($fila->resultado==NULL) {
+                              $fila->resultado="Sin Intervenir";
+                            }
                             echo "<td>".$fila->resultado."</td>";
                             echo "<td>".$fila->fecha."</td>";
 
