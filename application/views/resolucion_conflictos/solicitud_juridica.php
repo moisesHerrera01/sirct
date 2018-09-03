@@ -8,17 +8,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 <script type="text/javascript">
     function iniciar(){
-
-
-        
-
-toast({
-  type: 'success',
-  title: 'Signed in successfully'
-})
-        
         <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-        tablasolicitudes();
+            tablasolicitudes();
         <?php }else{ ?>
             $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
         <?php } ?>
@@ -241,10 +232,11 @@ function tabla_representantes(){
       
     }
 
-    function cambiar_editar2(id_representante, nombres_representante, alias_representante, tipo_representante, estado_representante, band){
+    function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante, tipo_representante, estado_representante, band){
       $("#id_representante").val(id_representante);
+      $("#dui_representante").val(dui_representante);
       $("#nombres_representante").val(nombres_representante);
-      $("#alias_representante").val(alias_representante);
+      $("#acreditacion_representante").val(acreditacion_representante);
       $("#tipo_representante").val(tipo_representante);
       $("#estado_representante").val(estado_representante);
       $("#band2").val(band);
@@ -270,8 +262,7 @@ function tabla_representantes(){
             type: "warning",   
             showCancelButton: true,   
             confirmButtonColor: "#fc4b6c",   
-            confirmButtonText: "Sí, continuar",
-            closeOnConfirm: false 
+            confirmButtonText: "Sí, continuar" 
         }, function(){
             if(estado == 1){
                 $.when( $("#estado_representante").val('0') ).then( $("#submit2").click() );
@@ -642,15 +633,13 @@ function tabla_representantes(){
                   </div>
                 </div>
                 <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>DUI: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
                       </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Tipo: <span class="text-danger">*</span></h5>
                       <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
                           <option value=''>[Seleccione el tipo]</option>
@@ -688,7 +677,7 @@ function tabla_representantes(){
 </div>
 
 <div class="modal fade" id="modal_establecimiento" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
     <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
           <input type="hidden" id="band" name="band" value="save">
@@ -698,12 +687,44 @@ function tabla_representantes(){
             </div>
             <div class="modal-body" id="">
                 <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" placeholder="Nombre" id="nombre_empresa" name="nombre_empresa" class="form-control" required="">
                       </div>
                   </div>
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Telefono: </h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Telefono" id="telefono_empresa" name="telefono_empresa" class="form-control" data-mask="9999-9999">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Direcci&oacute;n: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <textarea type="text" id="direccion_empresa" name="direccion_empresa" class="form-control" required=""></textarea>
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Municipio: <span class="text-danger">*</span></h5>
+                        <select id="id_municipio" name="id_municipio" class="select2" style="width: 100%" required>
+                            <option value=''>[Seleccione el municipio]</option>
+                            <?php 
+                                $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
+                                if($municipio->num_rows() > 0){
+                                    foreach ($municipio->result() as $fila2) {              
+                                       echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
+                                    }
+                                }
+                            ?>
+                        </select>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -715,39 +736,6 @@ function tabla_representantes(){
                                 if($catalogociiu->num_rows() > 0){
                                     foreach ($catalogociiu->result() as $fila2) {              
                                        echo '<option class="m-l-50" value="'.$fila2->id_catalogociiu.'">'.$fila2->actividad_catalogociiu.'</option>';
-                                    }
-                                }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Direcci&oacute;n: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <textarea type="text" id="direccion_empresa" name="direccion_empresa" class="form-control" required=""></textarea>
-                      </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Telefono: </h5>
-                      <div class="controls">
-                          <input type="text" placeholder="Telefono" id="telefono_empresa" name="telefono_empresa" class="form-control" data-mask="9999-9999">
-                          <div class="help-block"></div>
-                      </div>
-                  </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>Municipio: <span class="text-danger">*</span></h5>
-                        <select id="id_municipio" name="id_municipio" class="select2" style="width: 100%" required>
-                            <option value=''>[Seleccione el municipio]</option>
-                            <?php 
-                                $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
-                                if($municipio->num_rows() > 0){
-                                    foreach ($municipio->result() as $fila2) {              
-                                       echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
                                     }
                                 }
                             ?>
@@ -794,7 +782,7 @@ $(function(){
                 if($("#band").val() == "save"){
                     //$("#id_empresa").val(res[1])
                     $("#modal_establecimiento").modal('hide');
-                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                    $.toast({ heading: 'Registro exitoso', text: 'Registro de establecimiento exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                     combo_establecimiento(res[1]);
                 }else if($("#band").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
@@ -812,10 +800,10 @@ $(function(){
         });
     });
 
-  $("#formajax3").on("submit", function(e){
+  $("#formajax2").on("submit", function(e){
         e.preventDefault();
         var f = $(this);
-        var formData = new FormData(document.getElementById("formajax3"));
+        var formData = new FormData(document.getElementById("formajax2"));
         formData.append("id_empresa", $('#establecimiento').val());
         
         $.ajax({

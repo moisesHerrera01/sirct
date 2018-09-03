@@ -17,8 +17,8 @@
                 <thead class="bg-info text-white">
                     <tr>
                         <th>Id</th>
+                        <th>DUI</th>
                         <th>Nombre del representante</th>
-                        <th>Alias</th>
                         <th>Tipo</th>
                         <th>Estado</th>
                         <th style="min-width: 85px;">(*)</th>
@@ -34,12 +34,12 @@
                           $contador++;
                           echo "<tr>";
                           echo "<td>".$contador."</td>";
+                          echo "<td>".$fila->dui_representante."</td>";
                           echo "<td>".$fila->nombres_representante."</td>";
-                          echo "<td>".$fila->alias_representante."</td>";
                           echo "<td>".$fila->tipo_representante."</td>";
                           echo ($fila->estado_representante == "1") ? '<td><span class="label label-success">Activo</span></td>' : '<td><span class="label label-danger">Inactivo</span></td>';
                           echo "<td>";
-                          $array = array($fila->id_representante, $fila->nombres_representante, $fila->alias_representante, $fila->tipo_representante, $fila->estado_representante);
+                          $array = array($fila->id_representante, $fila->dui_representante, $fila->nombres_representante, $fila->acreditacion_representante, $fila->tipo_representante, $fila->estado_representante);
                            
                           if(tiene_permiso($segmentos=2,$permiso=4)){
                             array_push($array, "edit");

@@ -34,8 +34,8 @@ class Solicitud_juridica extends CI_Controller {
 
 	}
 
-	public function gestionar_representantes(){
-		if($this->input->post('band3') == "save"){
+	public function gestionar_representante(){
+		if($this->input->post('band2') == "save"){
 			$data = array(
 			'id_empresa' => $this->input->post('id_empresa'),
 			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
@@ -44,7 +44,7 @@ class Solicitud_juridica extends CI_Controller {
 			'tipo_representante' => $this->input->post('tipo_representante')
 			);
       		echo $this->solicitud_juridica_model->insertar_representante($data);
-		}else if($this->input->post('band3') == "edit"){
+		}else if($this->input->post('band2') == "edit"){
       		$data = array(
 		    'id_representante' => $this->input->post('id_representante'),
 		    'id_empresa' => $this->input->post('id_empresa'),
@@ -54,7 +54,7 @@ class Solicitud_juridica extends CI_Controller {
 			'tipo_representante' => $this->input->post('tipo_representante')
 			);
 			echo $this->solicitud_juridica_model->editar_representante($data);
-		}else if($this->input->post('band3') == "delete"){
+		}else if($this->input->post('band2') == "delete"){
 			$data = array(
 			'id_representante' => $this->input->post('id_representante'),
 			'estado_representante' => $this->input->post('estado_representante')
