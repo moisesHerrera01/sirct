@@ -11,6 +11,7 @@ class Expediente extends CI_Controller {
 	}
 
 	public function gestionar_expediente() {
+		 $fecha_actual=date("Y-m-d H:i:s");
 
 		if($this->input->post('band2') == "save"){
 
@@ -21,7 +22,6 @@ class Expediente extends CI_Controller {
 						);
 
 						//date_default_timezone_set('America/El_Salvador');
-			      $fecha_actual=date("Y-m-d H:i:s");
 						$data2 = array(
                 'motivo_expedienteci' => $this->input->post('motivo'),
                 'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
@@ -51,32 +51,46 @@ class Expediente extends CI_Controller {
                 echo "fracaso";
             }
 
-		} /*else if($this->input->post('band2') == "edit"){
+		} else if($this->input->post('band2') == "edit"){
 
-			$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expedient'))->result_array()[0];
-
-            $data['id_personal'] = $this->input->post('colaborador');
-
-			$data2 = array(
-				'id_expedientert' => $this->input->post('id_expedient'),
-                'docreglamento_documentort' => $this->input->post('reglamento_interno'),
-                'escritura_documentort' => $this->input->post('constitucion_sociedad'),
-                'credencial_documentort'  => $this->input->post('credencial_representante'),
-                'poder_documentort' => $this->input->post('poder'),
-                'dui_documentort' => $this->input->post('dui'),
-                'matricula_documentort' => $this->input->post('matricula'),
-                'estatutos_documentort' => $this->input->post('estatutos'),
-                'acuerdoejec_documentort' => $this->input->post('acuerdo_creacion'),
-                'nominayfuncion_documentort' => $this->input->post('nominacion')
+			$data3 = array(
+				'id_empleador' => $this->input->post('id_empleador'),
+				'nombre_empleador' => $this->input->post('nombres_jefe'),
+				'apellido_empleador' => $this->input->post('apellidos_jefe'),
+				'cargo_empleador' => $this->input->post('cargo_jefe')
 			);
 
-			if ("fracaso" != $this->documento_model->editar_documento($data2)) {
-				echo $this->reglamento_model->editar_reglamento($data);
+			$data = $this->solicitudes_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
+			$data['id_personaci'] = $this->input->post('id_persona');
+			$data['salario_personaci'] = $this->input->post('salario');
+			$data['funciones_personaci'] = $this->input->post('funciones');
+			$data['formapago_personaci'] = $this->input->post('forma_pago');
+			$data['horarios_personaci'] = $this->input->post('horario');
+			$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
+			$data['id_catalogociuo'] = $this->input->post('ocupacion');
+			$data['id_empleador'] = $this->input->post('id_empleador');
+
+			$data2 = array(
+					'id_expedienteci' => $this->input->post('id_expedienteci'),
+					'motivo_expedienteci' => $this->input->post('motivo'),
+					'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
+					'id_personaci' => $this->input->post('id_persona'),
+					'id_personal' => $this->input->post('id_personal'),
+					'id_empresaci' => $this->input->post('establecimiento'),
+					'id_estadosci' => 1,
+					'fechacrea_expedienteci' => $fecha_actual,
+					'tiposolicitud_expedienteci' =>"Conciliación",
+					'numerocaso_expedienteci' =>10
+			);
+
+			if ("fracaso" != $this->empleadores_model->editar_empleador($data3)) {
+				 $this->solicitudes_model->editar_solicitud($data);
+				 $this->expedientes_model->editar_expediente($data2);
 			} else {
 				echo "fracaso";
 			}
 
-		}else if($this->input->post('band') == "delete"){
+		}/*else if($this->input->post('band') == "delete"){
 			$data = array(
 				'id_expedientert' => $this->input->post('id_expedientert')
 			);
@@ -93,6 +107,14 @@ class Expediente extends CI_Controller {
 					'id' => $this->input->post('id'),
 					'colaborador' => $this->db->get('lista_empleados_estado')
 				)
+			);
+
+		}
+
+		public function registros_expedientes() {
+
+			print json_encode(
+				$this->expedientes_model->obtener_registros_expedientes($this->input->post('id'))->result()
 			);
 
 		}

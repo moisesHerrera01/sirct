@@ -25,4 +25,31 @@ class Expedientes_model extends CI_Model {
       return "fracaso";
     }
   }
+
+	public function obtener_registros_expedientes($id) {
+
+			$this->db->select('')
+						 ->from('sct_expedienteci e')
+						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
+						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
+						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresa')
+						 ->where('a.id_expedientert', $id);
+			$query=$this->db->get();
+			if ($query->num_rows() > 0) {
+					return  $query;
+			}
+			else {
+					return FALSE;
+			}
+
+	}
+
+	public function editar_expediente($data){
+		$this->db->where("id_expedienteci",$data["id_expedienteci"]);
+		if ($this->db->update('sct_expedienteci', $data)) {
+			return "exito";
+		}else {
+			return "fracaso";
+		}
+	}
 }

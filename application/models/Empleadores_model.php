@@ -18,4 +18,13 @@ class Empleadores_model extends CI_Model {
       return "fracaso";
     }
   }
+
+	public function editar_empleador($data){
+		$this->db->where("id_empleador",$data["id_empleador"]);
+		if ($this->db->update('sge_empleador', $data)) {
+			return "exito";
+		}else {
+			return "fracaso";
+		}
+	}
 }

@@ -34,7 +34,7 @@ class Solicitudes_model extends CI_Model {
 		else return false;
 	}
 
-	function editar_solicitud($data){
+	/*function editar_solicitud($data){
 		$this->db->where("id_personaci",$data["id_personaci"]);
 		if($this->db->update('sct_personaci', array(
 			'nombre_personaci' => $data['nombre_personaci'],
@@ -59,6 +59,15 @@ class Solicitudes_model extends CI_Model {
 		))){
 			return "exito";
 		}else{
+			return "fracaso";
+		}
+	}*/
+
+	public function editar_solicitud($data){
+		$this->db->where("id_personaci",$data["id_personaci"]);
+		if ($this->db->update('sct_personaci', $data)) {
+			return "exito";
+		}else {
 			return "fracaso";
 		}
 	}
