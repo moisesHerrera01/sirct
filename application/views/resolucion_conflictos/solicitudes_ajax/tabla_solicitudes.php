@@ -83,11 +83,7 @@
                             echo "<td>";
 
 
-                            $array = array($fila->id_expedienteci,
-                                           $fila->numero,
-                                           date("d-m-Y",strtotime($fila->fecha)),
-                                           $fila->nombre_personaci
-                                          );
+                            $array = array($fila->id_personaci);
                             if(tiene_permiso($segmentos=2,$permiso=4)){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");

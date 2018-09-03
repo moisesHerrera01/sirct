@@ -34,39 +34,10 @@ class Solicitudes_model extends CI_Model {
 		else return false;
 	}
 
-	/*function editar_solicitud($data){
-		$this->db->where("id_personaci",$data["id_personaci"]);
-		if($this->db->update('sct_personaci', array(
-			'nombre_personaci' => $data['nombre_personaci'],
-			'apellido_personaci' => $data['apellido_personaci'],
-			'dui_personaci' => $data['dui_personaci'],
-			'telefono_personaci' => $data['telefono_personaci'],
-			'id_municipio' => $data['id_municipio'],
-			'direccion_personaci' => $data['direccion_personaci'],
-			'fnacimiento_personaci' => $data['fnacimiento_personaci'],
-			'sexo_personaci' => $data['sexo_personaci'],
-			'estudios_personaci' => $data['estudios_personaci'],
-			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
-			'discapacidad_personaci' => $data['discapacidad_personaci'],
-			'salario_personaci' => $data['salario_personaci'],
-			'funciones_personaci'=> $data['funciones_personaci'],
-			'formapago_personaci'=>$data['formapago_personaci'] ,
-			'horarios_personaci' => $data['horarios_personaci'],
-			'fechaconflicto_personaci'=>	$data['fechaconflicto_personaci'],
-			'id_catalogociuo'=>$data['id_catalogociuo'],
-			'id_empleador'=>$data['id_empleador'],
-			'tipopeticion_personaci' => $data['tipopeticion_personaci']
-		))){
-			return "exito";
-		}else{
-			return "fracaso";
-		}
-	}*/
-
 	public function editar_solicitud($data){
 		$this->db->where("id_personaci",$data["id_personaci"]);
 		if ($this->db->update('sct_personaci', $data)) {
-			return "exito";
+			return $data["id_personaci"];
 		}else {
 			return "fracaso";
 		}

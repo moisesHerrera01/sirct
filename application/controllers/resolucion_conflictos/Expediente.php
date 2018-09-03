@@ -54,7 +54,7 @@ class Expediente extends CI_Controller {
 		} else if($this->input->post('band2') == "edit"){
 
 			$data3 = array(
-				'id_empleador' => $this->input->post('id_empleador'),
+				'id_empleador' => $this->input->post('id_emplea'),
 				'nombre_empleador' => $this->input->post('nombres_jefe'),
 				'apellido_empleador' => $this->input->post('apellidos_jefe'),
 				'cargo_empleador' => $this->input->post('cargo_jefe')
@@ -68,7 +68,6 @@ class Expediente extends CI_Controller {
 			$data['horarios_personaci'] = $this->input->post('horario');
 			$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
 			$data['id_catalogociuo'] = $this->input->post('ocupacion');
-			$data['id_empleador'] = $this->input->post('id_empleador');
 
 			$data2 = array(
 					'id_expedienteci' => $this->input->post('id_expedienteci'),
@@ -77,10 +76,8 @@ class Expediente extends CI_Controller {
 					'id_personaci' => $this->input->post('id_persona'),
 					'id_personal' => $this->input->post('id_personal'),
 					'id_empresaci' => $this->input->post('establecimiento'),
-					'id_estadosci' => 1,
 					'fechacrea_expedienteci' => $fecha_actual,
 					'tiposolicitud_expedienteci' =>"Conciliación",
-					'numerocaso_expedienteci' =>10
 			);
 
 			if ("fracaso" != $this->empleadores_model->editar_empleador($data3)) {

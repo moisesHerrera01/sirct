@@ -52,7 +52,8 @@ class Solicitudes extends CI_Controller {
 			'sexo_personaci' => $this->input->post('sexo'),
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
-			'discapacidad_personaci' => $this->input->post('discapacidad')
+			'discapacidad_personaci' => $this->input->post('discapacidad'),
+			'id_empleador' => $this->input->post('id_empleador')
 			);
 			echo $this->solicitudes_model->editar_solicitud($data);
 

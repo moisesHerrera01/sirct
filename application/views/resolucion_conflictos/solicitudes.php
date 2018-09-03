@@ -36,7 +36,7 @@ function combo_establecimiento(seleccion){
   })
   .done(function(res){
     $('#div_combo_establecimiento').html(res);
-    $("#establecimiento").select2({
+    $(".est").select2({
       'minimumInputLength': 3,
       'language': {
         noResults: function () {
@@ -123,6 +123,7 @@ function open_form(num){
 
 function cerrar_mantenimiento(){
     $("#cnt_tabla").show(0);
+    $("#cnt_tabla_solicitudes").show(0);
     $("#cnt_form_main").hide(0);
     open_form(1);
     tablasolicitudes();
@@ -189,6 +190,7 @@ function cambiar_nuevo(){
     $("#establecimiento").val('');
     $("#salario").val('');
     $("#funciones").val('');
+    $("#forma_pago").val('');
     $("#horario").val('');
     $("#fecha_conflicto").val('');
     /*Fin expediente*/
@@ -210,28 +212,29 @@ function cambiar_nuevo(){
     combo_establecimiento('');
 }
 
-function cambiar_editar(id_expedienteci,bandera){
-  $("#id_expedienteci").val(id_expedienteci);
+function cambiar_editar(id_personaci,bandera){
+  $("#id_persona").val(id_personaci);
 
   if(bandera == "edit"){
 
     $.ajax({
       url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/registros_expedientes",
       type: "POST",
-      data: {id : id_expedienteci}
+      data: {id : id_personaci}
     })
     .done(function(res){
       result = JSON.parse(res)[0];
 
       $("#id_personaci").val(result.id_personaci);
       $("#id_persona").val(result.id_persona);
+      $("#id_expedienteci").val(result.id_expedienteci);
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
       $("#nombres").val(result.nombre_personaci);
       $("#apellidos").val(result.apellido_personaci);
       $("#dui").val(result.dui_personaci);
       $("#telefono").val(result.telefono_personaci);
-      $("#id_municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
-      $("#direccion").val(result.direccion_personci);
+      $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
+      $("#direccion").val(result.direccion_personaci);
       $("#fecha_nacimiento").val(result.fnacimiento_personaci);
       $("#sexo").val(result.sexo_personaci);
       $("#estudios").val(result.estudios_personaci);
@@ -242,17 +245,22 @@ function cambiar_editar(id_expedienteci,bandera){
       combo_ocupacion(result.id_catalogociuo);
       combo_delegado(result.id_personal);
       combo_actividad_economica(result.id_catalogociiu);
-      combo_municipio(result.id_municipio);
-      $("#id_empleador").val($(result.id_empleador).val()).trigger('change.select2');
+      combo_municipio(result.id_municipio1);
+      $("#id_empleador").val(result.id_empleador);
+      $("#id_emplea").val(result.id_empleador);
       $("#nombres_jefe").val(result.nombre_empleador);
       $("#apellidos_jefe").val(result.apellido_empleador);
       $("#cargo_jefe").val(result.cargo_empleador);
       $("#motivo").val(result.motivo_expedienteci).trigger('change.select2');
-      $("#establecimiento").val(result.id_empresaci);
       $("#salario").val(result.salario_personaci);
       $("#funciones").val(result.funciones_personaci);
+      $("#forma_pago").val(result.formapago_personaci);
       $("#horario").val(result.horarios_personaci);
       $("#fecha_conflicto").val(result.fechaconflicto_personaci);
+      $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
+      combo_establecimiento(result.id_empresaci);
+
+
       /*Fin expediente*/
 
       $("#band").val("edit");
@@ -266,7 +274,8 @@ function cambiar_editar(id_expedienteci,bandera){
     $("#btnedit1").show(0);
     $("#btnadd2").hide(0);
     $("#btnedit2").show(0);
-    $("#cnt-tabla").hide(0);
+    $("#cnt_tabla_solicitudes").hide(0);
+    $("#cnt_tabla").hide(0);
     $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
   }else{
@@ -279,38 +288,8 @@ function volver(num) {
   $("#band"+num).val("edit")
 }
 
-  function editar_actividad(){ $("#band").val("edit"); enviarDatos(); }
+  function editar_solicitud(){ $("#band").val("edit"); enviarDatos(); }
 
-/*function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,telefono,direccion, nacimiento,sexo,nacionalidad,
-                        discapacidad){
-    $("#id_personaci").val(id_personaci);
-    $("#nr").val($("#nr_search").val()).trigger('change.select2');
-    $("#nombres").val(nombre_personaci);
-    $("#apellidos").val(apellido_personaci);
-    $("#dui").val(dui);
-    $("#telefono").val(telefono);
-    $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');
-    $("#direccion").val(direccion);
-    $("#fecha_nacimiento").val(nacimiento);
-    $("#sexo").val(sexo);
-    $("#estudios").val('estudios');
-    $("#nacionalidad").val(nacionalidad);
-    $("#discapacidad").val(discapacidad);
-    $("#band").val(band);
-
-    if(band == "edit"){
-        $("#ttl_form").removeClass("bg-success");
-        $("#ttl_form").addClass("bg-info");
-        //$("#btnadd").hide(0);
-        //$("#btnedit").show(0);
-        $("#cnt_tabla").hide(0);
-        $("#cnt_form_main").show(0);
-        $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Solicitud");
-    }else{
-        eliminar_horario(estado);
-    }
-}
-*/
 </script>
 
 <input type="hidden" id="address" name="">
@@ -355,6 +334,8 @@ function volver(num) {
                             <input type="hidden" id="band1" name="band1" value="save">
                             <input type="hidden" id="estado" name="estado" value="1">
                             <input type="hidden" id="id_personaci" name="id_personaci" value="">
+                            <input type="hidden" id="id_empleador" name="id_empleador" value="">
+
 
                             <span class="etiqueta">Expediente</span>
                             <blockquote class="m-t-0">
@@ -474,6 +455,8 @@ function volver(num) {
                                 Información de la solicitud
                                 <input type="hidden" id="band2" name="band2" value="save">
                                 <input type="hidden" id="id_persona" name="id_persona" value="">
+                                <input type="hidden" id="id_emplea" name="id_emplea" value="">
+                                <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="">
 
                               </h3><hr class="m-t-0 m-b-30">
                               <span class="etiqueta">Expediente</span>

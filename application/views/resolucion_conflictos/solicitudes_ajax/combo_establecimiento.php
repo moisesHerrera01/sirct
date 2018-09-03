@@ -1,5 +1,5 @@
 <h5>Establecimiento: <span class="text-danger">*</span></h5>
-<select id="establecimiento" name="establecimiento" required class="select2" onchange=""  style="width: 100%">
+<select id="establecimiento" name="establecimiento" required class="select2 est" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php
             if(!empty($establecimiento)){
