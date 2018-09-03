@@ -62,11 +62,26 @@ class Solicitud_juridica_model extends CI_Model {
   		}
 	}
 
-	/*function insertar_representante($data){
+	function insertar_establecimiento($data){
+		if($this->db->insert('sge_empresa', array(
+			'nombre_empresa' => $data['nombre_empresa'],
+			'telefono_empresa' => $data['telefono_empresa'],
+			'id_catalogociiu' => $data['id_catalogociiu'],
+			'id_municipio' => $data['id_municipio'],
+			'direccion_empresa' => $data['direccion_empresa'],
+		))){
+			return "exito,".$this->db->insert_id();
+		}else{
+			return "fracaso";
+		}
+	}
+
+	function insertar_representante($data){
 		if($this->db->insert('sge_representante', array(
-			'id_empresa' => $data['id_empresa'],
+			'id_empresa' => $data['id_empresa'], 
 			'nombres_representante' => $data['nombres_representante'],
-			'alias_representante' => $data['alias_representante'],
+			'dui_representante' => $data['dui_representante'],
+			'acreditacion_representante' => $data['acreditacion_representante'],
 			'tipo_representante' => $data['tipo_representante']
 		))){
 			return "exito";
@@ -78,9 +93,10 @@ class Solicitud_juridica_model extends CI_Model {
 	function editar_representante($data){
 		$this->db->where("id_representante",$data["id_representante"]);
 		if($this->db->update('sge_representante', array(
-			'id_empresa' => $data['id_empresa'],
+			'id_empresa' => $data['id_empresa'], 
 			'nombres_representante' => $data['nombres_representante'],
-			'alias_representante' => $data['alias_representante'],
+			'dui_representante' => $data['dui_representante'],
+			'acreditacion_representante' => $data['acreditacion_representante'],
 			'tipo_representante' => $data['tipo_representante']
 		))){
 			return "exito";
@@ -90,12 +106,15 @@ class Solicitud_juridica_model extends CI_Model {
 	}
 
 	function eliminar_representante($data){
-  		if($this->db->delete("sge_representante",array('id_representante' => $data['id_representante']))){
-  			return "exito";
-  		}else{
-  			return "fracaso";
-  		}
-	}*/
+  		$this->db->where("id_representante",$data["id_representante"]);
+		if($this->db->update('sge_representante', array(
+			'estado_representante' => $data['estado_representante']
+		))){
+			return "exito";
+		}else{
+			return "fracaso";
+		}
+	}
 
 	function obtener_ultimo_id($tabla,$nombreid){
 		$this->db->order_by($nombreid, "asc");

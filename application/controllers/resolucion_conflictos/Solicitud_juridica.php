@@ -19,6 +19,10 @@ class Solicitud_juridica extends CI_Controller {
     $this->load->view('resolucion_conflictos/solicitud_juridica_ajax/tabla_solicitud_juridica');
   }
 
+  	public function tabla_representantes(){
+		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/tabla_representantes');
+	}
+
   public function combo_establecimiento() {
 		
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento', 
@@ -28,6 +32,63 @@ class Solicitud_juridica extends CI_Controller {
 			)
 		);
 
+	}
+
+	public function gestionar_representantes(){
+		if($this->input->post('band3') == "save"){
+			$data = array(
+			'id_empresa' => $this->input->post('id_empresa'),
+			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
+			'dui_representante' => ($this->input->post('dui_representante')),
+			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
+			'tipo_representante' => $this->input->post('tipo_representante')
+			);
+      		echo $this->solicitud_juridica_model->insertar_representante($data);
+		}else if($this->input->post('band3') == "edit"){
+      		$data = array(
+		    'id_representante' => $this->input->post('id_representante'),
+		    'id_empresa' => $this->input->post('id_empresa'),
+			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
+			'dui_representante' => ($this->input->post('dui_representante')),
+			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
+			'tipo_representante' => $this->input->post('tipo_representante')
+			);
+			echo $this->solicitud_juridica_model->editar_representante($data);
+		}else if($this->input->post('band3') == "delete"){
+			$data = array(
+			'id_representante' => $this->input->post('id_representante'),
+			'estado_representante' => $this->input->post('estado_representante')
+			);
+			echo $this->solicitud_juridica_model->eliminar_representante($data);
+		}
+	}
+
+	public function gestionar_establecimiento(){
+		if($this->input->post('band') == "save"){
+			$data = array(
+			'nombre_empresa' => mb_strtoupper($this->input->post('nombre_empresa')),
+			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
+			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
+			'id_municipio' => $this->input->post('id_municipio'),
+			'direccion_empresa' => $this->input->post('direccion_empresa')
+			);
+      		echo $this->solicitud_juridica_model->insertar_establecimiento($data);
+		}else if($this->input->post('band') == "edit"){
+      		$data = array(
+		    'nombre_empresa' => mb_strtoupper($this->input->post('nombre_empresa')),
+			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
+			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
+			'id_municipio' => $this->input->post('id_municipio'),
+			'direccion_empresa' => $this->input->post('direccion_empresa')
+			);
+			echo $this->solicitud_juridica_model->editar_establecimiento($data);
+		}else if($this->input->post('band') == "delete"){
+			$data = array(
+			'id_empresa' => $this->input->post('id_empresa'),
+			'estado_empresa' => $this->input->post('estado_empresa')
+			);
+			echo $this->solicitud_juridica_model->eliminar_establecimiento($data);
+		}
 	}
 
 	public function gestionar_solicitud_juridica(){
