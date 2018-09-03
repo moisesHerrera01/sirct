@@ -16,14 +16,6 @@
     <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
     <script> jQuery(document).ready(function() { $(".select2").select2(); $('.selectpicker').selectpicker(); }); </script>
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert/sweetalert.min.js"></script>
-    <script type="text/javascript">
-        const toast = swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 3000
-        });
-    </script>
     <script src="<?php echo base_url(); ?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/moment.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/moment-with-locales.min.js"></script>
