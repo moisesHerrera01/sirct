@@ -113,7 +113,14 @@ class Expediente extends CI_Controller {
 			print json_encode(
 				$this->expedientes_model->obtener_registros_expedientes($this->input->post('id'))->result()
 			);
-
 		}
+
+
+			public function ver_expediente() {
+				$data['empresa'] = $this->expedientes_model->obtener_municipio($this->input->post('id_emp'));
+				$data['expediente'] = $this->expedientes_model->obtener_registros_expedientes( $this->input->post('id') );
+
+				$this->load->view('resolucion_conflictos/solicitudes_ajax/vista_expediente', $data);
+			}
 }
 ?>

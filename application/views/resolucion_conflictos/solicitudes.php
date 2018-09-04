@@ -51,6 +51,22 @@ function combo_establecimiento(seleccion){
 
 }
 
+function visualizar(id_personaci,id_empresaci) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/ver_expediente",
+    type: "post",
+    dataType: "html",
+    data: {id : id_personaci, id_emp : id_empresaci}
+  })
+  .done(function(res){
+    $('#cnt_actions').html(res);
+    $("#cnt_actions").show(0);
+    $("#cnt_tabla").hide(0);
+    $("#cnt_tabla_solicitudes").hide(0);
+    $("#cnt_form_main").hide(0);
+  });
+}
+
 function combo_actividad_economica(){
 
   $.ajax({
@@ -125,6 +141,8 @@ function cerrar_mantenimiento(){
     $("#cnt_tabla").show(0);
     $("#cnt_tabla_solicitudes").show(0);
     $("#cnt_form_main").hide(0);
+    $("#cnt_actions").hide(0);
+    $("#cnt_actions").remove('.card');
     open_form(1);
     tablasolicitudes();
 }
@@ -569,6 +587,7 @@ function volver(num) {
                     </div>
                 </div>
             </div>
+            <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
                 <div class="card">
