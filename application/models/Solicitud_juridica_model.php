@@ -7,18 +7,23 @@ class Solicitud_juridica_model extends CI_Model {
 		parent::__construct();
 	}
 
-	function insertar_solicitud($data){
+	function mostrar_solicitud(){
+		$query = $this->db->get("sct_personaci");
+		if($query->num_rows() > 0) return $query;
+		else return false;
+	}
+
+	function insertar_solicitado($data){
 		if($this->db->insert('sct_personaci', array(
 			'nombre_personaci' => $data['nombre_personaci'],
 			'apellido_personaci' => $data['apellido_personaci'],
-			'dui_personaci' => $data['dui_personaci'],
 			'telefono_personaci' => $data['telefono_personaci'],
 			'id_municipio' => $data['id_municipio'],
 			'direccion_personaci' => $data['direccion_personaci'],
-			'fnacimiento_personaci' => $data['fnacimiento_personaci'],
 			'sexo_personaci' => $data['sexo_personaci'],
-			'estudios_personaci' => $data['estudios_personaci'],
-			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
+			'salario_personaci' => $data['salario_personaci'],
+			'horarios_personaci' => $data['horarios_personaci'],
+			'id_catalogociuo' => $data['id_catalogociuo'],
 			'discapacidad_personaci' => $data['discapacidad_personaci']
 		))){
 			return "exito,".$this->db->insert_id();
@@ -27,25 +32,18 @@ class Solicitud_juridica_model extends CI_Model {
 		}
 	}
 
-	function mostrar_solicitud(){
-		$query = $this->db->get("sct_personaci");
-		if($query->num_rows() > 0) return $query;
-		else return false;
-	}
-
 	function editar_solicitud($data){
 		$this->db->where("id_personaci",$data["id_personaci"]);
 		if($this->db->update('sct_personaci', array(
 			'nombre_personaci' => $data['nombre_personaci'],
 			'apellido_personaci' => $data['apellido_personaci'],
-			'dui_personaci' => $data['dui_personaci'],
 			'telefono_personaci' => $data['telefono_personaci'],
 			'id_municipio' => $data['id_municipio'],
 			'direccion_personaci' => $data['direccion_personaci'],
-			'fnacimiento_personaci' => $data['fnacimiento_personaci'],
 			'sexo_personaci' => $data['sexo_personaci'],
-			'estudios_personaci' => $data['estudios_personaci'],
-			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
+			'salario_personaci' => $data['salario_personaci'],
+			'horarios_personaci' => $data['horarios_personaci'],
+			'id_catalogociuo' => $data['id_catalogociuo'],
 			'discapacidad_personaci' => $data['discapacidad_personaci']
 		))){
 			return "exito";
@@ -56,6 +54,48 @@ class Solicitud_juridica_model extends CI_Model {
 
 	function eliminar_solicitud($data){
   		if($this->db->delete("sct_personaci",array('id_personaci' => $data['id_personaci']))){
+  			return "exito";
+  		}else{
+  			return "fracaso";
+  		}
+	}
+
+	function insertar_expediente($data){
+		if($this->db->insert('sct_expedienteci', array(
+			'id_empresaci' => $data['id_empresaci'],
+			'id_personal' => $data['id_personal'],
+			'id_personaci' => $data['id_personaci'],
+			'motivo_expedienteci' => $data['motivo_expedienteci'],
+			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci']
+		))){
+			return "exito";
+		}else{
+			return "fracaso";
+		}
+	}
+
+	function editar_expediente($data){
+		$this->db->where("id_expedienteci",$data["id_expedienteci"]);
+		if($this->db->update('sct_expedienteci', array(
+			'nombre_personaci' => $data['nombre_personaci'],
+			'apellido_personaci' => $data['apellido_personaci'],
+			'telefono_personaci' => $data['telefono_personaci'],
+			'id_municipio' => $data['id_municipio'],
+			'direccion_personaci' => $data['direccion_personaci'],
+			'sexo_personaci' => $data['sexo_personaci'],
+			'salario_personaci' => $data['salario_personaci'],
+			'horarios_personaci' => $data['horarios_personaci'],
+			'id_catalogociuo' => $data['id_catalogociuo'],
+			'discapacidad_personaci' => $data['discapacidad_personaci']
+		))){
+			return "exito";
+		}else{
+			return "fracaso";
+		}
+	}
+
+	function eliminar_expediente($data){
+  		if($this->db->delete("sct_expedienteci",array('id_expedienteci' => $data['id_expedienteci']))){
   			return "exito";
   		}else{
   			return "fracaso";

@@ -95,10 +95,10 @@ if("192.168.1.200" == $_SERVER['SERVER_NAME']){
 		'failover' => array(),
 		'save_queries' => FALSE
 	);
-}elseif("192.168.11.239" == $_SERVER['SERVER_NAME']){
+}elseif("192.168.1.41" == $_SERVER['SERVER_NAME']){
 	$db['default'] = array(
 		'dsn'	=> '',
-		'hostname' => '192.168.1.240',
+		'hostname' => '192.168.1.42',
 		'username' => 'root',
 		'password' => 'Prueba#45',
 		'database' => 'mtps',

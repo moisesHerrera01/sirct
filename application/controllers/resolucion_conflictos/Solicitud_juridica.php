@@ -9,29 +9,27 @@ class Solicitud_juridica extends CI_Controller {
 		$this->load->library('FPDF/fpdf');
 	}
 
-  public function index(){
-    $this->load->view('templates/header');
-    $this->load->view('resolucion_conflictos/solicitud_juridica');
-    $this->load->view('templates/footer');
-  }
+  	public function index(){
+	    $this->load->view('templates/header');
+	    $this->load->view('resolucion_conflictos/solicitud_juridica');
+	    $this->load->view('templates/footer');
+  	}
 
-  public function tabla_solicitud_juridica(){
-    $this->load->view('resolucion_conflictos/solicitud_juridica_ajax/tabla_solicitud_juridica');
-  }
+	public function tabla_solicitud_juridica(){
+	    $this->load->view('resolucion_conflictos/solicitud_juridica_ajax/tabla_solicitud_juridica');
+	}
 
   	public function tabla_representantes(){
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/tabla_representantes');
 	}
 
-  public function combo_establecimiento() {
-		
+  	public function combo_establecimiento() {
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento', 
 			array(
 				'id' => $this->input->post('id'),
 				'establecimiento' => $this->db->get('sge_empresa')
 			)
 		);
-
 	}
 
 	public function gestionar_representante(){
@@ -91,66 +89,79 @@ class Solicitud_juridica extends CI_Controller {
 		}
 	}
 
-	public function gestionar_solicitud_juridica(){
-
-
-		if($this->input->post('band') == "save"){
+	public function gestionar_solicitado(){
+		if($this->input->post('band3') == "save"){
 			$data = array(
-      		'nombre_personaci' => $this->input->post('nombres'),
-			'apellido_personaci' => $this->input->post('apellidos'),
-			'dui_personaci' => $this->input->post('dui'),
-			'telefono_personaci' => $this->input->post('telefono'),
+      		'nombre_personaci' => $this->input->post('nombre_personaci'),
+			'apellido_personaci' => $this->input->post('apellido_personaci'),
+			'telefono_personaci' => $this->input->post('telefono_personaci'),
 			'id_municipio' => $this->input->post('municipio'),
-			'direccion_personaci' => $this->input->post('direccion'),
-			'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
+			'direccion_personaci' => $this->input->post('direccion_personaci'),
 			'sexo_personaci' => $this->input->post('sexo'),
-			'estudios_personaci' => $this->input->post('estudios'),
-			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
+			'salario_personaci' => $this->input->post('salario_personaci'),
+			'horarios_personaci' => $this->input->post('horarios_personaci'),
+			'id_catalogociuo' => $this->input->post('id_catalogociuo'),
+			'id_empresaci' => $this->input->post('id_empresaci'),
 			'discapacidad_personaci' => $this->input->post('discapacidad')
 			);
-			echo $this->solicitudes_model->insertar_solicitud($data);
+			echo $this->solicitud_juridica_model->insertar_solicitado($data);
 
-		}else if($this->input->post('band') == "edit"){
-
+		}else if($this->input->post('band3') == "edit"){
 			$data = array(
 			'id_personaci' => $this->input->post('id_personaci'),
-			'nombre_personaci' => $this->input->post('nombres'),
-			'apellido_personaci' => $this->input->post('apellidos'),
-			'dui_personaci' => $this->input->post('dui'),
-			'telefono_personaci' => $this->input->post('telefono'),
-			'id_municipio' => $this->input->post('municipio'),
-			'direccion_personaci' => $this->input->post('direccion'),
-			'fnacimiento_personaci' => $this->input->post('fecha_nacimiento'),
-			'sexo_personaci' => $this->input->post('sexo'),
-			'estudios_personaci' => $this->input->post('estudios'),
-			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
-			'discapacidad_personaci' => $this->input->post('discapacidad')
+			'nombre_personaci' => $this->input->post('nombre_personaci'),
+			'apellido_personaci' => $this->input->post('apellido_personaci'),
+			'telefono_personaci' => $this->input->post('telefono_personaci'),
+			'id_municipio' => $this->input->post('id_municipio'),
+			'direccion_personaci' => $this->input->post('direccion_personaci'),
+			'sexo_personaci' => $this->input->post('sexo_personaci'),
+			'salario_personaci' => $this->input->post('salario_personaci'),
+			'horarios_personaci' => $this->input->post('horarios_personaci'),
+			'id_catalogociuo' => $this->input->post('id_catalogociuo'),
+			'discapacidad_personaci' => $this->input->post('discapacidad_personaci')
 			);
-			echo $this->solicitudes_model->editar_estado($data);
+			echo $this->solicitud_juridica_model->editar_solicitado($data);
 
-		}else if($this->input->post('band') == "delete"){
+		}else if($this->input->post('band3') == "delete"){
 			$data = array(
 			'id_personaci' => $this->input->post('id_personaci'),
 			'id_estadosci' => $this->input->post('id_estadosci')
 			);
-			echo $this->solicitudes_model->eliminar_estado($data);
+			echo $this->solicitud_juridica_model->eliminar_solicitado($data);
 		}
 	}
 
-	/*public function combo_establecimiento() {
-		$this->db->select("*");
-		$this->db->group_by('e.nombre_empresa');
-		$query = $this->db->get('sge_empresa e');
 
-		$data = $query->result();
+	public function gestionar_expediente(){
+		if($this->input->post('band4') == "save"){
+			$data = array(
+      		'id_empresaci' => $this->input->post('id_empresaci'),
+			'id_personal' => $this->input->post('id_personal'),
+			'id_personaci' => $this->input->post('id_personaci'),
+			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
+			'descripmotivo_expedienteci' => $this->input->post('descripmotivo_expedienteci')
+			);
+			echo $this->solicitud_juridica_model->insertar_expediente($data);
 
-		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_establecimiento',
-			array(
-				'id' => $this->input->post('id'),
-				'establecimiento' => $query
-			)
-		);
-	}*/
+		}else if($this->input->post('band4') == "edit"){
+			$data = array(
+			'id_expedienteci' => $this->input->post('id_expedienteci'),
+			'id_empresaci' => $this->input->post('id_empresaci'),
+			'id_personal' => $this->input->post('id_personal'),
+			'id_personaci' => $this->input->post('id_personaci'),
+			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
+			'descripmotivo_expedienteci' => $this->input->post('descripmotivo_expedienteci')
+			);
+			echo $this->solicitud_juridica_model->editar_expediente($data);
+
+		}else if($this->input->post('band4') == "delete"){
+			$data = array(
+			'id_expedienteci' => $this->input->post('id_expedienteci'),
+			'id_estadosci' => $this->input->post('id_estadosci')
+			);
+			echo $this->solicitud_juridica_model->eliminar_expediente($data);
+		}
+	}
 
 	public function combo_ocupacion() {
 		$data = $this->db->get('sge_catalogociuo');

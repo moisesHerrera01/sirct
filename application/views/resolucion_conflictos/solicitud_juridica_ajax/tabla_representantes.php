@@ -36,7 +36,7 @@
                           echo "<td>".$contador."</td>";
                           echo "<td>".$fila->dui_representante."</td>";
                           echo "<td>".$fila->nombres_representante."</td>";
-                          echo "<td>".$fila->tipo_representante."</td>";
+                          echo ($fila->tipo_representante == "1") ? '<td>Legal</td>' : '<td>designado</td>';
                           echo ($fila->estado_representante == "1") ? '<td><span class="label label-success">Activo</span></td>' : '<td><span class="label label-danger">Inactivo</span></td>';
                           echo "<td>";
                           $array = array($fila->id_representante, $fila->dui_representante, $fila->nombres_representante, $fila->acreditacion_representante, $fila->tipo_representante, $fila->estado_representante);
