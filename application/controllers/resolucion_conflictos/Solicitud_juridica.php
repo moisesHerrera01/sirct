@@ -25,8 +25,9 @@ class Solicitud_juridica extends CI_Controller {
 	}
 
 	public function ver_expediente() {
-		$data['empresa'] = $this->solicitud_juridica_model->obtener_municipio($this->input->post('id_emp'));
+		$data['personaci'] = $this->solicitud_juridica_model->obtener_personaci($this->input->post('id_per'));
 		$data['expediente'] = $this->solicitud_juridica_model->obtener_registros_expedientes( $this->input->post('id') );
+		$data['representantes'] = $this->solicitud_juridica_model->obtener_representantes( $this->input->post('id_emp') );
 
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/vista_expediente', $data);
 	}
@@ -173,7 +174,7 @@ class Solicitud_juridica extends CI_Controller {
 
 	public function combo_ocupacion() {
 		$data = $this->db->get('sge_catalogociuo');
-		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_ocupacion',
+		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_ocupacion',
 			array(
 				'id' => $this->input->post('id'),
 				'ocupacion' => $data

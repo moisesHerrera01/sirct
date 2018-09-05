@@ -26,7 +26,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         tablasolicitudes();
     }
 
-    function combo_ocupacion(seleccion){
+    function combo_ocupacion(seleccion, seleccion2){
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_ocupacion",
             type: "post",
@@ -35,8 +35,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         })
         .done(function(res){
             $('#div_combo_ocupacion').html(res);
-            $("#ocupacion").select2();
-            combo_establecimiento(seleccion);
+            $("#id_catalogociuo").select2();
+            combo_establecimiento(seleccion2);
         });
     }
 
@@ -101,16 +101,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         xmlhttpB.send();
     }
 
-    function visualizar(id_personaci,id_empresaci) {
-        alert(id_personaci)
+    function visualizar(id_expedienteci,id_empresaci, id_personaci) {
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/ver_expediente",
             type: "post",
             dataType: "html",
-            data: {id : id_personaci, id_emp : id_empresaci}
+            data: {id : id_expedienteci, id_emp : id_empresaci, id_per : id_personaci}
         })
         .done(function(res){
-            alert(res)
             $('#cnt_visualizar').html(res);
             $("#cnt_visualizar").show(0);
             $("#cnt_tabla").hide(0);
@@ -180,8 +178,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal,band){
-        alert(id_empresaci)
-        combo_ocupacion(id_empresaci);
+        combo_ocupacion(id_catalogociuo, id_empresaci);
         $("#id_personaci").val(id_personaci);
         $("#nombre_personaci").val(nombre_personaci);
         $("#apellido_personaci").val(apellido_personaci);
@@ -202,8 +199,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#direccion_personaci").val(direccion_personaci);
         $("#discapacidad_personaci").val(discapacidad_personaci);
         $("#telefono_personaci").val(telefono_personaci);
-        $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');
-        $("#id_catalogociuo").val(id_catalogociuo).trigger('change.select2');
+        $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');      
         $("#salario_personaci").val(salario_personaci);
         $("#horarios_personaci").val(horarios_personaci);
         $("#id_expedienteci").val(id_expedienteci);
@@ -892,6 +888,8 @@ $(function(){
         formData.append("id_empresaci", $('#establecimiento').val());
         formData.append("sexo", $('input:radio[name=sexo_personaci]:checked').val());
         formData.append("discapacidad", $('input:radio[name=discapacidad_personaci]:checked').val());
+
+        alert($("#id_catalogociuo").val())
 
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/gestionar_solicitado",
