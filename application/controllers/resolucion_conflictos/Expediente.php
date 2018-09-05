@@ -123,11 +123,6 @@ class Expediente extends CI_Controller {
 				$this->load->view('resolucion_conflictos/solicitudes_ajax/vista_expediente', $data);
 			}
 
-			public function programar_audiencias(){
-				$data['expediente'] = $this->expedientes_model->obtener_registros_expedientes( $this->input->post('id') );
-				$this->load->view('resolucion_conflictos/solicitudes_ajax/programar_audiencias', $data);
-			}
-
 			public function gestionar_inhabilitar_expediente() {
 
 				$data = $this->expedientes_model->obtener_expediente($this->input->post('id_exp'))->result_array()[0];
