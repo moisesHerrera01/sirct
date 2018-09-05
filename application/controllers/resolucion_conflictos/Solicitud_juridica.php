@@ -112,7 +112,7 @@ class Solicitud_juridica extends CI_Controller {
 			'nombre_personaci' => $this->input->post('nombre_personaci'),
 			'apellido_personaci' => $this->input->post('apellido_personaci'),
 			'telefono_personaci' => $this->input->post('telefono_personaci'),
-			'id_municipio' => $this->input->post('id_municipio'),
+			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion_personaci'),
 			'sexo_personaci' => $this->input->post('sexo_personaci'),
 			'salario_personaci' => $this->input->post('salario_personaci'),

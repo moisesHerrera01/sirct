@@ -32,7 +32,7 @@ class Solicitud_juridica_model extends CI_Model {
 		}
 	}
 
-	function editar_solicitud($data){
+	function editar_solicitado($data){
 		$this->db->where("id_personaci",$data["id_personaci"]);
 		if($this->db->update('sct_personaci', array(
 			'nombre_personaci' => $data['nombre_personaci'],
@@ -66,7 +66,10 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_personal' => $data['id_personal'],
 			'id_personaci' => $data['id_personaci'],
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
-			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci']
+			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
+			'tiposolicitud_expedienteci' => 'conciliacion juridica',
+			'id_estadosci' => '1',
+			'fechacrea_expedienteci' => date("Y-m-d H:i:s")
 		))){
 			return "exito";
 		}else{
@@ -77,16 +80,11 @@ class Solicitud_juridica_model extends CI_Model {
 	function editar_expediente($data){
 		$this->db->where("id_expedienteci",$data["id_expedienteci"]);
 		if($this->db->update('sct_expedienteci', array(
-			'nombre_personaci' => $data['nombre_personaci'],
-			'apellido_personaci' => $data['apellido_personaci'],
-			'telefono_personaci' => $data['telefono_personaci'],
-			'id_municipio' => $data['id_municipio'],
-			'direccion_personaci' => $data['direccion_personaci'],
-			'sexo_personaci' => $data['sexo_personaci'],
-			'salario_personaci' => $data['salario_personaci'],
-			'horarios_personaci' => $data['horarios_personaci'],
-			'id_catalogociuo' => $data['id_catalogociuo'],
-			'discapacidad_personaci' => $data['discapacidad_personaci']
+			'id_empresaci' => $data['id_empresaci'],
+			'id_personal' => $data['id_personal'],
+			'id_personaci' => $data['id_personaci'],
+			'motivo_expedienteci' => $data['motivo_expedienteci'],
+			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci']
 		))){
 			return "exito";
 		}else{
