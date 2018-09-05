@@ -90,12 +90,27 @@
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
                             }
-                            if(tiene_permiso($segmentos=2,$permiso=3)){
-                                unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
-                                array_push($array, "delete");
-                                echo generar_boton($array,"cambiar_editar","btn-danger","fa fa-close","Eliminar");
+                            if(tiene_permiso($segmentos=2,$permiso=1)){
+                                ?>
+                              <div class="btn-group">
+                                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                      aria-expanded="false">
+                                      <i class="ti-settings"></i>
+                                  </button>
+                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                      <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci.','.$fila->id_empresaci?>)">Visualizar</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="resolucion('.$fila->id_expedienteci.')">Regisstrar Resolución</a>
+                                      <a class="dropdown-item" href="'.base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedienteci.'/').'" >Descargar Reglamento</a>
+                                      <a class="dropdown-item" href="javascript:;">Something else here</a>
+                                      <?php if ($fila->id_estadosci == "1") { ?>
+                                            <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>
+                                      <?php } else { ?>
+                                          	<a class="dropdown-item" href="javascript:;" onClick="habilitar(<?=$fila->id_expedienteci?>)">Habilitar Expediente</a>
+                                      <?php } ?>
+                                  </div>
+                              </div>
+                              <?php
                             }
-                            echo generar_boton(array($fila->id_expedienteci),"imprimir_solicitud","btn-default","fa fa-print","Imprimir");
                             echo "</td>";
                           echo "</tr>";
                         }

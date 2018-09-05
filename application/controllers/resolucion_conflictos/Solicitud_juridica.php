@@ -6,6 +6,7 @@ class Solicitud_juridica extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('solicitud_juridica_model');
+		$this->load->model('expedientes_model');
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -21,6 +22,13 @@ class Solicitud_juridica extends CI_Controller {
 
   	public function tabla_representantes(){
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/tabla_representantes');
+	}
+
+	public function ver_expediente() {
+		$data['empresa'] = $this->solicitud_juridica_model->obtener_municipio($this->input->post('id_emp'));
+		$data['expediente'] = $this->solicitud_juridica_model->obtener_registros_expedientes( $this->input->post('id') );
+
+		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/vista_expediente', $data);
 	}
 
   	public function combo_establecimiento() {

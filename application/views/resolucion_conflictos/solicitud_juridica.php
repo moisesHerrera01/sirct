@@ -101,6 +101,24 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         xmlhttpB.send();
     }
 
+    function visualizar(id_personaci,id_empresaci) {
+        alert(id_personaci)
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/ver_expediente",
+            type: "post",
+            dataType: "html",
+            data: {id : id_personaci, id_emp : id_empresaci}
+        })
+        .done(function(res){
+            alert(res)
+            $('#cnt_visualizar').html(res);
+            $("#cnt_visualizar").show(0);
+            $("#cnt_tabla").hide(0);
+            $("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+        });
+    }
+
     function alertFunc() {
         $('[data-toggle="tooltip"]').tooltip()
     }
@@ -162,6 +180,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal,band){
+        alert(id_empresaci)
         combo_ocupacion(id_empresaci);
         $("#id_personaci").val(id_personaci);
         $("#nombre_personaci").val(nombre_personaci);
@@ -342,6 +361,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
             <!-- ============================================================== -->
             <div class="col-lg-1"></div>
+            <div class="col-lg-10" id="cnt_visualizar" style="display: block;"></div>
             <div class="col-lg-10" id="cnt_form_main" style="display: none;">
                 <div class="card">
                     <div class="card-header bg-success2" id="ttl_form">
