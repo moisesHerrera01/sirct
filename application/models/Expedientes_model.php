@@ -72,4 +72,20 @@ class Expedientes_model extends CI_Model {
 			return "fracaso";
 		}
 	}
+
+
+  public function obtener_expediente($id) {
+
+      $this->db->select('')
+             ->from('sct_expedienteci')
+             ->where('id_expedienteci', $id);
+      $query=$this->db->get();
+      if ($query->num_rows() > 0) {
+          return $query;
+      }
+      else {
+          return FALSE;
+      }
+
+  }
 }
