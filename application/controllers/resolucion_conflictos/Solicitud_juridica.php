@@ -6,6 +6,7 @@ class Solicitud_juridica extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('solicitud_juridica_model');
+		$this->load->model('expedientes_model');
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -21,6 +22,14 @@ class Solicitud_juridica extends CI_Controller {
 
   	public function tabla_representantes(){
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/tabla_representantes');
+	}
+
+	public function ver_expediente() {
+		$data['personaci'] = $this->solicitud_juridica_model->obtener_personaci($this->input->post('id_per'));
+		$data['expediente'] = $this->solicitud_juridica_model->obtener_registros_expedientes( $this->input->post('id') );
+		$data['representantes'] = $this->solicitud_juridica_model->obtener_representantes( $this->input->post('id_emp') );
+
+		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/vista_expediente', $data);
 	}
 
   	public function combo_establecimiento() {
@@ -112,7 +121,7 @@ class Solicitud_juridica extends CI_Controller {
 			'nombre_personaci' => $this->input->post('nombre_personaci'),
 			'apellido_personaci' => $this->input->post('apellido_personaci'),
 			'telefono_personaci' => $this->input->post('telefono_personaci'),
-			'id_municipio' => $this->input->post('id_municipio'),
+			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion_personaci'),
 			'sexo_personaci' => $this->input->post('sexo_personaci'),
 			'salario_personaci' => $this->input->post('salario_personaci'),
@@ -165,7 +174,7 @@ class Solicitud_juridica extends CI_Controller {
 
 	public function combo_ocupacion() {
 		$data = $this->db->get('sge_catalogociuo');
-		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_ocupacion',
+		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_ocupacion',
 			array(
 				'id' => $this->input->post('id'),
 				'ocupacion' => $data

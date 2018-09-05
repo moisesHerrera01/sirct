@@ -32,7 +32,7 @@ class Solicitud_juridica_model extends CI_Model {
 		}
 	}
 
-	function editar_solicitud($data){
+	function editar_solicitado($data){
 		$this->db->where("id_personaci",$data["id_personaci"]);
 		if($this->db->update('sct_personaci', array(
 			'nombre_personaci' => $data['nombre_personaci'],
@@ -66,7 +66,10 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_personal' => $data['id_personal'],
 			'id_personaci' => $data['id_personaci'],
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
-			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci']
+			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
+			'tiposolicitud_expedienteci' => 'conciliacion juridica',
+			'id_estadosci' => '1',
+			'fechacrea_expedienteci' => date("Y-m-d H:i:s")
 		))){
 			return "exito";
 		}else{
@@ -77,16 +80,11 @@ class Solicitud_juridica_model extends CI_Model {
 	function editar_expediente($data){
 		$this->db->where("id_expedienteci",$data["id_expedienteci"]);
 		if($this->db->update('sct_expedienteci', array(
-			'nombre_personaci' => $data['nombre_personaci'],
-			'apellido_personaci' => $data['apellido_personaci'],
-			'telefono_personaci' => $data['telefono_personaci'],
-			'id_municipio' => $data['id_municipio'],
-			'direccion_personaci' => $data['direccion_personaci'],
-			'sexo_personaci' => $data['sexo_personaci'],
-			'salario_personaci' => $data['salario_personaci'],
-			'horarios_personaci' => $data['horarios_personaci'],
-			'id_catalogociuo' => $data['id_catalogociuo'],
-			'discapacidad_personaci' => $data['discapacidad_personaci']
+			'id_empresaci' => $data['id_empresaci'],
+			'id_personal' => $data['id_personal'],
+			'id_personaci' => $data['id_personaci'],
+			'motivo_expedienteci' => $data['motivo_expedienteci'],
+			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci']
 		))){
 			return "exito";
 		}else{
@@ -153,6 +151,52 @@ class Solicitud_juridica_model extends CI_Model {
 			return "exito";
 		}else{
 			return "fracaso";
+		}
+	}
+
+	public function obtener_registros_expedientes($id) {
+
+		$this->db->select('')
+			->from('sct_expedienteci e')
+			->join('sge_empresa em','em.id_empresa = e.id_empresaci')
+			->join('sir_empleado ep','ep.id_empleado=e.id_personal')
+			/*->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
+			->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo')
+			->join('org_municipio m','m.id_municipio=p.id_municipio')
+			->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
+			*/
+			->where('e.id_expedienteci', $id);
+		$query=$this->db->get();
+		if ($query->num_rows() > 0) {
+			return  $query;
+		}else{
+			return FALSE;
+		}
+	}
+
+	public function obtener_personaci($id) {
+		$this->db->select('')
+			->from('sct_personaci p')
+			->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo')
+			->join('org_municipio m','m.id_municipio=p.id_municipio')
+			->where('p.id_personaci', $id);
+		$query=$this->db->get();
+		if ($query->num_rows() > 0) {
+			return  $query;
+		}else{
+			return FALSE;
+		}
+	}
+
+	public function obtener_representantes($id) {
+		$this->db->select('')
+			->from('sge_representante r')
+			->where('r.id_empresa', $id);
+		$query=$this->db->get();
+		if ($query->num_rows() > 0) {
+			return  $query;
+		}else{
+			return FALSE;
 		}
 	}
 

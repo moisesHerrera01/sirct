@@ -26,7 +26,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         tablasolicitudes();
     }
 
-    function combo_ocupacion(seleccion){
+    function combo_ocupacion(seleccion, seleccion2){
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_ocupacion",
             type: "post",
@@ -35,8 +35,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         })
         .done(function(res){
             $('#div_combo_ocupacion').html(res);
-            $("#ocupacion").select2();
-            combo_establecimiento('');
+            $("#id_catalogociuo").select2();
+            combo_establecimiento(seleccion2);
         });
     }
 
@@ -82,7 +82,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $('#myTable').DataTable();
             }
         }
-        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_solicitudes?nr="+nr_empleado+"&tipo="+estado_pestana,true);
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/tabla_solicitud_juridica?nr="+nr_empleado+"&tipo="+estado_pestana,true);
         xmlhttpB.send();
     }
 
@@ -101,6 +101,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         xmlhttpB.send();
     }
 
+    function visualizar(id_expedienteci,id_empresaci, id_personaci) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/ver_expediente",
+            type: "post",
+            dataType: "html",
+            data: {id : id_expedienteci, id_emp : id_empresaci, id_per : id_personaci}
+        })
+        .done(function(res){
+            $('#cnt_visualizar').html(res);
+            $("#cnt_visualizar").show(0);
+            $("#cnt_tabla").hide(0);
+            $("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+        });
+    }
+
     function alertFunc() {
         $('[data-toggle="tooltip"]').tooltip()
     }
@@ -117,7 +133,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#municipio").val('').trigger('change.select2');
         $("#direccion").val('');
         $("#fecha_nacimiento").val('');
-        $("#sexo").val('');
+        document.getElementById('masculino').checked = 1;
+        document.getElementById('femenino').checked = 0;
+        document.getElementById('si').checked = 0;
+        document.getElementById('no').checked = 1;
         $("#estudios").val('');
         $("#nacionalidad").val('');
         $("#discapacidad").val('');
@@ -128,13 +147,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         //
         /*Fin Solicitado*/
 
-        $("#band4").val('save');
+        $("#band3").val('save');
 
         $("#ttl_form").addClass("bg-success");
         $("#ttl_form").removeClass("bg-info");
 
-        $("#btnadd").show(0);
-        $("#btnedit").hide(0);
+        open_form(1);
 
         $("#cnt_tabla").hide(0);
         $("#cnt_form_main").show(0);
@@ -145,7 +163,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function cambiar_nuevo4(){
         /*Inicio Solicitante*/
-        $("#id_personaci").val('');
         $("#motivo_expedienteci").val('');
         $("#descripmotivo_expedienteci").val('');
         $("#id_personal").val('').trigger('change.select2');
@@ -155,25 +172,43 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         
         //
         /*Fin Solicitado*/
+        open_form(3);
 
         $("#band4").val('save');
     }
 
-    function cambiar_editar(id_personaci,nombre_personaci,apellido_personaci,dui,telefono,direccion, nacimiento,sexo,nacionalidad, discapacidad){
+    function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal,band){
+        combo_ocupacion(id_catalogociuo, id_empresaci);
         $("#id_personaci").val(id_personaci);
-        $("#nr").val($("#nr_search").val()).trigger('change.select2');
-        $("#nombres").val(nombre_personaci);
-        $("#apellidos").val(apellido_personaci);
-        $("#dui").val(dui);
-        $("#telefono").val(telefono);
-        $("#id_municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');
-        $("#direccion").val(direccion);
-        $("#fecha_nacimiento").val(nacimiento);
-        $("#sexo").val(sexo);
-        $("#estudios").val('estudios');
-        $("#nacionalidad").val(nacionalidad);
-        $("#discapacidad").val(discapacidad);
+        $("#nombre_personaci").val(nombre_personaci);
+        $("#apellido_personaci").val(apellido_personaci);
+        if(sexo_personaci == 'M'){
+            document.getElementById('masculino').checked = 1;
+            document.getElementById('femenino').checked = 0;
+        }else{
+            document.getElementById('masculino').checked = 0;
+            document.getElementById('femenino').checked = 1;
+        }
+        if(discapacidad_personaci == '1'){
+            document.getElementById('si').checked = 1;
+            document.getElementById('no').checked = 0;
+        }else{
+            document.getElementById('si').checked = 0;
+            document.getElementById('no').checked = 1;
+        }
+        $("#direccion_personaci").val(direccion_personaci);
+        $("#discapacidad_personaci").val(discapacidad_personaci);
+        $("#telefono_personaci").val(telefono_personaci);
+        $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');      
+        $("#salario_personaci").val(salario_personaci);
+        $("#horarios_personaci").val(horarios_personaci);
+        $("#id_expedienteci").val(id_expedienteci);
+        $("#motivo_expedienteci").val(motivo_expedienteci);
+        $("#descripmotivo_expedienteci").val(descripmotivo_expedienteci);
+        $("#id_personal").val(id_personal).trigger('change.select2');
         $("#band3").val(band);
+
+        open_form(1)
 
         if(band == "edit"){
             $("#ttl_form").removeClass("bg-success");
@@ -274,12 +309,27 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $(".cnt_form").hide(0);
         $("#cnt_form"+num).show(0);
 
-        if($("#band").val() == "save"){
+        if($("#band3").val() == "save"){
             $("#btnadd"+num).show(0);
             $("#btnedit"+num).hide(0);
         }else{
             $("#btnadd"+num).hide(0);
             $("#btnedit"+num).show(0);
+        }
+    }
+
+    function validar_establecimiento(){
+        var establecimiento = $("#establecimiento").val();
+        var registros = $("#myTable2 tr:last td");
+
+        if(establecimiento == "" || registros.length < 5){
+            if(establecimiento == ""){
+                swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
+            }else{
+                swal({ title: "No hay representantes", text: "Agregue al menos un representante.", type: "warning", showConfirmButton: true });
+            }
+        }else{
+            open_form(2);
         }
     }
 
@@ -307,6 +357,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
             <!-- ============================================================== -->
             <div class="col-lg-1"></div>
+            <div class="col-lg-10" id="cnt_visualizar" style="display: block;"></div>
             <div class="col-lg-10" id="cnt_form_main" style="display: none;">
                 <div class="card">
                     <div class="card-header bg-success2" id="ttl_form">
@@ -336,10 +387,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <div class="row">
                                 <div class="col-lg-12" align="center">
                                     <div align="right" id="btnadd1" class="pull-right">
-                                        <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                                        <button type="submit" onclick="validar_establecimiento();" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
                                     </div>
                                     <div align="right" id="btnedit1" style="display: none;" class="pull-right">
-                                        <button type="submit" class="btn waves-effect waves-light btn-info">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                                        <button type="submit" onclick="validar_establecimiento();" class="btn waves-effect waves-light btn-info">Siguiente <i class="mdi mdi-chevron-right"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -390,9 +441,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <div class="form-group col-lg-4">
                                     <center>
                                     <h5>Posee discapacidad:</h5>
-                                    <input name="discapacidad_personaci" type="radio" id="si" value="SI">
+                                    <input name="discapacidad_personaci" type="radio" id="si" value="1">
                                     <label for="si">Si</label><br>
-                                    <input name="discapacidad_personaci" type="radio" id="no" checked="" value="NO">
+                                    <input name="discapacidad_personaci" type="radio" id="no" checked="" value="0">
                                     <label for="no">No</label>
                                     </center>
                                 </div>
@@ -451,7 +502,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITADO -->
                         <!-- ============================================================== -->
                         <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-                        <input type="hidden" id="band4" name="band4" value="save">
                         <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="">
 
                         <div id="cnt_form3" class="cnt_form" style="display: none;">
@@ -494,11 +544,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
                                             if($otro_empleado->num_rows() > 0){
                                                 foreach ($otro_empleado->result() as $fila) {
-                                                    if($nr_usuario == $fila->nr){
-                                                       echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                                    }else{
-                                                        echo '<option class="m-l-50" value="'.$fila->nr.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                                    }
+                                                    echo '<option class="m-l-50" value="'.$fila->id_empleado.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
                                                 }
                                             }
                                         ?>
@@ -843,6 +889,8 @@ $(function(){
         formData.append("sexo", $('input:radio[name=sexo_personaci]:checked').val());
         formData.append("discapacidad", $('input:radio[name=discapacidad_personaci]:checked').val());
 
+        alert($("#id_catalogociuo").val())
+
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/gestionar_solicitado",
             type: "post",
@@ -862,6 +910,7 @@ $(function(){
                     $.toast({ heading: 'Registro exitoso', text: 'Registro de información de solicitado exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                 }else if($("#band3").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                    open_form(3);
                 }
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
@@ -875,6 +924,7 @@ $(function(){
         var formData = new FormData(document.getElementById("formajax4"));
         formData.append("id_empresaci", $('#establecimiento').val());
         formData.append("id_personaci", $('#id_personaci').val());
+        formData.append("band4", $('#band3').val());
 
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/gestionar_expediente",
@@ -888,12 +938,10 @@ $(function(){
         .done(function(res){
           console.log(res)
             if(res == "exito"){
-                if($("#band4").val() == "save"){
-                    $("#id_personaci").val(res[1])
+                if($("#band3").val() == "save"){
                     $.toast({ heading: 'Registro exitoso', text: 'Registro de información de solicitado exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
-                }else if($("#band4").val() == "edit"){
-                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                    tabla_representantes();
+                }else if($("#band3").val() == "edit"){
+                    $.toast({ heading: 'Modificación exitosa', text: 'Modificación de información de solicitado exitosa', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                 }else{
                     if($("#estado_empresa").val() == '1'){
                         swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
@@ -901,6 +949,7 @@ $(function(){
                         swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
                     }
                 }
+                cerrar_mantenimiento()
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }

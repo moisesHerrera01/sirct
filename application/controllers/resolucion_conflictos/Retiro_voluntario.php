@@ -115,7 +115,25 @@ class Retiro_voluntario extends CI_Controller {
 
        }
 
-   }
+    }
+
+    public function tabla_solicitudes() {
+        $this->load->view('resolucion_conflictos/retiro_voluntario_ajax/tabla_solicitudes');
+    }
+
+    public function registro_expediente() {
+
+        print json_encode(
+            $this->expedientes_model->obtener_registro_expediente_retiro($this->input->post('id'))->result()
+        );
+    }
+
+    public function ver_expediente() {
+        $data['empresa'] = $this->expedientes_model->obtener_municipio($this->input->post('id_emp'));
+        $data['expediente'] = $this->expedientes_model->obtener_registro_expediente_retiro( $this->input->post('id') );
+
+        $this->load->view('resolucion_conflictos/retiro_voluntario_ajax/vista_expediente', $data);
+    }
 
 }
 ?>

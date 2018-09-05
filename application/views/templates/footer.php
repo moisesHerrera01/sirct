@@ -40,6 +40,8 @@
 
 <?php } ?>
 
+<script src="<?php echo base_url(); ?>assets/plugins/dropzone-master/dist/min/dropzone.min.js"></script>
+
 <?php if($ruta_segmento == "informes/menu_reportes"){ ?>
     <!-- JS para reportes  -->
     <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>

@@ -68,22 +68,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     }
 
-    function combo_ocupacion(seleccion) {
-        $.ajax({
-                url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_ocupacion",
-                type: "post",
-                dataType: "html",
-                data: {
-                    id: seleccion
-                }
-            })
-            .done(function (res) {
-                $('#div_combo_ocupacion').html(res);
-                $(".select2").select2();
-            });
-
-    }
-
     function combo_municipio() {
 
         $.ajax({
@@ -132,6 +116,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#cnt_tabla").show(0);
         $("#cnt_tabla_solicitudes").show(0);
         $("#cnt_form_main").hide(0);
+        $("#cnt_actions").hide(0);
+        $("#cnt_actions").remove('.card');
         open_form(1);
         tablasolicitudes();
     }
@@ -167,7 +153,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $('#myTable').DataTable();
             }
         }
-        xmlhttpB.open("GET", "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_solicitudes?nr=" +
+        xmlhttpB.open("GET", "<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/tabla_solicitudes?nr=" +
             nr_empleado + "&tipo=" + estado_pestana, true);
         xmlhttpB.send();
     }
@@ -194,22 +180,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Fin Solicitante*/
 
         /*Inicio Expediente*/
-        combo_ocupacion('');
         combo_delegado('');
         combo_actividad_economica();
         combo_municipio();
-        $("#id_empleador").val($("#id_empleador").val()).trigger('change.select2');
-        $("#nombres_jefe").val('');
-        $("#apellidos_jefe").val('');
-        $("#cargo_jefe").val('');
-        $("#motivo").val("").trigger('change.select2');
         $("#id_personal").val('');
         $("#establecimiento").val('');
-        $("#salario").val('');
-        $("#funciones").val('');
-        $("#forma_pago").val('');
-        $("#horario").val('');
-        $("#fecha_conflicto").val('');
         /*Fin expediente*/
 
         $("#band").val("save");
@@ -235,7 +210,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         if (bandera == "edit") {
 
             $.ajax({
-                    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/registros_expedientes",
+                    url: "<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/registro_expediente",
                     type: "POST",
                     data: {
                         id: id_personaci
@@ -261,27 +236,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     $("#discapacidad").val(result.discapacidad_personaci);
 
                     /*Inicio Expediente*/
-                    combo_ocupacion(result.id_catalogociuo);
                     combo_delegado(result.id_personal);
                     combo_actividad_economica(result.id_catalogociiu);
                     combo_municipio(result.id_municipio1);
-                    $("#id_empleador").val(result.id_empleador);
-                    $("#id_emplea").val(result.id_empleador);
-                    $("#nombres_jefe").val(result.nombre_empleador);
-                    $("#apellidos_jefe").val(result.apellido_empleador);
-                    $("#cargo_jefe").val(result.cargo_empleador);
-                    $("#motivo").val(result.motivo_expedienteci).trigger('change.select2');
-                    $("#salario").val(result.salario_personaci);
-                    $("#funciones").val(result.funciones_personaci);
-                    $("#forma_pago").val(result.formapago_personaci);
-                    $("#horario").val(result.horarios_personaci);
-                    $("#fecha_conflicto").val(result.fechaconflicto_personaci);
-                    $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
                     combo_establecimiento(result.id_empresaci);
 
 
                     /*Fin expediente*/
-
                     $("#band").val("edit");
                     $("#band1").val("edit");
                     $("#band2").val("edit");
@@ -311,6 +272,60 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#band").val("edit");
         enviarDatos();
     }
+
+    function visualizar(id_personaci, id_empresaci) {
+        $.ajax({
+                url: "<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/ver_expediente",
+                type: "post",
+                dataType: "html",
+                data: {
+                    id: id_personaci,
+                    id_emp: id_empresaci
+                }
+            })
+            .done(function (res) {
+                $('#cnt_actions').html(res);
+                $("#cnt_actions").show(0);
+                $("#cnt_tabla").hide(0);
+                $("#cnt_tabla_solicitudes").hide(0);
+                $("#cnt_form_main").hide(0);
+            });
+    }
+
+    function adjuntar_actas(id_expediente) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/acta",
+            type: "post",
+            dataType: "html",
+            data: {
+                id: id_expediente
+            }
+        })
+        .done(function (res) {
+            $('#cnt_actions').html(res);
+            $("#cnt_actions").show(0);
+            $("#cnt_tabla").hide(0);
+            $("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+
+            $("#myAwesomeDropzone").dropzone({
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 10,
+                successmultiple: function (data, response) {
+                    $("#uploaded_files").val(response);
+                },
+                init: function () {
+                    var submitButton = document.querySelector("#submit_dropzone_form");
+                    myDropzone = this;
+                    submitButton.addEventListener("click", function () {
+                        myDropzone.processQueue();
+                    });
+                }
+            });
+        });
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -356,7 +371,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <input type="hidden" id="band1" name="band1" value="save">
                             <input type="hidden" id="estado" name="estado" value="1">
                             <input type="hidden" id="id_personaci" name="id_personaci" value="">
-                            <input type="hidden" id="id_empleador" name="id_empleador" value="">
 
 
                             <span class="etiqueta">Expediente</span>
@@ -491,7 +505,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 Información de la solicitud
                                 <input type="hidden" id="band2" name="band2" value="save">
                                 <input type="hidden" id="id_persona" name="id_persona" value="">
-                                <input type="hidden" id="id_emplea" name="id_emplea" value="">
                                 <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="">
 
                             </h3>
@@ -531,6 +544,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     </div>
                 </div>
             </div>
+            <div class="col-lg-10" id="cnt_actions" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
                 <div class="card">
@@ -836,12 +850,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             var currentDate = date.getDate();
             var currentYear = date.getFullYear();
             $('#fecha_nacimiento').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-                endDate: moment().format("DD-MM-YYYY")
-            }).datepicker("setDate", new Date());
-            $('#fecha_conflicto').datepicker({
                 format: 'dd-mm-yyyy',
                 autoclose: true,
                 todayHighlight: true,

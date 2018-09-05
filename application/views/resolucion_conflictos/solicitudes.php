@@ -486,7 +486,7 @@ function volver(num) {
                         <!-- Inicio del FORMULARIO INFORMACIÓN DE LA SOLICITUD -->
                         <!-- ============================================================== -->
                         <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-                          <div id="cnt_form2" class="cnt_form" style="display: none;">
+                          <div id="cnt_form2" class="cnt_form" style="display: block;">
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
                                 Información de la solicitud

@@ -9,22 +9,22 @@ class Solicitudes extends CI_Controller {
 		$this->load->library('FPDF/fpdf');
 	}
 
-  public function index(){
-    $this->load->view('templates/header');
-    $this->load->view('resolucion_conflictos/solicitudes');
-    $this->load->view('templates/footer');
-  }
+	public function index(){
+		$this->load->view('templates/header');
+		$this->load->view('resolucion_conflictos/solicitudes');
+		$this->load->view('templates/footer');
+	}
 
-  public function tabla_solicitudes(){
-    $this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_solicitudes');
-  }
+	public function tabla_solicitudes(){
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_solicitudes');
+	}
 
 	public function gestionar_solicitudes(){
 
 
 		if($this->input->post('band1') == "save"){
 			$data = array(
-      'nombre_personaci' => $this->input->post('nombres'),
+		'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
 			'dui_personaci' => $this->input->post('dui'),
 			'telefono_personaci' => $this->input->post('telefono'),
