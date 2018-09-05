@@ -22,158 +22,185 @@
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>
-                    <tr>
-                        <td>N&uacute;mero de caso:</td>
-                        <td class="font-medium">
-                            <?= $expediente->numerocaso_expedienteci ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Fecha y Hora de Creaci&oacute;n del expediente:</td>
-                        <td class="font-medium">
-                            <?= date("d-M-Y g:i:s A", strtotime($expediente->fechacrea_expedienteci)) ?>
-                        </td>
-                    </tr>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      N&uacute;mero de caso:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->numerocaso_expedienteci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Fecha y Hora de Creaci&oacute;n del expediente:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= date("d-M-Y g:i:s A", strtotime($expediente->fechacrea_expedienteci)) ?></h5>
+                    </div>
+                  </div>
                 </tbody>
             </table>
         </blockquote>
 
-          <!-- <span class="label label-success" style="font-size: 16px;">Datos del establecimiento</span> !-->
+          <!--Datos del solicitante !-->
 
             <span class="label label-success" style="font-size: 16px;">Datos del solicitante</span>
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>
-                    <tr>
-                        <td>Nombres:</td>
-                        <td class="font-medium">
-                            <?= $expediente->nombre_personaci ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Apellidos:</td>
-                        <td class="font-medium">
-                            <?= $expediente->apellido_personaci ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>N&uacute;mero de DUI:</td>
-                        <td class="font-medium">
-                            <?= $expediente->dui_personaci ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tel&eacute;fono:</td>
-                        <td class="font-medium">
-                            <?= $expediente->telefono_personaci ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Municipio:</td>
-                        <td class="font-medium">
-                            <?= $expediente->municipio ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Direci&oacute;n:</td>
-                        <td class="font-medium">
-                            <?= $expediente->direccion_personaci ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                      <td>Fecha de nacimiento:</td>
-                      <td class="font-medium">
-                          <?= $expediente->fnacimiento_personaci ?>
-                      </td>
-                  </tr>
-
-                  <tr>
-                    <td>Sexo:</td>
-                    <td class="font-medium">
-                        <?= ($expediente->sexo_personaci == "M") ? "Masculino" : "Femenino" ; ?>
-                    </td>
-                    </tr>
-
-                  <tr>
-                      <td>Estudios realizados:</td>
-                      <td class="font-medium">
-                          <?= $expediente->estudios_personaci ?>
-                      </td>
-                  </tr>
-
-                  <tr>
-                      <td>Nacionalidad:</td>
-                      <td class="font-medium">
-                          <?= $expediente->nacionalidad_personaci ?>
-                      </td>
-                  </tr>
-
-                  <tr>
-                      <td>Posee discapacidad:</td>
-                      <td class="font-medium">
-                          <?= ($expediente->discapacidad_personaci) ? "SI" : "NO" ; ?>
-                      </td>
-                  </tr>
-
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Nombres:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->nombre_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Apellidos:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->apellido_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      N&uacute;mero de DUI:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->dui_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Tel&eacute;fono:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->telefono_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Tel&eacute;fono:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->municipio ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Direci&oacute;n:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->direccion_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Fecha de nacimiento:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->fnacimiento_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Sexo:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= ($expediente->sexo_personaci == "M") ? "Masculino" : "Femenino" ; ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Estudios realizados:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->estudios_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Nacionalidad:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->nacionalidad_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Posee discapacidad:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= ($expediente->discapacidad_personaci) ? "SI" : "NO" ; ?></h5>
+                    </div>
+                  </div>
                 </tbody>
             </table>
         </blockquote>
 
+        <!--Datos del solicitado !-->
         <span class="label label-success" style="font-size: 16px;">Datos del solicitado</span>
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>
-                    <tr>
-                        <td>N&uacute;mero de Inscripci&oacute;n de empresa:</td>
-                        <td class="font-medium">
-                            <?= $expediente->numinscripcion_empresa ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Municipio:</td>
-                        <td class="font-medium">
-                            <?= $empresa->municipio ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Actividad:</td>
-                        <td class="font-medium">
-                            <?= $empresa->actividad_catalogociiu ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Nombre de empresa:</td>
-                        <td class="font-medium">
-                            <?= $empresa->nombre_empresa ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Dirección:</td>
-                        <td class="font-medium">
-                            <?= $empresa->direccion_empresa ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Telefono:</td>
-                        <td class="font-medium">
-                            <?= $empresa->telefono_empresa ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Representante:</td>
-                        <td class="font-medium">
-                            <?= $empresa->nombres_representante ?>
-                        </td>
-                    </tr>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      N&uacute;mero de Inscripci&oacute;n de empresa:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->numinscripcion_empresa ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Municipio:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $empresa->municipio ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Actividad:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $empresa->actividad_catalogociiu ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Nombre de empresa:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $empresa->nombre_empresa ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Dirección:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $empresa->direccion_empresa ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Telefono:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $empresa->telefono_empresa ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Representante:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $empresa->nombres_representante ?></h5>
+                    </div>
+                  </div>
                 </tbody>
             </table>
         </blockquote>
@@ -182,88 +209,104 @@
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>
-                    <tr>
-                        <td>Motivo de la solicitud:</td>
-                        <td class="font-medium">
-                            <?= $expediente->motivo_expedienteci ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Descripción del motivo:</td>
-                        <td class="font-medium">
-                            <?= $expediente->descripmotivo_expedienteci ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Fecha del conflicto:</td>
-                        <td class="font-medium">
-                            <?= $expediente->fechaconflicto_personaci ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Ocupación:</td>
-                        <td class="font-medium">
-                            <?= $expediente->primarios_catalogociuo ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Salario:</td>
-                        <td class="font-medium">
-                            <?= $expediente->salario_personaci ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Funciones laborales:</td>
-                        <td class="font-medium">
-                            <?= $expediente->funciones_personaci ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Forma de pago:</td>
-                        <td class="font-medium">
-                            <?= $expediente->formapago_personaci ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Horario laboral:</td>
-                        <td class="font-medium">
-                            <?= $expediente->horarios_personaci ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Delegado asignado:</td>
-                        <td class="font-medium">
-                            <?= $expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.$expediente->primer_apellido.
-                            ' '.$expediente->segundo_apellido.' '.(($expediente->apellido_casada) ? $expediente->apellido_casada : ' ') ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Nombres de jefe inmediato:</td>
-                        <td class="font-medium">
-                            <?= $expediente->nombre_empleador ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Apellidos de jefe inmediato:</td>
-                        <td class="font-medium">
-                            <?= $expediente->apellido_empleador ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Cargo de jefe inmediato:</td>
-                        <td class="font-medium">
-                            <?= $expediente->cargo_empleador ?>
-                        </td>
-                    </tr>
-
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Motivo de la solicitud:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->motivo_expedienteci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Descripción del motivo:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->descripmotivo_expedienteci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Fecha del conflicto:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->fechaconflicto_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Ocupación:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->primarios_catalogociuo ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Salario:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->salario_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Funciones laborales:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->funciones_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Forma de pago:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->formapago_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Horario laboral:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->horarios_personaci ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Delegado asignado:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.
+                          $expediente->primer_apellido.' '.$expediente->segundo_apellido.' '.
+                          (($expediente->apellido_casada) ? $expediente->apellido_casada : ' ') ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Nombres de jefe inmediato:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->nombre_empleador ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Apellidos de jefe inmediato:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->apellido_empleador ?></h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                      Cargo de jefe inmediato:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                          <h5><?= $expediente->cargo_empleador ?></h5>
+                    </div>
+                  </div>
                 </tbody>
             </table>
         </blockquote>

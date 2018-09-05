@@ -29,29 +29,21 @@
 
                     $solicitudes = $this->db->query("SELECT e.*,
                                               e.numerocaso_expedienteci AS numero,
+                                              ep.nombre_empresa,
                                               e.id_empresaci,
                                               e.tiposolicitud_expedienteci AS tipo,
-                                              es.nombre_estadosci AS nombre_estado,
                                               e.resultado_expedienteci AS resultado,
                                               e.fechacrea_expedienteci AS fecha,
                                               p.nombre_personaci,
                                               p.apellido_personaci,
-                                              p.dui_personaci AS dui,
                                               p.id_personaci,
-                                              p.telefono_personaci AS telefono,
-                                              p.direccion_personaci AS direccion,
-                                              p.fnacimiento_personaci AS nacimiento,
-                                              p.sexo_personaci AS sexo,
-                                              p.estudios_personaci AS estudios,
-                                              p.nacionalidad_personaci AS nacionalidad,
-                                              p.discapacidad_personaci AS discapacidad,
-                                              em.nombre_empleador,
                                               e.id_expedienteci,
                                               es.id_estadosci AS estado
                                               FROM sct_estadosci AS es
                                               JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                               JOIN sct_personaci p ON p.id_personaci=e.id_personaci
                                               JOIN sge_empleador em ON em.id_empleador=p.id_empleador
+                                              JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
                                               /*JOIN lista_empleados_estado l on l.id_empleado=e.id_personal*/
                                               JOIN sir_empleado l on l.id_empleado=e.id_personal
                                               ".$add." ORDER BY e.id_expedienteci DESC");
@@ -60,8 +52,8 @@
                         foreach ($solicitudes->result() as $fila) {
                           echo "<tr>";
                             echo "<td>".$fila->numero."</td>";
-                            echo "<td>".$fila->nombre_personaci."</td>";
-                            echo "<td>".$fila->nombre_empleador."</td>";
+                            echo "<td>".$fila->nombre_personaci.' '.$fila->apellido_personaci."</td>";
+                            echo "<td>".$fila->nombre_empresa."</td>";
                             echo "<td>".$fila->tipo."</td>";
                             if ($fila->resultado==NULL) {
                               $fila->resultado="Sin Intervenir";
