@@ -88,11 +88,8 @@
                                   </button>
                                   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
                                       <a class="dropdown-item" href="javascript:;" onClick="visualizar('.$fila->id_personaci.','.$fila->id_empresaci.')">Visualizar</a>
-                                      <a class="dropdown-item" href="javascript:;" onClick="resolucion('.$fila->id_expedienteci.')">Registrar Resolución</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas('.$fila->id_expedienteci.')">Adjuntar Actas</a>
                                       <a class="dropdown-item" href="'.base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedienteci.'/').'" >Descargar Reglamento</a>
-                                      <a class="dropdown-item" href="javascript:;">Something else here</a>
-                                      <div class="dropdown-divider"></div>
-                                      <a class="dropdown-item" href="javascript:;">Separated link</a>
                                   </div>
                               </div>';
                             }
@@ -105,8 +102,3 @@
             </table>
         </div>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#myTable').DataTable();
-    });
-</script>

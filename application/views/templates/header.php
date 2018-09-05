@@ -50,6 +50,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <link href="<?php echo base_url(); ?>assets/plugins/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet">
 <?php } ?>
 
+<link href="<?php echo base_url(); ?>assets/plugins/dropzone-master/dist/min/dropzone.min.css" rel="stylesheet">
+
 <?php if($ruta_segmento == "informes/menu_reportes"){ ?>
     <!-- CSS Reportes -->
     <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />

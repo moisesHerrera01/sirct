@@ -292,6 +292,40 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             });
     }
 
+    function adjuntar_actas(id_expediente) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/acta",
+            type: "post",
+            dataType: "html",
+            data: {
+                id: id_expediente
+            }
+        })
+        .done(function (res) {
+            $('#cnt_actions').html(res);
+            $("#cnt_actions").show(0);
+            $("#cnt_tabla").hide(0);
+            $("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+
+            $("#myAwesomeDropzone").dropzone({
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 10,
+                successmultiple: function (data, response) {
+                    $("#uploaded_files").val(response);
+                },
+                init: function () {
+                    var submitButton = document.querySelector("#submit_dropzone_form");
+                    myDropzone = this;
+                    submitButton.addEventListener("click", function () {
+                        myDropzone.processQueue();
+                    });
+                }
+            });
+        });
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -510,7 +544,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
+            <div class="col-lg-10" id="cnt_actions" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
                 <div class="card">
