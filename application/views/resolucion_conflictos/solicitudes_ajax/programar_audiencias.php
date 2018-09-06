@@ -7,7 +7,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $navegatorless = true;
 }
 ?>
-
 <div class="page-wrapper">
   <div class="container-fluid">
     <div class="row">
@@ -61,7 +60,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <hr class="m-t-0 m-b-30">
 
-                <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="10">
+                <input type="hidden" id="id_expedienteci" name="id_expedienteci" value= <?=$expediente->id_expedienteci?>>
+                
 
                 <div class="row">
                   <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -79,7 +79,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <div align="right" id="btnadd1">
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
-                <button type="submit" class="btn waves-effect waves-light btn-success2">
+                <button type="submit" onclick="cambiar_nuevo2();" class="btn waves-effect waves-light btn-success2">
                   Guardar <i class="mdi mdi-chevron-right"></i>
                 </button>
               </div>
@@ -100,7 +100,6 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax6"));
-
         $.ajax({
           url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/gestionar_audiencia",
           type: "post",
@@ -114,15 +113,17 @@ $(function(){
             if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
-              cerrar_mantenimiento();
+              //cerrar_mantenimiento();
               if($("#band3").val() == "save"){
+                  alert($("#id_expedienteci").val(res[0]))
+                  cambiar_nuevo2();
                   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
               }else if($("#band3").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
-              tablasolicitudes();
+              tabla_audiencias($("#id_expedienteci").val());
             }
         });
 

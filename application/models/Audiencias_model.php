@@ -20,4 +20,25 @@ class Audiencias_model extends CI_Model {
 					return FALSE;
 			}
 	}
+
+	function insertar_audiencia($data){
+		if($this->db->insert('sct_fechasaudienciasci', array(
+			'fecha_fechasaudienciasci' => $data['fecha_fechasaudienciasci'],
+			'hora_fechasaudienciasci' => $data['hora_fechasaudienciasci'],
+			'id_expedienteci' => $data['id_expedienteci']
+		))){
+			return "exito,".$this->db->insert_id();
+		}else{
+			return "fracaso";
+		}
+	}
+
+	public function editar_audiencia($data){
+		$this->db->where("id_fechasaudienciasci",$data["id_fechasaudienciasci"]);
+		if ($this->db->update('sct_fechasaudienciasci', $data)) {
+			return "exito";
+		}else {
+			return "fracaso";
+		}
+	}
 }

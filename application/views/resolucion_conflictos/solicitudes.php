@@ -16,6 +16,17 @@ function iniciar(){
     <?php } ?>
 }
 
+function cambiar_nuevo2(){
+    //$("#id_fechasaudienciasci").val('');
+    $("#id_expedienteci").val('');
+    $("#fecha_fechasaudienciasci").val('');
+    $("#hora_fechasaudienciasci").val('');
+    $("#band3").val("save");
+
+    $("#ttl_form").addClass("bg-success");
+    $("#ttl_form").removeClass("bg-info");
+}
+
 function convert_lim_text(lim){
     var tlim = "-"+lim+"d";
     return tlim;
@@ -175,7 +186,7 @@ function tablasolicitudes(){
 }
 
 function tabla_audiencias(id_expedienteci){
-  alert(id_expedienteci);
+  //alert(id_expedienteci);
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttpB=new XMLHttpRequest();
     }else{// code for IE6, IE5
