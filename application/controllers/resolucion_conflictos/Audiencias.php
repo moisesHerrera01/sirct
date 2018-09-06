@@ -22,31 +22,30 @@ class Audiencias extends CI_Controller {
 	public function gestionar_audiencia(){
 
 
-		if($this->input->post('band3') == "save"){
+		if($this->input->post('band4') == "save"){
 			$data = array(
-		  'fecha_fechasaudienciasci' => $this->input->post('fecha_audiencia'),
+			'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
 			'hora_fechasaudienciasci' => $this->input->post('hora_audiencia'),
 			'id_expedienteci' => $this->input->post('id_expedienteci')
 			);
 			echo $this->audiencias_model->insertar_audiencia($data);
 
-		}else if($this->input->post('band3') == "edit"){
+		}else if($this->input->post('band4') == "edit"){
 
 			$data = array(
-			'fecha_fechasaudienciasci' => $this->input->post('fecha_audiencia'),
+			'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
 			'hora_fechasaudienciasci' => $this->input->post('hora_audiencia'),
 			'id_expedienteci' => $this->input->post('id_expedienteci'),
 			'id_fechasaudienciasci' => $this->input->post('id_fechasaudienciasci')
 			);
 			echo $this->audiencias_model->editar_audiencia($data);
 
-		}/*else if($this->input->post('band') == "delete"){
+		}else if($this->input->post('band4') == "delete"){
 			$data = array(
-			'id_personaci' => $this->input->post('id_personaci'),
-			'id_estadosci' => $this->input->post('id_estadosci')
+			'id_fechasaudienciasci' => $this->input->post('id_fechasaudienciasci'),
 			);
-			echo $this->solicitudes_model->eliminar_estado($data);
-		}*/
+			echo $this->audiencias_model->eliminar_audiencia($data);
+		}
 	}
 
 }

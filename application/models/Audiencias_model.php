@@ -9,7 +9,7 @@ class Audiencias_model extends CI_Model {
 
 	public function obtener_audiencias($id) {
 
-			$this->db->select('fecha_fechasaudienciasci,hora_fechasaudienciasci')
+			$this->db->select('id_expedienteci,id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci')
 						 ->from('sct_fechasaudienciasci')
 						 ->where('id_expedienteci', $id);
 			$query=$this->db->get();
@@ -40,5 +40,8 @@ class Audiencias_model extends CI_Model {
 		}else {
 			return "fracaso";
 		}
+	}
+	public function eliminar_audiencia($data){
+		$this->db->delete('sct_fechasaudienciasci', array('id_fechasaudienciasci' => $data['id_fechasaudienciasci']));
 	}
 }

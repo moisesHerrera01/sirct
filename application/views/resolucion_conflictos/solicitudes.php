@@ -16,17 +16,6 @@ function iniciar(){
     <?php } ?>
 }
 
-function cambiar_nuevo2(){
-    //$("#id_fechasaudienciasci").val('');
-    $("#id_expedienteci").val('');
-    $("#fecha_fechasaudienciasci").val('');
-    $("#hora_fechasaudienciasci").val('');
-    $("#band3").val("save");
-
-    $("#ttl_form").addClass("bg-success");
-    $("#ttl_form").removeClass("bg-info");
-}
-
 function convert_lim_text(lim){
     var tlim = "-"+lim+"d";
     return tlim;
@@ -326,8 +315,6 @@ function cambiar_editar(id_personaci,bandera){
     $("#cnt_tabla").hide(0);
     $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
-  }else{
-    //eliminar_reglamento();
   }
 }
 

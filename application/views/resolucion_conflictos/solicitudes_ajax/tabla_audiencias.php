@@ -21,31 +21,29 @@
                   $contador=0;
                     if($audiencia!=FALSE){
                         foreach ($audiencia->result() as $fila) {
+                          $fila->fecha_fechasaudienciasci = date("d-m-Y",strtotime($fila->fecha_fechasaudienciasci));
                           $contador++;
                           echo "<tr>";
                           echo "<td>".$contador."</td>";
                           echo "<td>".date("d-M-Y", strtotime($fila->fecha_fechasaudienciasci))."</td>";
                           echo "<td>".date("g:i:s A", strtotime($fila->hora_fechasaudienciasci))."</td>";
                           echo "<td>";
-                          /*$array = array($fila->id_representante, $fila->dui_representante, $fila->nombres_representante, $fila->acreditacion_representante, $fila->tipo_representante, $fila->estado_representante);
+                          $array = array($fila->id_fechasaudienciasci, $fila->fecha_fechasaudienciasci,
+                          $fila->hora_fechasaudienciasci, $fila->id_expedienteci);
 
                           if(tiene_permiso($segmentos=2,$permiso=4)){
                             array_push($array, "edit");
                             echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
                           }
 
-                          if(tiene_permiso($segmentos=2,$permiso=3)){
+                          if(tiene_permiso($segmentos=2,$permiso=1)){
                             unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
                             array_push($array, "delete");
-                            if($fila->estado_representante == "1"){
-                                echo generar_boton($array,"cambiar_editar2","btn-danger","fa fa-chevron-down","Dar de baja");
-                            }else{
-                                echo generar_boton($array,"cambiar_editar2","btn-success","fa fa-chevron-up","Activar");
-                            }
+                              echo generar_boton($array,"cambiar_editar2","btn-danger","fa fa-chevron-down","Eliminar");
                           }
                           echo "</td>";
                           echo "</tr>";
-                        */}
+                        }
                     }
                 ?>
                 </tbody>

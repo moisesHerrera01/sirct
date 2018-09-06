@@ -61,7 +61,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <hr class="m-t-0 m-b-30">
 
                 <input type="hidden" id="id_expedienteci" name="id_expedienteci" value= <?=$expediente->id_expedienteci?>>
-                
+                <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value= "">
+                <input type="hidden" id="band4" name="band4" value="save">
 
                 <div class="row">
                   <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -76,11 +77,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   </div>
                 </div>
 
-              <div align="right" id="btnadd1">
+              <div align="right" id="btnadd6">
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
                 <button type="submit" onclick="cambiar_nuevo2();" class="btn waves-effect waves-light btn-success2">
                   Guardar <i class="mdi mdi-chevron-right"></i>
+                </button>
+              </div>
+              <div align="right" id="btnedit6" style="display: none;">
+                <button type="reset" class="btn waves-effect waves-light btn-success">
+                  <i class="mdi mdi-recycle"></i> Limpiar</button>
+                <button type="submit" class="btn waves-effect waves-light btn-info">
+                  Finalizar <i class="mdi mdi-chevron-right"></i>
                 </button>
               </div>
             <?php echo form_close(); ?>
@@ -95,6 +103,51 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </div>
 
 <script>
+function eliminar_audiencia(){
+  $("#band4").val("delete");
+  swal({
+    title: "¿Está seguro?",
+    text: "¡Desea eliminar el registro!",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#fc4b6c",
+    confirmButtonText: "Sí, deseo eliminar!",
+    closeOnConfirm: false
+  }, function(){
+
+    $( "#formajax6" ).submit();
+
+  });
+ }
+
+function cambiar_nuevo2(){
+    //$("#id_fechasaudienciasci").val('');
+    $("#id_expedienteci").val('');
+    $("#fecha_fechasaudienciasci").val('');
+    $("#hora_fechasaudienciasci").val('');
+    $("#band4").val("save");
+
+    $("#ttl_form").addClass("bg-success");
+    $("#ttl_form").removeClass("bg-info");
+}
+
+function cambiar_editar2(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,bandera){
+    $("#id_fechasaudienciasci").val(id_fechasaudienciasci);
+    $("#fecha_audiencia").val(fecha_fechasaudienciasci);
+    $("#hora_audiencia").val(hora_fechasaudienciasci);
+    $("#id_expedienteci").val(id_expedienteci);
+
+    if(bandera == "edit"){
+        $("#ttl_form").removeClass("bg-success");
+        $("#ttl_form").addClass("bg-info");
+        $("#btnadd6").hide(0);
+        $("#btnedit6").show(0);
+        $("#band4").val("edit")
+    }else{
+        eliminar_audiencia();
+    }
+}
+
 $(function(){
     $("#formajax6").on("submit", function(e){
         e.preventDefault();
@@ -114,16 +167,16 @@ $(function(){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
               //cerrar_mantenimiento();
-              if($("#band3").val() == "save"){
-                  alert($("#id_expedienteci").val(res[0]))
+              if($("#band4").val() == "save"){
                   cambiar_nuevo2();
                   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-              }else if($("#band3").val() == "edit"){
+              }else if($("#band4").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
-              tabla_audiencias($("#id_expedienteci").val());
+              tabla_audiencias(formData.get('id_expedienteci'));
+              $('#formajax6').trigger("reset");
             }
         });
 
