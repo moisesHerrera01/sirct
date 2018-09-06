@@ -36,7 +36,7 @@ function resolucion(id_expedienteci) {
 
 function cambiar_delegado(id_expedienteci) {
   $.ajax({
-    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/cambiar_delegado",
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/actualizar_delegado",
     type: "post",
     dataType: "html",
     data: {id : id_expedienteci}
@@ -45,6 +45,7 @@ function cambiar_delegado(id_expedienteci) {
     $('#cnt_modal_acciones').html(res);
     $('#modal_delegado').modal('show');
   });
+
 }
 
 var estado_pestana = "";

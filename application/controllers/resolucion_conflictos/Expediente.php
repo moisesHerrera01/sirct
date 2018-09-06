@@ -108,6 +108,17 @@ class Expediente extends CI_Controller {
 
 		}
 
+		public function combo_delegado2() {
+
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado2',
+				array(
+					'id' => $this->input->post('id'),
+					'colaborador' => $this->db->get('lista_empleados_estado')
+				)
+			);
+
+		}
+
 		public function registros_expedientes() {
 
 			print json_encode(
@@ -174,9 +185,8 @@ class Expediente extends CI_Controller {
 
 			}
 
-			public function cambiar_delegado() {
-				$data['expediente'] = $this->expedientes_model->obtener_expediente( $this->input->post('id') );
-				$this->load->view('resolucion_conflictos/solicitudes_ajax/cambiar_delegado',  $data);
+			public function actualizar_delegado() {
+				$this->load->view('resolucion_conflictos/solicitudes_ajax/cambiar_delegado',array('id' => $this->input->post('id') ));
 			}
 }
 ?>

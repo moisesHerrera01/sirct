@@ -1,3 +1,17 @@
+<script>
+function combo_delegado2(seleccion){
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado2",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_delegado2').html(res);
+    $(".select2").select2();
+  });
+}
+</script>
 <?php
 // Características del navegador
 $ua=$this->config->item("navegator");
@@ -23,7 +37,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <div class="row">
             <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Delegado: <span class="text-danger">*</span></h5>
-                <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
+                <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div>
             </div>
           </div>
 
@@ -42,20 +56,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </div>
 
 <script>
-function combo_delegado(seleccion){
-
-  $.ajax({
-    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado",
-    type: "post",
-    dataType: "html",
-    data: {id : seleccion}
-  })
-  .done(function(res){
-    $('#div_combo_delegado').html(res);
-    $(".select2").select2();
-  });
-}
-
 $(function(){
 
     $("#formajax4").on("submit", function(e){
