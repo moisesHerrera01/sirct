@@ -34,6 +34,19 @@ function resolucion(id_expedienteci) {
   });
 }
 
+function cambiar_delegado(id_expedienteci) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/cambiar_delegado",
+    type: "post",
+    dataType: "html",
+    data: {id : id_expedienteci}
+  })
+  .done(function(res){
+    $('#cnt_modal_acciones').html(res);
+    $('#modal_delegado').modal('show');
+  });
+}
+
 var estado_pestana = "";
 function cambiar_pestana(tipo){
     estado_pestana = tipo;
@@ -135,7 +148,6 @@ function combo_delegado(seleccion){
     $('#div_combo_delegado').html(res);
     $(".select2").select2();
   });
-
 }
 
 function open_form(num){

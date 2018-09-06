@@ -9,7 +9,7 @@ class Audiencias extends CI_Controller {
 	}
 
   public function programar_audiencias(){
-    $data['expediente'] = $this->expedientes_model->obtener_registros_expedientes( $this->input->post('id') );
+    $data['expediente'] = $this->expedientes_model->obtener_expediente( $this->input->post('id') );
     $this->load->view('resolucion_conflictos/solicitudes_ajax/programar_audiencias', $data);
   }
 
