@@ -49,7 +49,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                           Nombre de solicitante:
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
-                              <h5><?= $expediente->nombre_personaci.' '.$expediente->apellido_personaci ?></h5>
+                          <h5>
+                          <?php if($expediente->tiposolicitud_expedienteci != "conciliacion juridica"){
+                              echo $expediente->nombre_personaci.' '.$expediente->apellido_personaci;
+                          }else{
+                              echo $expediente->nombre_empresa;
+                          }?>
+                          </h5>
                         </div>
                       </div>
                     </tbody>
@@ -80,7 +86,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <div align="right" id="btnadd6">
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
-                <button type="submit" onclick="cambiar_nuevo2();" class="btn waves-effect waves-light btn-success2">
+                <button type="submit" onclick="cambiar_nuevo5();" class="btn waves-effect waves-light btn-success2">
                   Guardar <i class="mdi mdi-chevron-right"></i>
                 </button>
               </div>
@@ -120,7 +126,7 @@ function eliminar_audiencia(){
   });
  }
 
-function cambiar_nuevo2(){
+function cambiar_nuevo5(){
     //$("#id_fechasaudienciasci").val('');
     $("#id_expedienteci").val('');
     $("#fecha_fechasaudienciasci").val('');
@@ -131,7 +137,7 @@ function cambiar_nuevo2(){
     $("#ttl_form").removeClass("bg-info");
 }
 
-function cambiar_editar2(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,bandera){
+function cambiar_editar5(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,bandera){
     $("#id_fechasaudienciasci").val(id_fechasaudienciasci);
     $("#fecha_audiencia").val(fecha_fechasaudienciasci);
     $("#hora_audiencia").val(hora_fechasaudienciasci);
@@ -168,7 +174,7 @@ $(function(){
             }else{
               //cerrar_mantenimiento();
               if($("#band4").val() == "save"){
-                  cambiar_nuevo2();
+                  cambiar_nuevo5();
                   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
               }else if($("#band4").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
