@@ -321,6 +321,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     submitButton.addEventListener("click", function () {
                         myDropzone.processQueue();
                     });
+                },
+                success: function () {
+                    swal({
+                        title: "¡Registro exitoso!",
+                        type: "success",
+                        showConfirmButton: true
+                    });
+                    
                 }
             });
         });

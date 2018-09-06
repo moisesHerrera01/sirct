@@ -5,11 +5,15 @@ class Acta extends CI_Controller {
 
     function __construct(){
         parent::__construct();
-        $this->load->model( array('expedientes_model'));
+        $this->load->model( array('expedientes_model', 'acta_model'));
     }
     
     public function index() {
         $this->load->view('resolucion_conflictos/retiro_voluntario_ajax/adjuntar_actas', array('id' => $this->input->post('id') ));
+    }
+
+    public function tabla_acta() {
+        $this->load->view('resolucion_conflictos/acta_ajax/tabla_actas');
     }
 
     public function gestionar_adjuntar_actas() {
@@ -31,8 +35,16 @@ class Acta extends CI_Controller {
                 $config['allowed_types'] = 'pdf|doc|docx';
                 $this->load->library('upload', $config);
                 if ($this->upload->do_upload('uploadFile')) {
-                    $fileData = $this->upload->data();
-                    $uploadData[$i]['file_name'] = $fileData['file_name'];
+                    
+                    $this->acta_model->insertar_acta(
+                        array(
+                            'id_expedienteci' => $this->input->post('id_expediente'),
+                            'nombre_actasci' => $this->upload->data('file_name'),
+                            'archivo_actasci' => $this->upload->data('full_path'),
+                            'fechacrea_actasci' => date("Y-m-d H:i:s")
+                        )
+                    );
+
                 }
             }
 
