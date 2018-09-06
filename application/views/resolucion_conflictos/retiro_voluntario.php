@@ -308,6 +308,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#cnt_tabla_solicitudes").hide(0);
             $("#cnt_form_main").hide(0);
 
+            tabla_acta(id_expediente);
+
             $("#myAwesomeDropzone").dropzone({
                 autoProcessQueue: false,
                 uploadMultiple: true,
@@ -328,7 +330,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         type: "success",
                         showConfirmButton: true
                     });
-                    
+                    tabla_acta(id_expediente);                    
                 }
             });
         });

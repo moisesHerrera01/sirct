@@ -20,8 +20,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
         <div id="cnt_form4" class="cnt_form">
             <form method="post" action="<?php echo site_url(); ?>/resolucion_conflictos/acta/gestionar_adjuntar_actas" enctype="multipart/form-data" class="dropzone" id="myAwesomeDropzone">
-                <input type="hidden" id="id_expediente" name="id_expediente" value="<?= $id?>">
+                <input type="hidden" id="id_expediente" name="id_expediente" value="<?= $id ?>">
             </form>
+            <br>
             <div align="right" id="btnadd1">
               <button type="reset" class="btn waves-effect waves-light btn-success">
                 <i class="mdi mdi-recycle"></i> Limpiar</button>
@@ -30,49 +31,57 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </button>
             </div>
         </div>
+        <br><br>
+        <div id="cnt_tabla_actas"></div>
     </div>
 </div>
 
+
 <script>
 
-$(function(){     
-    $("#formajax4").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax4"));
+function tabla_acta(id_expediente) {
+    if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttpB = new XMLHttpRequest();
+    } else { // code for IE6, IE5
+        xmlhttpB = new ActiveXObject("Microsoft.XMLHTTPB");
+    }
+    xmlhttpB.onreadystatechange = function () {
+        if (xmlhttpB.readyState == 4 && xmlhttpB.status == 200) {
+            document.getElementById("cnt_tabla_actas").innerHTML = xmlhttpB.responseText;
+            $('[data-toggle="tooltip"]').tooltip();
+            $('#myTable').DataTable();
+        }
+    }
+    xmlhttpB.open("GET", "<?php echo site_url(); ?>/resolucion_conflictos/acta/tabla_acta?id_expediente="+id_expediente);
+    xmlhttpB.send();
+}
 
-        swal({
-          title: "¿Está seguro?", 
-          text: "¡Desea inhabilitar el expediente!",
-          type: "warning", 
-          showCancelButton: true, 
-          confirmButtonColor: "#fc4b6c", 
-          confirmButtonText: "Sí, deseo inhabilitar!", 
-          closeOnConfirm: false
-        }, function(){
-            
-          $.ajax({
-            url: "<?php echo site_url(); ?>/resolucion_conflictos/acta/gestionar_adjuntar_actas",
-            type: "post",
-            dataType: "html",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false
-          })
-          .done(function(res){
-              if(res == "exito"){
-                  //cerrar_mantenimiento();
-                  swal({ title: "¡Expediente Inhabilitado!", type: "success", showConfirmButton: true });
-                  //tablaEstados();
-              }else{
-                  swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-              }
-          });
+function eliminar_acta(id_acta, id_expediente) {
+    $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/acta/eliminar_acta",
+        type: "post",
+        dataType: "html",
+        data: {id_acta: id_acta}
+    })
+    .done(function (res) {
+        if (res == "fracaso") {
+            swal({
+                title: "¡Ups! Error",
+                text: "Intentalo nuevamente.",
+                type: "error",
+                showConfirmButton: true
+            });
+        } else {
+            swal({
+                title: "¡Archivo eliminado exitosamente!",
+                type: "success",
+                showConfirmButton: true
+            });
 
-        });
-            
+            tabla_acta(id_expediente);
+        }
     });
-});
+
+}
 
 </script>

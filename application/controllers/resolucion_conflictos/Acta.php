@@ -57,6 +57,37 @@ class Acta extends CI_Controller {
 		}
     }
 
+    public function eliminar_acta() {
+        $data = $this->acta_model->obtener_acta($this->input->post('id_acta'))->result_array()[0];
+
+        if (file_exists($data['archivo_actasci'])) {
+
+            if ("exito" == $this->acta_model->eliminar_estado($data)) {
+                unlink($data['archivo_actasci']);
+                echo "exito";
+            } else {
+                echo "fracaso";
+            }
+        } else {
+            echo "fracaso";
+        }
+    }
+    
+    public function descargar_acta($id_acta) {
+        $data = $this->acta_model->obtener_acta($id_acta)->result_array()[0];
+
+		if(file_exists( $data['archivo_actasci'] )) {
+			header("Cache-Control: public");
+			header("Content-Description: File Transfer");
+			header('Content-disposition: attachment; filename='.basename($data['archivo_actasci']));
+			header("Content-Type: application/pdf");
+			header("Content-Transfer-Encoding: binary");
+			readfile($data['archivo_actasci']);
+		} else {
+			return redirect('/resolucion_conflictos/retiro_voluntario');
+		}
+    }
+
     private function directorio($expediente) {
 
         if(!is_dir("./files/pdfs/" . $expediente)) {
