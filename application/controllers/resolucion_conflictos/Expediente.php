@@ -148,5 +148,22 @@ class Expediente extends CI_Controller {
 					echo "exito";
 				}
 			}
+
+			public function resolucion_expediente() {
+				$this->load->view('resolucion_conflictos/solicitudes_ajax/resolucion_expediente', array('id' => $this->input->post('id') ));
+			}
+
+			public function gestionar_resolucion_expediente() {
+				$data = $this->expedientes_model->obtener_expediente($this->input->post('id_expedienteci'))->result_array()[0];
+				$data['resultado_expedienteci'] = $this->input->post('resolucion');
+				$data['tipocociliacion_expedienteci'] = $this->input->post('tipo_conciliacion');;
+
+				if ("fracaso" == $this->expedientes_model->editar_expediente($data)) {
+					echo "fracaso";
+				} else {
+					echo "exito";
+				}
+
+			}
 }
 ?>

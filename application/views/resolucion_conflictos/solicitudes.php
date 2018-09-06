@@ -21,6 +21,19 @@ function convert_lim_text(lim){
     return tlim;
 }
 
+function resolucion(id_expedienteci) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/resolucion_expediente",
+    type: "post",
+    dataType: "html",
+    data: {id : id_expedienteci}
+  })
+  .done(function(res){
+    $('#cnt_modal_acciones').html(res);
+    $('#modal_resolucion').modal('show');
+  });
+}
+
 var estado_pestana = "";
 function cambiar_pestana(tipo){
     estado_pestana = tipo;
@@ -687,7 +700,7 @@ function volver(num) {
     <button  id="submit_ubi" name="submit_ubi" type="button"  >clicks</button>
 </div>
 
-
+<div id="cnt_modal_acciones"></div>
     <!--INICIA MODAL DE ESTABLECIMIENTOS -->
 <div class="modal fade" id="modal_establecimiento" role="dialog">
   <div class="modal-dialog" role="document">
