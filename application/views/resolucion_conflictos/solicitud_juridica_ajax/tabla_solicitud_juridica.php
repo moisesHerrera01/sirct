@@ -100,9 +100,9 @@
                                   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
                                       <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci.','.$fila->id_empresaci.','.$fila->id_personaci?>)">Visualizar</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)"">Cambiar Delegado</a>
-                                      <a class="dropdown-item" href="javascript:;" onClick="resolucion('.$fila->id_expedienteci.')">Regisstrar Resolución</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_expedienteci?>)">Gestionar audiencias</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci?>)">Registrar Resolución</a>
                                       <a class="dropdown-item" href="'.base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedienteci.'/').'" >Descargar Reglamento</a>
-                                      <a class="dropdown-item" href="javascript:;">Something else here</a>
                                       <?php if ($fila->id_estadosci == "1") { ?>
                                             <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>
                                       <?php } else { ?>

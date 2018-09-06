@@ -33,13 +33,13 @@
 
                           if(tiene_permiso($segmentos=2,$permiso=4)){
                             array_push($array, "edit");
-                            echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
+                            echo generar_boton($array,"cambiar_editar5","btn-info","fa fa-wrench","Editar");
                           }
 
                           if(tiene_permiso($segmentos=2,$permiso=1)){
                             unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
                             array_push($array, "delete");
-                              echo generar_boton($array,"cambiar_editar2","btn-danger","fa fa-chevron-down","Eliminar");
+                              echo generar_boton($array,"cambiar_editar5","btn-danger","fa fa-times","Eliminar");
                           }
                           echo "</td>";
                           echo "</tr>";

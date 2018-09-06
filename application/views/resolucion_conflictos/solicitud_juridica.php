@@ -416,13 +416,48 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           }
         })
         .done(function (res) {
-            alert(res)
           if(res == "exito"){
             tablasolicitudes();
             swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
           }else{
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
           }
+        });
+    }
+
+    function tabla_audiencias(id_expedienteci){
+      alert(id_expedienteci)
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla_audiencias").innerHTML=xmlhttpB.responseText;
+                $('[data-toggle="tooltip"]').tooltip();
+                $('#myTable2').DataTable();
+            }
+        }
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/audiencias/tabla_audiencias?id_expedienteci="+id_expedienteci,true);
+        xmlhttpB.send();
+    }
+
+    function audiencias(id_expedienteci) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
+            type: "post",
+            dataType: "html",
+            data: {id : id_expedienteci}
+        })
+        .done(function(res){
+            console.log(res)
+            $('#cnt_actions').html(res);
+            $("#cnt_actions").show(0);
+            $("#cnt_tabla").hide(0);
+            $("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+            tabla_audiencias(id_expedienteci);
         });
     }
 
@@ -439,6 +474,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de Resolución de Conflictos Persona Jurídica</h3>
             </div>
         </div>
+
+        <div id="cnt_actions" style="display: block;"></div>
         <!-- ============================================================== -->
         <!-- Fin TITULO de la página de sección -->
         <!-- ============================================================== -->
@@ -451,6 +488,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <!-- ============================================================== -->
             <div class="col-lg-1"></div>
             <div class="col-lg-10" id="cnt_visualizar" style="display: block;"></div>
+
             <div class="col-lg-10" id="cnt_form_main" style="display: none;">
                 <div class="card">
                     <div class="card-header bg-success2" id="ttl_form">
