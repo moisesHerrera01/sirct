@@ -149,6 +149,14 @@ class Expediente extends CI_Controller {
 				}
 			}
 
+			public function cambiar_delegado() {
+				$data = array(
+					'id_expedienteci' => $this->input->post('id_expedienteci'),
+					'id_personal' => $this->input->post('id_personal'),
+				);
+				echo $this->expedientes_model->cambiar_delegado($data);
+			}
+
 			public function resolucion_expediente() {
 				$this->load->view('resolucion_conflictos/solicitudes_ajax/resolucion_expediente', array('id' => $this->input->post('id') ));
 			}

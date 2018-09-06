@@ -88,6 +88,15 @@ class Expedientes_model extends CI_Model {
       }
 
 	}
+
+	public function cambiar_delegado($data){
+		$this->db->where("id_expedienteci",$data["id_expedienteci"]);
+		if ($this->db->update('sct_expedienteci', array('id_personal' => $data['id_personal']) )) {
+			return "exito";
+		}else {
+			return "fracaso";
+		}
+	}
 	
 	public function obtener_registro_expediente_retiro($id) {
 
