@@ -50,6 +50,35 @@ function cambiar_delegado() {
     });
 }
 
+function modal_estado(id_expedienteci, id_estadosci) {
+    $("#id_expedienteci_copia").val(id_expedienteci);
+    $("#id_estado_copia").val(id_estadosci).trigger('change.select2');
+    $("#modal_estado").modal("show");
+}
+
+function cambiar_estado() {
+    var id_expedienteci = $("#id_expedienteci_copia").val();
+    var id_estadosci = $("#id_estado_copia").val();
+    $.ajax({
+      url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/cambiar_estado",
+      type: "post",
+      dataType: "html",
+      data: {
+        id_expedienteci: id_expedienteci,
+        id_estadosci: id_estadosci,
+      }
+    })
+    .done(function (res) {
+      if(res == "exito"){
+        cerrar_mantenimiento()
+        tablasolicitudes();
+        swal({ title: "¡Estado modificado exitosamente!", type: "success", showConfirmButton: true });
+      }else{
+          swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+      }
+    });
+}
+
 function resolucion(id_expedienteci) {
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/resolucion_expediente",
@@ -185,6 +214,7 @@ function cerrar_mantenimiento(){
     $("#cnt_form_main").hide(0);
     $("#cnt_actions").hide(0);
     $("#modal_delegado").modal('hide');
+    $("#modal_estado").modal('hide');
     $("#cnt_actions").remove('.card');
     open_form(1);
     tablasolicitudes();
@@ -849,6 +879,45 @@ function volver(num) {
       </div>
     </div>
     <!--FIN MODAL DE DELEGADO -->
+
+    <!--INICIO MODAL DE ESTADO -->
+    <div class="modal fade" id="modal_estado" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Cambiar estado del expediente:</h4>
+          </div>
+
+          <div class="modal-body" id="">
+              <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
+              <div class="row">
+                <div class="form-group col-lg-12 col-sm-12">
+                    <div class="form-group">
+                        <h5>Estado:<span class="text-danger">*</h5>
+                        <select id="id_estado_copia" name="id_estado_copia" class="select2" style="width: 100%" required="">
+                        <option value="">[Todos los estados]</option>
+                        <?php
+                            $otro_estado = $this->db->query("SELECT e.id_estadosci, e.nombre_estadosci FROM sct_estadosci AS e ");
+                            if($otro_estado->num_rows() > 0){
+                                foreach ($otro_estado->result() as $fila) {
+                                    echo '<option class="m-l-50" value="'.$fila->id_estadosci.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_estadosci).'</option>';
+                                }
+                            }
+                        ?>
+                        </select>
+                    </div>
+                </div>
+              </div>
+              <div align="right">
+                <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="cambiar_estado();" class="btn waves-effect waves-light btn-success2"> Guardar
+                </button>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--FIN MODAL DE ESTADO -->
 <script>
 
 $(function(){
