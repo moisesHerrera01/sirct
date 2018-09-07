@@ -26,7 +26,7 @@ class Audiencias extends CI_Controller {
 			$data = array(
 			'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
 			'hora_fechasaudienciasci' => $this->input->post('hora_audiencia'),
-			'id_expedienteci' => $this->input->post('id_expedienteci')
+			'id_expedienteci' => $this->input->post('id_expedienteci1')
 			);
 			echo $this->audiencias_model->insertar_audiencia($data);
 
@@ -35,7 +35,7 @@ class Audiencias extends CI_Controller {
 			$data = array(
 			'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
 			'hora_fechasaudienciasci' => $this->input->post('hora_audiencia'),
-			'id_expedienteci' => $this->input->post('id_expedienteci'),
+			'id_expedienteci' => $this->input->post('id_expedienteci1'),
 			'id_fechasaudienciasci' => $this->input->post('id_fechasaudienciasci')
 			);
 			echo $this->audiencias_model->editar_audiencia($data);

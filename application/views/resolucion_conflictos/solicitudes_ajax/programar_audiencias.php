@@ -66,7 +66,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <hr class="m-t-0 m-b-30">
 
-                <input type="hidden" id="id_expedienteci" name="id_expedienteci" value= <?=$expediente->id_expedienteci?>>
+                <input type="hidden" id="id_expedienteci1" name="id_expedienteci1" value="<?=$expediente->id_expedienteci?>">
                 <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value= "">
                 <input type="hidden" id="band4" name="band4" value="save">
 
@@ -128,7 +128,7 @@ function eliminar_audiencia(){
 
 function cambiar_nuevo5(){
     //$("#id_fechasaudienciasci").val('');
-    $("#id_expedienteci").val('');
+    //$("#id_expedienteci1").val('');
     $("#fecha_fechasaudienciasci").val('');
     $("#hora_fechasaudienciasci").val('');
     $("#band4").val("save");
@@ -141,7 +141,7 @@ function cambiar_editar5(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fec
     $("#id_fechasaudienciasci").val(id_fechasaudienciasci);
     $("#fecha_audiencia").val(fecha_fechasaudienciasci);
     $("#hora_audiencia").val(hora_fechasaudienciasci);
-    $("#id_expedienteci").val(id_expedienteci);
+    $("#id_expedienteci1").val(id_expedienteci);
 
     if(bandera == "edit"){
         $("#ttl_form").removeClass("bg-success");
@@ -181,7 +181,7 @@ $(function(){
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
-              tabla_audiencias(formData.get('id_expedienteci'));
+              tabla_audiencias(formData.get('id_expedienteci1'));
               $('#formajax6').trigger("reset");
             }
         });
