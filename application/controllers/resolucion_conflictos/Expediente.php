@@ -136,10 +136,14 @@ class Expediente extends CI_Controller {
 
 			public function gestionar_inhabilitar_expediente() {
 
-				$data = $this->expedientes_model->obtener_expediente($this->input->post('id_exp'))->result_array()[0];
-				$data['id_estadosci'] = 4;
-				$data['inhabilitado_expedienteci'] = $this->input->post('mov_inhabilitar');
-
+				//$data = $this->expedientes_model->obtener_expediente($this->input->post('id_exp'))->result_array()[0];
+				//	$data['id_estadosci'] = ;
+				//$data['inhabilitado_expedienteci'] = $this->input->post('mov_inhabilitar');
+				$data  = array(
+					'id_expedienteci'=>$this->input->post('id_exp'),
+					'id_estadosci' => 4,
+					'inhabilitado_expedienteci' => $this->input->post('mov_inhabilitar')
+				);
 				if ("fracaso" == $this->expedientes_model->editar_expediente($data)) {
 					echo "fracaso";
 				} else {
@@ -149,10 +153,15 @@ class Expediente extends CI_Controller {
 
 			public function gestionar_habilitar_expediente() {
 
-				$data = $this->expedientes_model->obtener_expediente($this->input->post('id_exp'))->result_array()[0];
+				/*$data = $this->expedientes_model->obtener_expediente($this->input->post('id_exp'))->result_array()[0];
 				$data['id_estadosci'] = 1;
 				$data['inhabilitado_expedienteci'] = null;
-
+				*/
+				$data  = array(
+					'id_expedienteci'=>$this->input->post('id_exp'),
+					'id_estadosci' => 1,
+					'inhabilitado_expedienteci' => null
+				);
 				if ("fracaso" == $this->expedientes_model->editar_expediente($data)) {
 					echo "fracaso";
 				} else {
@@ -183,10 +192,6 @@ class Expediente extends CI_Controller {
 					echo "exito";
 				}
 
-			}
-
-			public function actualizar_delegado() {
-				$this->load->view('resolucion_conflictos/solicitudes_ajax/cambiar_delegado',array('id' => $this->input->post('id') ));
 			}
 }
 ?>

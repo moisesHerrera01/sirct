@@ -21,6 +21,35 @@ function convert_lim_text(lim){
     return tlim;
 }
 
+function modal_delegado(id_expedienteci, id_personal) {
+    $("#id_expedienteci_copia").val(id_expedienteci);
+    $("#id_personal_copia").val(id_personal).trigger('change.select2');
+    $("#modal_delegado").modal("show");
+}
+
+function cambiar_delegado() {
+    var id_expedienteci = $("#id_expedienteci_copia").val();
+    var id_personal = $("#id_personal_copia").val();
+    $.ajax({
+      url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/cambiar_delegado",
+      type: "post",
+      dataType: "html",
+      data: {
+        id_expedienteci: id_expedienteci,
+        id_personal: id_personal,
+      }
+    })
+    .done(function (res) {
+      if(res == "exito"){
+        cerrar_mantenimiento()
+        tablasolicitudes();
+        swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+      }else{
+          swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+      }
+    });
+}
+
 function resolucion(id_expedienteci) {
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/resolucion_expediente",
@@ -32,20 +61,6 @@ function resolucion(id_expedienteci) {
     $('#cnt_modal_acciones').html(res);
     $('#modal_resolucion').modal('show');
   });
-}
-
-function cambiar_delegado(id_expedienteci) {
-  $.ajax({
-    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/actualizar_delegado",
-    type: "post",
-    dataType: "html",
-    data: {id : id_expedienteci}
-  })
-  .done(function(res){
-    $('#cnt_modal_acciones').html(res);
-    $('#modal_delegado').modal('show');
-  });
-
 }
 
 var estado_pestana = "";
@@ -169,6 +184,7 @@ function cerrar_mantenimiento(){
     $("#cnt_tabla_solicitudes").show(0);
     $("#cnt_form_main").hide(0);
     $("#cnt_actions").hide(0);
+    $("#modal_delegado").modal('hide');
     $("#cnt_actions").remove('.card');
     open_form(1);
     tablasolicitudes();
@@ -789,6 +805,50 @@ function volver(num) {
   </div>
 </div>
     <!--FIN MODAL DE ESTABLECIMIENTOS -->
+
+    <!--INICIO MODAL DE DELEGADO -->
+    <div class="modal fade" id="modal_delegado" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Cambiar asignación de delegado:</h4>
+          </div>
+
+          <div class="modal-body" id="">
+              <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
+              <div class="row">
+                <div class="form-group col-lg-12 col-sm-12">
+                    <div class="form-group">
+                        <h5>Delegado/a:<span class="text-danger">*</h5>
+                        <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%" required="">
+                        <option value="">[Todos los empleados]</option>
+                        <?php
+                            $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre,
+                                                                      e.segundo_nombre, e.tercer_nombre, e.primer_apellido,
+                                                                      e.segundo_apellido, e.apellido_casada)) AS nombre_completo
+                                                              FROM sir_empleado AS e WHERE e.id_estado = '00001'
+                                                              ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre,
+                                                              e.primer_apellido, e.segundo_apellido, e.apellido_casada");
+                            if($otro_empleado->num_rows() > 0){
+                                foreach ($otro_empleado->result() as $fila) {
+                                    echo '<option class="m-l-50" value="'.$fila->id_empleado.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
+                                }
+                            }
+                        ?>
+                        </select>
+                    </div>
+                </div>
+              </div>
+              <div align="right">
+                <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="cambiar_delegado();" class="btn waves-effect waves-light btn-success2"> Guardar
+                </button>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--FIN MODAL DE DELEGADO -->
 <script>
 
 $(function(){

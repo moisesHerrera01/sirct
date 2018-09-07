@@ -33,7 +33,7 @@ class Expedientes_model extends CI_Model {
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 						 ->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo')
 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
-						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
+						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
 						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
 						 ->join('sge_empleador emp','emp.id_empleador=p.id_empleador')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
