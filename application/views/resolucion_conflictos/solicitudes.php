@@ -16,6 +16,50 @@ function iniciar(){
     <?php } ?>
 }
 
+function adjuntar_actas(id_expediente) {
+    $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/acta",
+        type: "post",
+        dataType: "html",
+        data: {
+            id: id_expediente
+        }
+    })
+    .done(function (res) {
+        $('#cnt_actions').html(res);
+        $("#cnt_actions").show(0);
+        $("#cnt_tabla").hide(0);
+        $("#cnt_tabla_solicitudes").hide(0);
+        $("#cnt_form_main").hide(0);
+
+        tabla_acta(id_expediente);
+
+        $("#myAwesomeDropzone").dropzone({
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            parallelUploads: 10,
+            successmultiple: function (data, response) {
+                $("#uploaded_files").val(response);
+            },
+            init: function () {
+                var submitButton = document.querySelector("#submit_dropzone_form");
+                myDropzone = this;
+                submitButton.addEventListener("click", function () {
+                    myDropzone.processQueue();
+                });
+            },
+            success: function () {
+                swal({
+                    title: "¡Registro exitoso!",
+                    type: "success",
+                    showConfirmButton: true
+                });
+                tabla_acta(id_expediente);
+            }
+        });
+    });
+}
+
 function convert_lim_text(lim){
     var tlim = "-"+lim+"d";
     return tlim;
