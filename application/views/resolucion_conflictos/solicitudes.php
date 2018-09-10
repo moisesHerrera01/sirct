@@ -383,6 +383,19 @@ function cambiar_nuevo(){
     combo_establecimiento('');
 }
 
+/*function cambiar_nuevo2(){
+  $("#id_representante_persona").val('');
+  $("#nombre_representante_persona").val('');
+  $("#apellido_representante_persona").val('');
+  $("#tipo_representante_persona").val('');
+  $("#dui_representante_persona").val('');
+  $("#telefono_representante_persona").val('');
+  $("#acreditacion_representante_persona").val('');
+  $("#band6").val('save');
+
+  $("#modal_representante_persona").modal('show');
+}*/
+
 function cambiar_editar(id_personaci,bandera){
   $("#id_persona").val(id_personaci);
 
@@ -592,6 +605,13 @@ function volver(num) {
                               <label for="no">No</label>
                          <div class="help-block"></div>
                        </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-lg-2" style="height: 83px;">
+                          <select id="select_ic" onchange="abrir_representante_persona($(this).val());">
+                          <option data-toggle="modal">Agregar representante de la persona></option>
+                          </select>
+                        </div>
                         </div>
                           </blockquote>
 
@@ -980,6 +1000,77 @@ function volver(num) {
       </div>
     </div>
     <!--FIN MODAL DE ESTADO -->
+
+    <!--INICIO MODAL DE REPRESENTANTE PERSONA -->
+    <div id="modal_representante_persona" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              <?php echo form_open('', array('id' => 'formajax8', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+              <input type="hidden" id="band6" name="band6" value="save">
+              <input type="hidden" id="id_representante_persona" name="id_representante_persona" value="">
+                <div class="modal-header">
+                    <h4 class="modal-title">Gestión de representantes de persona</h4>
+                </div>
+                <div class="modal-body" id="">
+                  <div class="row">
+                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Tipo de representaci&oacute;n: <span class="text-danger">*</span></h5>
+                        <div class="controls">
+                            <input type="text" id="tipo_representante_persona" name="tipo_representante_persona" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Nombres del representante: <span class="text-danger">*</span></h5>
+                        <div class="controls">
+                            <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
+                        <div class="controls">
+                            <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" required>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>DUI de representante: <span class="text-danger">*</span></h5>
+                        <div class="controls">
+                            <input type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
+                        <div class="controls">
+                            <input type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" required>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Acreditaci&oacute;n: <span class="text-danger">*</span></h5>
+                        <div class="controls">
+                            <textarea type="text" id="acreditacion_representante_persona" name="acreditacion_representante_persona" class="form-control" required>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Aceptar</button>
+                </div>
+              <?php echo form_close(); ?>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!--FIN MODAL DE DE REPRESENTANTE PERSONA -->
 <script>
 
 $(function(){
@@ -1185,6 +1276,43 @@ function pagos(id_expedienteci) {
     tabla_pagos(id_expedienteci);
   });
 }
+
+/*$("#formajax8").on("submit", function(e){
+    e.preventDefault();
+    var f = $(this);
+    var formData = new FormData(document.getElementById("formajax8"));
+
+    $.ajax({
+        url: "</*?php echo site_url(); ?>/resolucion_conflictos/representante_persona/gestionar_representantes",
+        type: "post",
+        dataType: "html",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false
+    })
+    .done(function(res){
+      console.log(res)
+        if(res == "exito"){
+            if($("#band6").val() == "save"){
+                swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+            }else if($("#band6").val() == "edit"){
+                swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+            }/*else{
+                if($("#estado_representante").val() == '1'){
+                    swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
+                }else{
+                    swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
+                }
+            }
+            $("#modal_representante_persona").modal('hide');
+            tabla_representantes();
+        }else{
+            swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+        }
+    });
+
+});*/
 
 $(function(){
     $(document).ready(function(){
