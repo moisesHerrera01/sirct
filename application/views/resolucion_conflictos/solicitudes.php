@@ -397,7 +397,6 @@ function cambiar_nuevo(){
 
 
 function cambiar_editar(id_personaci,bandera){
-  $("#id_persona").val(id_personaci);
 
   if(bandera == "edit"){
 
@@ -409,8 +408,7 @@ function cambiar_editar(id_personaci,bandera){
     .done(function(res){
       result = JSON.parse(res)[0];
 
-      $("#id_personaci").val(result.id_personaci);
-      $("#id_persona").val(result.id_persona);
+      $("#id_personaci").val(id_personaci);
       $("#id_expedienteci").val(result.id_expedienteci);
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
       $("#nombres").val(result.nombre_personaci);
@@ -452,6 +450,8 @@ function cambiar_editar(id_personaci,bandera){
       combo_delegado(result.id_personal);
       combo_actividad_economica(result.id_catalogociiu);
       combo_municipio(result.id_municipio1);
+
+      $("#fecha_creacion_exp").val(result.fechacrea_expedienteci);
       $("#id_empleador").val(result.id_empleador);
       $("#id_emplea").val(result.id_empleador);
       $("#nombres_jefe").val(result.nombre_empleador);
@@ -754,9 +754,9 @@ function volver(num) {
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
                                 Información de la solicitud
                                 <input type="hidden" id="band2" name="band2" value="save">
-                                <input type="hidden" id="id_persona" name="id_persona" value="">
                                 <input type="hidden" id="id_emplea" name="id_emplea" value="">
                                 <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="">
+                                <input type="hidden" id="fecha_creacion_exp" name="fecha_creacion_exp" value="">
 
                               </h3><hr class="m-t-0 m-b-30">
                               <span class="etiqueta">Expediente</span>
@@ -1182,7 +1182,7 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax2"));
-
+        formData.append("id_personaci", $('#id_personaci').val());
         $.ajax({
           url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_expediente",
           type: "post",

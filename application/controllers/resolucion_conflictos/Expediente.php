@@ -25,7 +25,7 @@ class Expediente extends CI_Controller {
 						$data2 = array(
                 'motivo_expedienteci' => $this->input->post('motivo'),
                 'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
-								'id_personaci' => $this->input->post('id_persona'),
+								'id_personaci' => $this->input->post('id_personaci'),
 								'id_personal' => $this->input->post('id_personal'),
 								'id_empresaci' => $this->input->post('establecimiento'),
 								'id_estadosci' => 1,
@@ -37,7 +37,7 @@ class Expediente extends CI_Controller {
 						$id_empleador=$this->empleadores_model->insertar_empleador($data3);
 
             if ("fracaso" != $id_empleador) {
-								$data = $this->solicitudes_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
+								$data = $this->solicitudes_model->obtener_persona($this->input->post('id_personaci'))->result_array()[0];
 								$data['salario_personaci'] = $this->input->post('salario');
 								$data['funciones_personaci'] = $this->input->post('funciones');
 								$data['formapago_personaci'] = $this->input->post('forma_pago');
@@ -60,8 +60,8 @@ class Expediente extends CI_Controller {
 				'cargo_empleador' => $this->input->post('cargo_jefe')
 			);
 
-			$data = $this->solicitudes_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
-			$data['id_personaci'] = $this->input->post('id_persona');
+			$data = $this->solicitudes_model->obtener_persona($this->input->post('id_personaci'))->result_array()[0];
+			$data['id_personaci'] = $this->input->post('id_personaci');
 			$data['salario_personaci'] = $this->input->post('salario');
 			$data['funciones_personaci'] = $this->input->post('funciones');
 			$data['formapago_personaci'] = $this->input->post('forma_pago');
@@ -73,10 +73,10 @@ class Expediente extends CI_Controller {
 					'id_expedienteci' => $this->input->post('id_expedienteci'),
 					'motivo_expedienteci' => $this->input->post('motivo'),
 					'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
-					'id_personaci' => $this->input->post('id_persona'),
+					'id_personaci' => $this->input->post('id_personaci'),
 					'id_personal' => $this->input->post('id_personal'),
 					'id_empresaci' => $this->input->post('establecimiento'),
-					'fechacrea_expedienteci' => $fecha_actual,
+					'fechacrea_expedienteci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_creacion_exp'))),
 					'tiposolicitud_expedienteci' =>"Conciliación",
 			);
 
