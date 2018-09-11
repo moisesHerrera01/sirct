@@ -34,7 +34,7 @@ class Representante_persona extends CI_Controller {
 			'tel_representantepersonaci' => $this->input->post('telefono_representante_persona'),
 			'acreditacion_representantepersonaci' => $this->input->post('acreditacion_representante_persona')
 			);
-			echo $this->represnetante_persona_model->editar_representante($data);
+			echo $this->representante_persona_model->editar_representante($data);
 
 		}/*else if($this->input->post('band') == "delete"){
 			$data = array(

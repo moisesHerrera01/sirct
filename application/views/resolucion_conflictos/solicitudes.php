@@ -420,12 +420,23 @@ function cambiar_editar(id_personaci,bandera){
       $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
       $("#fecha_nacimiento").val(result.fnacimiento_personaci);
-      $("#sexo").val(result.sexo_personaci);
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
-      $("#discapacidad").val(result.discapacidad_personaci);
-      $("#posee_representante").val(result.posee_representante);
-
+      if (result.discapacidad_personaci=='1') {
+          document.getElementById('si').checked = true;
+      }else {
+          document.getElementById('no').checked = true;
+      }
+      if (result.posee_representante=='1') {
+        document.getElementById('si_posee').checked =true;
+      }else {
+        document.getElementById('no_posee').checked =true;
+      }
+      if (result.sexo_personaci=='M') {
+        document.getElementById('masculino').checked =true;
+      }else {
+        document.getElementById('femenino').checked =true;
+      }
       /*Inicio represnetante persona*/
       $("#id_representante_persona").val(result.id_representantepersonaci);
       $("#nombre_representante_persona").val(result.nombre_representantepersonaci);
