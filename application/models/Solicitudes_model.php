@@ -20,6 +20,7 @@ class Solicitudes_model extends CI_Model {
 			'estudios_personaci' => $data['estudios_personaci'],
 			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
 			'discapacidad_personaci' => $data['discapacidad_personaci'],
+			'posee_representante' => $data['posee_representante'],
 			'tipopeticion_personaci' => 0
 		))){
 			return $this->db->insert_id();

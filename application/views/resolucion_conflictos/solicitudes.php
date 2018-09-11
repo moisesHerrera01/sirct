@@ -345,7 +345,17 @@ function cambiar_nuevo(){
     $("#estudios").val('');
     $("#nacionalidad").val('');
     $("#discapacidad").val('');
+    $("#posee_representante").val('');
     /*Fin Solicitante*/
+
+    /*Inicio represnetante persona*/
+    $("#nombre_representante_persona").val('');
+    $("#apellido_representante_persona").val('');
+    $("#tipo_representante_persona").val('');
+    $("#dui_representante_persona").val('');
+    $("#telefono_representante_persona").val('');
+    $("#acreditacion_representante_persona").val('');
+    /*Fin representante persona*/
 
     /*Inicio Expediente*/
     combo_ocupacion('');
@@ -369,6 +379,7 @@ function cambiar_nuevo(){
     $("#band").val("save");
     $("#band1").val("save");
     $("#band2").val("save");
+    $("#band6").val('save');
 
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
@@ -383,18 +394,7 @@ function cambiar_nuevo(){
     combo_establecimiento('');
 }
 
-/*function cambiar_nuevo2(){
-  $("#id_representante_persona").val('');
-  $("#nombre_representante_persona").val('');
-  $("#apellido_representante_persona").val('');
-  $("#tipo_representante_persona").val('');
-  $("#dui_representante_persona").val('');
-  $("#telefono_representante_persona").val('');
-  $("#acreditacion_representante_persona").val('');
-  $("#band6").val('save');
 
-  $("#modal_representante_persona").modal('show');
-}*/
 
 function cambiar_editar(id_personaci,bandera){
   $("#id_persona").val(id_personaci);
@@ -424,6 +424,17 @@ function cambiar_editar(id_personaci,bandera){
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
       $("#discapacidad").val(result.discapacidad_personaci);
+      $("#posee_representante").val(result.posee_representante);
+
+      /*Inicio represnetante persona*/
+      $("#id_representante_persona").val(result.id_representantepersonaci);
+      $("#nombre_representante_persona").val(result.nombre_representantepersonaci);
+      $("#apellido_representante_persona").val(result.apellido_representantepersonaci);
+      $("#tipo_representante_persona").val(result.tipo_representantepersonaci);
+      $("#dui_representante_persona").val(result.dui_representantepersonaci);
+      $("#telefono_representante_persona").val(result.tel_representantepersonaci);
+      $("#acreditacion_representante_persona").val(result.acreditacion_representantepersonaci);
+      /*Fin representante persona*/
 
       /*Inicio Expediente*/
       combo_ocupacion(result.id_catalogociuo);
@@ -443,13 +454,12 @@ function cambiar_editar(id_personaci,bandera){
       $("#fecha_conflicto").val(result.fechaconflicto_personaci);
       $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
       combo_establecimiento(result.id_empresaci);
-
-
       /*Fin expediente*/
 
       $("#band").val("edit");
       $("#band1").val("edit");
       $("#band2").val("edit");
+      $("#band6").val('edit');
     });
 
     $("#ttl_form").removeClass("bg-success");
@@ -458,6 +468,8 @@ function cambiar_editar(id_personaci,bandera){
     $("#btnedit1").show(0);
     $("#btnadd2").hide(0);
     $("#btnedit2").show(0);
+    $("#btnadd3").hide(0);
+    $("#btnedit3").show(0);
     $("#cnt_tabla_solicitudes").hide(0);
     $("#cnt_tabla").hide(0);
     $("#cnt_form_main").show(0);
@@ -589,6 +601,15 @@ function volver(num) {
                                   <label for="femenino">Femenino</label>
                                   <div class="help-block"></div>
                             </div>
+
+                            <div class="form-group col-lg-2" style="height: 83px;">
+                                <h5>Representante:</h5>
+                                <input name="posee_representante" type="radio" id="si_posee" value='1'>
+                                <label for="si_posee">Si </label><Br>
+                                <input name="posee_representante" type="radio" id="no_posee" checked="" value='0' required>
+                                <label for="no_posee">No</label>
+                           <div class="help-block"></div>
+                         </div>
                         </div>
                         <div class="row">
                           <div class="form-group col-lg-8" style="height: 83px;">
@@ -599,21 +620,14 @@ function volver(num) {
 
                           <div class="form-group col-lg-2" style="height: 83px;">
                               <h5>Discapacidad:</h5>
-                              <input name="discapacidad" type="radio" id="si" value="SI">
+                              <input name="discapacidad" type="radio" id="si" value='1'>
                               <label for="si">Si </label><Br>
-                              <input name="discapacidad" type="radio" id="no" checked="" value="NO">
+                              <input name="discapacidad" type="radio" id="no" checked="" value='0'>
                               <label for="no">No</label>
                          <div class="help-block"></div>
                        </div>
                         </div>
-                        <div class="row">
-                          <div class="form-group col-lg-2" style="height: 83px;">
-                          <select id="select_ic" onchange="abrir_representante_persona($(this).val());">
-                          <option data-toggle="modal">Agregar representante de la persona></option>
-                          </select>
-                        </div>
-                        </div>
-                          </blockquote>
+                            </blockquote>
 
                           <div align="right" id="btnadd1">
                             <button type="reset" class="btn waves-effect waves-light btn-success">
@@ -635,12 +649,98 @@ function volver(num) {
                         <!-- Fin del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
                         <!-- ============================================================== -->
                         <!-- ============================================================== -->
+                        <!-- Inicio del FORMULARIO REPRESENTANTE DEL SOLICITANTE -->
+                        <!-- ============================================================== -->
+                        <?php echo form_open('', array('id' => 'formajax8', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+                            <div id="cnt_form3" class="cnt_form" style="display: block;">
+                            <h3 class="box-title" style="margin: 0px;">
+                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
+                                Representante de la persona
+                              </h3><hr class="m-t-0 m-b-30">
+                              <input type="hidden" id="band6" name="band6" value="save">
+                              <input type="hidden" id="id_representante_persona" name="id_representante_persona" value="">
+
+
+                              <span class="etiqueta">Expediente</span>
+                              <blockquote class="m-t-0">
+
+                                <div class="row">
+                                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                      <h5>Nombres del representante: <span class="text-danger">*</span></h5>
+                                      <div class="controls">
+                                          <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres del representante" required>
+                                      </div>
+                                  </div>
+
+                                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                      <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
+                                      <div class="controls">
+                                          <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos del representante" required>
+                                      </div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                      <h5>DUI de representante: <span class="text-danger">*</span></h5>
+                                      <div class="controls">
+                                          <input type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
+                                      </div>
+                                  </div>
+
+                                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                      <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
+                                      <div class="controls">
+                                          <input type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
+                                      </div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                      <h5>Tipo de representaci&oacute;n: <span class="text-danger">*</span></h5>
+                                      <div class="controls">
+                                          <input type="text" id="tipo_representante_persona" name="tipo_representante_persona" class="form-control" placeholder="Tipo de representante" required>
+                                      </div>
+                                  </div>
+
+                                  <div class="form-group col-lg-8 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                      <h5>Acreditaci&oacute;n: <span class="text-danger">*</span></h5>
+                                      <div class="controls">
+                                          <textarea type="text" id="acreditacion_representante_persona" name="acreditacion_representante_persona" class="form-control" required></textarea>
+                                      </div>
+                                  </div>
+                                </div>
+                            </blockquote>
+
+                            <div align="right" id="btnadd3">
+                              <button type="reset" class="btn waves-effect waves-light btn-success">
+                                <i class="mdi mdi-recycle"></i> Limpiar</button>
+                              <button type="submit" class="btn waves-effect waves-light btn-success2">
+                                Siguiente <i class="mdi mdi-chevron-right"></i>
+                              </button>
+                            </div>
+                            <div align="right" id="btnedit3" style="display: none;">
+                              <button type="reset" class="btn waves-effect waves-light btn-success">
+                                <i class="mdi mdi-recycle"></i> Limpiar</button>
+                              <button type="submit" class="btn waves-effect waves-light btn-info">
+                                Siguiente <i class="mdi mdi-chevron-right"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <?php echo form_close(); ?>
+                          <!-- ============================================================== -->
+                          <!-- FIN del FORMULARIO REPRESENTANTE DEL SOLICITANTE -->
+                          <!-- ============================================================== -->
+
+
+                        <!-- ============================================================== -->
                         <!-- Inicio del FORMULARIO INFORMACIÓN DE LA SOLICITUD -->
                         <!-- ============================================================== -->
                         <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                           <div id="cnt_form2" class="cnt_form" style="display: block;">
                             <h3 class="box-title" style="margin: 0px;">
-                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
+                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
                                 Información de la solicitud
                                 <input type="hidden" id="band2" name="band2" value="save">
                                 <input type="hidden" id="id_persona" name="id_persona" value="">
@@ -1000,77 +1100,6 @@ function volver(num) {
       </div>
     </div>
     <!--FIN MODAL DE ESTADO -->
-
-    <!--INICIO MODAL DE REPRESENTANTE PERSONA -->
-    <div id="modal_representante_persona" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-              <?php echo form_open('', array('id' => 'formajax8', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-              <input type="hidden" id="band6" name="band6" value="save">
-              <input type="hidden" id="id_representante_persona" name="id_representante_persona" value="">
-                <div class="modal-header">
-                    <h4 class="modal-title">Gestión de representantes de persona</h4>
-                </div>
-                <div class="modal-body" id="">
-                  <div class="row">
-                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>Tipo de representaci&oacute;n: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" id="tipo_representante_persona" name="tipo_representante_persona" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>Nombres del representante: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" required>
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>DUI de representante: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" required>
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>Acreditaci&oacute;n: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <textarea type="text" id="acreditacion_representante_persona" name="acreditacion_representante_persona" class="form-control" required>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Aceptar</button>
-                </div>
-              <?php echo form_close(); ?>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!--FIN MODAL DE DE REPRESENTANTE PERSONA -->
 <script>
 
 $(function(){
@@ -1093,7 +1122,11 @@ $(function(){
             if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
-              open_form(2);
+              if (formData.get('posee_representante') == 1) {
+                open_form(3);
+              }else {
+                open_form(2);
+              }
               $("#id_personaci").val(res);
               $("#id_persona").val(res);
               $("#band1").val( $("#band").val() );
@@ -1101,6 +1134,32 @@ $(function(){
               if($("#band").val() == "delete"){
                 swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
+            }
+        });
+
+    });
+});
+
+$(function(){
+    $("#formajax8").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax8"));
+        formData.append("id_personaci", $('#id_personaci').val());
+        $.ajax({
+          url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/gestionar_representantes",
+          type: "post",
+          dataType: "html",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false
+        })
+        .done(function(res){
+            if(res == "fracaso"){
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }else{
+              open_form(2);
             }
         });
 
@@ -1276,43 +1335,6 @@ function pagos(id_expedienteci) {
     tabla_pagos(id_expedienteci);
   });
 }
-
-/*$("#formajax8").on("submit", function(e){
-    e.preventDefault();
-    var f = $(this);
-    var formData = new FormData(document.getElementById("formajax8"));
-
-    $.ajax({
-        url: "</*?php echo site_url(); ?>/resolucion_conflictos/representante_persona/gestionar_representantes",
-        type: "post",
-        dataType: "html",
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false
-    })
-    .done(function(res){
-      console.log(res)
-        if(res == "exito"){
-            if($("#band6").val() == "save"){
-                swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-            }else if($("#band6").val() == "edit"){
-                swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-            }/*else{
-                if($("#estado_representante").val() == '1'){
-                    swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
-                }else{
-                    swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
-                }
-            }
-            $("#modal_representante_persona").modal('hide');
-            tabla_representantes();
-        }else{
-            swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-        }
-    });
-
-});*/
 
 $(function(){
     $(document).ready(function(){

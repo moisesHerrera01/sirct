@@ -31,6 +31,7 @@ class Expedientes_model extends CI_Model {
 			$this->db->select('')
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
+						 ->join('sct_representantepersonaci rp','rp.id_personaci=p.id_personaci','left')						 
 						 ->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo')
 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
