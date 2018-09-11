@@ -14,7 +14,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <i class="mdi mdi-window-close"></i>
             </a>
         </div>
-        <h4 class="card-title m-b-0 text-white">Adjuntar Acta</h4>
+        <h4 class="card-title m-b-0 text-white">Gestionar Acta</h4>
     </div>
     <div class="card-body b-t">
 

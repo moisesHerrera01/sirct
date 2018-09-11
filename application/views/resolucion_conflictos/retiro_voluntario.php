@@ -118,6 +118,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#cnt_form_main").hide(0);
         $("#cnt_actions").hide(0);
         $("#cnt_actions").remove('.card');
+        $("#modal_delegado").modal('hide');
+        $("#modal_estado").modal('hide');
         open_form(1);
         tablasolicitudes();
     }
@@ -333,6 +335,99 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     tabla_acta(id_expediente);                    
                 }
             });
+        });
+    }
+
+    function audiencias(id_expedienteci) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
+            type: "post",
+            dataType: "html",
+            data: {id : id_expedienteci}
+        })
+        .done(function(res){
+            console.log(res)
+            $('#cnt_actions').html(res);
+            $("#cnt_actions").show(0);
+            $("#cnt_tabla").hide(0);
+            $("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+            tabla_audiencias(id_expedienteci);
+        });
+    }
+
+    function tabla_audiencias(id_expedienteci){
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla_audiencias").innerHTML=xmlhttpB.responseText;
+                $('[data-toggle="tooltip"]').tooltip();
+                $('#myTable2').DataTable();
+            }
+        }
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/audiencias/tabla_audiencias?id_expedienteci="+id_expedienteci,true);
+        xmlhttpB.send();
+    }
+
+    function modal_delegado(id_expedienteci, id_personal) {
+        $("#id_expedienteci_copia").val(id_expedienteci);
+        $("#id_personal_copia").val(id_personal).trigger('change.select2');
+        $("#modal_delegado").modal("show");
+    }
+
+    function cambiar_delegado() {
+        var id_expedienteci = $("#id_expedienteci_copia").val();
+        var id_personal = $("#id_personal_copia").val();
+        $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/cambiar_delegado",
+        type: "post",
+        dataType: "html",
+        data: {
+            id_expedienteci: id_expedienteci,
+            id_personal: id_personal,
+        }
+        })
+        .done(function (res) {
+        if(res == "exito"){
+            cerrar_mantenimiento()
+            tablasolicitudes();
+            swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+        }else{
+            swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+        }
+        });
+    }
+
+    function modal_estado(id_expedienteci, id_estadosci) {
+        $("#id_expedienteci_copia").val(id_expedienteci);
+        $("#id_estado_copia").val(id_estadosci).trigger('change.select2');
+        $("#modal_estado").modal("show");
+    }
+
+    function cambiar_estado() {
+        var id_expedienteci = $("#id_expedienteci_copia").val();
+        var id_estadosci = $("#id_estado_copia").val();
+        $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/cambiar_estado",
+        type: "post",
+        dataType: "html",
+        data: {
+            id_expedienteci: id_expedienteci,
+            id_estadosci: id_estadosci,
+        }
+        })
+        .done(function (res) {
+        if(res == "exito"){
+            cerrar_mantenimiento()
+            tablasolicitudes();
+            swal({ title: "¡Estado modificado exitosamente!", type: "success", showConfirmButton: true });
+        }else{
+            swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+        }
         });
     }
 
@@ -722,6 +817,94 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
 </div>
 <!--FIN MODAL DE ESTABLECIMIENTOS -->
+
+<!--INICIO MODAL DE DELEGADO -->
+<div class="modal fade" id="modal_delegado" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Cambiar asignación de delegado:</h4>
+            </div>
+
+            <div class="modal-body" id="">
+                <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
+                <div class="row">
+                    <div class="form-group col-lg-12 col-sm-12">
+                        <div class="form-group">
+                            <h5>Delegado/a:<span class="text-danger">*</h5>
+                            <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%"
+                                required="">
+                                <option value="">[Todos los empleados]</option>
+                                <?php
+                            $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre,
+                                                                      e.segundo_nombre, e.tercer_nombre, e.primer_apellido,
+                                                                      e.segundo_apellido, e.apellido_casada)) AS nombre_completo
+                                                              FROM sir_empleado AS e WHERE e.id_estado = '00001'
+                                                              ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre,
+                                                              e.primer_apellido, e.segundo_apellido, e.apellido_casada");
+                            if($otro_empleado->num_rows() > 0){
+                                foreach ($otro_empleado->result() as $fila) {
+                                    echo '<option class="m-l-50" value="'.$fila->id_empleado.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
+                                }
+                            }
+                        ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div align="right">
+                    <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" onclick="cambiar_delegado();" class="btn waves-effect waves-light btn-success2">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FIN MODAL DE DELEGADO -->
+
+<!--INICIO MODAL DE ESTADO -->
+<div class="modal fade" id="modal_estado" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Cambiar estado del expediente:</h4>
+            </div>
+
+            <div class="modal-body" id="">
+                <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
+                <div class="row">
+                    <div class="form-group col-lg-12 col-sm-12">
+                        <div class="form-group">
+                            <h5>Estado:<span class="text-danger">*</h5>
+                            <select id="id_estado_copia" name="id_estado_copia" class="select2" style="width: 100%"
+                                required="">
+                                <option value="">[Todos los estados]</option>
+                                <?php
+                            $otro_estado = $this->db->query("SELECT e.id_estadosci, e.nombre_estadosci FROM sct_estadosci AS e ");
+                            if($otro_estado->num_rows() > 0){
+                                foreach ($otro_estado->result() as $fila) {
+                                    echo '<option class="m-l-50" value="'.$fila->id_estadosci.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_estadosci).'</option>';
+                                }
+                            }
+                        ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div align="right">
+                    <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" onclick="cambiar_estado();" class="btn waves-effect waves-light btn-success2">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FIN MODAL DE ESTADO -->
+
 <script>
     $(function () {
         $("#formajax").on("submit", function (e) {
