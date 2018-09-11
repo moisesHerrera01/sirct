@@ -167,7 +167,7 @@ class Acta extends CI_Controller {
         $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/FichaSolicitud_PNPJ.docx');
         $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
         $templateWord->setValue('fecha_actual', date('d/m/Y'));
-        $templateWord->setValue('dirección_empresa', $expediente->direccion_empresa);
+        $templateWord->setValue('direccion_empresa', $expediente->direccion_empresa);
         $templateWord->setValue('representante_legal', $expediente->nombres_representante);
         $templateWord->setValue('actividad', $expediente->actividad_catalogociiu);
         $templateWord->setValue('nombre_solicitante', $expediente->nombre_personaci.' '.$expediente->apellido_personaci);
@@ -194,6 +194,86 @@ class Acta extends CI_Controller {
 
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         header("Content-Disposition: attachment; filename='ficha_solicitud_pnpj_".date('dmy_His').".docx'");
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
+        $objWriter->save('php://output');
+
+        unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+    }
+
+    public function generar_acta_tipo($caso,$id_expedienteci) {
+        $data = $this->expedientes_model->obtener_expediente( $id_expedienteci )->result_array()[0];
+        $expediente = $this->expedientes_model->obtener_registros_expedientes( $data['id_personaci'])->result()[0];
+        //$jefe = $this->reglamento_model->jefe_direccion_trabajo()->result()[0];
+
+        $this->load->library("phpword");
+
+        $PHPWord = new PHPWord();
+
+        switch ($caso) {
+          case '1':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_EN_EL_ACTO_CON_DEFENSOR.docx');
+            break;
+          case '2':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_EN_EL_ACTO_SIN_DEFENSOR.docx');
+            break;
+          case '3':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_PAGO_DIFERIDO_CON_DEFENSOR.docx');
+            break;
+          case '4':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_PAGO_DIFERIDO_SIN_DEFENSOR.docx');
+            break;
+          default:
+            // code...
+            break;
+        }
+        $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
+        $templateWord->setValue('departamento', departamento($expediente->numerocaso_expedienteci));
+        $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($expediente->hora_fechasaudienciasci))));
+        $templateWord->setValue('minuto_audiencia', minuto(date('i', strtotime($expediente->hora_fechasaudienciasci))));
+        $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($expediente->fecha_fechasaudienciasci))));
+        $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($expediente->fecha_fechasaudienciasci)))));
+        $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($expediente->fecha_fechasaudienciasci))));
+        $templateWord->setValue('nombre_solicitante', strtoupper($expediente->nombre_personaci.' '.$expediente->apellido_personaci));
+        if ($caso== 1 || $caso==3) {
+              $templateWord->setValue('representante_persona', strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci));
+        }
+        $templateWord->setValue('representante_empresa', strtoupper($expediente->nombres_representante));
+        $templateWord->setValue('resolucion', strtoupper($expediente->resultado_expedienteci));
+        $templateWord->setValue('nombre_delegado',
+                                $expediente->primer_nombre . ' '
+                                . $expediente->segundo_nombre . ' '
+                                . $expediente->tercer_nombre . ' '
+                                . $expediente->primer_apellido . ' '
+                                . $expediente->segundo_apellido . ' '
+                                . $expediente->apellido_casada);
+
+        $nombreWord = $this->random();
+
+        $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+        $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        switch ($caso) {
+          case '1':
+            header("Content-Disposition: attachment; filename='CONCILIADA_EN_EL_ACTO_CON_DEFENSOR_".date('dmy_His').".docx'");
+            break;
+          case '2':
+            header("Content-Disposition: attachment; filename='CONCILIADA_EN_EL_ACTO_SIN_DEFENSOR_".date('dmy_His').".docx'");
+            break;
+          case '3':
+            header("Content-Disposition: attachment; filename='CONCILIADA_PAGO_DIFERIDO_CON_DEFENSOR_".date('dmy_His').".docx'");
+            break;
+          case '4':
+            header("Content-Disposition: attachment; filename='CONCILIADA_PAGO_DIFERIDO_SIN_DEFENSOR_".date('dmy_His').".docx'");
+            break;
+          default:
+            // code...
+            break;
+        }
         header('Cache-Control: max-age=0');
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');

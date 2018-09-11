@@ -190,7 +190,8 @@ class Expediente extends CI_Controller {
 			}
 
 			public function gestionar_resolucion_expediente() {
-				$data = $this->expedientes_model->obtener_expediente($this->input->post('id_expedienteci'))->result_array()[0];
+				//$data = $this->expedientes_model->obtener_expediente($this->input->post('id_expedienteci'))->result_array()[0];
+				$data['id_expedienteci'] = $this->input->post('id_expedienteci');
 				$data['resultado_expedienteci'] = $this->input->post('resolucion');
 				$data['tipocociliacion_expedienteci'] = $this->input->post('tipo_conciliacion');;
 

@@ -93,10 +93,11 @@
                                       <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_expedienteci?>)">Gestionar audiencias</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="pagos(<?=$fila->id_expedienteci?>)">Gestionar pagos</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar delegado</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="modal_actas_tipo(<?=$fila->id_expedienteci?>)">Generar acta por tipo</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci?>)">Registrar resolución</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas(<?=$fila->id_expedienteci?>)">Gestionar actas</a>
-                                      <a class="dropdown-item"href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/'.$fila->id_expedienteci)?>">Generar Acta</a>
+                                      <a class="dropdown-item"href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/'.$fila->id_expedienteci)?>">Generar ficha</a>
                                       <?php
                                           if ($fila->id_estadosci == "1") {
                                       ?>

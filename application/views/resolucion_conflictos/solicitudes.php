@@ -7,6 +7,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 <script type="text/javascript">
+function nav(value) {
+  var id_expedienteci = $("#id_expedienteci_copia2").val();
+  if (value != "") { location.href = value+id_expedienteci; }
+  cerrar_mantenimiento();
+}
+
 function iniciar(){
 
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
@@ -88,6 +94,35 @@ function cambiar_delegado() {
         cerrar_mantenimiento()
         tablasolicitudes();
         swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+      }else{
+          swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+      }
+    });
+}
+
+function modal_actas_tipo(id_expedienteci) {
+    $("#id_expedienteci_copia2").val(id_expedienteci);
+    $("#tipo_acta").val('').trigger('');
+    $("#modal_actas_tipo").modal("show");
+}
+
+function generar_actas_tipo() {
+    var id_expedienteci = $("#id_expedienteci_copia2").val();
+    var tipo_acta = $("#tipo_acta").val();
+    $.ajax({
+      url: "<?php echo site_url(); ?>/resolucion_conflictos/acta/generar_acta_tipo",
+      type: "post",
+      dataType: "html",
+      data: {
+        id_expedienteci: id_expedienteci,
+        tipo_acta: tipo_acta,
+      }
+    })
+    .done(function (res) {
+      if(res == "exito"){
+        cerrar_mantenimiento()
+        tablasolicitudes();
+        swal({ title: "¡Acta generada exitosamente!", type: "success", showConfirmButton: true });
       }else{
           swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
       }
@@ -258,6 +293,7 @@ function cerrar_mantenimiento(){
     $("#cnt_form_main").hide(0);
     $("#cnt_actions").hide(0);
     $("#modal_delegado").modal('hide');
+    $("#modal_actas_tipo").modal('hide');
     $("#modal_estado").modal('hide');
     $("#cnt_actions").remove('.card');
     open_form(1);
@@ -1072,6 +1108,41 @@ function volver(num) {
       </div>
     </div>
     <!--FIN MODAL DE DELEGADO -->
+
+    <!--INICIO MODAL GENERAR ACTA -->
+    <div class="modal fade" id="modal_actas_tipo" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Emitir acta:</h4>
+          </div>
+
+          <div class="modal-body" id="">
+              <input type="hidden" id="id_expedienteci_copia2" name="id_expedienteci_copia2" value="">
+              <div class="row">
+                <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Seleccione el tipo de acta: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="tipo_acta" name="tipo_acta" class="custom-select col-4" onchange="nav(this.value)" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Conciliada en el acto con defensor público</option>
+                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Conciliada en el acto sin defensor público</option>
+                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor público</option>
+                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Conciliada pago diferido sin defensor público</option>
+                      </select>
+                    </div>
+                </div>
+              </div>
+              <div align="right">
+                <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+              <!--  <button type="button" onclick="generar_actas_tipo();" class="btn waves-effect waves-light btn-success2"> Generar
+              </button> !-->
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--FIN MODAL GENERAR ACTA -->
 
     <!--INICIO MODAL DE ESTADO -->
     <div class="modal fade" id="modal_estado" role="dialog">

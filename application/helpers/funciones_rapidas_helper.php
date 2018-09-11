@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 /***********************************
-	CREAR TABLA:	
-	Genera el body de una tabla, solicitando solamente los datos que conformaran la tabla 
+	CREAR TABLA:
+	Genera el body de una tabla, solicitando solamente los datos que conformaran la tabla
 	y las conlumnas que se desean presentar (genera el botón para modificaciones automaticamente).
 ************************************/
 	function generar_boton($opciones,$funcion,$color,$icono,$title){
@@ -61,7 +61,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		$combo .= '<div class="input-group-btn">';
 		$combo .= '<select class="form-control" id="'.$id.'" name="'.$id.'" onChange="cambiarBtnCombo('."'".$id."'".');">';
 		$combo .= '<option value="">[Seleccione una opción]</option>';
-		
+
 		if(!empty($lista)){
 			foreach ($lista->result() as $fila) {
 				$combo .= "<option value='".$fila->$datos[0]."'>".$fila->$datos[1]."</option>";
@@ -229,6 +229,92 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</table>';
 
 		return $pie;
+    }
+
+		function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtolower($mesesarray[($mes-1)]); }
+
+		function hora($hora) {
+			$arrayHoras = array('CERO','UNA','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
+								'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO');
+			return $arrayHoras[$hora];
+		}
+
+		function minuto($minutos) {
+			$arrayMinutos = array('UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
+								'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO',
+								'VEINTICINCO','VEINTISEIS','VEINTESIETE','VEINTIOCHO','VEINTINUEVE','TREINTA','TREINTA Y UNO','TREINTA Y DOS','TREINTA Y TRES',
+								'TREINTA Y CUATRO','TREINTA Y CINCO','TREINTA Y SEIS','TREINTA Y SIETE','TREINTA Y OCHO','TREINTA Y NUEVE','CUARENTA','CUARENTA Y UNO',
+								'CUARENTA Y DOS','CUARENTA Y TRES','CUARENTA Y CUATRO','CUARENTA Y CINCO','CUARENTA Y SEIS','CUARENTA Y SIETE','CUARENTA Y OCHO','CUARENTA Y NUEVE',
+								'CINCUENTA','CINCUENTA Y UNO',' CINCUENTA Y DOS','CINCUENTA Y TRES','CINCUENTA Y CUATRO','CINCUENTA Y CINCO','CINCUENTA Y SEIS','CINCUENTA Y SIETE','CINCUENTA Y OCHO','CINCUENTA Y NUEVE','SESENTA');
+			return $arrayMinutos[$minutos-1];
+		}
+
+		function dia($dia) {
+			$arrayDias = array('UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
+								'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO',
+								'VEINTICINCO','VEINTISEIS','VEINTESIETE','VEINTIOCHO','VEINTINUEVE','TREINTA','TREINTA Y UNO');
+			return $arrayDias[$dia-1];
+		}
+
+		function anio($anio) {
+			$arrayAnio = array(
+				2015 => 'DOS MIL QUINCE',
+				2016 => 'DOS MIL DIESCISEIS',
+				2017 => 'DOS MIL DIECISIETE',
+				2018 => 'DOS MIL DIECIOCHO',
+				2019 => 'DOS MIL DIECINUEVE',
+				2020 => 'DOS MIL VEINTE'
+			);
+			return $arrayAnio[$anio];
+		}
+
+	 function departamento($numero_expediente) {
+        $abr = substr($numero_expediente, -2);
+
+        switch ($abr) {
+            case 'SS':
+                return "SAN SALVADOR";
+                break;
+            case 'AH':
+                return "AHUACHAPAN";
+                break;
+            case 'SO':
+                return "SONSONATE";
+                break;
+            case 'SA':
+                return "SANTA ANA";
+                break;
+            case 'LL':
+                return "LA LIBERTAD";
+                break;
+            case 'CU':
+                return "CUSCATLAN";
+                break;
+            case 'CH':
+                return "CHALATENANGO";
+                break;
+            case 'CA':
+                return "CABANAS";
+                break;
+            case 'SV':
+                return "SAN VICENTE";
+                break;
+            case 'US':
+                return "USULUTAN";
+                break;
+            case 'MO':
+                return "MORAZAN";
+                break;
+            case 'SM':
+                return "SAN MIGUEL";
+                break;
+            case 'LU':
+                return "LA UNION";
+                break;
+            default:
+                # code...
+                break;
+        }
     }
 
 ?>
