@@ -1135,6 +1135,8 @@ function volver(num) {
                         <option disabled>_________</option>
                         <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor</option>
                         <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor</option>
+                        <option disabled>_________</option>
+                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Desistimiento de persona natural a persona juridica</option>
                       </select>
                     </div>
                 </div>
