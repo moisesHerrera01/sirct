@@ -33,12 +33,12 @@ class Expedientes_model extends CI_Model {
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 						 ->join('sct_representantepersonaci rp','rp.id_personaci=p.id_personaci','left')
 						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')						 
-						 ->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo')
+						 ->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo', 'left')
 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
 						 ->join('sge_catalogociiu c','c.id_catalogociiu=em.id_catalogociiu')
 						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
-						 ->join('sge_empleador emp','emp.id_empleador=p.id_empleador')
+						 ->join('sge_empleador emp','emp.id_empleador=p.id_empleador', 'left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 						 ->where('p.id_personaci', $id);
 			$query=$this->db->get();
@@ -55,7 +55,7 @@ class Expedientes_model extends CI_Model {
 		$this->db->select('m.municipio,cat.actividad_catalogociiu,e.nombre_empresa,e.direccion_empresa,e.telefono_empresa,r.nombres_representante')
 						->from('sge_empresa e')
 						->join('org_municipio m', ' m.id_municipio = e.id_municipio')
-						->join('sge_catalogociiu cat','cat.id_catalogociiu=e.id_catalogociiu')
+						->join('sge_catalogociiu cat','cat.id_catalogociiu=e.id_catalogociiu', 'left')
 						->join('sge_representante r','r.id_empresa=e.id_empresa')
 						->where('e.id_empresa', $id);
 		$query=$this->db->get();
@@ -85,7 +85,8 @@ class Expedientes_model extends CI_Model {
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
              ->where('id_expedienteci', $id);
-      $query=$this->db->get();
+	  $query=$this->db->get();
+	  //print $this->db->get_compiled_select();
       if ($query->num_rows() > 0) {
           return $query;
       }
@@ -118,23 +119,6 @@ class Expedientes_model extends CI_Model {
 		$query=$this->db->get();
 		if ($query->num_rows() > 0) {
 				return  $query;
-		}
-		else {
-				return FALSE;
-		}
-	}
-
-	public function obtener_municipio_retiro($id) {
-
-		$this->db->select('')
-						->from('sge_empresa e')
-						->join('org_municipio m', ' m.id_municipio = e.id_municipio')
-						->join('sge_catalogociiu cat','cat.id_catalogociiu=e.id_catalogociiu')
-						->join('sge_representante r','r.id_empresa=e.id_empresa')
-						->where('e.id_empresa', $id);
-		$query=$this->db->get();
-		if ($query->num_rows() > 0) {
-				return $query->row();
 		}
 		else {
 				return FALSE;

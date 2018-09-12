@@ -130,8 +130,8 @@ class Retiro_voluntario extends CI_Controller {
     }
 
     public function ver_expediente() {
-        $data['empresa'] = $this->expedientes_model->obtener_municipio_retiro($this->input->post('id_emp'));
-        $data['expediente'] = $this->expedientes_model->obtener_registro_expediente_retiro( $this->input->post('id') );
+        $data['empresa'] = $this->expedientes_model->obtener_municipio($this->input->post('id_emp'));
+        $data['expediente'] = $this->expedientes_model->obtener_registro_expediente( $this->input->post('id') );
 
         $this->load->view('resolucion_conflictos/retiro_voluntario_ajax/vista_expediente', $data);
     }

@@ -92,7 +92,7 @@
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_delegado('.$fila->id_expedienteci.','.$fila->id_personal.')">Cambiar delegado</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_estado('.$fila->id_expedienteci.','.$fila->id_estadosci.')">Cambiar estado</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas('.$fila->id_expedienteci.')">Gestionar Actas</a>
-                                      <a class="dropdown-item" href="'.base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedienteci.'/').'" >Descargar Reglamento</a>
+                                      <a class="dropdown-item" href="'.base_url('index.php/resolucion_conflictos/acta/generar_acta/'.$fila->id_expedienteci.'/').'" >Emitir Ficha</a>
                                   </div>
                               </div>';
                             }
