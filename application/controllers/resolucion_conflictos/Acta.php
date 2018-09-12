@@ -190,6 +190,9 @@ class Acta extends CI_Controller {
           case '7':
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSegundaCita/SEGUNDA_CITA_PN_PJ_SIN_DEFENSOR.docx');
             break;
+          case '8':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeDesistimiento/DESISTIMIENTO_PN_PJ.docx');
+            break;
           default:
             // code...
             break;
@@ -269,8 +272,10 @@ class Acta extends CI_Controller {
           case '7':
             header("Content-Disposition: attachment; filename='SEGUNDA_CITA_PN_PJ_SIN_DEFENSOR_".date('dmy_His').".docx'");
             break;
+          case '8':
+            header("Content-Disposition: attachment; filename='DESISTIMIENTO_PN_PJ_".date('dmy_His').".docx'");
+            break;
           default:
-            // code...
             break;
         }
         header('Cache-Control: max-age=0');
