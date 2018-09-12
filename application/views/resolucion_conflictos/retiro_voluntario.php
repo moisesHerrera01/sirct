@@ -431,6 +431,88 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
+    function inhabilitar(id_expedienteci) {
+        swal({
+            title: "Inhabilitar Expediente",
+            text: "Motivo de Inhabilitar Expediente: *",
+            type: "input",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            inputPlaceholder: "Motivo para inhabilitar"
+        }, function (inputValue) {
+            if (inputValue === false) return false;
+            if (inputValue === "") {
+                swal.showInputError("Se necesita un motivo para inhabilitar.");
+                return false
+            }
+            $.ajax({
+                url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_inhabilitar_expediente",
+                type: "post",
+                dataType: "html",
+                data: {
+                    id_exp: id_expedienteci,
+                    mov_inhabilitar: inputValue
+                }
+            })
+            .done(function (res) {
+                if (res == "exito") {
+                    tablasolicitudes();
+                    swal({
+                        title: "¡Expediente inhabilitado exitosamente!",
+                        type: "success",
+                        showConfirmButton: true
+                    });
+                } else {
+                    swal({
+                        title: "¡Ups! Error",
+                        text: "Intentalo nuevamente.",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                }
+            });
+        });
+    }
+
+    function habilitar(id_expedienteci) {
+        swal({
+            title: "Confirmar Habilitación",
+            text: "¿Está seguro que desea habilitar el expediente?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-success2",
+            confirmButtonText: "Si",
+            closeOnConfirm: false
+        },
+        function () {
+            $.ajax({
+                    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_habilitar_expediente",
+                    type: "post",
+                    dataType: "html",
+                    data: {
+                        id_exp: id_expedienteci,
+                    }
+                })
+                .done(function (res) {
+                    if (res == "exito") {
+                        tablasolicitudes();
+                        swal({
+                            title: "¡Expediente habilitado exitosamente!",
+                            type: "success",
+                            showConfirmButton: true
+                        });
+                    } else {
+                        swal({
+                            title: "¡Ups! Error",
+                            text: "Intentalo nuevamente.",
+                            type: "error",
+                            showConfirmButton: true
+                        });
+                    }
+                });
+        });
+    }
+
 </script>
 
 <div class="page-wrapper">
