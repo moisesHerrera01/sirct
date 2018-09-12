@@ -5,7 +5,7 @@ class Acta extends CI_Controller {
 
     function __construct(){
         parent::__construct();
-        $this->load->model( array('expedientes_model', 'acta_model'));
+        $this->load->model( array('expedientes_model', 'acta_model','audiencias_model'));
     }
 
     public function index() {
@@ -110,53 +110,9 @@ class Acta extends CI_Controller {
       return $code;
   }
 
-  public function generar_acta($id){
-
+    public function generar_acta($id) {
         $data = $this->expedientes_model->obtener_expediente( $id )->result_array()[0];
-
-        switch ($data['id_estadosci']) {
-            case 1:
-                switch ($data['tiposolicitud_expedienteci']) {
-                    case 'Conciliación':
-                        $this->generar_acta_pnpj($data['id_personaci']);
-                        break;
-                    case 'Renuncia Voluntaria':
-                        $this->generar_acta_pnpj($data['id_personaci']);
-                        break;
-                    default:
-                        $this->generar_acta_pnpj($data['id_personaci']);
-                        break;
-                }
-                break;
-            /*case 2:
-                switch ($data['tiposolicitud_expedientert']) {
-                    case 'Reforma Parcial':
-                        $this->generar_acta_denegada_parcial($id);
-                        break;
-                    case 'Reforma Total':
-                        $this->generar_acta_denegada_total($id);
-                        break;
-                    default:
-                        $this->generar_acta_denegada($id);
-                        break;
-                }
-                break;
-            case 3:
-                $this->generar_acta_observado($id);
-                break;
-            case 4:
-                $this->generar_acta_prevenido($id);
-                break;
-            default:
-                # code...
-                break;*/
-        }
-
-    }
-
-    public function generar_acta_pnpj($id) {
-
-        $expediente = $this->expedientes_model->obtener_registros_expedientes( $id )->result()[0];
+        $expediente = $this->expedientes_model->obtener_registros_expedientes( $data['id_expedienteci'] )->result()[0];
 
         //$jefe = $this->reglamento_model->jefe_direccion_trabajo()->result()[0];
 
@@ -225,6 +181,15 @@ class Acta extends CI_Controller {
           case '4':
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_PAGO_DIFERIDO_SIN_DEFENSOR.docx');
             break;
+          case '5':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_PJ_estandar.docx');
+            break;
+          case '6':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSegundaCita/SEGUNDA_CITA_PN_PJ_CON_DEFENSOR.docx');
+            break;
+          case '7':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSegundaCita/SEGUNDA_CITA_PN_PJ_SIN_DEFENSOR.docx');
+            break;
           default:
             // code...
             break;
@@ -237,8 +202,33 @@ class Acta extends CI_Controller {
         $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($expediente->fecha_fechasaudienciasci)))));
         $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($expediente->fecha_fechasaudienciasci))));
         $templateWord->setValue('nombre_solicitante', strtoupper($expediente->nombre_personaci.' '.$expediente->apellido_personaci));
-        if ($caso== 1 || $caso==3) {
+        $templateWord->setValue('nombre_empresa', strtoupper($expediente->nombre_empresa));
+        if ($caso== 1 || $caso==3 || $caso==6) {
               $templateWord->setValue('representante_persona', strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci));
+        }
+        if ($caso==5) {
+          $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci);
+          $segunda= $audiencias->result()[1];
+          $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
+          $templateWord->setValue('minuto_expediente', minuto(date('i', strtotime($expediente->fechacrea_expedienteci))));
+          $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
+          $templateWord->setValue('mes_expediente', strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
+          $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
+          $templateWord->setValue('edad', calcular_edad(date("Y-m-d", strtotime($expediente->fnacimiento_personaci))));
+          $templateWord->setValue('dui_persona', convertir_dui($expediente->dui_personaci));
+          $templateWord->setValue('nacionalidad_persona', $expediente->nacionalidad_personaci);
+          $templateWord->setValue('nombre_empleador', $expediente->nombre_empleador.' '.$expediente->apellido_empleador);
+          $templateWord->setValue('funciones_persona', $expediente->funciones_personaci);
+          $templateWord->setValue('horario_persona', $expediente->horarios_personaci);
+          $templateWord->setValue('salario_solicitante', '$'.number_format( $expediente->salario_personaci,2));
+          $templateWord->setValue('forma_pago', $expediente->formapago_personaci);
+          $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
+          $templateWord->setValue('mes_conflicto', strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
+          $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
+          $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
+          $templateWord->setValue('minuto_audiencia2', minuto(date('i', strtotime($segunda->hora_fechasaudienciasci))));
+          $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
+          $templateWord->setValue('mes_audiencia2', strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
         }
         $templateWord->setValue('representante_empresa', strtoupper($expediente->nombres_representante));
         $templateWord->setValue('resolucion', strtoupper($expediente->resultado_expedienteci));
@@ -269,6 +259,15 @@ class Acta extends CI_Controller {
             break;
           case '4':
             header("Content-Disposition: attachment; filename='CONCILIADA_PAGO_DIFERIDO_SIN_DEFENSOR_".date('dmy_His').".docx'");
+            break;
+          case '5':
+            header("Content-Disposition: attachment; filename='SOLICITUD_PN_PJ_".date('dmy_His').".docx'");
+            break;
+          case '6':
+            header("Content-Disposition: attachment; filename='SEGUNDA_CITA_PN_PJ_CON_DEFENSOR_".date('dmy_His').".docx'");
+            break;
+          case '7':
+            header("Content-Disposition: attachment; filename='SEGUNDA_CITA_PN_PJ_SIN_DEFENSOR_".date('dmy_His').".docx'");
             break;
           default:
             // code...

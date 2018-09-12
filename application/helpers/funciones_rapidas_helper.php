@@ -316,5 +316,56 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 break;
         }
     }
+		/* Ej: calcular_edad("1945-11-22")*/
+		function calcular_edad( $fecha ) {
+	    list($Y,$m,$d) = explode("-",$fecha);
+	    return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
+		}
+
+		function convertir_dui($dui_numeros){
+			$dui_letras='';
+			$letras='';
+			for($i=0;$i<strlen($dui_numeros);$i++){
+				switch ($dui_numeros[$i]) {
+					case '0':
+						$letras='CERO';
+						break;
+					case '1':
+						$letras='UNO';
+						break;
+					case '2':
+						$letras='DOS';
+						break;
+					case '3':
+						$letras='TRES';
+						break;
+					case '4':
+						$letras='CUATRO';
+						break;
+					case '5':
+						$letras='CINCO';
+						break;
+					case '6':
+						$letras='SEIS';
+						break;
+					case '7':
+						$letras='SIETE';
+						break;
+					case '8':
+						$letras='OCHO';
+						break;
+					case '9':
+						$letras='NUEVE';
+						break;
+					case '-':
+						$letras='GUION';
+						break;
+					default:
+						break;
+				}
+			  $dui_letras.=$letras.' ';
+			}
+			return $dui_letras;
+		}
 
 ?>
