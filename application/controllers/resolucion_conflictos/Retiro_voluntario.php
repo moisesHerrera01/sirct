@@ -28,7 +28,8 @@ class Retiro_voluntario extends CI_Controller {
                 'sexo_personaci' => $this->input->post('sexo'),
                 'estudios_personaci' => $this->input->post('estudios'),
                 'nacionalidad_personaci' => $this->input->post('nacionalidad'),
-                'discapacidad_personaci' => $this->input->post('discapacidad')
+                'discapacidad_personaci' => $this->input->post('discapacidad'),
+                'posee_representante' => null
 			);
 			echo $this->solicitudes_model->insertar_solicitud($data);
 
@@ -129,7 +130,7 @@ class Retiro_voluntario extends CI_Controller {
     }
 
     public function ver_expediente() {
-        $data['empresa'] = $this->expedientes_model->obtener_municipio($this->input->post('id_emp'));
+        $data['empresa'] = $this->expedientes_model->obtener_municipio_retiro($this->input->post('id_emp'));
         $data['expediente'] = $this->expedientes_model->obtener_registro_expediente_retiro( $this->input->post('id') );
 
         $this->load->view('resolucion_conflictos/retiro_voluntario_ajax/vista_expediente', $data);
