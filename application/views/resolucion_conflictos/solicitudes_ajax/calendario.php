@@ -15,3 +15,4 @@ $(document).ready(function() {
         // Las opciones van aquí
     })
 });
+</script>

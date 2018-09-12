@@ -13,6 +13,12 @@
     <script src="<?php echo base_url(); ?>assets/js/validation.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/jquery.slimscroll.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
+
+    <script src="<?php echo base_url(); ?>assets/plugins/calendar/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/calendar/dist/fullcalendar.min.js" type="text/javascript"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/calendar/dist/jquery.fullcalendar.js" type="text/javascript"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/moment/moment.js" type="text/javascript"></script>
+
     <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
     <script> jQuery(document).ready(function() { $(".select2").select2(); $('.selectpicker').selectpicker(); }); </script>
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert/sweetalert.min.js"></script>

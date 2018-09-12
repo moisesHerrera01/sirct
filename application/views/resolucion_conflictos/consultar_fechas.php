@@ -28,8 +28,8 @@ function tabla_calendario(){
     xmlhttpB.onreadystatechange=function(){
         if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
             document.getElementById("cnt_calendario").innerHTML=xmlhttpB.responseText;
-            /*$('[data-toggle="tooltip"]').tooltip();
-            $('#myTable2').DataTable();*/
+            $('[data-toggle="tooltip"]').tooltip();
+            $('#calendar').fullCalendar();
         }
     }
     xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/consultar_fechas/calendario?nr="+id_delegado,true);

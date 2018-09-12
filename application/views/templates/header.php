@@ -34,12 +34,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <link href="<?php echo base_url(); ?>assets/css/colors/blue.css" id="theme" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/calendar/dist/fullcalendar.css" rel="stylesheet">
 
-    <link href="<?php echo base_url(); ?>assets/plugins/calendar/dist/fullcalendar.css" rel="stylesheet" />
-    <script src="<?php echo base_url(); ?>assets/plugins/calendar/jquery-ui.min.js" type="text/javascript"></script>
-    <script src="<?php echo base_url(); ?>assets/plugins/calendar/dist/fullcalendar.min.js" type="text/javascript"></script>
-    <script src="<?php echo base_url(); ?>assets/plugins/calendar/dist/jquery.fullcalendar.js" type="text/javascript"></script>
-    <script src="<//?php echo base_url(); ?>assets/plugins/moment/moment.js" type="text/javascript"></script>
     <!--
     <link href="<?php echo base_url(); ?>assets/plugins/switchery/dist/switchery.min.css" rel="stylesheet" />
     -->
