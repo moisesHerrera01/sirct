@@ -22,11 +22,12 @@ class Audiencias_model extends CI_Model {
 	}
 
 	public function obtener_audiencias_delegado($id_delegado) {
-
-			$this->db->select('f.id_expedienteci,f.id_fechasaudienciasci,f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci')
+			$this->db->select('e.motivo_expedienteci,e.numerocaso_expedienteci,f.id_expedienteci,f.id_fechasaudienciasci,f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci')
 						 ->from('sct_fechasaudienciasci f')
-						 ->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
-						 ->where('e.id_personal', $id_delegado);
+						 ->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci');
+			if ($id_delegado) {
+					$this->db->where('e.id_personal', $id_delegado);
+			}
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {
 					return $query;

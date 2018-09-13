@@ -9,15 +9,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <script>
 function iniciar(){
-
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-    tabla_calendario();
+  //  tabla_calendario();
     <?php }else{ ?>
-        $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
+        $("#cnt_calendario").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
 }
 
-function tabla_calendario(){
+/*function tabla_calendario(){
   //alert(id_expedienteci);
   var id_delegado = $("#nr_search").val();
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -29,12 +28,24 @@ function tabla_calendario(){
         if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
             document.getElementById("cnt_calendario").innerHTML=xmlhttpB.responseText;
             $('[data-toggle="tooltip"]').tooltip();
-            $('#calendar').fullCalendar();
+            $('#calendar').fullCalendar({
+            dayClick: function() {
+                alert('a day has been clicked!');
+              },
+              header:{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+              },
+              editable: true,
+              navLinks: true, // can click day/week names to navigate views
+              eventLimit: true, // allow “more” link when too many events
+              });
         }
     }
     xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/consultar_fechas/calendario?nr="+id_delegado,true);
     xmlhttpB.send();
-}
+}*/
 </script>
 
 <input type="hidden" id="address" name="">
@@ -96,12 +107,21 @@ function tabla_calendario(){
                         </div>
                     </div>
                     <div class="row" style="width: 100%"></div>
-
-                    <div id="cnt_calendario"></div>
                     </div>
                 </div>
+                <!--<div id="cnt_calendario"></div>-->
+                <div class="row">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-8">
+                    <div class="card">
+                    <div class="card-body">
+                      <div id="calendar"></div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <!--Pruebas -->
             </div>
-
         </div>
         <!-- ============================================================== -->
         <!-- Fin CUERPO DE LA SECCIÓN -->
@@ -115,3 +135,30 @@ function tabla_calendario(){
 <div style="display:none;">
     <button  id="submit_ubi" name="submit_ubi" type="button"  >clicks</button>
 </div>
+
+<script>
+$(document).ready(function () {
+
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+
+    // page is now ready, initialize the calendar...
+    $('#calendar').fullCalendar({
+        // put your options and callbacks here
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay,listMonth'
+        },
+        events: {
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/calendario",
+        cache: true
+    },
+        defaultView: 'month',
+        defaultDate: date
+    })
+
+});
+</script>

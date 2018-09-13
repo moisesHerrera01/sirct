@@ -15,7 +15,16 @@ class Consultar_fechas extends CI_Controller {
   }
 
   public function calendario(){
-    $data['fechas'] = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('id_delegado') );
-    $this->load->view('resolucion_conflictos/solicitudes_ajax/calendario',$data);
+    $data = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('id_delegado') );
+		foreach ($data->result() as $au) {
+			 $title = $au->numerocaso_expedienteci;
+			 $start = $au->fecha_fechasaudienciasci.' '.$au->hora_fechasaudienciasci;
+			 $end = $au->fecha_fechasaudienciasci.' '.$au->hora_fechasaudienciasci;
+			 $id = $au->id_fechasaudienciasci;
+
+			 $eventos[] = array('id' => $id, 'title' => $title, 'start' => $start, 'end' => $end);
+		}
+		$arrayJson = json_encode($eventos, JSON_UNESCAPED_UNICODE);
+		print_r($arrayJson);
   }
 }
