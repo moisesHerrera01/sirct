@@ -10,23 +10,6 @@
 </div>
 
 <script>
-/*$(document).ready(function() {
-  $('#calendar').fullCalendar({
-    dayClick: function() {
-      alert('a day has been clicked!');
-    },
-    header:{
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay'
-    },
-    editable: true,
-    navLinks: true, // can click day/week names to navigate views
-    eventLimit: true, // allow “more” link when too many events
-    }
-  });
-});*/
-
 $(document).ready(function () {
 
     var date = new Date();
@@ -54,5 +37,4 @@ $(document).ready(function () {
     })
 
 });
-
 </script>

@@ -10,42 +10,51 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <script>
 function iniciar(){
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-  //  tabla_calendario();
+    //tabla_calendario();
     <?php }else{ ?>
         $("#cnt_calendario").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
 }
 
-/*function tabla_calendario(){
-  //alert(id_expedienteci);
+function tabla_calendario(){
   var id_delegado = $("#nr_search").val();
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttpB=new XMLHttpRequest();
     }else{// code for IE6, IE5
         xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
     }
-    xmlhttpB.onreadystatechange=function(){
-        if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
-            document.getElementById("cnt_calendario").innerHTML=xmlhttpB.responseText;
-            $('[data-toggle="tooltip"]').tooltip();
-            $('#calendar').fullCalendar({
-            dayClick: function() {
-                alert('a day has been clicked!');
-              },
-              header:{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-              },
-              editable: true,
-              navLinks: true, // can click day/week names to navigate views
-              eventLimit: true, // allow “more” link when too many events
-              });
-        }
-    }
-    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/consultar_fechas/calendario?nr="+id_delegado,true);
-    xmlhttpB.send();
-}*/
+    $('#calendar').fullCalendar("destroy");
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+    $('#calendar').fullCalendar({
+        // put your options and callbacks here
+        eventClick:  function(event, jsEvent, view) {
+              $('#numero_caso_exp').html(event.title);
+              $('#tipo_sol').html(event.tipo);
+              $('#delegado').html(event.delegado);
+              $('#persona').html(event.persona);
+              $('#inicio').html(event.inicio);
+              $('#fin').html(event.fin);
+              $('#modalBody').html(event.description);
+              $('#eventUrl').attr('href',event.url);
+              $('#calendarModal').modal();
+          },
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay,listMonth'
+        },
+        events: {
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/calendario?nr="+id_delegado,
+        cache: true
+    },
+        defaultView: 'month',
+        defaultDate: date,
+        editable:true
+    })
+}
 </script>
 
 <input type="hidden" id="address" name="">
@@ -82,7 +91,7 @@ function iniciar(){
             <div class="col-lg-12" id="cnt_tabla">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title m-b-0">Filtrar por delegado</h4>
+                        <h4 class="card-title m-b-0 ">Filtrar por delegado</h4>
                     </div>
                     <div class="card-body b-t" style="padding-top: 7px;">
                     <div>
@@ -109,7 +118,7 @@ function iniciar(){
                     <div class="row" style="width: 100%"></div>
                     </div>
                 </div>
-                <!--<div id="cnt_calendario"></div>-->
+                <div id="cnt_calendario">
                 <div class="row">
                   <div class="col-md-2"></div>
                   <div class="col-md-8">
@@ -120,7 +129,8 @@ function iniciar(){
                     </div>
                   </div>
                 </div>
-                <!--Pruebas -->
+                </div>
+                  <!--Pruebas -->
             </div>
         </div>
         <!-- ============================================================== -->
@@ -136,9 +146,81 @@ function iniciar(){
     <button  id="submit_ubi" name="submit_ubi" type="button"  >clicks</button>
 </div>
 
+<!-- ============================================================== -->
+<!--INICIO MODAL DE EVENTO CALENDARIO -->
+<!-- ============================================================== -->
+<div id="calendarModal" class="modal fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Detalles de la audiencia</h4>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+        </div>
+        <div id="modalBody" class="modal-body">
+          <div class="row">
+            <div class="form-group col-lg-6" style="height: 20px;">
+              N&uacute;mero de caso:
+            </div>
+            <div class="form-group col-lg-6" style="height: 20px;">
+                  <h5 id="numero_caso_exp"></h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-6" style="height: 20px;">
+              Tipo de solicitud:
+            </div>
+            <div class="form-group col-lg-6" style="height: 20px;">
+                  <h5 id="tipo_sol"></h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-6" style="height: 20px;">
+              Nombre delegado(a):
+            </div>
+            <div class="form-group col-lg-6" style="height: 20px;">
+                  <h5 id="delegado"></h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-6" style="height: 20px;">
+              Nombre de solicitante:
+            </div>
+            <div class="form-group col-lg-6" style="height: 20px;">
+                  <h5 id="persona"></h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-6" style="height: 20px;">
+              Fecha y hora de inicio:
+            </div>
+            <div class="form-group col-lg-6" style="height: 20px;">
+                  <h5 id="inicio"></h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-6" style="height: 20px;">
+              Fecha y hora de fin:
+            </div>
+            <div class="form-group col-lg-6" style="height: 20px;">
+                  <h5 id="fin"></h5>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+</div>
+<!-- ============================================================== -->
+<!--FIN MODAL DE EVENTO CALENDARIO -->
+<!-- ============================================================== -->
+
+
 <script>
 $(document).ready(function () {
 
+  var calendar = $('#calendar').fullCalendar('getCalendar');
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
@@ -147,6 +229,17 @@ $(document).ready(function () {
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
         // put your options and callbacks here
+        eventClick:  function(event, jsEvent, view) {
+              $('#numero_caso_exp').html(event.title);
+              $('#tipo_sol').html(event.tipo);
+              $('#delegado').html(event.delegado);
+              $('#persona').html(event.persona);
+              $('#inicio').html(event.inicio);
+              $('#fin').html(event.fin);
+              $('#modalBody').html(event.description);
+              $('#eventUrl').attr('href',event.url);
+              $('#calendarModal').modal();
+          },
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -157,8 +250,8 @@ $(document).ready(function () {
         cache: true
     },
         defaultView: 'month',
-        defaultDate: date
+        defaultDate: date,
+        editable:true
     })
-
 });
 </script>

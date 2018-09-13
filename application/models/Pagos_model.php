@@ -21,6 +21,27 @@ class Pagos_model extends CI_Model {
 			}
 	}
 
+	public function obtener_pagos_delegado($id_delegado) {
+
+	  $this->db->select('e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
+		e.tiposolicitud_expedienteci,CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
+		CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
+						 ->from('sct_fechaspagosci f')
+						 ->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
+						 ->join('sir_empleado em','em.id_empleado=e.id_personal')
+						 ->join('sct_personaci P','p.id_personaci=e.id_personaci');
+						 if ($id_delegado) {
+						 	$this->db->where('em.nr', $id_delegado);
+						 }
+			$query=$this->db->get();
+			if ($query->num_rows() > 0) {
+					return $query;
+			}
+			else {
+					return FALSE;
+			}
+	}
+
 	function insertar_pago($data){
 		if($this->db->insert('sct_fechaspagosci', array(
 			'fechapago_fechaspagosci' => $data['fechapago_fechaspagosci'],
