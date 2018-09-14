@@ -140,7 +140,6 @@ class Solicitud_juridica extends CI_Controller {
 		}
 	}
 
-
 	public function gestionar_expediente(){
 		if($this->input->post('band4') == "save"){
 			$data = array(
@@ -181,4 +180,49 @@ class Solicitud_juridica extends CI_Controller {
 			)
 		);
 	}
+
+	public function emitir_ficha($id_expedienteci) {
+        
+        $this->load->library("phpword");
+        $PHPWord = new PHPWord();
+        $titulo = 'FichaSolicitud_PJPN';
+
+		$rows = $this->solicitud_juridica_model->obtener_registros_expedientes( $id_expedienteci );
+        $expediente = $rows->result()[0];
+        $rows2 = $this->solicitud_juridica_model->obtener_personaci( $expediente->id_personaci );
+        $personaci = $rows2->result()[0];
+
+        $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/'.$this->config->item("nombre_base").'/files/templates/actasSolicitud/'.$titulo.'.docx');
+        $get = array ('AAAA', 'BBBB', 'CCCC', 'DDDD', 'EEEE', 'FFFF', 'GGGG', 'HHHH', 'IIII', 'JJJJ', 'KKKK');
+        $set = array ($expediente->numerocaso_expedienteci, $expediente->fechacrea_expedienteci, $personaci->direccion_personaci, $personaci->nombre_personaci." ".$personaci->apellido_personaci, $personaci->primarios_catalogociuo, $expediente->nombre_empresa, $expediente->telefono_empresa, $expediente->direccion_empresa, $expediente->primer_nombre." ".$expediente->segundo_nombre." ".$expediente->tercer_nombre." ".$expediente->primer_apellido." ".$expediente->segundo_apellido." ".$expediente->apellido_casada);
+
+        $templateWord->setValue($get,$set);        
+
+        $nombreWord = $this->random();
+
+        $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/'.$this->config->item("nombre_base").'/files/generate/'.$nombreWord.'.docx');
+
+        $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/'.$this->config->item("nombre_base").'/files/generate/'.$nombreWord.'.docx');
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header("Content-Disposition: attachment; filename='".$titulo."-".date('dmy_Hmi').".docx'");
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
+        $objWriter->save('php://output');
+
+        unlink($_SERVER['DOCUMENT_ROOT'].'/'.$this->config->item("nombre_base").'/files/generate/'.$nombreWord.'.docx');
+
+    }
+
+    private function random() {
+        $alpha = "123qwertyuiopa456sdfghjklzxcvbnm789";
+        $code = "";
+        $longitud=5;
+        for($i=0;$i<$longitud;$i++){
+            $code .= $alpha[rand(0, strlen($alpha)-1)];
+        }
+        return $code;
+    }
+
 }

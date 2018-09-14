@@ -103,7 +103,7 @@
                                       <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_expedienteci?>)">Gestionar audiencias</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas(<?=$fila->id_expedienteci?>)">Gestionar actas</a>
-                                      <a class="dropdown-item" href="'.base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedienteci.'/').'" >Descargar Reglamento</a>
+                                      <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/solicitud_juridica/emitir_ficha/'.$fila->id_expedienteci.'/')?>">Emitir Ficha</a>
                                       <?php if ($fila->id_estadosci == "1") { ?>
                                             <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>
                                       <?php } else { ?>
