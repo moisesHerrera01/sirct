@@ -1,12 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Solicitude_indemnizacion extends CI_Controller {
+class Solicitud_indemnizacion extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('solicitudes_model');
-		$this->load->library('FPDF/fpdf');
+		$this->load->model('expediente_cc_model');
 	}
 
 	public function index(){
@@ -16,11 +15,14 @@ class Solicitude_indemnizacion extends CI_Controller {
 	}
 
 	public function tabla_solicitudes(){
-		$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_solicitudes');
+		$this->load->view('conflictos_colectivos/solicitud_indemnizacion_ajax/tabla_solicitudes');
+	}
+
+	public function gestionar_solicitud() {
+		echo "exito";
 	}
 
 	public function gestionar_solicitudes(){
-
 
 		if($this->input->post('band1') == "save"){
 			$data = array(
