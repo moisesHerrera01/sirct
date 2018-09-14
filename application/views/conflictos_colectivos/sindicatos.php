@@ -25,7 +25,7 @@ function iniciar(){
 var estado_pestana = "";
 function cambiar_pestana(tipo){
     estado_pestana = tipo;
-    tablasolicitudes();
+    tablasindicatos();
 }
 
 function combo_municipio(){
@@ -90,7 +90,7 @@ function tablasindicatos(){
             $('#myTable').DataTable();
         }
     }
-    xmlhttpB.open("GET","<?php echo site_url(); ?>/conflictos_colectivos/sindicatos/tabla_sindicatos?nr="+nr_empleado+"&tipo="+estado_pestana,true);
+    xmlhttpB.open("GET","<?php echo site_url(); ?>/conflictos_colectivos/sindicato/tabla_sindicatos?nr="+nr_empleado+"&tipo="+estado_pestana,true);
     xmlhttpB.send();
 }
 
@@ -250,7 +250,7 @@ function cambiar_editar(id_personaci,bandera){
     $("#btnedit2").show(0);
     $("#btnadd3").hide(0);
     $("#btnedit3").show(0);
-    $("#cnt_tabla_solicitudes").hide(0);
+    $("#cnt_tabla_sindicatos").hide(0);
     $("#cnt_tabla").hide(0);
     $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
@@ -587,7 +587,7 @@ function volver(num) {
                     <div>
                         <div class="pull-left">
                             <div class="form-group" style="width: 400px;">
-                                <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablasolicitudes();">
+                                <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablasindicatos();">
                                     <option value="">[Todos los empleados]</option>
                                 <?php
                                     $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
@@ -640,7 +640,7 @@ function volver(num) {
                             </li>
                         </ul>
                     </div>
-                    <div id="cnt_tabla_solicitudes"></div>
+                    <div id="cnt_tabla_sindicatos"></div>
                     </div>
                 </div>
             </div>
@@ -752,7 +752,7 @@ $(function(){
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
-              tablasolicitudes();
+              tablasindicatos();
             }
         });
 

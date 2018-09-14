@@ -15,7 +15,8 @@ class Sindicato extends CI_Controller {
 	}
 
   public function tabla_sindicatos(){
-    $this->load->view('conflictos_colectivos/sindicatos_ajax/tabla_sindicatos');
+		$data['sindicatos'] = $this->sindicatos_model->obtener_expedientes_sindicatos($this->input->get('nr'),$this->input->get('tipo'));
+    $this->load->view('conflictos_colectivos/sindicatos_ajax/tabla_sindicatos',$data);
   }
 
   public function gestionar_sindicato(){
