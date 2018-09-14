@@ -55,7 +55,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function cerrar_mantenimiento(){
         $("#cnt_tabla").show(0);
-        $("#cnt_visualizar").hide(0);
+        $("#cnt_actions").hide(0);
         $("#cnt_form_main").hide(0);
         open_form(1);
         tablasolicitudes();
@@ -110,8 +110,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             data: {id : id_expedienteci, id_emp : id_empresaci, id_per : id_personaci}
         })
         .done(function(res){
-            $('#cnt_visualizar').html(res);
-            $("#cnt_visualizar").show(0);
+            $('#cnt_actions').html(res);
+            $("#cnt_actions").show(0);
             $("#cnt_tabla").hide(0);
             $("#cnt_form_main").hide(0);
         });
@@ -403,6 +403,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#modal_delegado").modal("show");
     }
 
+    function modal_estado(id_expedienteci, id_estadosci) {
+        $("#id_expedienteci_copia").val(id_expedienteci);
+        $("#id_estado_copia").val(id_estadosci).trigger('change.select2');
+        $("#modal_estado").modal("show");
+    }
+
     function cambiar_delegado() {
         var id_expedienteci = $("#id_expedienteci_copia").val();
         var id_personal = $("#id_personal_copia").val();
@@ -419,6 +425,29 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           if(res == "exito"){
             tablasolicitudes();
             swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+          }else{
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+          }
+        });
+    }
+
+    function cambiar_estado() {
+        var id_expedienteci = $("#id_expedienteci_copia").val();
+        var id_estadosci = $("#id_estado_copia").val();
+        $.ajax({
+          url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/cambiar_estado",
+          type: "post",
+          dataType: "html",
+          data: {
+            id_expedienteci: id_expedienteci,
+            id_estadosci: id_estadosci,
+          }
+        })
+        .done(function (res) {
+          if(res == "exito"){
+            cerrar_mantenimiento()
+            tablasolicitudes();
+            swal({ title: "¡Estado modificado exitosamente!", type: "success", showConfirmButton: true });
           }else{
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
           }
@@ -454,11 +483,56 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $('#cnt_actions').html(res);
             $("#cnt_actions").show(0);
             $("#cnt_tabla").hide(0);
-            $("#cnt_tabla_solicitudes").hide(0);
+            //$("#cnt_tabla_solicitudes").hide(0);
             $("#cnt_form_main").hide(0);
             tabla_audiencias(id_expedienteci);
         });
     }
+
+    function adjuntar_actas(id_expediente) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/acta",
+            type: "post",
+            dataType: "html",
+            data: {
+                id: id_expediente
+            }
+        })
+        .done(function (res) {
+            $('#cnt_actions').html(res);
+            $("#cnt_actions").show(0);
+            $("#cnt_tabla").hide(0);
+            //$("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+
+            tabla_acta(id_expediente);
+
+            $("#myAwesomeDropzone").dropzone({
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 10,
+                successmultiple: function (data, response) {
+                    $("#uploaded_files").val(response);
+                },
+                init: function () {
+                    var submitButton = document.querySelector("#submit_dropzone_form");
+                    myDropzone = this;
+                    submitButton.addEventListener("click", function () {
+                        myDropzone.processQueue();
+                    });
+                },
+                success: function () {
+                    swal({
+                        title: "¡Registro exitoso!",
+                        type: "success",
+                        showConfirmButton: true
+                    });
+                    tabla_acta(id_expediente);
+                }
+            });
+        });
+    }
+
 
 </script>
 
@@ -486,8 +560,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
             <!-- ============================================================== -->
             <div class="col-lg-1"></div>
-            <div class="col-lg-10" id="cnt_visualizar" style="display: block;"></div>
-
             <div class="col-lg-10" id="cnt_form_main" style="display: none;">
                 <div class="card">
                     <div class="card-header bg-success2" id="ttl_form">
@@ -730,7 +802,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         </div>
                         <div class="pull-right">
                             <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
-                            <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2" data-toggle="tooltip" title="Clic para agregar un nuevo registro"><span class="mdi mdi-plus"></span> Nuevo registro</button>
+                            <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2" ><span class="mdi mdi-plus"></span> Nuevo registro</button>
                             <?php } ?>
                         </div>
                     </div>
@@ -954,6 +1026,45 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
   </div>
 </div>
+
+<!--INICIO MODAL DE ESTADO -->
+    <div class="modal fade" id="modal_estado" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Cambiar estado del expediente:</h4>
+          </div>
+
+          <div class="modal-body" id="">
+              <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
+              <div class="row">
+                <div class="form-group col-lg-12 col-sm-12">
+                    <div class="form-group">
+                        <h5>Estado:<span class="text-danger">*</h5>
+                        <select id="id_estado_copia" name="id_estado_copia" class="select2" style="width: 100%" required="">
+                        <option value="">[Todos los estados]</option>
+                        <?php
+                            $otro_estado = $this->db->query("SELECT e.id_estadosci, e.nombre_estadosci FROM sct_estadosci AS e ");
+                            if($otro_estado->num_rows() > 0){
+                                foreach ($otro_estado->result() as $fila) {
+                                    echo '<option class="m-l-50" value="'.$fila->id_estadosci.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_estadosci).'</option>';
+                                }
+                            }
+                        ?>
+                        </select>
+                    </div>
+                </div>
+              </div>
+              <div align="right">
+                <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="cambiar_estado();" class="btn waves-effect waves-light btn-success2"> Guardar
+                </button>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--FIN MODAL DE ESTADO -->
 
 <script>
 $(function(){

@@ -64,6 +64,7 @@ class Solicitud_juridica_model extends CI_Model {
 		if($this->db->insert('sct_expedienteci', array(
 			'id_empresaci' => $data['id_empresaci'],
 			'id_personal' => $data['id_personal'],
+			'numerocaso_expedienteci' => '11',
 			'id_personaci' => $data['id_personaci'],
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
 			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
