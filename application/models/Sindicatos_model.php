@@ -16,8 +16,8 @@ class Sindicatos_model extends CI_Model {
   }
 
   public function insertar_sindicato($data){
-    if ($this->db->insert('sct_sindicato', $data)) {
-      $this->db->insert_id();
+    if ($this->db->insert('sge_sindicato', $data)) {
+			return $this->db->insert_id();
     }else {
       return "fracaso";
     }

@@ -94,30 +94,38 @@ function tablasindicatos(){
     xmlhttpB.send();
 }
 
+  function tabla_directivos(){
+      open_form(3);
+      var id_sindicato = $("#id_sindicato").val();
+      if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
+      }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
+      xmlhttpB.onreadystatechange=function(){
+          if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+              document.getElementById("cnt_tabla_directivos").innerHTML=xmlhttpB.responseText;
+              $('[data-toggle="tooltip"]').tooltip();
+              $('#myTable2').DataTable();
+          }
+      }
+      xmlhttpB.open("GET","<?php echo site_url(); ?>/conflictos_colectivos/directivos/tabla_directivos?id_sindicato="+id_sindicato,true);
+      xmlhttpB.send();
+  }
 
 function alertFunc() {
     $('[data-toggle="tooltip"]').tooltip()
 }
 
 function cambiar_nuevo(){
-    /*Inicio Solicitante*/
-    $("#id_personaci").val('');
+    /*Inicio Sindicato*/
+    $("#id_sindicato").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
-    $("#nombres").val('');
-    $("#apellidos").val('');
-    $("#dui").val('');
-    $("#telefono").val('');
-    $("#municipio").val('').trigger('change.select2');
-    $("#direccion").val('');
-    $("#fecha_nacimiento").val('');
-    $("#sexo").val('');
-    $("#estudios").val('');
-    $("#nacionalidad").val('');
-    $("#discapacidad").val('');
-    $("#posee_representante").val('');
-    /*Fin Solicitante*/
+    $("#nombre_sindicato").val('');
+    $("#direccion_sindicato").val('');
+    $("#telefono_sindicato").val('');
+    $("#totalafiliados_sindicato").val('');
+    combo_municipio();
+    /*Fin Sindicato*/
 
-    /*Inicio represnetante persona*/
+    /*Inicio represnetante persona
     $("#nombre_representante_persona").val('');
     $("#apellido_representante_persona").val('');
     $("#tipo_representante_persona").val('');
@@ -127,11 +135,9 @@ function cambiar_nuevo(){
     /*Fin representante persona*/
 
     /*Inicio Expediente*/
-    combo_ocupacion('');
-    combo_delegado('');
-    combo_actividad_economica();
-    combo_municipio();
-    $("#id_empleador").val($("#id_empleador").val()).trigger('change.select2');
+    //combo_delegado('');
+    //combo_actividad_economica();
+    /*$("#id_empleador").val($("#id_empleador").val()).trigger('change.select2');
     $("#nombres_jefe").val('');
     $("#apellidos_jefe").val('');
     $("#cargo_jefe").val('');
@@ -142,13 +148,13 @@ function cambiar_nuevo(){
     $("#funciones").val('');
     $("#forma_pago").val('');
     $("#horario").val('');
-    $("#fecha_conflicto").val('');
+    $("#fecha_conflicto").val('');*/
     /*Fin expediente*/
 
     $("#band").val("save");
     $("#band1").val("save");
-    $("#band2").val("save");
-    $("#band6").val('save');
+    //$("#band2").val("save");
+    //$("#band6").val('save');
 
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
@@ -160,7 +166,19 @@ function cambiar_nuevo(){
     $("#cnt_form_main").show(0);
 
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
-    combo_establecimiento('');
+    //combo_establecimiento('');
+}
+
+function cambiar_nuevo2(){
+  $("#id_directivo").val('');
+  $("#nombre_directivo").val('');
+  $("#apellido_directivo").val('');
+  $("#dui_directivo").val('');
+  $("#tipo_directivo").val('');
+  $("#acreditacion_directivo").val('');
+  $("#band2").val('save');
+
+  $("#modal_directivo").modal('show');
 }
 
 
@@ -215,7 +233,6 @@ function cambiar_editar(id_personaci,bandera){
       /*Fin representante persona*/
 
       /*Inicio Expediente*/
-      combo_ocupacion(result.id_catalogociuo);
       combo_delegado(result.id_personal);
       combo_actividad_economica(result.id_catalogociiu);
       combo_municipio(result.id_municipio1);
@@ -307,44 +324,42 @@ function volver(num) {
                             <input type="hidden" id="band" name="band" value="save">
                             <input type="hidden" id="band1" name="band1" value="save">
                             <input type="hidden" id="estado" name="estado" value="1">
-                            <input type="hidden" id="id_personaci" name="id_personaci" value="">
-                            <input type="hidden" id="id_empleador" name="id_empleador" value="">
+                            <input type="hidden" id="id_sindicato" name="id_sindicato" value="">
 
 
                             <span class="etiqueta">Expediente</span>
                             <blockquote class="m-t-0">
 
                             <div class="row">
-                              <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                              <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                   <h5>Nombre del sindicato: <span class="text-danger">*</span></h5>
                                   <input type="text" id="nombre_sindicato" name="nombre_sindicato" class="form-control" placeholder="Nombres del sindicato" required="">
                                   <div class="help-block"></div>
                               </div>
 
-                                <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
-                            </div>
-
-                            <div class="row">
-                              <div class="form-group col-lg-12" style="height: 83px;">
-                                  <h5>Dirección del sindicato:</h5>
-                                  <textarea type="text" id="direccion_sindicato" name="direccion_sindicato" class="form-control" placeholder="Dirección completa"></textarea>
-                                  <div class="help-block"></div>
-                              </div>
+                                <div class="col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
                             </div>
 
                               <div class="row">
-                                <div class="form-group col-lg-4" style="height: 83px;">
+                                <div class="form-group col-lg-6" style="height: 83px;">
                                     <h5>Teléfono del sindicato: </h5>
                                     <input data-mask="9999-9999" type="text" id="telefono_sindicato" name="telefono_sindicato" class="form-control" placeholder="Número de Telefóno">
                                     <div class="help-block"></div>
                                 </div>
 
-                              <div class="form-group col-lg-4" style="height: 83px;">
+                              <div class="form-group col-lg-6" style="height: 83px;">
                                   <h5>Total de afiliados:</h5>
-                                  <input type="number" id="nacionalidad" name="nacionalidad" class="form-control" placeholder="Nacionalidad">
+                                  <input type="number" id="totalafiliados_sindicato" name="totalafiliados_sindicato" class="form-control" placeholder="Nacionalidad">
                                   <div class="help-block"></div>
                               </div>
                         </div>
+                      <div class="row">
+                        <div class="form-group col-lg-12" style="height: 83px;">
+                            <h5>Dirección del sindicato:</h5>
+                            <textarea type="text" id="direccion_sindicato" name="direccion_sindicato" class="form-control" placeholder="Dirección completa"></textarea>
+                            <div class="help-block"></div>
+                        </div>
+                      </div>
                             </blockquote>
 
                           <div align="right" id="btnadd1">
@@ -367,211 +382,34 @@ function volver(num) {
                         <!-- Fin del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
                         <!-- ============================================================== -->
                         <!-- ============================================================== -->
-                        <!-- Inicio del FORMULARIO REPRESENTANTE DEL SOLICITANTE -->
+                        <!-- INICIA MANTENIMIENTO DE DIRECTIVOS -->
                         <!-- ============================================================== -->
-                        <?php echo form_open('', array('id' => 'formajax8', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-                            <div id="cnt_form3" class="cnt_form" style="display: block;">
+                        <div id="cnt_form3" class="cnt_form" style="display: none;">
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
-                                Representante de la persona
-                              </h3><hr class="m-t-0 m-b-30">
-                              <input type="hidden" id="band6" name="band6" value="save">
-                              <input type="hidden" id="id_representante_persona" name="id_representante_persona" value="">
+                                Datos de directivo:
+                            </h3><hr class="m-t-0 m-b-30">
 
+                            <div id="cnt_tabla_directivos"></div>
 
-                              <span class="etiqueta">Expediente</span>
-                              <blockquote class="m-t-0">
-
-                                <div class="row">
-                                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                      <h5>Nombres del representante: <span class="text-danger">*</span></h5>
-                                      <div class="controls">
-                                          <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres del representante" required>
-                                      </div>
-                                  </div>
-
-                                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                      <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
-                                      <div class="controls">
-                                          <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos del representante" required>
-                                      </div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                      <h5>DUI de representante: <span class="text-danger">*</span></h5>
-                                      <div class="controls">
-                                          <input type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
-                                      </div>
-                                  </div>
-
-                                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                      <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
-                                      <div class="controls">
-                                          <input type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
-                                      </div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                      <h5>Tipo de representaci&oacute;n: <span class="text-danger">*</span></h5>
-                                      <div class="controls">
-                                          <input type="text" id="tipo_representante_persona" name="tipo_representante_persona" class="form-control" placeholder="Tipo de representante" required>
-                                      </div>
-                                  </div>
-
-                                  <div class="form-group col-lg-8 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                      <h5>Acreditaci&oacute;n: <span class="text-danger">*</span></h5>
-                                      <div class="controls">
-                                          <textarea type="text" id="acreditacion_representante_persona" name="acreditacion_representante_persona" class="form-control" required></textarea>
-                                      </div>
-                                  </div>
-                                </div>
-                            </blockquote>
-
-                            <div align="right" id="btnadd3">
+                            <div align="right" id="btnadd2">
                               <button type="reset" class="btn waves-effect waves-light btn-success">
                                 <i class="mdi mdi-recycle"></i> Limpiar</button>
                               <button type="submit" class="btn waves-effect waves-light btn-success2">
                                 Siguiente <i class="mdi mdi-chevron-right"></i>
                               </button>
                             </div>
-                            <div align="right" id="btnedit3" style="display: none;">
+                            <div align="right" id="btnedit2" style="display: none;">
                               <button type="reset" class="btn waves-effect waves-light btn-success">
                                 <i class="mdi mdi-recycle"></i> Limpiar</button>
                               <button type="submit" class="btn waves-effect waves-light btn-info">
                                 Siguiente <i class="mdi mdi-chevron-right"></i>
                               </button>
                             </div>
-                          </div>
-                          <?php echo form_close(); ?>
-                          <!-- ============================================================== -->
-                          <!-- FIN del FORMULARIO REPRESENTANTE DEL SOLICITANTE -->
-                          <!-- ============================================================== -->
 
-
+                        </div>
                         <!-- ============================================================== -->
-                        <!-- Inicio del FORMULARIO INFORMACIÓN DE LA SOLICITUD -->
-                        <!-- ============================================================== -->
-                        <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-                          <div id="cnt_form2" class="cnt_form" style="display: block;">
-                            <h3 class="box-title" style="margin: 0px;">
-                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
-                                Información de la solicitud
-                                <input type="hidden" id="band2" name="band2" value="save">
-                                <input type="hidden" id="id_emplea" name="id_emplea" value="">
-                                <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="">
-                                <input type="hidden" id="fecha_creacion_exp" name="fecha_creacion_exp" value="">
-
-                              </h3><hr class="m-t-0 m-b-30">
-                              <span class="etiqueta">Expediente</span>
-                              <blockquote class="m-t-0">
-
-                                <div class="row">
-                                  <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
-
-                                  <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                      <h5>Fecha del conflicto: <span class="text-danger">*</span></h5>
-                                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy" readonly="">
-                                      <div class="help-block"></div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                      <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
-                                      <div class="controls">
-                                        <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
-                                          <option value="">[Seleccione]</option>
-                                          <option value="Indemnización">Indemnización</option>
-                                          <option value="Inasistencia Laboral">Inasistencia Laboral</option>
-                                          <option value="Despido Injustificado">Despido Injustificado</option>
-                                          <option value="Exige indeminización">Exige indeminización</option>
-                                          <option value="Insubordinación">Insubordinación</option>
-                                        </select>
-                                      </div>
-                                  </div>
-
-                                  <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Descripción del motivo:<span class="text-danger">*</h5>
-                                      <textarea type="text" id="descripcion_motivo" name="descripcion_motivo" class="form-control" placeholder="Descipción del motivo"></textarea>
-                                      <div class="help-block"></div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_ocupacion"></div>
-
-                                  <div class="form-group col-lg-4" style="height: 83px;">
-                                      <h5>Salario($):<span class="text-danger">*</h5>
-                                      <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01">
-                                      <div class="help-block"></div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Funciones:<span class="text-danger">*</h5>
-                                      <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones laborales" required=""></textarea>
-                                      <div class="help-block"></div>
-                                  </div>
-
-                                  <div class="form-group col-lg-4" style="height: 83px;">
-                                      <h5>Forma de pago:<span class="text-danger">*</h5>
-                                      <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Forma de pago">
-                                      <div class="help-block"></div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Horario laboral:<span class="text-danger">*</h5>
-                                      <textarea type="text" id="horario" name="horario" class="form-control" placeholder="Horario laboral"></textarea>
-                                      <div class="help-block"></div>
-                                  </div>
-
-                                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Nombres de jefe inmediato: </h5>
-                                        <input type="text" id="nombres_jefe" name="nombres_jefe" class="form-control" placeholder="Nombres de jefe inmediato" required="">
-                                        <div class="help-block"></div>
-                                    </div>
-                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Apellidos de jefe inmediato:</h5>
-                                        <input type="text" id="apellidos_jefe" name="apellidos_jefe" class="form-control" placeholder="Apellidos de jefe inmediato" required="">
-                                        <div class="help-block"></div>
-                                    </div>
-
-                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Cargo de jefe inmediato: </h5>
-                                        <input type="text" id="cargo_jefe" name="cargo_jefe" class="form-control" placeholder="Cargo de jefe inmediato" required="">
-                                        <div class="help-block"></div>
-                                    </div>
-                              </div>
-                            </blockquote>
-                            <div align="right" id="btnadd2">
-                              <button type="reset" class="btn waves-effect waves-light btn-success">
-                                <i class="mdi mdi-recycle"></i> Limpiar
-                              </button>
-                              <button type="submit" class="btn waves-effect waves-light btn-success2">Finalizar
-                                <i class="mdi mdi-chevron-right"></i></button>
-                            </div>
-                            <div align="right" id="btnedit2" style="display: none;">
-                              <button type="reset" class="btn waves-effect waves-light btn-success">
-                                <i class="mdi mdi-recycle"></i> Limpiar</button>
-                              <button type="submit" class="btn waves-effect waves-light btn-info">Finalizar
-                                <i class="mdi mdi-chevron-right"></i></button>
-                            </div>
-                          </div>
-                          <?php echo form_close(); ?>
-                        <!-- ============================================================== -->
-                        <!-- Fin del FORMULARIO INFORMACIÓN DE LA SOLICITUD -->
+                        <!-- FIN MANTENIMIENTO DE DIRECTIVOS -->
                         <!-- ============================================================== -->
                     </div>
                 </div>
@@ -654,6 +492,77 @@ function volver(num) {
 <!-- ============================================================== -->
 <!-- Fin de DIV de inicio (ENVOLTURA) -->
 <!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- INICIO MODAL DIRECTIVOS -->
+<!-- ============================================================== -->
+<div id="modal_directivo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band2" name="band2" value="save">
+          <input type="hidden" id="id_directivo" name="id_directivo" value="">
+            <div class="modal-header">
+                <h4 class="modal-title">Gestión de directivos</h4>
+            </div>
+            <div class="modal-body" id="">
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Nombre del directivo: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="nombre_directivo" name="nombre_directivo" class="form-control" required="">
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Apellido del directivo: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="apellido_directivo" name="apellido_directivo" class="form-control">
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>DUI del directivo: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="dui_directivo" name="dui_directivo" class="form-control">
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Tipo del directivo: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="tipo_directivo" name="tipo_directivo" class="form-control">
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Acreditación del directivo: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="acreditacion_directivo" name="acreditacion_directivo" class="form-control">
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="submit" id="submit2" class="btn btn-info waves-effect text-white">Aceptar</button>
+            </div>
+          <?php echo form_close(); ?>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- ============================================================== -->
+<!-- FIN MODAL DIRECTIVOS -->
+<!-- ============================================================== -->
+
+
 
 <div style="display:none;">
     <button  id="submit_ubi" name="submit_ubi" type="button"  >clicks</button>
@@ -669,7 +578,7 @@ $(function(){
         formData.append("dato", "valor");
 
         $.ajax({
-            url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_solicitudes",
+            url: "<?php echo site_url(); ?>/conflictos_colectivos/sindicato/gestionar_sindicato",
             type: "post",
             dataType: "html",
             data: formData,
@@ -681,18 +590,48 @@ $(function(){
             if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
-              if (formData.get('posee_representante') == 1) {
+                $("#id_sindicato").val(res);
                 open_form(3);
-              }else {
-                open_form(2);
-              }
-              $("#id_personaci").val(res);
-              $("#id_persona").val(res);
+                tabla_directivos();
               $("#band1").val( $("#band").val() );
               $("#band2").val( $("#band").val() );
               if($("#band").val() == "delete"){
                 swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
+            }
+        });
+
+    });
+});
+
+$(function(){
+    $("#formajax2").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax2"));
+        formData.append("id_sindicato", $('#id_sindicato').val());
+        $.ajax({
+          url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/gestionar_directivos",
+          type: "post",
+          dataType: "html",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false
+        })
+        .done(function(res){
+            if(res == "fracaso"){
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }else{
+              if($("#band2").val() == "save"){
+                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+              }else if($("#band2").val() == "edit"){
+                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+              }else{
+                  swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+              }
+              $("#modal_directivo").modal('hide');
+              tabla_directivos();
             }
         });
 
@@ -719,40 +658,6 @@ $(function(){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
               open_form(2);
-            }
-        });
-
-    });
-});
-
-$(function(){
-    $("#formajax2").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax2"));
-        formData.append("id_personaci", $('#id_personaci').val());
-        $.ajax({
-          url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_expediente",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              cerrar_mantenimiento();
-              if($("#band2").val() == "save"){
-                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-              }else if($("#band2").val() == "edit"){
-                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-              }else{
-                  swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-              }
-              tablasindicatos();
             }
         });
 

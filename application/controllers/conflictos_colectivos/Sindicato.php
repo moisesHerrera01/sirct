@@ -23,7 +23,7 @@ class Sindicato extends CI_Controller {
 		if($this->input->post('band1') == "save"){
 			$data = array(
 		  'nombre_sindicato' => $this->input->post('nombre_sindicato'),
-			'id_municipio' => $this->input->post('id_municipio'),
+			'id_municipio' => $this->input->post('municipio2'),
 			'direccion_sindicato' => $this->input->post('direccion_sindicato'),
 			'telefono_sindicato' => $this->input->post('telefono_sindicato'),
 			'totalafiliados_sindicato' => $this->input->post('totalafiliados_sindicato')
@@ -35,7 +35,7 @@ class Sindicato extends CI_Controller {
 			$data = array(
         'id_sindicato' => $this->input->post('id_sindicato'),
         'nombre_sindicato' => $this->input->post('nombre_sindicato'),
-  			'id_municipio' => $this->input->post('id_municipio'),
+  			'id_municipio' => $this->input->post('municipio2'),
   			'direccion_sindicato' => $this->input->post('direccion_sindicato'),
   			'telefono_sindicato' => $this->input->post('telefono_sindicato'),
   			'totalafiliados_sindicato' => $this->input->post('totalafiliados_sindicato')
