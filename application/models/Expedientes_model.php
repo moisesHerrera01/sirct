@@ -32,7 +32,7 @@ class Expedientes_model extends CI_Model {
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 						 ->join('sct_representantepersonaci rp','rp.id_personaci=p.id_personaci','left')
-						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')						 
+						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')
 						 ->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo', 'left')
 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
@@ -84,7 +84,7 @@ class Expedientes_model extends CI_Model {
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
-             ->where('id_expedienteci', $id);
+             ->where('e.id_expedienteci', $id);
 	  $query=$this->db->get();
 	  //print $this->db->get_compiled_select();
       if ($query->num_rows() > 0) {
