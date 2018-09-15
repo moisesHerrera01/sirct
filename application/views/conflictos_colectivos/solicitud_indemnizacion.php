@@ -161,7 +161,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function tabla_solicitantes(){
-        //open_form(3);
+        open_form(3);
         var id_empresa = $("#id_empresa").val();
         if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
         }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
@@ -181,30 +181,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function cambiar_nuevo() {
-        /*Inicio Solicitante*/
-        $("#id_personaci").val('');
-        $("#nr").val($("#nr_search").val()).trigger('change.select2');
-        $("#nombres").val('');
-        $("#apellidos").val('');
-        $("#dui").val('');
-        $("#telefono").val('');
-        $("#municipio").val('').trigger('change.select2');
-        $("#direccion").val('');
-        $("#fecha_nacimiento").val('');
-        $("#sexo").val('');
-        $("#estudios").val('');
-        $("#nacionalidad").val('');
-        $("#discapacidad").val('');
-        /*Fin Solicitante*/
-
         /*Inicio Expediente*/
-        combo_delegado('');
+        $("#fecha_conflicto").val('');
+        $("#nombre_persona").val('');
+        $("#apellido_persona").val('');
+        $("#cago_persona").val('');
+        $("#id_persona").val('');
+        $("#id_expediente2").val('');
+        /*Fin Expediente*/
+
+        /*Inicio establecimiento*/
         combo_actividad_economica();
         combo_municipio();
-        $("#id_personal").val('');
-        $("#establecimiento").val('');
-        /*Fin expediente*/
-
+        $("#id_expediente").val('');
+        /*Fin establecimiento*/
+        
         $("#band").val("save");
         $("#band1").val("save");
         $("#band2").val("save");
@@ -219,47 +210,50 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#cnt_form_main").show(0);
 
         $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
+
+        /*Inicio Solicitado */
+        $("#id_expediente").val('');
+        combo_delegado('');
         combo_establecimiento('');
-        tabla_solicitantes();
+        /*Fin Solicitado */
+
     }
 
-    function cambiar_editar(id_personaci, bandera) {
-        $("#id_persona").val(id_personaci);
+    function cambiar_editar(id_expediente, bandera) {
+        $("#id_persona").val(id_expediente);
 
         if (bandera == "edit") {
 
             $.ajax({
-                    url: "<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/registro_expediente",
+                    url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/obtener_expediente_json",
                     type: "POST",
                     data: {
-                        id: id_personaci
+                        id: id_expediente
                     }
                 })
                 .done(function (res) {
                     result = JSON.parse(res)[0];
 
-                    $("#id_personaci").val(result.id_personaci);
-                    $("#id_persona").val(result.id_persona);
-                    $("#id_expedienteci").val(result.id_expedienteci);
-                    $("#nr").val($("#nr_search").val()).trigger('change.select2');
-                    $("#nombres").val(result.nombre_personaci);
-                    $("#apellidos").val(result.apellido_personaci);
-                    $("#dui").val(result.dui_personaci);
-                    $("#telefono").val(result.telefono_personaci);
-                    $("#municipio").val(result.id_municipio.padStart(5, "00000")).trigger('change.select2');
-                    $("#direccion").val(result.direccion_personaci);
-                    $("#fecha_nacimiento").val(result.fnacimiento_personaci);
-                    $("#sexo").val(result.sexo_personaci);
-                    $("#estudios").val(result.estudios_personaci);
-                    $("#nacionalidad").val(result.nacionalidad_personaci);
-                    $("#discapacidad").val(result.discapacidad_personaci);
-
                     /*Inicio Expediente*/
-                    combo_delegado(result.id_personal);
-                    combo_actividad_economica(result.id_catalogociiu);
-                    combo_municipio(result.id_municipio1);
-                    combo_establecimiento(result.id_empresaci);
+                    $("#fecha_conflicto").val(result.fechaconflicto_personaci);
+                    $("#nombre_persona").val(result.nombre_personaci);
+                    $("#apellido_persona").val(result.apellido_personaci);
+                    $("#cago_persona").val(result.funciones_personaci);
+                    $("#id_persona").val(result.id_personaci);
+                    $("#id_expediente2").val(id_expediente);
+                    /*Fin Expediente*/
 
+                    /*Inicio establecimiento*/
+                    combo_actividad_economica();
+                    combo_municipio();
+                    $("#id_expediente").val(id_expediente);
+                    /*Fin establecimiento*/
+
+                    /*Inicio Solicitado */
+                    $("#id_expediente").val(id_expediente);
+                    combo_delegado(result.id_personal);
+                    combo_establecimiento(result.id_empresaci);
+                    /*Fin Solicitado */
 
                     /*Fin expediente*/
                     $("#band").val("edit");
@@ -637,17 +631,24 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                                 <div class="row">
                                    
-                                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Fecha del Conflicto: <span class="text-danger">*</span></h5>
                                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
                                             id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy">
                                         <div class="help-block"></div>
                                     </div>
 
-                                    <div class="form-group col-lg-6" style="height: 83px;">
+                                    <div class="form-group col-lg-4" style="height: 83px;">
                                         <h5>Nombre Persona del Conficto: </h5>
                                         <input type="text" id="nombre_persona" name="nombre_persona" class="form-control"
                                             placeholder="Nombre Persona del Conficto">
+                                        <div class="help-block"></div>
+                                    </div>
+
+                                    <div class="form-group col-lg-4" style="height: 83px;">
+                                        <h5>Apellido Persona del Conficto: </h5>
+                                        <input type="text" id="apellido_persona" name="apellido_persona" class="form-control"
+                                            placeholder="Apellido Persona del Conficto">
                                         <div class="help-block"></div>
                                     </div>
 
@@ -979,7 +980,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             var formData = new FormData(document.getElementById("formajax"));
 
             $.ajax({
-                url: "<?php echo site_url(); ?>/conflictos_colectivos/Solicitud_indemnizacion/gestionar_solicitud",
+                url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/gestionar_solicitud",
                 type: "post",
                 dataType: "html",
                 data: formData,
@@ -997,8 +998,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     });
                 } else {
                     open_form(2);
-                    $("#id_personaci").val(res);
-                    $("#id_persona").val(res);
+                    $("#id_expediente").val(res);
+                    $("#id_expediente2").val(res);
                     $("#band1").val($("#band").val());
                     $("#band2").val($("#band").val());
                 }
@@ -1013,7 +1014,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             var formData = new FormData(document.getElementById("formajax2"));
 
             $.ajax({
-                    url: "<?php echo site_url(); ?>/conflictos_colectivos/Solicitud_indemnizacion/gestionar_solicitud",
+                    url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/gestionar_solicitud_persona",
                     type: "post",
                     dataType: "html",
                     data: formData,
@@ -1030,9 +1031,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             showConfirmButton: true
                         });
                     } else {
-                        
-                        open_form(3);
-                        $("#id_personaci").val(res);
+                        tabla_solicitantes();
                         $("#id_persona").val(res);
                         $("#band1").val($("#band").val());
                         $("#band2").val($("#band").val());

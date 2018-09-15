@@ -5,7 +5,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('expediente_cc_model');
+		$this->load->model(array('Expediente_cc_model', 'Persona_cc_model'));
 	}
 
 	public function index(){
@@ -19,7 +19,86 @@ class Solicitud_indemnizacion extends CI_Controller {
 	}
 
 	public function gestionar_solicitud() {
-		echo "exito";
+		
+		if($this->input->post('band1') == "save"){
+			$data = array(
+                'numerocaso_expedienteci' => 'N/A',
+                'id_empresaci' => $this->input->post('establecimiento'),
+                'id_personal' => $this->input->post('id_personal'),
+                'tiposolicitud_expedienteci' => 'Indemnización y Prestaciones Laborales',
+                'id_estadosci' => 1
+			);
+			echo $this->Expediente_cc_model->insertar_expediente($data);
+
+		} else if ($this->input->post('band1') == "edit") {
+			
+			$data = $this->Expediente_cc_model->obtener_expediente($this->input->post('id_expediente'))->result_array()[0];
+
+			$data['id_empresaci'] = $this->input->post('establecimiento');
+			$data['id_personal'] = $this->input->post('id_personal');
+
+			if ($this->Expediente_cc_model->editar_expediente($data) == "exito") {
+				echo $this->input->post('id_expediente');
+			} else {
+				echo "fracaso";
+			}
+
+		} else {
+			echo "fracaso";
+		}
+
+	}
+
+	public function gestionar_solicitud_persona() {
+		
+		if($this->input->post('band2') == "save"){
+			$data = array(
+                'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
+                'nombre_personaci' => $this->input->post('nombre_persona'),
+                'apellido_personaci' => $this->input->post('apellido_persona'),
+                'funciones_personaci' => $this->input->post('cago_persona'),
+				'sexo_personaci' => 'N/A',
+				'id_municipio' => 0
+			);
+
+			$id_persona = $this->Persona_cc_model->insertar_persona_conflicto($data);
+
+			$res = $this->Expediente_cc_model->editar_expediente(array(
+				'id_expedienteci' => $this->input->post('id_expediente'), 
+				'id_personaci' => $id_persona, 
+			));
+
+			if ($res == 'exito') {
+				echo $id_persona;
+			} else {
+				echo $res;
+			}
+
+		}else if ($this->input->post('band2') == "edit") {
+			
+			$data = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
+
+			$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
+			$data['nombre_personaci'] = $this->input->post('nombre_persona');
+			$data['apellido_personaci'] = $this->input->post('apellido_persona');
+			$data['funciones_personaci'] = $this->input->post('cago_persona');
+
+			if ($this->Persona_cc_model->editar_persona($data) == "exito") {
+				echo $this->input->post('id_persona');
+			} else {
+				echo "fracaso";
+			}
+
+		} else {
+			echo "fracaso";
+		}
+
+	}
+
+	public function obtener_expediente_json() {
+		print json_encode(
+            $this->Expediente_cc_model->obtener_expediente_persona($this->input->post('id'))->result()
+        );
 	}
 
 	public function gestionar_solicitudes(){
