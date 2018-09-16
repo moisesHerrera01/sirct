@@ -14,7 +14,7 @@ class Solicitantes_model extends CI_Model {
                 ->join('sct_representantepersonaci b', 'a.id_personaci = b.id_personaci', 'left')
                 ->where('a.id_expedienteci', $expediente);
         $query=$this->db->get();
-        //print $this->db->get_compiled_select();
+        
         if ($query->num_rows() > 0) {
             return $query;
         }
@@ -23,7 +23,25 @@ class Solicitantes_model extends CI_Model {
         }
 
     }
-    
+
+    public function obtener_solicitante($id) {
+        
+        $this->db->select('')
+                ->from('sct_personaci a')
+                ->join('sct_representantepersonaci b', 'a.id_personaci = b.id_personaci', 'left')
+                ->join('sct_expedienteci c', 'a.id_expedienteci = c.id_expedienteci', 'left')
+                ->where('a.id_personaci', $id);
+        $query=$this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            return $query;
+        }
+        else {
+            return FALSE;
+        }
+
+    }
+
 }
 
 ?>

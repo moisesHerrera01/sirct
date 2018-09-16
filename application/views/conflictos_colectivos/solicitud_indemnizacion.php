@@ -162,7 +162,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function tabla_solicitantes(){
         open_form(3);
-        var id_empresa = $("#id_empresa").val();
+        var id_expediente = $("#id_expediente").val();
         if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
         }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
         xmlhttpB.onreadystatechange=function(){
@@ -172,8 +172,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $('#myTable').DataTable();
             }
         }
-        xmlhttpB.open("GET","<?php echo site_url(); ?>/conflictos_colectivos/detalle_solicitante/tabla_solicitante?expediente="+34,true);
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/conflictos_colectivos/detalle_solicitante/tabla_solicitante?expediente="+id_expediente,true);
         xmlhttpB.send();
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_solicitantes",
+            type: "POST",
+            data: {
+                id: id_expediente
+            }
+        })
+        .done(function (res) {
+            $('#cnt_modal_acciones').html(res);
+            $('.select2').select2();
+        });
+
     }
 
     function alertFunc() {
@@ -234,8 +247,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 .done(function (res) {
                     result = JSON.parse(res)[0];
 
+                    var fecha = new Date(result.fechaconflicto_personaci);
+                    
                     /*Inicio Expediente*/
-                    $("#fecha_conflicto").val(result.fechaconflicto_personaci);
+                    $("#fecha_conflicto").val( `${fecha.getDate()}-${fecha.getMonth() + 1}-${fecha.getFullYear()}` );
                     $("#nombre_persona").val(result.nombre_personaci);
                     $("#apellido_persona").val(result.apellido_personaci);
                     $("#cago_persona").val(result.funciones_personaci);
@@ -971,6 +986,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
 </div>
 <!--FIN MODAL DE ESTADO -->
+
+<div id="cnt_modal_acciones"></div>
 
 <script>
     $(function () {
