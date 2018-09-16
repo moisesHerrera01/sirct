@@ -8,7 +8,7 @@ class Sindicatos_model extends CI_Model {
 	}
   public function editar_sindicato($data){
     $this->db->where("id_sindicato",$data["id_sindicato"]);
-    if ($this->db->update('sct_sindicato', $data)) {
+    if ($this->db->update('sge_sindicato', $data)) {
       return "exito";
     }else {
       return "fracaso";

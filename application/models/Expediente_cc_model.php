@@ -29,7 +29,7 @@ class Expediente_cc_model extends CI_Model {
                ->where("a.id_expedienteci", $id);
 
       $query=$this->db->get();
-      
+
 			if ($query->num_rows() > 0) {
 					return  $query;
 			}
@@ -45,7 +45,7 @@ class Expediente_cc_model extends CI_Model {
                ->where("a.id_expedienteci", $id);
 
       $query=$this->db->get();
-      
+
 			if ($query->num_rows() > 0) {
 					return  $query;
 			}
@@ -54,6 +54,34 @@ class Expediente_cc_model extends CI_Model {
 			}
     }
 
+    public function expedientes_diferencia_laboral($id_expedienteci){
+      $this->db->select(
+                        'e.id_expedienteci,
+                         e.numerocaso_expedienteci,
+                         e.id_empresaci,
+                         e.id_estadosci,
+                         e.id_personal,
+                         e.motivo_expedienteci,
+                         e.descripmotivo_expedienteci,
+                         e.tiposolicitud_expedienteci,
+                         e.fechacrea_expedienteci,
+                         s.id_sindicato,
+                         s.id_municipio,
+                         s.nombre_sindicato,
+                         s.direccion_sindicato,
+                         s.telefono_sindicato,
+                         s.totalafiliados_sindicato'
+                       )
+               ->from('sct_expedienteci e')
+               ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci')
+               ->where('e.id_expedienteci',$id_expedienteci);
+      $query = $this->db->get();
+      if ($query->num_rows() > 0) {
+        return $query;
+      }else {
+        return FALSE;
+      }
+    }
 }
 
 ?>
