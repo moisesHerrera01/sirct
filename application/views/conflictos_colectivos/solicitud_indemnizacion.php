@@ -301,23 +301,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         enviarDatos();
     }
 
-    function visualizar(id_personaci, id_empresaci) {
+    function visualizar(id_expediente) {
         $.ajax({
-                url: "<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/ver_expediente",
-                type: "post",
-                dataType: "html",
-                data: {
-                    id: id_personaci,
-                    id_emp: id_empresaci
-                }
-            })
-            .done(function (res) {
-                $('#cnt_actions').html(res);
-                $("#cnt_actions").show(0);
-                $("#cnt_tabla").hide(0);
-                $("#cnt_tabla_solicitudes").hide(0);
-                $("#cnt_form_main").hide(0);
-            });
+            url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/ver_expediente",
+            type: "post",
+            dataType: "html",
+            data: {
+                id: id_expediente
+            }
+        })
+        .done(function (res) {
+            $('#cnt_actions').html(res);
+            $("#cnt_actions").show(0);
+            $("#cnt_tabla").hide(0);
+            $("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+        });
     }
 
     function adjuntar_actas(id_expediente) {

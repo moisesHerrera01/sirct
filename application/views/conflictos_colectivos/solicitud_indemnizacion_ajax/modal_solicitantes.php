@@ -130,89 +130,90 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div class="modal-body" id="">
                 <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                 <div class="row">
-                    <input type="hidden" name="band5" id="band5" value="save">
-                    <input type="hidden" name="id_persona" id="id_persona2">
-                    <input type="hidden" name="id_representante" id="id_representante_solicitante">
+                    <div class="col-lg-12">
+                        <input type="hidden" name="band5" id="band5" value="save">
+                        <input type="hidden" name="id_persona" id="id_persona2">
+                        <input type="hidden" name="id_representante" id="id_representante_solicitante">
 
-                    <!-- span class="etiqueta">Informaci&oacute;n del Solicitante</span -->
-                    <blockquote class="m-t-0">
-                        <div class="row">
-                            <div class="form-group col-lg-6" style="height: 83px;">
-                                <h5>Nombres de Representante: <span class="text-danger">*</span></h5>
-                                <input type="text" id="nombre_representacion_solicitante" name="nombre_representacion_solicitante"
-                                    class="form-control" placeholder="Nombre de Representante" required>
-                                <div class="help-block"></div>
-                            </div>
-                            <div class="form-group col-lg-6" style="height: 83px;">
-                                <h5>Apellidos de Representante: <span class="text-danger">*</span></h5>
-                                <input type="text" id="apellido_representacion_solicitante" name="apellido_representacion_solicitante"
-                                    class="form-control" placeholder="Apellidos de Representante" required>
-                                <div class="help-block"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-lg-6" style="height: 83px;">
-                                <h5>Tipo de Representación: <span class="text-danger">*</span></h5>
-                                <input type="text" id="tipo_representacion_solicitante" name="tipo_representacion_solicitante"
-                                    class="form-control" placeholder="Tipo de Representación" required>
-                                <div class="help-block"></div>
-                            </div>
-                        </div>
-                    </blockquote>
-
-                    <!-- span class="etiqueta">Motivo de la solicitud</span -->
-                    <blockquote class="m-t-0">
-                        <div class="row">
-                            <div class="form-group col-lg-6" style="height: 83px;">
-                                <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
-                                <div class="controls">
-                                    <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
-                                        <option value="">[Seleccione]</option>
-                                        <option value="1">Indemnización</option>
-                                        <option value="2">Inasistencia Laboral</option>
-                                        <option value="3">Despido Injustificado</option>
-                                        <option value="4">Exige indeminización</option>
-                                        <option value="5">Insubordinación</option>
-                                    </select>
+                        <span class="etiqueta">Informaci&oacute;n del Solicitante</span>
+                        <blockquote class="m-t-0">
+                            <div class="row">
+                                <div class="form-group col-lg-6" style="height: 83px;">
+                                    <h5>Nombres de Representante: <span class="text-danger">*</span></h5>
+                                    <input type="text" id="nombre_representacion_solicitante" name="nombre_representacion_solicitante"
+                                        class="form-control" placeholder="Nombre de Representante" required>
+                                    <div class="help-block"></div>
+                                </div>
+                                <div class="form-group col-lg-6" style="height: 83px;">
+                                    <h5>Apellidos de Representante: <span class="text-danger">*</span></h5>
+                                    <input type="text" id="apellido_representacion_solicitante" name="apellido_representacion_solicitante"
+                                        class="form-control" placeholder="Apellidos de Representante" required>
+                                    <div class="help-block"></div>
                                 </div>
                             </div>
-                            <div class="form-group col-lg-6" style="height: 83px;">
-                                <?= $ocupacion ?>
+                            <div class="row">
+                                <div class="form-group col-lg-6" style="height: 83px;">
+                                    <h5>Tipo de Representación: <span class="text-danger">*</span></h5>
+                                    <input type="text" id="tipo_representacion_solicitante" name="tipo_representacion_solicitante"
+                                        class="form-control" placeholder="Tipo de Representación" required>
+                                    <div class="help-block"></div>
+                                </div>
                             </div>
-                        </div>
+                        </blockquote>
 
-                        <div class="row">
-                            <div class="form-group col-lg-12" style="height: 83px;">
-                                <h5>Funciones: <span class="text-danger">*</span></h5>
-                                <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones"></textarea>
-                                <div class="help-block"></div>
+                        <span class="etiqueta">Motivo de la solicitud</span>
+                        <blockquote class="m-t-0">
+                            <div class="row">
+                                <div class="form-group col-lg-6" style="height: 83px;">
+                                    <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
+                                            <option value="">[Seleccione]</option>
+                                            <option value="1">Indemnización</option>
+                                            <option value="2">Inasistencia Laboral</option>
+                                            <option value="3">Despido Injustificado</option>
+                                            <option value="4">Exige indeminización</option>
+                                            <option value="5">Insubordinación</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6" style="height: 83px;">
+                                    <?= $ocupacion ?>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="form-group col-lg-6" style="height: 83px;">
-                                <h5>Salario($):<span class="text-danger">*</h5>
-                                <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario"
-                                    step="0.01">
-                                <div class="help-block"></div>
+                            <div class="row">
+                                <div class="form-group col-lg-12" style="height: 83px;">
+                                    <h5>Funciones: <span class="text-danger">*</span></h5>
+                                    <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones"></textarea>
+                                    <div class="help-block"></div>
+                                </div>
                             </div>
 
-                            <div class="form-group col-lg-6" style="height: 83px;">
-                                <h5>Forma de pago:<span class="text-danger">*</h5>
-                                <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Forma de pago">
-                                <div class="help-block"></div>
-                            </div>
-                        </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6" style="height: 83px;">
+                                    <h5>Salario($):<span class="text-danger">*</h5>
+                                    <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario"
+                                        step="0.01">
+                                    <div class="help-block"></div>
+                                </div>
 
-                        <div class="row">
-                            <div class="form-group col-lg-12" style="height: 83px;">
-                                <h5>Horario laboral:<span class="text-danger">*</h5>
-                                <textarea type="text" id="horario" name="horario" class="form-control" placeholder="Horario laboral"></textarea>
-                                <div class="help-block"></div>
+                                <div class="form-group col-lg-6" style="height: 83px;">
+                                    <h5>Forma de pago:<span class="text-danger">*</h5>
+                                    <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Forma de pago">
+                                    <div class="help-block"></div>
+                                </div>
                             </div>
-                        </div>
-                    </blockquote>
 
+                            <div class="row">
+                                <div class="form-group col-lg-12" style="height: 83px;">
+                                    <h5>Horario laboral:<span class="text-danger">*</h5>
+                                    <textarea type="text" id="horario" name="horario" class="form-control" placeholder="Horario laboral"></textarea>
+                                    <div class="help-block"></div>
+                                </div>
+                            </div>
+                        </blockquote>
+                    </div>
                 </div>
                 <div align="right">
                     <button type="button" class="btn waves-effect waves-light" onClick="volver_modal()">Volver</button>
@@ -321,7 +322,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#forma_pago').val('');
         $('#horario').val('');
 
-        $("#modal_representante_motivo").modal("show");
+        $("#modal_solicitante").modal("show");
 
     }
 

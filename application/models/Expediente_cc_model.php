@@ -82,6 +82,29 @@ class Expediente_cc_model extends CI_Model {
         return FALSE;
       }
     }
+
+    public function obtener_expediente_indemnizacion($id) {
+      $this->db->select('')
+               ->from('sct_expedienteci a')
+               ->join('sct_personaci b', 'a.id_personaci = b.id_personaci', 'left')
+               ->join('sge_empresa c', 'a.id_empresaci = c.id_empresa')
+               ->join('org_municipio d', 'c.id_municipio = d.id_municipio')
+               ->join('sge_catalogociiu e', 'c.id_catalogociiu = e.id_catalogociiu', 'left')
+               ->join('sge_representante f', 'c.id_empresa = f.id_empresa', 'left')
+               ->join('sir_empleado g','g.id_empleado = a.id_personal')
+               ->where("a.id_expedienteci", $id)
+               ->limit(1);
+
+      $query=$this->db->get();
+
+			if ($query->num_rows() > 0) {
+					return  $query;
+			}
+			else {
+					return FALSE;
+			}
+    }
+  
 }
 
 ?>
