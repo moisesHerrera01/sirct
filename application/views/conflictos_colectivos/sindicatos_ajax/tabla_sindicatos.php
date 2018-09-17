@@ -41,9 +41,12 @@
 
 
                             $array = array($fila->id_expedienteci);
+                            $array2 = array($fila->id_sindicato);
                             if(tiene_permiso($segmentos=2,$permiso=4)){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
+                                array_push($array2, "directivos");
+                                echo generar_boton($array2,"gestionar_directivos","btn-info","mdi mdi-account-plus","Gestionar");
                             }
                             if(tiene_permiso($segmentos=2,$permiso=1)){
                                 ?>

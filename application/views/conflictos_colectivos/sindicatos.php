@@ -22,6 +22,16 @@ function iniciar(){
     <?php } ?>
 }
 
+function gestionar_directivos(id_sindicato) {
+    $("#btnadd2").hide(0);
+    $("#btnedit5").show(0);
+    $("#cnt_tabla").hide(0);
+    $("#cnt_tabla_sindicatos").hide(0);
+    $("#cnt_form_main").show(0);
+    $("#id_sindicato").val(id_sindicato);
+    tabla_directivos();
+}
+
 function visualizar(id_expedienteci,id_empresa) {
   $.ajax({
     url: "<?php echo site_url(); ?>/conflictos_colectivos/diferencias_laborales/ver_expediente",
@@ -121,6 +131,9 @@ function open_form(num){
 }
 
 function cerrar_mantenimiento(){
+    $("#btnadd2").show(0);
+    $("#btnedit5").hide(0);
+    $("#cnt_tabla").show(0);
     $("#cnt_tabla").show(0);
     $("#cnt_tabla_sindicatos").show(0);
     $("#cnt_form_main").hide(0);
@@ -151,7 +164,7 @@ function tablasindicatos(){
     xmlhttpB.onreadystatechange=function(){
         if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
             document.getElementById("cnt_tabla_sindicatos").innerHTML=xmlhttpB.responseText;
-            $('[data-toggle="tooltip"]').tooltip();
+            //$('[data-toggle="tooltip"]').tooltip();
             $('#myTable').DataTable();
         }
     }
@@ -455,6 +468,14 @@ function volver(num) {
                               </button>
                             </div>
 
+                            <div align="right" id="btnedit5" style="display: none;">
+                              <button type="reset" class="btn waves-effect waves-light btn-success">
+                                <i class="mdi mdi-recycle"></i> Limpiar</button>
+                              <button type="button" onclick="cerrar_mantenimiento()" class="btn waves-effect waves-light btn-success2">
+                                Finalizar <i class="mdi mdi-chevron-right"></i>
+                              </button>
+                            </div>
+
                         </div>
                         <!-- ============================================================== -->
                         <!-- FIN MANTENIMIENTO DE DIRECTIVOS -->
@@ -557,7 +578,7 @@ function volver(num) {
                         </div>
                         <div class="pull-right">
                             <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
-                            <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2" data-toggle="tooltip" title="Clic para agregar un nuevo registro"><span class="mdi mdi-plus"></span> Nuevo registro</button>
+                            <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2" data-toggle="tooltip" ><span class="mdi mdi-plus"></span> Nuevo registro</button>
                             <?php } ?>
                         </div>
                     </div>
