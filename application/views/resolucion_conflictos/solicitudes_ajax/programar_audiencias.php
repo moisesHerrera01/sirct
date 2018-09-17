@@ -50,10 +50,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
                           <h5>
-                          <?php if($expediente->tiposolicitud_expedienteci != "conciliacion juridica"){
-                              echo $expediente->nombre_personaci.' '.$expediente->apellido_personaci;
-                          }else{
+                          <?php if($expediente->tiposolicitud_expedienteci == "conciliacion juridica"){
                               echo $expediente->nombre_empresa;
+                          }if ($expediente->tiposolicitud_expedienteci == "Conciliación") {
+                              echo $expediente->nombre_personaci.' '.$expediente->apellido_personaci;
+                          }if ($expediente->tiposolicitud_expedienteci == "Diferencia Laboral") {
+                              echo $expediente->nombre_sindicato;
                           }?>
                           </h5>
                         </div>

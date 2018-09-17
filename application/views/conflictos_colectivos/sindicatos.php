@@ -22,14 +22,46 @@ function iniciar(){
     <?php } ?>
 }
 
+function resolucion(id_expedienteci) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/diferencias_laborales/resolucion_expediente",
+    type: "post",
+    dataType: "html",
+    data: {id : id_expedienteci}
+  })
+  .done(function(res){
+    $('#cnt_modal_acciones').html(res);
+    $('#modal_resolucion').modal('show');
+  });
+}
+
 function gestionar_directivos(id_sindicato) {
     $("#btnadd2").hide(0);
+    $("#paso2").hide(0);
     $("#btnedit5").show(0);
     $("#cnt_tabla").hide(0);
     $("#cnt_tabla_sindicatos").hide(0);
     $("#cnt_form_main").show(0);
     $("#id_sindicato").val(id_sindicato);
     tabla_directivos();
+}
+
+function audiencias(id_expedienteci) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
+    type: "post",
+    dataType: "html",
+    data: {id : id_expedienteci}
+  })
+  .done(function(res){
+    console.log(res)
+    $('#cnt_actions').html(res);
+    $("#cnt_actions").show(0);
+    $("#cnt_tabla").hide(0);
+    $("#cnt_tabla_solicitudes").hide(0);
+    $("#cnt_form_main").hide(0);
+    tabla_audiencias(id_expedienteci);
+  });
 }
 
 function visualizar(id_expedienteci,id_empresa) {
@@ -131,6 +163,7 @@ function open_form(num){
 }
 
 function cerrar_mantenimiento(){
+    $("#paso2").show(0);
     $("#btnadd2").show(0);
     $("#btnedit5").hide(0);
     $("#cnt_tabla").show(0);
@@ -169,6 +202,24 @@ function tablasindicatos(){
         }
     }
     xmlhttpB.open("GET","<?php echo site_url(); ?>/conflictos_colectivos/sindicato/tabla_sindicatos?nr="+nr_empleado+"&tipo="+estado_pestana,true);
+    xmlhttpB.send();
+}
+
+function tabla_audiencias(id_expedienteci){
+  //alert(id_expedienteci);
+    if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttpB=new XMLHttpRequest();
+    }else{// code for IE6, IE5
+        xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+    }
+    xmlhttpB.onreadystatechange=function(){
+        if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+            document.getElementById("cnt_tabla_audiencias").innerHTML=xmlhttpB.responseText;
+            $('[data-toggle="tooltip"]').tooltip();
+            $('#myTable2').DataTable();
+        }
+    }
+    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/audiencias/tabla_audiencias?id_expedienteci="+id_expedienteci,true);
     xmlhttpB.send();
 }
 
@@ -447,7 +498,7 @@ function volver(num) {
                         <!-- ============================================================== -->
                         <div id="cnt_form3" class="cnt_form" style="display: none;">
                             <h3 class="box-title" style="margin: 0px;">
-                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
+                                <button id="paso2" type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
                                 Datos de directivo:
                             </h3><hr class="m-t-0 m-b-30">
 

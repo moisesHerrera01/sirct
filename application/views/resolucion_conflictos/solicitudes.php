@@ -367,6 +367,7 @@ function alertFunc() {
 }
 
 function cambiar_nuevo(){
+    open_form(1);
     /*Inicio Solicitante*/
     $("#id_personaci").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
@@ -433,7 +434,7 @@ function cambiar_nuevo(){
 
 
 function cambiar_editar(id_personaci,bandera){
-
+  open_form(1);
   if(bandera == "edit"){
 
     $.ajax({

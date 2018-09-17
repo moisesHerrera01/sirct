@@ -8,7 +8,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 
 <div class="modal fade" id="modal_resolucion" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Registrar Resultado del Expediente</h4>
@@ -21,7 +21,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="<?= $id?>">
 
           <div class="row">
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+            <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Resulato de intervenci&oacute;n conciliator&iacute;a: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select id="resolucion" name="resolucion" class="form-control" required>
@@ -33,16 +33,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <option value="A multas">A multas</option>
                   <option value="No notificada">No notificada</option>
                   <option value="Reinstalo">Reinstalo</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Tipo de conciliación: <span class="text-danger">*</span></h5>
-              <div class="controls">
-                <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control" required>
-                  <option value="">[Seleccione]</option>
-                  <option value="Pago en el momento">Pago en el momento</option>
-                  <option value="Pago diferido">Pago diferido</option>
                 </select>
               </div>
             </div>
@@ -90,7 +80,7 @@ $(function(){
         });
       $('#modal_resolucion').remove();
       $('.modal-backdrop').remove();
-      tablasolicitudes();
+      tablasindicatos();
     });
 });
 

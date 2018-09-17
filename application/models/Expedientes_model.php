@@ -81,8 +81,9 @@ class Expedientes_model extends CI_Model {
 
       $this->db->select('')
              ->from('sct_expedienteci e')
-						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
+						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci','left')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
+						 ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
              ->where('e.id_expedienteci', $id);
 	  $query=$this->db->get();
