@@ -259,9 +259,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <!-- Logo icono --><b>
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                             <!-- Dark Logo icon -->
-                            <img src="<?php echo base_url(); ?>assets/images/Logo-min.png" height='45px' alt="homepage" class="dark-logo" />
+                            <img src="<?php echo base_url(); ?>assets/images/Logo-min.png" height='45px' style="margin-left: 10px;" alt="homepage" class="dark-logo" />
                             <!-- Light Logo icon -->
-                            <img src="<?php echo base_url(); ?>assets/images/Logo-min.png" height='45px' alt="homepage" class="light-logo" />
+                            <img src="<?php echo base_url(); ?>assets/images/Logo-min.png" height='45px' style="margin-left: 10px;" alt="homepage" class="light-logo" />
                         </b>
                         <!--Fin Logo icon -->
                         <!-- Logo text --><span>
