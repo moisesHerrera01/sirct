@@ -4,7 +4,7 @@
         <div class="card-actions">
 
         </div>
-        <h4 class="card-title m-b-0">Listado de representantes</h4>
+        <h4 class="card-title m-b-0">Listado de directivos</h4>
     </div>
     <div class="card-body b-t"  style="padding-top: 7px;">
     	<div class="pull-right">
@@ -37,7 +37,7 @@
                             $array = array($fila->id_directivo);
                             if(tiene_permiso($segmentos=2,$permiso=4)){
                                 array_push($array, "edit");
-                                echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
+                                echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
                             }
                             echo "</td>";
                             echo "</tr>";

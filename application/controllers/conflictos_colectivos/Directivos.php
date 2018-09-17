@@ -18,7 +18,7 @@ class Directivos extends CI_Controller {
 			$data = array(
 			'id_sindicato' => $this->input->post('id_sindicato'),
 		  'nombre_directivo' => $this->input->post('nombre_directivo'),
-			'apellido_directivo' => $this->input->post('nombre_directivo'),
+			'apellido_directivo' => $this->input->post('apellido_directivo'),
 			'dui_directivo' => $this->input->post('dui_directivo'),
 			'tipo_directivo' => $this->input->post('tipo_directivo'),
 			'acreditacion_directivo' => $this->input->post('acreditacion_directivo')
@@ -32,7 +32,7 @@ class Directivos extends CI_Controller {
         'id_directivo' => $this->input->post('id_directivo'),
 				'id_sindicato' => $this->input->post('id_sindicato'),
 			  'nombre_directivo' => $this->input->post('nombre_directivo'),
-				'apellido_directivo' => $this->input->post('nombre_directivo'),
+				'apellido_directivo' => $this->input->post('apellido_directivo'),
 				'dui_directivo' => $this->input->post('dui_directivo'),
 				'tipo_directivo' => $this->input->post('tipo_directivo'),
 				'acreditacion_directivo' => $this->input->post('acreditacion_directivo')
@@ -40,6 +40,13 @@ class Directivos extends CI_Controller {
 			$this->directivos_model->editar_directivo($data);
 			echo $data['id_sindicato'];
 		}
+	}
+
+	public function obtener_directivo() {
+
+		print json_encode(
+			$this->directivos_model->obtener_directivo($this->input->post('id_directivo'))->result()
+		);
 	}
 }
 ?>

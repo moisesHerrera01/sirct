@@ -40,18 +40,6 @@ function combo_municipio(){
   });
 }
 
-function combo_municipio2(){
-  $.ajax({
-    url: "<?php echo site_url(); ?>/conflictos_colectivos/diferencias_laborales/combo_municipio",
-    type: "post",
-    dataType: "html"
-  })
-  .done(function(res){
-    $('#div_combo_municipio2').html(res);
-    $(".select2").select2();
-  });
-}
-
 function combo_actividad_economica(){
 
   $.ajax({
@@ -183,7 +171,8 @@ function cambiar_nuevo(){
     $("#direccion_sindicato").val('');
     $("#telefono_sindicato").val('');
     $("#totalafiliados_sindicato").val('');
-    combo_municipio2('');
+    //combo_municipio2('');
+    $("#municipio").val('').trigger('change.select2');
     /*Fin Sindicato*/
 
     /*Inicio Expediente*/
@@ -241,12 +230,13 @@ function cambiar_editar(id_expedienteci,bandera){
       result = JSON.parse(res)[0];
       /*Inicio sindicato*/
       $("#id_sindicato").val(result.id_sindicato);
+      //combo_municipio2(result.id_municipio);
+      $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
       $("#nombre_sindicato").val(result.nombre_sindicato);
       $("#direccion_sindicato").val(result.direccion_sindicato);
       $("#telefono_sindicato").val(result.telefono_sindicato);
       $("#totalafiliados_sindicato").val(result.totalafiliados_sindicato);
-      combo_municipio2(result.id_municipio);
       /*Fin sindicato*/
 
       /*Inicio Expediente*/
@@ -275,6 +265,31 @@ function cambiar_editar(id_expedienteci,bandera){
     $("#cnt_tabla").hide(0);
     $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
+  }
+}
+
+function cambiar_editar2(id_directivo,bandera){
+
+  if(bandera == "edit"){
+
+    $.ajax({
+      url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/obtener_directivo",
+      type: "POST",
+      data: {id_directivo : id_directivo}
+    })
+    .done(function(res){
+      result = JSON.parse(res)[0];
+      /*Inicio directivo*/
+      $("#id_directivo").val(result.id_directivo);
+      $("#nombre_directivo").val(result.nombre_directivo);
+      $("#apellido_directivo").val(result.apellido_directivo);
+      $("#dui_directivo").val(result.dui_directivo);
+      $("#tipo_directivo").val(result.tipo_directivo);
+      $("#acreditacion_directivo").val(result.acreditacion_directivo);
+      /*Fin directivo*/
+      $("#band2").val("edit");
+    });
+    $("#modal_directivo").modal('show');
   }
 }
 
@@ -341,7 +356,19 @@ function volver(num) {
                                   <div class="help-block"></div>
                               </div>
 
-                                <div class="col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
+                              <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Municipio: <span class="text-danger">*</span></h5>
+                                  <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
+                                      <option value=''>[Seleccione el municipio]</option>
+                                      <?php
+                                          if($municipio->num_rows() > 0){
+                                              foreach ($municipio->result() as $fila2) {
+                                                 echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
+                                              }
+                                          }
+                                      ?>
+                                  </select>
+                              </div>
                             </div>
 
                               <div class="row">

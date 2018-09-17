@@ -44,4 +44,15 @@ class Sindicatos_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	public function obtener_municipios(){
+		$this->db->select('m.id_municipio,m.municipio')
+						 ->from('org_municipio m');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
 }

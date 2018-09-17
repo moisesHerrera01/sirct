@@ -9,8 +9,9 @@ class Sindicato extends CI_Controller {
 	}
 
 	public function index(){
+		$data['municipio'] = $this->sindicatos_model->obtener_municipios();
 		$this->load->view('templates/header');
-		$this->load->view('conflictos_colectivos/sindicatos');
+		$this->load->view('conflictos_colectivos/sindicatos',$data);
 		$this->load->view('templates/footer');
 	}
 
@@ -35,12 +36,12 @@ class Sindicato extends CI_Controller {
 			$data = array(
         'id_sindicato' => $this->input->post('id_sindicato'),
         'nombre_sindicato' => $this->input->post('nombre_sindicato'),
-  			'id_municipio' => $this->input->post('municipio2'),
+  			'id_municipio' => $this->input->post('municipio'),
   			'direccion_sindicato' => $this->input->post('direccion_sindicato'),
   			'telefono_sindicato' => $this->input->post('telefono_sindicato'),
   			'totalafiliados_sindicato' => $this->input->post('totalafiliados_sindicato')
 			);
-			echo $this->sindicatos_model->editar_solicitud($data);
+			echo $this->sindicatos_model->editar_sindicato($data);
 		}
 	}
 }

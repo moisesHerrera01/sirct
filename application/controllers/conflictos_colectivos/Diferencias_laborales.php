@@ -36,47 +36,21 @@ class Diferencias_laborales extends CI_Controller {
 
 		} else if($this->input->post('band4') == "edit"){
 
-			$data3 = array(
-				'id_empleador' => $this->input->post('id_emplea'),
-				'nombre_empleador' => $this->input->post('nombres_jefe'),
-				'apellido_empleador' => $this->input->post('apellidos_jefe'),
-				'cargo_empleador' => $this->input->post('cargo_jefe')
-			);
-
-			$data = $this->solicitudes_model->obtener_persona($this->input->post('id_personaci'))->result_array()[0];
-			$data['id_personaci'] = $this->input->post('id_personaci');
-			$data['salario_personaci'] = $this->input->post('salario');
-			$data['funciones_personaci'] = $this->input->post('funciones');
-			$data['formapago_personaci'] = $this->input->post('forma_pago');
-			$data['horarios_personaci'] = $this->input->post('horario');
-			$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
-			$data['id_catalogociuo'] = $this->input->post('ocupacion');
-
 			$data2 = array(
 					'id_expedienteci' => $this->input->post('id_expedienteci'),
 					'motivo_expedienteci' => $this->input->post('motivo'),
 					'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
-					'id_personaci' => $this->input->post('id_personaci'),
 					'id_personal' => $this->input->post('id_personal'),
 					'id_empresaci' => $this->input->post('establecimiento'),
-					'fechacrea_expedienteci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_creacion_exp'))),
-					'tiposolicitud_expedienteci' =>"Conciliación",
+					'fechacrea_expedienteci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_creacion_exp')))
 			);
 
-			if ("fracaso" != $this->empleadores_model->editar_empleador($data3)) {
-				 $this->solicitudes_model->editar_solicitud($data);
-				 $this->expedientes_model->editar_expediente($data2);
+			if ("fracaso" != $this->expediente_cc_model->editar_expediente($data2)) {
+				echo "exito";
 			} else {
 				echo "fracaso";
 			}
-
-		}/*else if($this->input->post('band') == "delete"){
-			$data = array(
-				'id_expedientert' => $this->input->post('id_expedientert')
-			);
-			echo $this->reglamento_model->eliminar_documento($data);
-
-		}*/
+		}
 
     }
 
@@ -163,16 +137,5 @@ class Diferencias_laborales extends CI_Controller {
 				}
 
 			}*/
-
-			public function combo_municipio() {
-
-			$this->load->view('conflictos_colectivos/sindicatos_ajax/combo_municipio',
-				array(
-					'id' => $this->input->post('id'),
-					'municipio' => $this->db->get('org_municipio')
-				)
-			);
-
-		}
 }
 ?>

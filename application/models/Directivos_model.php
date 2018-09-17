@@ -23,6 +23,15 @@ class Directivos_model extends CI_Model {
     }
   }
 
+	public function obtener_directivo($id_directivo){
+		$query = $this->db->get_where('sge_directivo', array('id_directivo' => $id_directivo));
+		if ($query->num_rows()>0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
+
 	public function obtener_directivos_sindicato($id_sindicato){
 		$this->db->select('d.id_sindicato,d.id_directivo,d.nombre_directivo,d.apellido_directivo,d.tipo_directivo,d.acreditacion_directivo')
 						 ->from('sge_directivo d')
