@@ -225,6 +225,61 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
 </div>
 
+<div class="modal fade" id="modal_resolucion" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Registrar Resultado del Expediente</h4>
+      </div>
+
+      <div class="modal-body" id="">
+        <div id="cnt_form6" class="cnt_form">
+          <?php echo form_open('', array('id' => 'formajax6', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+
+          <input type="hidden" id="id_persona3" name="id_persona" value="">
+
+          <div class="row">
+            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <h5>Resoluci&oacute;n de intervenci&oacute;n: <span class="text-danger">*</span></h5>
+              <div class="controls">
+                <select id="resolucion" name="resolucion" class="form-control" required>
+                  <option value="">[Seleccione]</option>
+                  <option value="">[Seleccione]</option>
+                  <option value="Conciliado">Conciliado</option>
+                  <option value="Sin conciliar">Sin conciliar</option>
+                  <option value="Inasistencia">Inasistencia</option>
+                  <option value="Desistida">Desistida</option>
+                  <option value="A multas">A multas</option>
+                  <option value="No notificada">No notificada</option>
+                  <option value="Reinstalo">Reinstalo</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <h5>Tipo de Conciliaci&oacute;n: </h5>
+              <div class="controls">
+                <select id="ob_genero" name="ob_genero" class="form-control">
+                  <option value="">[Seleccione]</option>
+                  <option value="Pago en el momento">Pago en el momento</option>
+                  <option value="Pago diferido">Pago diferido</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div align="right" id="btnadd1">
+            <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn waves-effect waves-light btn-success2">
+              Guardar <i class="mdi mdi-chevron-right"></i>
+            </button>
+          </div>
+          <?php echo form_close(); ?>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
     $(function () {
         $("#formajax4").on("submit", function (e) {
@@ -286,6 +341,39 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     swal({ title: "¡El solicitante se ingreso con exito!", type: "success", showConfirmButton: true });
                     tabla_solicitantes();
                     $('#modal_representante_motivo').modal('hide');
+                    $('.modal-backdrop').remove();
+                }
+            });
+        });
+    });
+
+    $(function () {
+        $("#formajax6").on("submit", function (e) {
+            e.preventDefault();
+            var f = $(this);
+            var formData = new FormData(document.getElementById("formajax6"));
+
+            $.ajax({
+                url: "<?php echo site_url(); ?>/conflictos_colectivos/detalle_solicitante/registrar_resultado",
+                type: "post",
+                dataType: "html",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false
+            })
+            .done(function (res) {
+                if (res == "fracaso") {
+                    swal({
+                        title: "¡Ups! Error",
+                        text: "Intentalo nuevamente.",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                } else {
+                    swal({ title: "¡Registro de resultado con exito!", type: "success", showConfirmButton: true });
+                    tabla_solicitantes();
+                    $('#modal_resolucion').modal('hide');
                     $('.modal-backdrop').remove();
                 }
             });
@@ -467,5 +555,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 }
             });
         });
+    }
+
+    function resultado(id_solicitante) {
+        $('#id_persona3').val(id_solicitante);
+        $('#modal_resolucion').modal('show');
     }
 </script>

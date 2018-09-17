@@ -48,13 +48,16 @@
                                     array_push($array, "edit");
                                     echo generar_boton($array,"cambiar_editar_solicitante","btn-info","fa fa-wrench","Editar");
                                 }
+
+                                array_pop($array);
                                 
-                                $act = array($fila->id_personaci);
                                 if($fila->estado_persona == "1"){
-                                    echo generar_boton($act,"desactivar","btn-danger","fa fa-chevron-down","Dar de baja");
+                                    echo generar_boton($array,"desactivar","btn-danger","fa fa-chevron-down","Dar de baja");
                                 }else{
-                                    echo generar_boton($act,"activar","btn-success","fa fa-chevron-up","Activar");
+                                    echo generar_boton($array,"activar","btn-success","fa fa-chevron-up","Activar");
                                 }
+
+                                echo generar_boton($array,"resultado","btn-info","fa fa-wrench","Registrar Resultado");
 
                                 echo "</td>";
                                 echo "</tr>";

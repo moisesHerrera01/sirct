@@ -162,7 +162,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         xmlhttpB.send();
     }
 
-    function tabla_solicitantes(){
+    function tabla_solicitantes(a = 0) {
         open_form(3);
         var id_expediente = $("#id_expediente").val();
         if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
@@ -174,7 +174,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $('#myTable').DataTable();
             }
         }
-        xmlhttpB.open("GET","<?php echo site_url(); ?>/conflictos_colectivos/detalle_solicitante/tabla_solicitante?expediente="+id_expediente,true);
+        xmlhttpB.open(
+            "GET",
+            "<?php echo site_url(); ?>/conflictos_colectivos/detalle_solicitante/tabla_solicitante?expediente="+id_expediente+"&resultado="+a,
+            true);
         xmlhttpB.send();
 
         $.ajax({
@@ -540,13 +543,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
-    function gestionar_solicitantes($id_expediente) {
+    function gestionar_solicitantes(id_expediente) {
         $("#cnt_tabla").hide(0);
         $("#cnt_form_main").show(0);
         $('#title_paso3').hide();
         $('#btn_volver').hide();
         $('#id_expediente3').val(id_expediente);
-        tabla_solicitantes();
+        $('#id_expediente').val(id_expediente);
+        tabla_solicitantes( 1 );
     }
 
 </script>

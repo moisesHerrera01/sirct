@@ -15,7 +15,10 @@ class Detalle_Solicitante extends CI_Controller {
     public function tabla_solicitante() {
         $this->load->view(
             'conflictos_colectivos/solicitud_indemnizacion_ajax/tabla_solicitantes',
-            array('solicitantes' => $this->Solicitantes_model->obtener_solicitantes_expediente( $this->input->get('expediente')) ));
+            array(
+                'solicitantes' => $this->Solicitantes_model->obtener_solicitantes_expediente( $this->input->get('expediente')),
+				'resultado' => $this->input->get('resultado')
+            ));
     }
 
     public function obtener_solicitantes_json() {
@@ -36,6 +39,10 @@ class Detalle_Solicitante extends CI_Controller {
         $data = $this->Persona_cc_model->obtener_persona($this->input->post('id'))->result_array()[0];
         $data['estado_persona'] = 1;
         echo $this->Persona_cc_model->editar_persona($data);
+    }
+
+    public function registrar_resultado() {
+        # code...
     }
 }  
 ?>
