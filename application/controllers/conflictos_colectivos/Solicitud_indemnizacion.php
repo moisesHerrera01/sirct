@@ -25,7 +25,8 @@ class Solicitud_indemnizacion extends CI_Controller {
                 'numerocaso_expedienteci' => 'N/A',
                 'id_empresaci' => $this->input->post('establecimiento'),
                 'id_personal' => $this->input->post('id_personal'),
-                'tiposolicitud_expedienteci' => 'Indemnización y Prestaciones Laborales',
+				'tiposolicitud_expedienteci' => 'Indemnización y Prestaciones Laborales',
+				'fechacrea_expedienteci' => date("Y-m-d H:i:s"),
                 'id_estadosci' => 1
 			);
 			echo $this->Expediente_cc_model->insertar_expediente($data);
