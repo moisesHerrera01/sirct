@@ -24,7 +24,7 @@ class Sindicatos_model extends CI_Model {
   }
 
 	public function obtener_expedientes_sindicatos($nr,$estado){
-		$this->db->select('ex.id_expedienteci,em.id_empresa,ex.id_personal,ex.id_estadosci,ex.numerocaso_expedienteci,s.nombre_sindicato,em.nombre_empresa,
+		$this->db->select('s.id_sindicato,ex.id_expedienteci,em.id_empresa,ex.id_personal,ex.id_estadosci,ex.numerocaso_expedienteci,s.nombre_sindicato,em.nombre_empresa,
 											 CONCAT_WS(" ",e.primer_nombre,e.segundo_nombre,e.primer_apellido,e.segundo_apellido,e.apellido_casada) delegado,
 											 es.nombre_estadosci,ex.resultado_expedienteci')
 						 ->from('sir_empleado e')

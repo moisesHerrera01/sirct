@@ -22,6 +22,22 @@ function iniciar(){
     <?php } ?>
 }
 
+function visualizar(id_expedienteci,id_empresa) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/diferencias_laborales/ver_expediente",
+    type: "post",
+    dataType: "html",
+    data: {id_e : id_expedienteci, id_p : id_empresa}
+  })
+  .done(function(res){
+    $('#cnt_actions').html(res);
+    $("#cnt_actions").show(0);
+    $("#cnt_tabla").hide(0);
+    $("#cnt_tabla_sindicatos").hide(0);
+    $("#cnt_form_main").hide(0);
+  });
+}
+
 var estado_pestana = "";
 function cambiar_pestana(tipo){
     estado_pestana = tipo;
@@ -164,6 +180,7 @@ function alertFunc() {
 }
 
 function cambiar_nuevo(){
+    open_form(1);
     /*Inicio Sindicato*/
     $("#id_sindicato").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
@@ -218,7 +235,7 @@ function cambiar_nuevo2(){
 
 
 function cambiar_editar(id_expedienteci,bandera){
-
+    open_form(1);
   if(bandera == "edit"){
 
     $.ajax({
