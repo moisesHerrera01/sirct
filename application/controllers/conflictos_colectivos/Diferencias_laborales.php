@@ -5,7 +5,7 @@ class Diferencias_laborales extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array('expediente_cc_model','sindicatos_model'));
+		$this->load->model(array('expediente_cc_model','sindicatos_model','expedientes_model'));
 	}
 
 	public function gestionar_expediente() {
@@ -59,6 +59,13 @@ class Diferencias_laborales extends CI_Controller {
 			print json_encode(
 				$this->expediente_cc_model->expedientes_diferencia_laboral($this->input->post('id'))->result()
 			);
+		}
+
+		public function ver_expediente() {
+			$data['empresa'] = $this->expedientes_model->obtener_municipio($this->input->post('id_p'));
+			$data['expediente'] = $this->expediente_cc_model->expedientes_diferencia_laboral($this->input->post('id_e'));
+
+			$this->load->view('conflictos_colectivos/sindicatos_ajax/vista_expediente', $data);
 		}
 
 /*

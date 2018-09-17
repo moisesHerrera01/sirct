@@ -70,10 +70,14 @@ class Expediente_cc_model extends CI_Model {
                          s.nombre_sindicato,
                          s.direccion_sindicato,
                          s.telefono_sindicato,
-                         s.totalafiliados_sindicato'
+                         s.totalafiliados_sindicato,
+                         m.municipio,
+                         CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido,em.apellido_casada) delegado'
                        )
                ->from('sct_expedienteci e')
                ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci')
+               ->join('org_municipio m','m.id_municipio=s.id_municipio')
+               ->join('sir_empleado em','em.id_empleado=e.id_personal')
                ->where('e.id_expedienteci',$id_expedienteci);
       $query = $this->db->get();
       if ($query->num_rows() > 0) {
