@@ -218,6 +218,11 @@ class Solicitud_indemnizacion extends CI_Controller {
         $data['expediente'] = $this->Expediente_cc_model->obtener_expediente_indemnizacion( $this->input->post('id') );
 
         $this->load->view('conflictos_colectivos/solicitud_indemnizacion_ajax/vista_expediente', $data);
-    }
+	}
+	
+	public function gestionar_inhabilitar_expediente()
+	{
+		# code...
+	}
 
 }

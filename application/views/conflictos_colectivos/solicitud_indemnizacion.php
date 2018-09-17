@@ -120,6 +120,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#cnt_actions").remove('.card');
         $("#modal_delegado").modal('hide');
         $("#modal_estado").modal('hide');
+        $('#title_paso3').show();
+        $('#btn_volver').show();
         open_form(1);
         tablasolicitudes();
     }
@@ -471,7 +473,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 return false
             }
             $.ajax({
-                url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_inhabilitar_expediente",
+                url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/gestionar_inhabilitar_expediente",
                 type: "post",
                 dataType: "html",
                 data: {
@@ -536,6 +538,15 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     }
                 });
         });
+    }
+
+    function gestionar_solicitantes($id_expediente) {
+        $("#cnt_tabla").hide(0);
+        $("#cnt_form_main").show(0);
+        $('#title_paso3').hide();
+        $('#btn_volver').hide();
+        $('#id_expediente3').val(id_expediente);
+        tabla_solicitantes();
     }
 
 </script>
@@ -706,14 +717,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <!-- ============================================================== -->
                         <div id="cnt_form3" class="cnt_form" style="display: none;">
                             <h3 class="box-title" style="margin: 0px;">
-                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
+                                <button type="button" id="title_paso3" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
                                 Gestionar Solicitantes:
                             </h3><hr class="m-t-0 m-b-30">                            
 
                             <div id="cnt_tabla_solicitantes"></div>
 
                             <div class="pull-left">
-                                <button type="button" class="btn waves-effect waves-light btn-default" onclick="volver(2)"><i class="mdi mdi-chevron-left"></i> Volver</button>
+                                <button id="btn_volver" type="button" class="btn waves-effect waves-light btn-default" onclick="volver(2)"><i class="mdi mdi-chevron-left"></i> Volver</button>
                             </div>
                             <div align="right" id="btnadd2" class="pull-right">
                                 <button type="button" onclick="cerrar_mantenimiento();" class="btn waves-effect waves-light btn-success2">Finalizar <i class="mdi mdi-chevron-right"></i></button>

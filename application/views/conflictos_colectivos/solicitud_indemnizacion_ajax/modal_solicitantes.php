@@ -16,7 +16,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div class="modal-body" id="">
                 <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                 <div class="row">
-                    <input type="hidden" id="id_expediente" name="id_expediente" value="<?=$id?>">
+                    <input type="hidden" id="id_expediente3" name="id_expediente" value="<?=$id?>">
                     <input type="hidden" name="id_persona" id="id_persona1">
                     <input type="hidden" id="band4" name="band4" value="save">
                             
@@ -297,7 +297,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#band4').val('save');
         $('#band5').val('save');
 
-        $('#id_expediente').val('');
         $('#id_persona1').val('');
         $('#id_persona2').val('');
         $('#id_representante_solicitante').val('');
@@ -343,7 +342,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $('#band4').val('edit');
             $('#band5').val('edit');
         
-            $('#id_expediente').val(result.id_expedienteci);
+            $('#id_expediente3').val(result.id_expedienteci);
             $('#id_persona1').val(result.id_personaci);
             $('#id_persona2').val(result.id_personaci);
             $('#id_representante_solicitante').val(result.id_representantepersonaci);
@@ -404,30 +403,30 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         },
         function () {
             $.ajax({
-                    url: "<?php echo site_url(); ?>/conflictos_colectivos/detalle_solicitante/bajar_solicitante",
-                    type: "post",
-                    dataType: "html",
-                    data: {
-                        id: id_solicitante,
-                    }
-                })
-                .done(function (res) {
-                    if (res == "exito") {
-                        tabla_solicitantes();
-                        swal({
-                            title: "¡Solicitante desactivado exitosamente!",
-                            type: "success",
-                            showConfirmButton: true
-                        });
-                    } else {
-                        swal({
-                            title: "¡Ups! Error",
-                            text: "Intentalo nuevamente.",
-                            type: "error",
-                            showConfirmButton: true
-                        });
-                    }
-                });
+                url: "<?php echo site_url(); ?>/conflictos_colectivos/detalle_solicitante/bajar_solicitante",
+                type: "post",
+                dataType: "html",
+                data: {
+                    id: id_solicitante,
+                }
+            })
+            .done(function (res) {
+                if (res == "exito") {
+                    tabla_solicitantes();
+                    swal({
+                        title: "¡Solicitante desactivado exitosamente!",
+                        type: "success",
+                        showConfirmButton: true
+                    });
+                } else {
+                    swal({
+                        title: "¡Ups! Error",
+                        text: "Intentalo nuevamente.",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                }
+            });
         });
     }
 
@@ -443,30 +442,30 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         },
         function () {
             $.ajax({
-                    url: "<?php echo site_url(); ?>/conflictos_colectivos/detalle_solicitante/activar_solicitante",
-                    type: "post",
-                    dataType: "html",
-                    data: {
-                        id: id_solicitante,
-                    }
-                })
-                .done(function (res) {
-                    if (res == "exito") {
-                        tabla_solicitantes();
-                        swal({
-                            title: "¡Solicitante activado exitosamente!",
-                            type: "success",
-                            showConfirmButton: true
-                        });
-                    } else {
-                        swal({
-                            title: "¡Ups! Error",
-                            text: "Intentalo nuevamente.",
-                            type: "error",
-                            showConfirmButton: true
-                        });
-                    }
-                });
+                url: "<?php echo site_url(); ?>/conflictos_colectivos/detalle_solicitante/activar_solicitante",
+                type: "post",
+                dataType: "html",
+                data: {
+                    id: id_solicitante,
+                }
+            })
+            .done(function (res) {
+                if (res == "exito") {
+                    tabla_solicitantes();
+                    swal({
+                        title: "¡Solicitante activado exitosamente!",
+                        type: "success",
+                        showConfirmButton: true
+                    });
+                } else {
+                    swal({
+                        title: "¡Ups! Error",
+                        text: "Intentalo nuevamente.",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                }
+            });
         });
     }
 </script>
