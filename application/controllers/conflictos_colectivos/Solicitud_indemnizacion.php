@@ -119,7 +119,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 	public function gestionar_solicitante() {
 		
-		if($this->input->post('band3') == "save"){
+		if($this->input->post('band4') == "save"){
 			$data = array(
                 'nombre_personaci' => $this->input->post('nombre_solicitante'),
 				'apellido_personaci' => $this->input->post('apellido_solicitante'),
@@ -137,7 +137,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 			echo $this->Persona_cc_model->insertar_persona_conflicto($data);
 
-		} else if ($this->input->post('band3') == "edit") {
+		} else if ($this->input->post('band4') == "edit") {
 			
 			$data = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
@@ -166,7 +166,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 	public function gestionar_representante() {
 		
-		if($this->input->post('band4') == "save"){
+		if($this->input->post('band5') == "save"){
 			$data = array(
                 'id_personaci' => $this->input->post('id_persona'),
 				'nombre_representantepersonaci' => $this->input->post('nombre_representacion_solicitante'),
@@ -187,7 +187,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 			$this->Persona_cc_model->editar_persona($data2);
 
-		} else if ($this->input->post('band4') == "edit") {
+		} else if ($this->input->post('band5') == "edit") {
 			echo $this->input->post('id_representante');
 			$data = $this->Representante_cc_model->obtener_representante($this->input->post('id_representante'))->result_array()[0];
 

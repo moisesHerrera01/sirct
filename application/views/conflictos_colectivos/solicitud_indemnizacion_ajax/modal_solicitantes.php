@@ -18,7 +18,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="row">
                     <input type="hidden" id="id_expediente" name="id_expediente" value="<?=$id?>">
                     <input type="hidden" name="id_persona" id="id_persona1">
-                    <input type="hidden" id="band3" name="band3" value="save">
+                    <input type="hidden" id="band4" name="band4" value="save">
                             
                     <span class="etiqueta">Datos del Solicitante</span>
                     <blockquote class="m-t-0">
@@ -113,7 +113,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
                 <div align="right">
                     <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" id="submit2" class="btn btn-info waves-effect text-white">Guardar</button>
+                    <button type="submit" id="submit2" class="btn btn-info waves-effect text-white">Siguiente</button>
                 </div>
                 <?php echo form_close(); ?>
             </div>
@@ -130,11 +130,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div class="modal-body" id="">
                 <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                 <div class="row">
-                    <input type="hidden" name="band4" id="band4" value="save">
+                    <input type="hidden" name="band5" id="band5" value="save">
                     <input type="hidden" name="id_persona" id="id_persona2">
                     <input type="hidden" name="id_representante" id="id_representante_solicitante">
 
-                    <span class="etiqueta">Informaci&oacute;n del Solicitante</span>
+                    <!-- span class="etiqueta">Informaci&oacute;n del Solicitante</span -->
                     <blockquote class="m-t-0">
                         <div class="row">
                             <div class="form-group col-lg-6" style="height: 83px;">
@@ -160,7 +160,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         </div>
                     </blockquote>
 
-                    <span class="etiqueta">Motivo de la solicitud</span>
+                    <!-- span class="etiqueta">Motivo de la solicitud</span -->
                     <blockquote class="m-t-0">
                         <div class="row">
                             <div class="form-group col-lg-6" style="height: 83px;">
@@ -215,7 +215,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 </div>
                 <div align="right">
-                    <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn waves-effect waves-light" onClick="volver_modal()">Volver</button>
                     <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Guardar</button>
                 </div>
                 <?php echo form_close(); ?>
@@ -294,6 +294,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function cambiar_nuevo_solicitante() {
 
         $('#band4').val('save');
+        $('#band5').val('save');
 
         $('#id_expediente').val('');
         $('#id_persona1').val('');
@@ -320,7 +321,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#forma_pago').val('');
         $('#horario').val('');
 
-        $("#modal_solicitante").modal("show");
+        $("#modal_representante_motivo").modal("show");
 
     }
 
@@ -338,8 +339,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
             var fecha = new Date(result.fnacimiento_personaci);
 
-            $('#band3').val('edit');
             $('#band4').val('edit');
+            $('#band5').val('edit');
         
             $('#id_expediente').val(result.id_expedienteci);
             $('#id_persona1').val(result.id_personaci);
@@ -383,6 +384,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             }).datepicker("setDate", new Date());
         });
     });
+
+    function volver_modal() {
+        $('#modal_representante_motivo').modal('hide');
+        $('#modal_solicitante').modal('show');
+        $('#band4').val('edit');
+    }
 
     function desactivar(id_solicitante) {
         swal({
