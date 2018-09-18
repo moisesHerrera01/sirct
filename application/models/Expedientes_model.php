@@ -50,6 +50,24 @@ class Expedientes_model extends CI_Model {
 			}
 	}
 
+	/*e.numerocaso_expedienteci,
+	 em.direccion_empresa,
+	 r.nombres_representante,
+	 c.actividad_catalogociiu,
+	 p.nombre_personaci,
+	 p.apellido_personaci,
+	 p.telefono_personaci,
+	 p.salario_personaci,
+	 p.direccion_personaci,
+	 p.formapago_personaci,
+	 p.funciones_personaci,
+	 p.horarios_personaci,
+	 ep.primer_nombre,
+	 ep.segundo_nombre,
+	 ep.primer_apellido,
+	 ep.segundo_apellido,
+	 ep.apellido_casada*/
+
 	public function obtener_municipio($id) {
 
 		$this->db->select('e.numinscripcion_empresa,m.municipio,cat.actividad_catalogociiu,e.nombre_empresa,e.direccion_empresa,e.telefono_empresa,r.nombres_representante')
@@ -79,13 +97,28 @@ class Expedientes_model extends CI_Model {
 
   public function obtener_expediente($id) {
 
-      $this->db->select('')
+      $this->db->select(
+											  'e.id_expedienteci,
+												 e.numerocaso_expedienteci,
+												 e.tiposolicitud_expedienteci,
+												 ep.apellido_casada,
+												 ep.primer_nombre,
+												 ep.segundo_nombre,
+												 ep.primer_apellido,
+												 ep.segundo_apellido,
+												 p.id_personaci,
+												 p.nombre_personaci,
+												 p.apellido_personaci,
+												 em.nombre_empresa,
+												 s.nombre_sindicato'
+												)
              ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci','left')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
 						 ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
-             ->where('e.id_expedienteci', $id);
+						 ->group_by('e.id_expedienteci')
+						 ->where('e.id_expedienteci', $id);
 	  $query=$this->db->get();
 	  //print $this->db->get_compiled_select();
       if ($query->num_rows() > 0) {
