@@ -47,7 +47,8 @@ class Pagos_model extends CI_Model {
 		if($this->db->insert('sct_fechaspagosci', array(
 			'fechapago_fechaspagosci' => $data['fechapago_fechaspagosci'],
 			'montopago_fechaspagosci' => $data['montopago_fechaspagosci'],
-			'id_expedienteci' => $data['id_expedienteci']
+			'id_expedienteci' => $data['id_expedienteci'],
+			'id_persona' => $data['id_persona']
 		))){
 			return "exito,".$this->db->insert_id();
 		}else{
@@ -63,7 +64,22 @@ class Pagos_model extends CI_Model {
 			return "fracaso";
 		}
 	}
+
 	public function eliminar_pago($data){
 		$this->db->delete('sct_fechaspagosci', array('id_fechaspagosci' => $data['id_fechaspagosci']));
+	}
+
+	public function obtener_pagos_persona($id) {
+
+		$this->db->select('id_persona,id_fechaspagosci,fechapago_fechaspagosci,montopago_fechaspagosci')
+					 ->from('sct_fechaspagosci')
+					 ->where('id_persona', $id);
+		$query=$this->db->get();
+		
+		if ($query->num_rows() > 0) {
+				return $query;
+		} else {
+				return FALSE;
+		}
 	}
 }

@@ -30,8 +30,10 @@ class Detalle_Solicitante extends CI_Controller {
     }
 
     public function bajar_solicitante() {
-        $data = $this->Persona_cc_model->obtener_persona($this->input->post('id'))->result_array()[0];
-        $data['estado_persona'] = 0;
+        $data = array(
+            'id_personaci' => $this->input->post('id'),
+            'estado_persona' => 0
+        );
         echo $this->Persona_cc_model->editar_persona($data);
     }
 
@@ -42,7 +44,13 @@ class Detalle_Solicitante extends CI_Controller {
     }
 
     public function registrar_resultado() {
-        # code...
+        $data = array(
+            'id_personaci' => $this->input->post('id_persona'),
+            'resultado_personacc' => $this->input->post('resolucion'),
+            'tipoconciliacion_personacc' => $this->input->post('tipo_conciliacion')
+        );
+
+        echo $this->Persona_cc_model->editar_persona($data);
     }
 }  
 ?>

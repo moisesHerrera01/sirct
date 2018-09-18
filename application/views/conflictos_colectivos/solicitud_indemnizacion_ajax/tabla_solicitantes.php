@@ -22,7 +22,7 @@
                         <th>Tipo Representante</th>
                         <th>Nombre Representante</th>
                         <th>Estado</th>
-                        <th style="min-width: 85px;">(*)</th>
+                        <th style="min-width: 150px;">(*)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,13 +51,16 @@
 
                                 array_pop($array);
                                 
+                                echo generar_boton($array,"resultado","btn-info","mdi mdi-checkbox-marked","Registrar Resultado");
+
+                                echo generar_boton($array,"pagos","btn-info","mdi mdi-square-inc-cash","Gestionar Pagos");
+                                
                                 if($fila->estado_persona == "1"){
                                     echo generar_boton($array,"desactivar","btn-danger","fa fa-chevron-down","Dar de baja");
                                 }else{
                                     echo generar_boton($array,"activar","btn-success","fa fa-chevron-up","Activar");
                                 }
 
-                                echo generar_boton($array,"resultado","btn-info","fa fa-wrench","Registrar Resultado");
 
                                 echo "</td>";
                                 echo "</tr>";

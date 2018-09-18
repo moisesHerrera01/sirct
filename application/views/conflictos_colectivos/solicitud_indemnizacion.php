@@ -118,6 +118,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#cnt_form_main").hide(0);
         $("#cnt_actions").hide(0);
         $("#cnt_actions").remove('.card');
+        $("#cnt_tabla_solicitantes").remove('.card')
         $("#modal_delegado").modal('hide');
         $("#modal_estado").modal('hide');
         $('#title_paso3').show();
@@ -551,6 +552,41 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#id_expediente3').val(id_expediente);
         $('#id_expediente').val(id_expediente);
         tabla_solicitantes( 1 );
+    }
+
+    function pagos(id_persona) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/pagos/programar_pagos_indemnizacion",
+            type: "post",
+            dataType: "html",
+            data: {id : id_persona}
+        })
+        .done(function(res){
+            console.log(res)
+            $('#cnt_actions').html(res);
+            $("#cnt_actions").show(0);
+            $("#cnt_tabla").hide(0);
+            $("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+            tabla_pagos(id_persona);
+        });
+    }
+
+    function tabla_pagos(id_persona){
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla_pagos").innerHTML=xmlhttpB.responseText;
+                $('[data-toggle="tooltip"]').tooltip();
+                $('#myTable3').DataTable();
+            }
+        }
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/pagos/tabla_pagos_indemnizacion?id_persona="+id_persona,true);
+        xmlhttpB.send();
     }
 
 </script>

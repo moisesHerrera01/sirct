@@ -24,7 +24,8 @@ class Pagos extends CI_Controller {
 			$data = array(
 			'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'))),
 			'montopago_fechaspagosci' => $this->input->post('monto'),
-			'id_expedienteci' => $this->input->post('id_expedienteci1')
+			'id_expedienteci' => $this->input->post('id_expedienteci1'),
+			'id_persona' => null
 			);
 			echo $this->pagos_model->insertar_pago($data);
 
@@ -39,6 +40,42 @@ class Pagos extends CI_Controller {
 			echo $this->pagos_model->editar_pago($data);
 
 		}else if($this->input->post('band5') == "delete"){
+			$data = array('id_fechaspagosci' => $this->input->post('id_fechaspagosci'));
+			echo $this->pagos_model->eliminar_pago($data);
+		}
+	}
+
+	public function programar_pagos_indemnizacion(){
+    $data['expediente'] = $this->expedientes_model->obtener_expediente_pagos_indemnizacion( $this->input->post('id') );
+    $this->load->view('conflictos_colectivos/solicitud_indemnizacion_ajax/programar_pagos', $data);
+  }
+
+  public function tabla_pagos_indemnizacion(){
+    $data['pago'] = $this->pagos_model->obtener_pagos_persona( $this->input->get('id_persona') );
+    $this->load->view('conflictos_colectivos/solicitud_indemnizacion_ajax/tabla_pagos',$data);
+  }
+
+	public function gestionar_pago_indemnizacion() {
+		if($this->input->post('band6') == "save"){
+			$data = array(
+			'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'))),
+			'montopago_fechaspagosci' => $this->input->post('monto'),
+			'id_persona' => $this->input->post('id_persona4'),
+			'id_expedienteci' => null
+			);
+			echo $this->pagos_model->insertar_pago($data);
+
+		}else if($this->input->post('band6') == "edit"){
+
+			$data = array(
+			'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'))),
+			'montopago_fechaspagosci' => $this->input->post('monto'),
+			'id_persona' => $this->input->post('id_persona4'),
+			'id_fechaspagosci' => $this->input->post('id_fechaspagosci')
+			);
+			echo $this->pagos_model->editar_pago($data);
+
+		}else if($this->input->post('band6') == "delete"){
 			$data = array('id_fechaspagosci' => $this->input->post('id_fechaspagosci'));
 			echo $this->pagos_model->eliminar_pago($data);
 		}
