@@ -21,7 +21,19 @@ class Inicio_model extends CI_Model {
 	}
 
 	public function obtener_estadistica_tipo_asociacion(){
-		$query=$this->db->query('SELECT ta.NOMBRE_TIPO_ASOCIACION AS nombre, (SELECT COUNT(*) FROM sap_asociacion AS a WHERE a.ID_TIPO_ASOCIACION = ta.ID_TIPO_ASOCIACION) AS cantidad FROM sap_tipo_asociacion AS ta');
+		$estados = ", SUM(CASE WHEN a.id_estadosci = 1 THEN 1 ELSE 0 END) AS estado1";
+		$estados .= ", SUM(CASE WHEN a.id_estadosci = 2 THEN 1 ELSE 0 END) AS estado2";
+		$estados .= ", SUM(CASE WHEN a.id_estadosci = 3 THEN 1 ELSE 0 END) AS estado3";
+		$estados .= ", SUM(CASE WHEN a.id_estadosci = 4 THEN 1 ELSE 0 END) AS estado4";
+
+		$query=$this->db->query("
+			SELECT 'Persona Natural con Rep.' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Conciliación' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 1) > 0 UNION 
+			SELECT 'Persona Natural sin Rep.' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Conciliación' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 0) > 0 UNION 
+			SELECT 'Persona Jurídica' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'conciliacion juridica' UNION 
+			SELECT 'Renuncia Voluntaria' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Renuncia Voluntaria' UNION 
+			SELECT 'Indemnización y Prestaciones Laborales' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Indemnización y Prestaciones Laborales' UNION
+			SELECT 'Diferencia Laboral' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Diferencia Laboral'
+			");
 		if ($query->num_rows() > 0) { return $query;
 		}else{ return FALSE; }
 	}
