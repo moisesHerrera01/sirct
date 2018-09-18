@@ -104,7 +104,7 @@ class Expedientes_model extends CI_Model {
 	}
 
 
-  public function obtener_expediente($id) {
+  public function obtener_expediente($id, $id_persona = false) {
 
       $this->db->select(
 											  'e.id_expedienteci,
@@ -166,6 +166,24 @@ class Expedientes_model extends CI_Model {
 		else {
 				return FALSE;
 		}
+	}
+
+	public function obtener_expediente_pagos_indemnizacion($id_persona) {
+
+		$this->db->select('')
+			    ->from('sct_expedienteci a')
+				->join('sct_personaci b', 'a.id_expedienteci = b.id_expedienteci')
+				->join('sir_empleado c', 'a.id_personal = c.id_empleado')
+				->where('b.id_personaci', $id_persona);
+		$query=$this->db->get();
+		//print $this->db->get_compiled_select();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}
+		else {
+			return FALSE;
+		}
+  
 	}
 
 }

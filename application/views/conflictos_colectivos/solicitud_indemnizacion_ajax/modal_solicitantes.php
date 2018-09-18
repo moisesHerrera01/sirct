@@ -258,7 +258,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Tipo de Conciliaci&oacute;n: </h5>
               <div class="controls">
-                <select id="ob_genero" name="ob_genero" class="form-control">
+                <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
                   <option value="">[Seleccione]</option>
                   <option value="Pago en el momento">Pago en el momento</option>
                   <option value="Pago diferido">Pago diferido</option>
