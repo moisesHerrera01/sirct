@@ -70,7 +70,16 @@ class Expedientes_model extends CI_Model {
 
 	public function obtener_municipio($id) {
 
-		$this->db->select('e.numinscripcion_empresa,m.municipio,cat.actividad_catalogociiu,e.nombre_empresa,e.direccion_empresa,e.telefono_empresa,r.nombres_representante')
+		$this->db->select(
+											'e.numinscripcion_empresa,
+											 m.municipio,
+											 cat.actividad_catalogociiu,
+											 cat.grupo_catalogociiu,
+											 e.nombre_empresa,
+											 e.direccion_empresa,
+											 e.telefono_empresa,
+											 r.nombres_representante'
+										  )
 						->from('sge_empresa e')
 						->join('org_municipio m', ' m.id_municipio = e.id_municipio')
 						->join('sge_catalogociiu cat','cat.id_catalogociiu=e.id_catalogociiu', 'left')
