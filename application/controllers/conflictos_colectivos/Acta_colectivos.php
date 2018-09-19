@@ -5,7 +5,7 @@ class Acta_colectivos extends CI_Controller {
 
     function __construct(){
         parent::__construct();
-        $this->load->model( array('expediente_cc_model','expedientes_model','directivos_model','audiencias_model'));
+        $this->load->model( array('expediente_cc_model','expedientes_model','directivos_model','audiencias_model', 'persona_cc_model'));
     }
 
     public function generar_acta($id_expedienteci) {
@@ -95,6 +95,54 @@ class Acta_colectivos extends CI_Controller {
 
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         header("Content-Disposition: attachment; filename='ActaSolicitudDifL_".date('dmy_His').".docx'");
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
+        $objWriter->save('php://output');
+
+        unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+    }
+
+    public function generar_ficha_indemnizacion($id_expedienteci) {
+        $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];
+        $estadisticas = $this->persona_cc_model->obtener_estadisticas_ficha( $id_expedienteci )->result()[0];
+
+        $this->load->library("phpword");
+
+        $PHPWord = new PHPWord();
+
+        $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/FichaSolicitud_SRCCT.docx');
+        $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
+        $templateWord->setValue('fecha_actual', date('d/m/Y'));
+        $templateWord->setValue('direccion_empresa', $expediente->direccion_empresa);
+        $templateWord->setValue('representante_legal', $expediente->nombres_representante);
+        $templateWord->setValue('especificacion', $expediente->actividad_catalogociiu);
+        $templateWord->setValue('actividad', $expediente->grupo_catalogociiu);
+        $templateWord->setValue('nombre_solicitante', $expediente->nombre_solicitante);
+        $templateWord->setValue('telefono_solicitante', $expediente->telefono_solicitante);
+        $templateWord->setValue('direccion_solicitante', $expediente->direccion_solicitante);
+        $templateWord->setValue('nombre_delegado',$expediente->delegado);
+        $templateWord->setValue('num_hombres',$estadisticas->hombres);
+        $templateWord->setValue('num_mujeres',$estadisticas->mujeres);
+        $templateWord->setValue('num_menores',$estadisticas->menores);
+        $templateWord->setValue('num_discapacitados',$estadisticas->discapacitados);
+        $templateWord->setValue('salario_solicitante',$expediente->salario_solicitante);
+        $templateWord->setValue('forma_pago',$expediente->formapago_solicitante);
+        $templateWord->setValue('cargo_solicitante',$expediente->funciones_solicitante);
+        $templateWord->setValue('horario_solicitante',$expediente->horarios_solicitante);
+        $templateWord->setValue('fecha_conflicto',$expediente->fechaconflicto_personaci);
+        $templateWord->setValue('persona_conflicto',$expediente->nombre_personaci .' '. $expediente->apellido_personaci);
+
+
+        $nombreWord = $this->random();
+
+        $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+        $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header("Content-Disposition: attachment; filename='FichaSolicitud_colectivos_".date('dmy_His').".docx'");
         header('Cache-Control: max-age=0');
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
