@@ -1029,8 +1029,6 @@ function volver(num) {
   </div>
 </div>
 <!--FIN MODAL DE ESTADO -->
-<script>
-
 <div style="display:none;">
     <button  id="submit_ubi" name="submit_ubi" type="button"  >clicks</button>
 </div>

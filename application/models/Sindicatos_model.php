@@ -24,9 +24,20 @@ class Sindicatos_model extends CI_Model {
   }
 
 	public function obtener_expedientes_sindicatos($nr,$estado){
-		$this->db->select('s.id_sindicato,ex.id_expedienteci,em.id_empresa,ex.id_personal,ex.id_estadosci,ex.numerocaso_expedienteci,s.nombre_sindicato,em.nombre_empresa,
+		$this->db->select(
+											's.id_sindicato,
+											 ex.id_expedienteci,
+											 em.id_empresa,
+											 ex.id_personal,
+											 ex.id_estadosci,
+											 ex.numerocaso_expedienteci,
+											 s.nombre_sindicato,
+											 em.nombre_empresa,
 											 CONCAT_WS(" ",e.primer_nombre,e.segundo_nombre,e.primer_apellido,e.segundo_apellido,e.apellido_casada) delegado,
-											 es.nombre_estadosci,ex.resultado_expedienteci')
+											 es.nombre_estadosci,
+											 ex.resultado_expedienteci,
+											 (select count(*) from sct_fechasaudienciasci f where f.id_expedienteci=ex.id_expedienteci) cuenta'
+										 )
 						 ->from('sir_empleado e')
 						 ->join('sct_expedienteci ex','ex.id_personal=e.id_empleado')
 						 ->join('sge_sindicato s','s.id_expedientecc=ex.id_expedienteci')
