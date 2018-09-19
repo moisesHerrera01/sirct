@@ -5,7 +5,8 @@ class Acta_colectivos extends CI_Controller {
 
     function __construct(){
         parent::__construct();
-        $this->load->model( array('expediente_cc_model','expedientes_model','directivos_model','audiencias_model', 'persona_cc_model'));
+        $this->load->model( array('expediente_cc_model','expedientes_model','directivos_model','audiencias_model', 'persona_cc_model',
+                                'solicitantes_model'));
     }
 
     public function generar_acta($id_expedienteci) {
@@ -104,6 +105,68 @@ class Acta_colectivos extends CI_Controller {
 
     }
 
+    public function generar_acta_indemnizacion($id_expedienteci) {
+        $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];
+        $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci);
+        $primera= $audiencias->result()[0];
+        $segunda= $audiencias->result()[1];
+
+        $solicitantes = $this->solicitantes_model->obtener_solicitantes_expediente_acta( $id_expedienteci )->result()[0];
+
+        $concat_solicitantes='';
+        foreach ($solicitantes->result() as $d) {
+            $concat_solicitantes .=  $d->nombre_solicitante .', de '. $d->edad .'años de edad, '. $d->actividad_catalogociiu
+                .', del domicilio de '. $d->direccion_personaci .', departamento de '. $d->departamento
+                .', con documento Único de Identidad Número:'. convertir_dui($d->dui_personaci);
+        }
+
+        $this->load->library("phpword");
+
+        $PHPWord = new PHPWord();
+
+        $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/FichaSolicitud_SRCCT.docx');
+        $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
+        $templateWord->setValue('nombre_empresa',$expediente->nombre_empresa);
+        $templateWord->setValue('direccion_empresa', $expediente->direccion_empresa);
+        $templateWord->setValue('nombre_representante', $expediente->nombres_representante);
+        $templateWord->setValue('persona_conflicto',$expediente->nombre_personaci .' '. $expediente->apellido_personaci);
+
+        $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
+        $templateWord->setValue('mes_conflicto', strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
+        $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
+
+        $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
+        $templateWord->setValue('minuto_expediente', minuto(date('i', strtotime($expediente->fechacrea_expedienteci))));
+        $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
+        $templateWord->setValue('mes_expediente', strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
+        $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
+
+        $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($primera->hora_fechasaudienciasci))));
+        $templateWord->setValue('minuto_audiencia', minuto(date('i', strtotime($primera->hora_fechasaudienciasci))));
+        $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($primera->fecha_fechasaudienciasci))));
+        $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($primera->fecha_fechasaudienciasci)))));
+        $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
+        $templateWord->setValue('minuto_audiencia2', minuto(date('i', strtotime($segunda->hora_fechasaudienciasci))));
+        $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
+        $templateWord->setValue('mes_audiencia2', strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
+
+        $nombreWord = $this->random();
+
+        $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+        $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header("Content-Disposition: attachment; filename='FichaSolicitud_colectivos_".date('dmy_His').".docx'");
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
+        $objWriter->save('php://output');
+
+        unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+    }
+
     public function generar_ficha_indemnizacion($id_expedienteci) {
         $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];
         $estadisticas = $this->persona_cc_model->obtener_estadisticas_ficha( $id_expedienteci )->result()[0];
@@ -112,7 +175,7 @@ class Acta_colectivos extends CI_Controller {
 
         $PHPWord = new PHPWord();
 
-        $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/FichaSolicitud_SRCCT.docx');
+        $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/ActaSolicitudIPL.docx');
         $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
         $templateWord->setValue('fecha_actual', date('d/m/Y'));
         $templateWord->setValue('direccion_empresa', $expediente->direccion_empresa);
@@ -142,7 +205,7 @@ class Acta_colectivos extends CI_Controller {
         $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
 
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        header("Content-Disposition: attachment; filename='FichaSolicitud_colectivos_".date('dmy_His').".docx'");
+        header("Content-Disposition: attachment; filename='ActaSolicitud_colectivos_".date('dmy_His').".docx'");
         header('Cache-Control: max-age=0');
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');

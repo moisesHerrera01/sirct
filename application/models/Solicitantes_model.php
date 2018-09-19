@@ -24,6 +24,32 @@ class Solicitantes_model extends CI_Model {
 
     }
 
+    public function obtener_solicitantes_expediente_acta($expediente) {
+        
+        $this->db->select('
+                    CONCAT_WS(" ", a.nombre_personaci, a.apellido_personaci) nombre_solicitante,
+                    TIMESTAMPDIFF( YEAR,a.fnacimiento_personaci,CURDATE() ) AS edad,
+                    b.actividad_catalogociiu,
+                    a.direccion_personaci,
+                    d.departamento,
+                    a.dui_personaci
+                ')
+                ->from('sct_personaci a')
+                ->join('sge_catalogociuo b', 'a.id_catalogociuo = b.id_catalogociuo')
+                ->join('org_municipio c', 'c.id_municipio = a.id_municipio')
+                ->join('org_departamento d', 'd.id_departamento = c.id_departamento_pais')
+                ->where('a.id_expedienteci', $expediente);
+        $query=$this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            return $query;
+        }
+        else {
+            return FALSE;
+        }
+
+    }
+
     public function obtener_solicitante($id) {
         
         $this->db->select('')

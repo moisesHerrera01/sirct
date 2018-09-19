@@ -112,7 +112,7 @@ class Expediente_cc_model extends CI_Model {
                   h.salario_personaci salario_solicitante,
                   h.formapago_personaci formapago_solicitante,
                   h.funciones_personaci funciones_solicitante,
-                  h.horarios_personaci horarios_solicitante,
+                  h.horarios_personaci horarios_solicitante
               ')
                ->from('sct_expedienteci a')
                ->join('sct_personaci b', 'a.id_personaci = b.id_personaci', 'left')
