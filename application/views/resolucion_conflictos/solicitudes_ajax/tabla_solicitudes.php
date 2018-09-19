@@ -34,17 +34,19 @@
                                               e.tiposolicitud_expedienteci AS tipo,
                                               e.resultado_expedienteci AS resultado,
                                               e.fechacrea_expedienteci AS fecha,
+                                              e.tipocociliacion_expedienteci AS tipo_conciliacion,
                                               p.nombre_personaci,
                                               p.apellido_personaci,
                                               p.id_personaci,
+                                              p.posee_representante,
                                               e.id_expedienteci,
-                                              es.id_estadosci AS estado
+                                              es.id_estadosci AS estado,
+                                              (select count(*) from sct_fechasaudienciasci f where f.id_expedienteci=e.id_expedienteci) AS cuenta
                                               FROM sct_estadosci AS es
                                               JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                               JOIN sct_personaci p ON p.id_personaci=e.id_personaci
                                               JOIN sge_empleador em ON em.id_empleador=p.id_empleador
                                               JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
-                                              /*JOIN lista_empleados_estado l on l.id_empleado=e.id_personal*/
                                               JOIN sir_empleado l on l.id_empleado=e.id_personal
                                               ".$add." ORDER BY e.id_expedienteci DESC");
 
@@ -75,7 +77,6 @@
 
                             echo "<td>";
 
-
                             $array = array($fila->id_personaci);
                             if(tiene_permiso($segmentos=2,$permiso=4)){
                                 array_push($array, "edit");
@@ -93,7 +94,7 @@
                                       <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_expedienteci?>)">Gestionar audiencias</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="pagos(<?=$fila->id_expedienteci?>)">Gestionar pagos</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar delegado</a>
-                                      <a class="dropdown-item" href="javascript:;" onClick="modal_actas_tipo(<?=$fila->id_expedienteci?>)">Generar acta por tipo</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="modal_actas_tipo(<?=$fila->id_expedienteci.','.$fila->cuenta.',\''.$fila->tipo_conciliacion.'\','.$fila->posee_representante.','.$fila->estado?>)">Generar acta por tipo</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci?>)">Registrar resolución</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas(<?=$fila->id_expedienteci?>)">Gestionar actas</a>

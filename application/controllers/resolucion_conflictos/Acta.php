@@ -212,6 +212,8 @@ class Acta extends CI_Controller {
         if ($caso==5) {
           $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci);
           $segunda= $audiencias->result()[1];
+          $templateWord->setValue('direccion_empresa', strtoupper($expediente->direccion_empresa));
+          $templateWord->setValue('direccion_solicitante', strtoupper($expediente->direccion_personaci));
           $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
           $templateWord->setValue('minuto_expediente', minuto(date('i', strtotime($expediente->fechacrea_expedienteci))));
           $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));

@@ -100,10 +100,43 @@ function cambiar_delegado() {
     });
 }
 
-function modal_actas_tipo(id_expedienteci) {
+function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_representante,estado) {
+      $("#solicitud_pn_pj").show();
+      $("#diferido_con").hide();
+      $("#diferido_sin").hide();
+      $("#acto_con").hide();
+      $("#acto_sin").hide();
+      $("#segunda_con").hide();
+      $("#segunda_sin").hide();
+
+    if (cuenta_audiencias<2) {
+      $("#solicitud_pn_pj").hide();
+    }if (posee_representante) {
+      $("#segunda_con").show();
+    }else {
+      $("#segunda_sin").show();
+    }
+
+    if (estado=="2") {
+      $("#separador1").show();
+      if (tipo_conciliacion=='Pago Diferido') {
+        if (posee_representante) {
+          $("#diferido_con").show();
+        }else {
+          $("#diferido_sin").show();
+        }
+      }else {
+        if (posee_representante) {
+          $("#acto_con").show();
+        }else {
+          $("#acto_sin").show();
+        }
+      }
+    }
     $("#id_expedienteci_copia2").val(id_expedienteci);
     $("#tipo_acta").val('').trigger('');
     $("#modal_actas_tipo").modal("show");
+
 }
 
 function generar_actas_tipo() {
@@ -1120,23 +1153,21 @@ function volver(num) {
 
           <div class="modal-body" id="">
               <input type="hidden" id="id_expedienteci_copia2" name="id_expedienteci_copia2" value="">
+              <input type="hidden" id="cuenta_audiencias" name="cuenta_audiencias" value="">
               <div class="row">
                 <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Seleccione el tipo de acta: <span class="text-danger">*</span></h5>
                     <div class="controls">
                       <select id="tipo_acta" name="tipo_acta" class="custom-select col-4" onchange="nav(this.value)" required>
                         <option value="">[Seleccione]</option>
-                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Conciliada en el acto con defensor público</option>
-                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Conciliada en el acto sin defensor público</option>
-                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor público</option>
-                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Conciliada pago diferido sin defensor público</option>
-                        <option disabled>_________</option>
-                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Solicitud de persona natural a persona juridica</option>
+                        <option id="acto_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Conciliada en el acto con defensor público</option>
+                        <option id="acto_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Conciliada en el acto sin defensor público</option>
+                        <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor público</option>
+                        <option id="diferido_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Conciliada pago diferido sin defensor público</option>
+                        <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Solicitud de persona natural a persona juridica</option>
                         <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
-                        <option disabled>_________</option>
-                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor</option>
-                        <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor</option>
-                        <option disabled>_________</option>
+                        <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor</option>
+                        <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor</option>
                         <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Desistimiento de persona natural a persona juridica</option>
                       </select>
                     </div>
