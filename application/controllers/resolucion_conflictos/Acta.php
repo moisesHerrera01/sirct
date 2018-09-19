@@ -200,7 +200,7 @@ class Acta extends CI_Controller {
         $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
         $templateWord->setValue('departamento', departamento($expediente->numerocaso_expedienteci));
         $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($expediente->hora_fechasaudienciasci))));
-        $templateWord->setValue('minuto_audiencia', minuto(date('i', strtotime($expediente->hora_fechasaudienciasci))));
+        $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($expediente->hora_fechasaudienciasci)))));
         $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($expediente->fecha_fechasaudienciasci))));
         $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($expediente->fecha_fechasaudienciasci)))));
         $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($expediente->fecha_fechasaudienciasci))));
@@ -215,7 +215,7 @@ class Acta extends CI_Controller {
           $templateWord->setValue('direccion_empresa', strtoupper($expediente->direccion_empresa));
           $templateWord->setValue('direccion_solicitante', strtoupper($expediente->direccion_personaci));
           $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
-          $templateWord->setValue('minuto_expediente', minuto(date('i', strtotime($expediente->fechacrea_expedienteci))));
+          $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($expediente->fechacrea_expedienteci)))));
           $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
           $templateWord->setValue('mes_expediente', strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
           $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
@@ -231,7 +231,7 @@ class Acta extends CI_Controller {
           $templateWord->setValue('mes_conflicto', strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
           $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
           $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
-          $templateWord->setValue('minuto_audiencia2', minuto(date('i', strtotime($segunda->hora_fechasaudienciasci))));
+          $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
           $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
           $templateWord->setValue('mes_audiencia2', strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
         }

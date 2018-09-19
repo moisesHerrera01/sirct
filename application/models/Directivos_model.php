@@ -32,10 +32,22 @@ class Directivos_model extends CI_Model {
 		}
 	}
 
-	public function obtener_directivos_sindicato($id_sindicato){
-		$this->db->select('d.dui_directivo,d.id_sindicato,d.id_directivo,d.nombre_directivo,d.apellido_directivo,d.tipo_directivo,d.acreditacion_directivo')
+	public function obtener_directivos_sindicato($id_sindicato, $estado_directivo=FALSE){
+		$this->db->select(
+											'd.dui_directivo,
+											 d.id_sindicato,
+											 d.id_directivo,
+											 d.nombre_directivo,
+											 d.apellido_directivo,
+											 d.tipo_directivo,
+											 d.acreditacion_directivo,
+											 d.estado_directivo'
+										 )
 						 ->from('sge_directivo d')
 		         ->where('d.id_sindicato',$id_sindicato);
+		if ($estado_directivo) {
+			$this->db->where('d.estado_directivo',1);
+		}
 		$query = $this->db->get();
 		if ($query->num_rows()>0) {
 			return $query;

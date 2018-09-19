@@ -50,7 +50,7 @@ class Acta_colectivos extends CI_Controller {
         $segunda= $audiencias->result()[1];
         $expediente = $this->expediente_cc_model->expedientes_diferencia_laboral( $id_expedienteci )->result()[0];
         $empresa = $this->expedientes_model->obtener_municipio($expediente->id_empresaci);
-        $directivos = $this->directivos_model->obtener_directivos_sindicato($expediente->id_sindicato);
+        $directivos = $this->directivos_model->obtener_directivos_sindicato($expediente->id_sindicato,'activos');
         $concat_directivos='';
         foreach ($directivos->result() as $d) {
           $concat_directivos.= $d->nombre_directivo.', identificándose por medio de su respectivo Documento Único de Identidad número '.
@@ -63,18 +63,18 @@ class Acta_colectivos extends CI_Controller {
 
         $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/ActaSolicitudDifL.docx');
         $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
-        $templateWord->setValue('minuto_expediente', minuto(date('i', strtotime($expediente->fechacrea_expedienteci))));
+        $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($expediente->fechacrea_expedienteci)))));
         $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
         $templateWord->setValue('mes_expediente', strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
         $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
         $templateWord->setValue('directivos', $concat_directivos);
 
         $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($primera->hora_fechasaudienciasci))));
-        $templateWord->setValue('minuto_audiencia', minuto(date('i', strtotime($primera->hora_fechasaudienciasci))));
+        $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($primera->hora_fechasaudienciasci)))));
         $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($primera->fecha_fechasaudienciasci))));
         $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($primera->fecha_fechasaudienciasci)))));
         $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
-        $templateWord->setValue('minuto_audiencia2', minuto(date('i', strtotime($segunda->hora_fechasaudienciasci))));
+        $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
         $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
         $templateWord->setValue('mes_audiencia2', strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
 
