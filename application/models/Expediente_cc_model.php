@@ -88,7 +88,32 @@ class Expediente_cc_model extends CI_Model {
     }
 
     public function obtener_expediente_indemnizacion($id) {
-      $this->db->select('')
+      $this->db->select('
+                  a.id_expedienteci,
+                  a.numerocaso_expedienteci,
+                  a.fechacrea_expedienteci,
+                  b.fechaconflicto_personaci,
+                  b.nombre_personaci,
+                  b.apellido_personaci,
+                  b.funciones_personaci,
+                  c.nombre_empresa,
+                  c.numinscripcion_empresa,
+                  c.direccion_empresa,
+                  c.telefono_empresa,
+                  c.direccion_empresa, 
+                  d.municipio,
+                  e.actividad_catalogociiu,
+                  e.grupo_catalogociiu,
+                  f.nombres_representante,
+                  CONCAT_WS(" ",g.primer_nombre,g.segundo_nombre,g.primer_apellido,g.segundo_apellido,g.apellido_casada) delegado,
+                  CONCAT_WS(" ", h.nombre_personaci, h.apellido_personaci) nombre_solicitante,
+                  h.telefono_personaci telefono_solicitante,
+                  h.direccion_personaci direccion_solicitante,
+                  h.salario_personaci salario_solicitante,
+                  h.formapago_personaci formapago_solicitante,
+                  h.funciones_personaci funciones_solicitante,
+                  h.horarios_personaci horarios_solicitante,
+              ')
                ->from('sct_expedienteci a')
                ->join('sct_personaci b', 'a.id_personaci = b.id_personaci', 'left')
                ->join('sge_empresa c', 'a.id_empresaci = c.id_empresa')
@@ -96,8 +121,10 @@ class Expediente_cc_model extends CI_Model {
                ->join('sge_catalogociiu e', 'c.id_catalogociiu = e.id_catalogociiu', 'left')
                ->join('sge_representante f', 'c.id_empresa = f.id_empresa', 'left')
                ->join('sir_empleado g','g.id_empleado = a.id_personal')
+               ->join('sct_personaci h', 'a.id_expedienteci = h.id_expedienteci')
                ->where("a.id_expedienteci", $id)
-               ->limit(1);
+               ->limit(1)
+               ->order_by('h.id_personaci', 'DESC');
 
       $query=$this->db->get();
 
