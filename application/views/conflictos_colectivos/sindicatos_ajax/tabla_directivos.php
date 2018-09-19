@@ -39,6 +39,11 @@
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
                             }
+                            if($fila->estado_directivo == "1"){
+                                echo generar_boton($array,"desactivar","btn-danger","fa fa-chevron-down","Dar de baja");
+                            }else{
+                                echo generar_boton($array,"activar","btn-success","fa fa-chevron-up","Activar");
+                            }
                             echo "</td>";
                             echo "</tr>";
                         }

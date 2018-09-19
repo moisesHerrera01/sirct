@@ -1173,6 +1173,84 @@ $(function(){
     });
 });
 
+function desactivar(id_directivo) {
+    swal({
+        title: "Confirmar Dar de Baja",
+        text: "¿Está seguro que desea dar de baja al solicitante?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-success2",
+        confirmButtonText: "Si",
+        closeOnConfirm: false
+    },
+    function () {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/bajar_directivo",
+            type: "post",
+            dataType: "html",
+            data: {
+                id: id_directivo,
+            }
+        })
+        .done(function (res) {
+            if (res == "exito") {
+                tabla_directivos();
+                swal({
+                    title: "¡Directivo desactivado exitosamente!",
+                    type: "success",
+                    showConfirmButton: true
+                });
+            } else {
+                swal({
+                    title: "¡Ups! Error",
+                    text: "Intentalo nuevamente.",
+                    type: "error",
+                    showConfirmButton: true
+                });
+            }
+        });
+    });
+}
+
+function activar(id_directivo) {
+    swal({
+        title: "Confirmar Activación",
+        text: "¿Está seguro que desea activar al solicitante?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-success2",
+        confirmButtonText: "Si",
+        closeOnConfirm: false
+    },
+    function () {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/activar_directivo",
+            type: "post",
+            dataType: "html",
+            data: {
+                id: id_directivo,
+            }
+        })
+        .done(function (res) {
+            if (res == "exito") {
+                tabla_directivos();
+                swal({
+                    title: "¡Directivo activado exitosamente!",
+                    type: "success",
+                    showConfirmButton: true
+                });
+            } else {
+                swal({
+                    title: "¡Ups! Error",
+                    text: "Intentalo nuevamente.",
+                    type: "error",
+                    showConfirmButton: true
+                });
+            }
+        });
+    });
+}
+
 /*$(function(){
     $(document).ready(function(){
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();

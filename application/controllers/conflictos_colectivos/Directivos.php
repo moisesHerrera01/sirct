@@ -48,5 +48,21 @@ class Directivos extends CI_Controller {
 			$this->directivos_model->obtener_directivo($this->input->post('id_directivo'))->result()
 		);
 	}
+
+	public function bajar_directivo() {
+			$data = array(
+					'id_directivo' => $this->input->post('id'),
+					'estado_directivo' => 0
+			);
+			echo $this->directivos_model->editar_directivo($data);
+	}
+
+	public function activar_directivo() {
+		$data = array(
+				'id_directivo' => $this->input->post('id'),
+				'estado_directivo' => 1
+		);
+			echo $this->directivos_model->editar_directivo($data);
+	}
 }
 ?>
