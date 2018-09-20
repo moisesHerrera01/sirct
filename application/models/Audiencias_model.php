@@ -22,26 +22,27 @@ class Audiencias_model extends CI_Model {
 	}
 
 	public function obtener_audiencias_delegado($id_delegado) {
-			$this->db->select('s.nombre_sindicato,e.motivo_expedienteci,e.numerocaso_expedienteci,f.id_expedienteci,f.id_fechasaudienciasci,
-												 f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci, e.tiposolicitud_expedienteci,
-												 CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) delegado,
-												 CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
-						 ->from('sct_fechasaudienciasci f')
-						 ->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
-						 ->join('sct_personaci P','p.id_personaci=e.id_personaci','left')
-						 ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
-						 ->join('sir_empleado em','em.id_empleado=e.id_personal')
-						 ->group_by('f.id_fechasaudienciasci');
-			if ($id_delegado) {
-					$this->db->where('em.nr', $id_delegado);
-			}
-			$query=$this->db->get();
-			if ($query->num_rows() > 0) {
-					return $query;
-			}
-			else {
-					return FALSE;
-			}
+		$this->db->select('s.nombre_sindicato,e.motivo_expedienteci,e.numerocaso_expedienteci,f.id_expedienteci,f.id_fechasaudienciasci,
+												f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci, e.tiposolicitud_expedienteci,
+												CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) delegado,
+												CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
+					->from('sct_fechasaudienciasci f')
+					->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
+					->join('sct_personaci P','p.id_personaci=e.id_personaci','left')
+					->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
+					->join('sir_empleado em','em.id_empleado=e.id_personal')
+					->group_by('f.id_fechasaudienciasci');
+		if ($id_delegado) {
+			$this->db->where('em.nr', $id_delegado);
+		}
+
+		$query=$this->db->get();
+		if ($query->num_rows() > 0) {
+				return $query;
+		}
+		else {
+				return FALSE;
+		}
 	}
 
 

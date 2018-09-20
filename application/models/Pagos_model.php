@@ -22,25 +22,44 @@ class Pagos_model extends CI_Model {
 	}
 
 	public function obtener_pagos_delegado($id_delegado) {
-	  $this->db->select('s.nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
-		e.tiposolicitud_expedienteci,CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
-		CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
-						 ->from('sct_fechaspagosci f')
-						 ->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
-						 ->join('sir_empleado em','em.id_empleado=e.id_personal')
-						 ->join('sct_personaci P','p.id_personaci=e.id_personaci','left')
-						 ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
-						 ->group_by('f.id_fechaspagosci');
-						 if ($id_delegado) {
-						 	$this->db->where('em.nr', $id_delegado);
-						 }
-			$query=$this->db->get();
-			if ($query->num_rows() > 0) {
-					return $query;
-			}
-			else {
-					return FALSE;
-			}
+	  	$this->db->select('s.nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
+			e.tiposolicitud_expedienteci,CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
+			CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
+				->from('sct_fechaspagosci f')
+				->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
+				->join('sir_empleado em','em.id_empleado=e.id_personal')
+				->join('sct_personaci P','p.id_personaci=e.id_personaci','left')
+				->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
+				->group_by('f.id_fechaspagosci');
+				if ($id_delegado) {
+				$this->db->where('em.nr', $id_delegado);
+				}
+		
+		$sql[] = '('.$this->db->get_compiled_select().')';
+
+		$this->db->select('p.apellido_personaci nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
+			e.tiposolicitud_expedienteci,CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
+			CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
+				->from('sct_fechaspagosci f')
+				->join('sct_personaci p', 'p.id_personaci = f.id_persona')
+				->join('sct_expedienteci` e ', ' e.id_expedienteci = p.id_expedienteci')
+				->join('sir_empleado em', 'em.id_empleado = e.id_personal')
+				->group_by('f.id_fechaspagosci');
+		if ($id_delegado) {
+			$this->db->where('em.nr', $id_delegado);
+		}
+		
+		$sql[] = '('.$this->db->get_compiled_select().')';
+
+		$sql = implode(' UNION ', $sql);
+			
+		$query=$this->db->query($sql);
+		if ($query->num_rows() > 0) {
+				return $query;
+		}
+		else {
+				return FALSE;
+		}
 	}
 
 	function insertar_pago($data){

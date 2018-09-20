@@ -17,7 +17,7 @@ class Consultar_fechas extends CI_Controller {
   public function calendario(){
 		$eventos= array();
 
-    $data = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('nr') );
+    	$data = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('nr') );
 		$data2= $this->pagos_model->obtener_pagos_delegado($this->input->get('nr'));
 
 		if ($data!=FALSE && $data!=NULL) {
@@ -30,7 +30,7 @@ class Consultar_fechas extends CI_Controller {
 				 $id = $au->id_fechasaudienciasci;
 				 $tipo = strtoupper($au->tiposolicitud_expedienteci);
 				 $delegado = $au->delegado;
-				 if ($au->tiposolicitud_expedienteci=='Conciliación') {
+				if ($au->tiposolicitud_expedienteci=='Conciliación' || $au->tiposolicitud_expedienteci == 'Indemnización y Prestaciones Laborales') {
 				 	$solicitante = strtoupper($au->persona);
 				}elseif ($au->tiposolicitud_expedienteci == 'Diferencia Laboral') {
 					$solicitante = strtoupper($au->nombre_sindicato);
@@ -59,7 +59,7 @@ class Consultar_fechas extends CI_Controller {
 				$id = $pago->id_fechaspagosci;
 				$tipo = strtoupper($pago->tiposolicitud_expedienteci);
 				$delegado = $pago->nombre_completo;
-				if ($pago->tiposolicitud_expedienteci=='Conciliación') {
+				if ($pago->tiposolicitud_expedienteci=='Conciliación' || $pago->tiposolicitud_expedienteci == 'Indemnización y Prestaciones Laborales') {
 				 $solicitante = strtoupper($pago->persona);
 			 }elseif ($pago->tiposolicitud_expedienteci == 'Diferencia Laboral') {
 				 $solicitante = strtoupper($pago->nombre_sindicato);

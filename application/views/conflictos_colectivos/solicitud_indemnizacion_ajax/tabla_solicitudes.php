@@ -34,7 +34,8 @@
                                         e.resultado_expedienteci AS resultado,
                                         e.fechacrea_expedienteci AS fecha,
                                         e.id_expedienteci,
-                                        es.id_estadosci AS estado
+                                        es.id_estadosci AS estado,
+                                        (select count(*) from sct_fechasaudienciasci where id_expedienteci = e.id_expedienteci ) audiencias
                                         FROM sct_estadosci AS es
                                         JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                         JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
@@ -89,7 +90,9 @@
                                     <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci  ?>)">Cambiar delegado</a>
                                     <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->estado?>)">Cambiar estado</a>
                                     <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_ficha_indemnizacion/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
-                                    <a class="dropdown-item" href="javascript:;" onClick="generar_acta(<?=$fila->id_expedienteci?>)">Emitir Actas</a>
+                                    <?php if ($fila->audiencias >= 2 ) { ?>
+                                        <a class="dropdown-item" href="javascript:;" onClick="generar_acta(<?=$fila->id_expedienteci?>)">Emitir Actas</a>
+                                    <?php }?>
                                     <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>
                                 </div>
                             </div>
