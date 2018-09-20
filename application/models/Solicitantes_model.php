@@ -29,7 +29,7 @@ class Solicitantes_model extends CI_Model {
         $this->db->select('
                     CONCAT_WS(" ", a.nombre_personaci, a.apellido_personaci) nombre_solicitante,
                     TIMESTAMPDIFF( YEAR,a.fnacimiento_personaci,CURDATE() ) AS edad,
-                    b.actividad_catalogociiu,
+                    b.primarios_catalogociuo,
                     a.direccion_personaci,
                     d.departamento,
                     a.dui_personaci
