@@ -27,7 +27,7 @@
     <script src="<?php echo base_url(); ?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/moment.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/moment-with-locales.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/mask.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery.mask.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 

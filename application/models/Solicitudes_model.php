@@ -11,8 +11,11 @@ class Solicitudes_model extends CI_Model {
 		if($this->db->insert('sct_personaci', array(
 			'nombre_personaci' => $data['nombre_personaci'],
 			'apellido_personaci' => $data['apellido_personaci'],
+			'conocido_por' => $data['conocido_por'],
 			'dui_personaci' => $data['dui_personaci'],
+			'id_doc_identidad' => $data['id_doc_identidad'],
 			'telefono_personaci' => $data['telefono_personaci'],
+			'telefono2_personaci' => $data['telefono2_personaci'],
 			'id_municipio' => $data['id_municipio'],
 			'direccion_personaci' => $data['direccion_personaci'],
 			'fnacimiento_personaci' => $data['fnacimiento_personaci'],
@@ -21,6 +24,7 @@ class Solicitudes_model extends CI_Model {
 			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
 			'discapacidad_personaci' => $data['discapacidad_personaci'],
 			'posee_representante' => $data['posee_representante'],
+			'pertenece_lgbt' => $data['pertenece_lgbt'],
 			'tipopeticion_personaci' => 0
 		))){
 			return $this->db->insert_id();
@@ -115,5 +119,38 @@ class Solicitudes_model extends CI_Model {
 			$ultimoid = 1;
 		}
 		return $ultimoid;
+	}
+
+	function obtener_nacionalidades(){
+		$this->db->select('n.id_nacionalidad,n.nacionalidad')
+						 ->from('sct_nacionalidad n');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
+
+	function obtener_tipo_documentos(){
+		$this->db->select('t.id_doc_identidad ,t.doc_identidad')
+						 ->from('sct_doc_identidad t');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
+
+	function obtener_discapacidades(){
+		$this->db->select('d.id_discapacidad ,d.discapacidad')
+						 ->from('sct_discapacidad d');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
 	}
 }

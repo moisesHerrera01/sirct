@@ -26,8 +26,10 @@ class Solicitudes extends CI_Controller {
 			$data = array(
 		'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
+			'conocido_por' => $this->input->post('conocido_por'),
 			'dui_personaci' => $this->input->post('dui'),
 			'telefono_personaci' => $this->input->post('telefono'),
+			'telefono2_personaci' => $this->input->post('telefono2'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion'),
 			'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
@@ -35,7 +37,9 @@ class Solicitudes extends CI_Controller {
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
-			'posee_representante' => $this->input->post('posee_representante')
+			'posee_representante' => $this->input->post('posee_representante'),
+			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
+			'id_doc_identidad' => $this->input->post('id_doc_identidad')
 			);
 			echo $this->solicitudes_model->insertar_solicitud($data);
 
@@ -45,8 +49,11 @@ class Solicitudes extends CI_Controller {
 			'id_personaci' => $this->input->post('id_personaci'),
 			'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
+			'conocido_por' => $this->input->post('conocido_por'),
+			'id_doc_identidad' => $this->input->post('id_doc_identidad'),
 			'dui_personaci' => $this->input->post('dui'),
 			'telefono_personaci' => $this->input->post('telefono'),
+			'telefono2_personaci' => $this->input->post('telefono2'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion'),
 			'fnacimiento_personaci' => $this->input->post('fecha_nacimiento'),
@@ -55,7 +62,8 @@ class Solicitudes extends CI_Controller {
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
 			'id_empleador' => $this->input->post('id_empleador'),
-			'posee_representante' => $this->input->post('posee_representante')
+			'posee_representante' => $this->input->post('posee_representante'),
+			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 			);
 			echo $this->solicitudes_model->editar_solicitud($data);
 
@@ -80,6 +88,36 @@ class Solicitudes extends CI_Controller {
 			array(
 				'id' => $this->input->post('id'),
 				'establecimiento' => $query
+			)
+		);
+	}
+
+	public function combo_nacionalidades() {
+		$data = $this->solicitudes_model->obtener_nacionalidades();
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_nacionalidades',
+			array(
+				'id' => $this->input->post('id'),
+				'nacionalidad' => $data
+			)
+		);
+	}
+
+	public function combo_tipo_doc() {
+		$data = $this->solicitudes_model->obtener_tipo_documentos();
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_tipo_doc',
+			array(
+				'id' => $this->input->post('id'),
+				'doc_identidad' => $data
+			)
+		);
+	}
+
+	public function combo_discapacidad() {
+		$data = $this->solicitudes_model->obtener_discapacidades();
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_discapacidad',
+			array(
+				'id' => $this->input->post('id'),
+				'discapacidad' => $data
 			)
 		);
 	}

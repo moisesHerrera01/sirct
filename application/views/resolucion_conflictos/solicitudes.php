@@ -235,6 +235,35 @@ function combo_establecimiento(seleccion){
 
 }
 
+
+function combo_nacionalidades(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_nacionalidades",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_nacionalidad').html(res);
+    $(".select2").select2();
+  });
+}
+
+function combo_doc_identidad(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_tipo_doc",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_tipo_doc').html(res);
+    $(".select2").select2();
+  });
+}
+
 function visualizar(id_personaci,id_empresaci) {
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/ver_expediente",
@@ -406,8 +435,10 @@ function cambiar_nuevo(){
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
     $("#nombres").val('');
     $("#apellidos").val('');
+    $("#conocido_por").val('');
     $("#dui").val('');
     $("#telefono").val('');
+    $("#telefono2").val('');
     $("#municipio").val('').trigger('change.select2');
     $("#direccion").val('');
     $("#fecha_nacimiento").val('');
@@ -416,6 +447,7 @@ function cambiar_nuevo(){
     $("#nacionalidad").val('');
     $("#discapacidad").val('');
     $("#posee_representante").val('');
+    $("#pertenece_lgbt").val('');
     /*Fin Solicitante*/
 
     /*Inicio represnetante persona*/
@@ -428,6 +460,8 @@ function cambiar_nuevo(){
     /*Fin representante persona*/
 
     /*Inicio Expediente*/
+    combo_nacionalidades('');
+    combo_doc_identidad('');
     combo_ocupacion('');
     combo_delegado('');
     combo_actividad_economica();
@@ -482,9 +516,11 @@ function cambiar_editar(id_personaci,bandera){
       $("#id_expedienteci").val(result.id_expedienteci);
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
       $("#nombres").val(result.nombre_personaci);
+      $("#conocido_por").val(result.conocido_por);
       $("#apellidos").val(result.apellido_personaci);
       $("#dui").val(result.dui_personaci);
       $("#telefono").val(result.telefono_personaci);
+      $("#telefono2").val(result.telefono2_personaci);
       $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
       $("#fecha_nacimiento").val(result.fnacimiento_personaci);
@@ -505,6 +541,11 @@ function cambiar_editar(id_personaci,bandera){
       }else {
         document.getElementById('femenino').checked =true;
       }
+      if (result.pertenece_lgbt=='1') {
+        document.getElementById('si_lgbt').checked =true;
+      }else {
+        document.getElementById('no_lgbt').checked =true;
+      }
       /*Inicio represnetante persona*/
       $("#id_representante_persona").val(result.id_representantepersonaci);
       $("#nombre_representante_persona").val(result.nombre_representantepersonaci);
@@ -516,6 +557,8 @@ function cambiar_editar(id_personaci,bandera){
       /*Fin representante persona*/
 
       /*Inicio Expediente*/
+      combo_doc_identidad(result.id_doc_identidad);
+      combo_nacionalidades(result.nacionalidad_personaci);
       combo_ocupacion(result.id_catalogociuo);
       combo_delegado(result.id_personal);
       combo_actividad_economica(result.id_catalogociiu);
@@ -626,87 +669,105 @@ function volver(num) {
                                     <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos de la persona" required="">
                                     <div class="help-block"></div>
                                 </div>
-                                <div class="form-group col-lg-4" style="height: 83px;">
-                                    <h5>Número de DUI: <span class="text-danger">*</span></h5>
-                                    <input data-mask="99999999-9" type="text" id="dui" name="dui" class="form-control" placeholder="Documento Unico de Identidad" required="">
+                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Conocido por: </h5>
+                                    <input type="text" id="conocido_por" name="conocido_por" class="form-control" placeholder="Conocido por">
                                     <div class="help-block"></div>
                                 </div>
                             </div>
 
                             <div class="row">
+                              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
+
                                 <div class="form-group col-lg-4" style="height: 83px;">
-                                    <h5>Teléfono: </h5>
+                                    <h5>Número de documento identidad: <span class="text-danger">*</span></h5>
+                                    <input data-mask="99999999-9" data-mask-reverse="true" type="text" id="dui" name="dui" class="form-control" placeholder="Documento Unico de Identidad" required="">
+                                    <div class="help-block"></div>
+                                </div>
+                                <div class="form-group col-lg-4" style="height: 83px;">
+                                    <h5>Teléfono 1: </h5>
                                     <input data-mask="9999-9999" type="text" id="telefono" name="telefono" class="form-control" placeholder="Número de Telefóno">
                                     <div class="help-block"></div>
                                 </div>
-                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Municipio: <span class="text-danger">*</span></h5>
-                                    <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
-                                        <option value=''>[Seleccione el municipio]</option>
-                                        <?php
-                                            $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
-                                            if($municipio->num_rows() > 0){
-                                                foreach ($municipio->result() as $fila2) {
-                                                   echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
-                                                }
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                                    <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy" readonly="">
-                                    <div class="help-block"></div>
-                                </div>
                             </div>
 
                             <div class="row">
                               <div class="form-group col-lg-4" style="height: 83px;">
-                                  <h5>Estudios realizados:</h5>
-                                  <input type="text" id="estudios" name="estudios" class="form-control" placeholder="Estudios realizados">
+                                  <h5>Teléfono 2: </h5>
+                                  <input data-mask="9999-9999" type="text" id="telefono2" name="telefono2" class="form-control" placeholder="Número de Telefóno casa">
                                   <div class="help-block"></div>
                               </div>
 
-                              <div class="form-group col-lg-4" style="height: 83px;">
-                                  <h5>Nacionalidad:</h5>
-                                  <input type="text" id="nacionalidad" name="nacionalidad" class="form-control" placeholder="Nacionalidad">
+                              <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Municipio: <span class="text-danger">*</span></h5>
+                                  <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
+                                      <option value=''>[Seleccione el municipio]</option>
+                                      <?php
+                                          $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
+                                          if($municipio->num_rows() > 0){
+                                              foreach ($municipio->result() as $fila2) {
+                                                 echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
+                                              }
+                                          }
+                                      ?>
+                                  </select>
+                              </div>
+                              <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy" readonly="">
                                   <div class="help-block"></div>
                               </div>
-
-                              <div class="form-group col-lg-2" style="height: 83px;">
-                                  <h5>Sexo:</h5>
-                                  <input name="sexo" type="radio" id="masculino" checked="" value="M">
-                                  <label for="masculino">Masculino</label>
-                                  <input name="sexo" type="radio" id="femenino" value="F">
-                                  <label for="femenino">Femenino</label>
-                                  <div class="help-block"></div>
-                            </div>
-
-                            <div class="form-group col-lg-2" style="height: 83px;">
-                                <h5>Representante:</h5>
-                                <input name="posee_representante" type="radio" id="si_posee" value='1'>
-                                <label for="si_posee">Si </label><Br>
-                                <input name="posee_representante" type="radio" id="no_posee" checked="" value='0' required>
-                                <label for="no_posee">No</label>
-                           <div class="help-block"></div>
-                         </div>
                         </div>
                         <div class="row">
+                          <div class="form-group col-lg-2" style="height: 83px;">
+                              <h5>Sexo:</h5>
+                              <input name="sexo" type="radio" id="masculino" checked="" value="M">
+                              <label for="masculino">Masculino</label>
+                              <input name="sexo" type="radio" id="femenino" value="F">
+                              <label for="femenino">Femenino</label>
+                              <div class="help-block"></div>
+                        </div>
+
+                        <div class="form-group col-lg-2" style="height: 83px;">
+                            <h5>Representante:</h5>
+                            <input name="posee_representante" type="radio" id="si_posee" value='1'>
+                            <label for="si_posee">Si </label><Br>
+                            <input name="posee_representante" type="radio" id="no_posee" checked="" value='0' required>
+                            <label for="no_posee">No</label>
+                       <div class="help-block"></div>
+                     </div>
                           <div class="form-group col-lg-8" style="height: 83px;">
                               <h5>Dirección:</h5>
                               <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
                               <div class="help-block"></div>
                           </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-2" style="height: 83px;">
+                                <h5>Discapacidad:</h5>
+                                <input name="discapacidad" type="radio" id="si" value='1'>
+                                <label for="si">Si </label><Br>
+                                <input name="discapacidad" type="radio" id="no" checked="" value='0'>
+                                <label for="no">No</label>
+                           <div class="help-block"></div>
+                         </div>
 
-                          <div class="form-group col-lg-2" style="height: 83px;">
-                              <h5>Discapacidad:</h5>
-                              <input name="discapacidad" type="radio" id="si" value='1'>
-                              <label for="si">Si </label><Br>
-                              <input name="discapacidad" type="radio" id="no" checked="" value='0'>
-                              <label for="no">No</label>
-                         <div class="help-block"></div>
-                       </div>
+                           <div class="form-group col-lg-2" style="height: 83px;">
+                               <h5>Pertenece LGBT:</h5>
+                               <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
+                               <label for="si_lgbt">Si </label><Br>
+                               <input name="pertenece_lgbt" type="radio" id="no_lgbt" checked="" value='0'>
+                               <label for="no_lgbt">No</label>
+                          <div class="help-block"></div>
+                        </div>
+
+                         <div class="form-group col-lg-4" style="height: 83px;">
+                             <h5>Estudios realizados:</h5>
+                             <input type="text" id="estudios" name="estudios" class="form-control" placeholder="Estudios realizados">
+                             <div class="help-block"></div>
+                         </div>
+
+                         <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
                         </div>
                             </blockquote>
 
@@ -1456,6 +1517,16 @@ function pagos(id_expedienteci) {
     $("#cnt_form_main").hide(0);
     tabla_pagos(id_expedienteci);
   });
+}
+
+function ocultar(){
+  var value = $("#id_doc_identidad").val();
+  if (value!=1) {
+    $('#dui').mask('', {reverse: true});
+    $('#dui').unmask();
+  }else {
+     $('#dui').mask('99999999-9', {reverse: true});
+  }
 }
 
 $(function(){
