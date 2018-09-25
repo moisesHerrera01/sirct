@@ -99,6 +99,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     }
 
+    function combo_nacionalidades(seleccion){
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_nacionalidades",
+            type: "post",
+            dataType: "html",
+            data: {
+                id: seleccion
+            }
+        })
+        .done(function (res) {
+            $('#div_combo_nacionalidad').html(res);
+            $(".select2").select2();
+        });
+    }
+
     function open_form(num) {
         $(".cnt_form").hide(0);
         $("#cnt_form" + num).show(0);
@@ -185,6 +201,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         combo_delegado('');
         combo_actividad_economica();
         combo_municipio();
+        combo_nacionalidades();
         $("#id_personal").val('');
         $("#establecimiento").val('');
         /*Fin expediente*/
@@ -234,7 +251,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     $("#fecha_nacimiento").val(result.fnacimiento_personaci);
                     $("#sexo").val(result.sexo_personaci);
                     $("#estudios").val(result.estudios_personaci);
-                    $("#nacionalidad").val(result.nacionalidad_personaci);
                     $("#discapacidad").val(result.discapacidad_personaci);
 
                     /*Inicio Expediente*/
@@ -242,7 +258,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     combo_actividad_economica(result.id_catalogociiu);
                     combo_municipio(result.id_municipio1);
                     combo_establecimiento(result.id_empresaci);
-
+                    combo_nacionalidades(result.nacionalidad_personaci);
 
                     /*Fin expediente*/
                     $("#band").val("edit");
@@ -627,12 +643,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                         <div class="help-block"></div>
                                     </div>
 
-                                    <div class="form-group col-lg-4" style="height: 83px;">
-                                        <h5>Nacionalidad:</h5>
-                                        <input type="text" id="nacionalidad" name="nacionalidad" class="form-control"
-                                            placeholder="Nacionalidad">
-                                        <div class="help-block"></div>
-                                    </div>
+                                    <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
 
                                     <div class="form-group col-lg-2" style="height: 83px;">
                                         <h5>Sexo:</h5>
