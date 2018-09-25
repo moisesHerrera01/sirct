@@ -5,9 +5,9 @@ class Retiro_voluntario extends CI_Controller {
 
     function __construct(){
         parent::__construct();
-        $this->load->model( array('expedientes_model', 'solicitudes_model'));
+        $this->load->model( array('expedientes_model', 'solicitudes_model','empleadores_model'));
     }
-    
+
     public function index() {
         $this->load->view('templates/header');
         $this->load->view('resolucion_conflictos/retiro_voluntario');
@@ -54,7 +54,7 @@ class Retiro_voluntario extends CI_Controller {
 
 		}
     }
-    
+
     public function gestionar_expediente() {
         $fecha_actual=date("Y-m-d H:i:s");
 
@@ -71,7 +71,7 @@ class Retiro_voluntario extends CI_Controller {
                 'tiposolicitud_expedienteci' => "Renuncia Voluntaria",
                 'numerocaso_expedienteci' =>10
             );
-            
+
             if ("fracaso" == $this->expedientes_model->insertar_expediente($data)) {
                 echo "fracaso";
             } else {
