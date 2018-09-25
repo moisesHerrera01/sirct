@@ -1,0 +1,45 @@
+PERSONA NATURAL
+LGTBI no LGBT
+
+Estudios realizados:
+	-Sin estudio
+	-Educacion Basica
+	-Bachillerato
+	-Universidad
+
+Tipos de representantes:
+	-Representante legal
+	-Apoderado
+	-Representate de menor
+
+Cambiar ocupación a ocupación según DUI
+
+
+-Folio, Libro, asiento, año, #. Cuando sea con partida de nacimiento
+-Si es apoderado hay que relacionar el poder
+-Pasar las audiencias a un solo paso al final de la solicitud
+-Es necesario se puedan reprogramar, indicar el motivo del retraso.
+-Llevar un historial de las reprogramaciones
+
+
+SOLICITUD JURÍDICA
+
+Motivos:
+-Diferencia laboral
+-Despido injustificado o de hecho
+
+Solo estos son los requeridos
+-Nombre 
+-direccion .
+-municipio 
+
+
+NOTIFICACION DE RENUNCIA VOLUNTARIA
+No lleva salario ni horario de trabajo.
+Falta apartado de intervenciion
+que dia entrego los documentos de renuncia y la fecha
+Fecha en que se presento al lugar de trabajo
+Y en fecha x para entregar renuncia
+
+Solo se le asigna una fecha de cita para audiencia
+
