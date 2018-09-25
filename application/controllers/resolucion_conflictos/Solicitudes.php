@@ -39,7 +39,8 @@ class Solicitudes extends CI_Controller {
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
 			'posee_representante' => $this->input->post('posee_representante'),
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
-			'id_doc_identidad' => $this->input->post('id_doc_identidad')
+			'id_doc_identidad' => $this->input->post('id_doc_identidad'),
+			'discapacidad' => $this->input->post('discapacidad_desc')
 			);
 			echo $this->solicitudes_model->insertar_solicitud($data);
 
@@ -64,6 +65,7 @@ class Solicitudes extends CI_Controller {
 			'id_empleador' => $this->input->post('id_empleador'),
 			'posee_representante' => $this->input->post('posee_representante'),
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
+			'discapacidad' => $this->input->post('discapacidad_desc')
 			);
 			echo $this->solicitudes_model->editar_solicitud($data);
 
@@ -118,6 +120,16 @@ class Solicitudes extends CI_Controller {
 			array(
 				'id' => $this->input->post('id'),
 				'discapacidad' => $data
+			)
+		);
+	}
+
+	public function combo_tipo_representante() {
+		$data = $this->solicitudes_model->obtener_tipos_representante();
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_tipo_representante',
+			array(
+				'id' => $this->input->post('id'),
+				'tipo_representante' => $data
 			)
 		);
 	}

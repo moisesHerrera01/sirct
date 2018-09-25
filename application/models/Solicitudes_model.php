@@ -25,6 +25,7 @@ class Solicitudes_model extends CI_Model {
 			'discapacidad_personaci' => $data['discapacidad_personaci'],
 			'posee_representante' => $data['posee_representante'],
 			'pertenece_lgbt' => $data['pertenece_lgbt'],
+			'discapacidad' => $data['discapacidad'],
 			'tipopeticion_personaci' => 0
 		))){
 			return $this->db->insert_id();
@@ -132,9 +133,9 @@ class Solicitudes_model extends CI_Model {
 		}
 	}
 
-	function obtener_tipo_documentos(){
-		$this->db->select('t.id_doc_identidad ,t.doc_identidad')
-						 ->from('sct_doc_identidad t');
+	function obtener_tipos_representante(){
+		$this->db->select('t.id_tipo_representante,t.tipo_representante')
+						 ->from('sct_tipo_representante t');
 		$query = $this->db->get();
 		if ($query->num_rows() > 0) {
 			return $query;
@@ -143,9 +144,9 @@ class Solicitudes_model extends CI_Model {
 		}
 	}
 
-	function obtener_discapacidades(){
-		$this->db->select('d.id_discapacidad ,d.discapacidad')
-						 ->from('sct_discapacidad d');
+	function obtener_tipo_documentos(){
+		$this->db->select('t.id_doc_identidad ,t.doc_identidad')
+						 ->from('sct_doc_identidad t');
 		$query = $this->db->get();
 		if ($query->num_rows() > 0) {
 			return $query;

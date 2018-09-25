@@ -4,26 +4,26 @@ Persona natural
 
 	Nueva solicitud
 		PASO 1 (Solicitante).
-			- 2 números de teléfono para el solicitante (casa y celular)
-			- Lista de nacionalidad en lugar de solo texto
-			- Falta el campo conocido por
-			- Cuando son extranjeros ocupan carnet o pasaporte en lugar de DUI
-			- Partida de nacimiento si es menor de edad y la madre el numero de DUI como representante legal
-			- Poder agregar si pertenece a un grupo de genero diferente
-			- Poder agregar que tipo de discapacidad tiene
+			ok- 2 números de teléfono para el solicitante (casa y celular) 
+			ok- Lista de nacionalidad en lugar de solo texto
+			ok- Falta el campo conocido por
+			ok- Cuando son extranjeros ocupan carnet o pasaporte en lugar de DUI
+			ok- Partida de nacimiento si es menor de edad y la madre el numero de DUI como representante legal
+			ok- Poder agregar si pertenece a un grupo de genero diferente
+			ok- Poder agregar que tipo de discapacidad tiene
 
 		PASO 2 (Solicitado).
-			- Tipo de representante lista (Es un asesor)
-			- El representa de la persona es un asesor no un representante
-			- Acreditación es quien acreditará la audiencia
+			ok- Tipo de representante lista (Es un asesor)
+			ok- El representa de la persona es un asesor no un representante
+			ok- Acreditación es quien acreditará la audiencia
 
 		PASO 3 (Información del expediente).
 			- Sirve más la razón social y (nombre comercial = nombre del establecimiento) pero se ocupan los campos anteriores
 			- Fecha del conflicto deberia ser fecha del conflicto/despido
-			- Revisar lo del motivo de la solicitud (Por despido o por diferencia laboral, nada más)
+			ok- Revisar lo del motivo de la solicitud (Por despido o por diferencia laboral, nada más)
 			- Ocupación debe ser lo que aparece en el DUI escrito a mano
 			- La función es lo que hacía en la empresa
-			- Forma de pago debe ir en una lista (diario, catorcenal, quincenal, mensual, etc).
+			- Forma de pago debe ir en una lista (diario,Semanal, catorcenal, quincenal, mensual, etc).
 			- Jefe inmediato del solicitante no requerido
 
 	Porgramación de audiencia 

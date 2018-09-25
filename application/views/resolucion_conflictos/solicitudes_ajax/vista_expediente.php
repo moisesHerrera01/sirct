@@ -125,7 +125,7 @@
                       Nacionalidad:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->nacionalidad_personaci ?></h5>
+                          <h5><?= $expediente->nacionalidad ?></h5>
                     </div>
                   </div>
                   <div class="row">

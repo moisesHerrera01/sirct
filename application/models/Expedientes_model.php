@@ -28,9 +28,10 @@ class Expedientes_model extends CI_Model {
 
 	public function obtener_registros_expedientes($id) {
 
-			$this->db->select('')
+			$this->db->select('n.*,e.*,rp.*,f.*,cat.*,m.*,em.*,c.*,r.*,emp.*,ep.*,p.*, p.discapacidad')
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
+						 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
 						 ->join('sct_representantepersonaci rp','rp.id_personaci=p.id_personaci','left')
 						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')
 						 ->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo', 'left')
@@ -40,7 +41,8 @@ class Expedientes_model extends CI_Model {
 						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
 						 ->join('sge_empleador emp','emp.id_empleador=p.id_empleador', 'left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
-						 ->where('p.id_personaci', $id);
+						 ->where('p.id_personaci', $id)
+						 ->group_by('e.id_expedienteci');
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {
 					return  $query;
@@ -183,7 +185,7 @@ class Expedientes_model extends CI_Model {
 		else {
 			return FALSE;
 		}
-  
+
 	}
 
 }

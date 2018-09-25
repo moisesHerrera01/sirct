@@ -250,6 +250,20 @@ function combo_nacionalidades(seleccion){
   });
 }
 
+function combo_tipo_representante(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_tipo_representante",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_tipo_representante').html(res);
+    $(".select2").select2();
+  });
+}
+
 function combo_doc_identidad(seleccion){
 
   $.ajax({
@@ -445,15 +459,16 @@ function cambiar_nuevo(){
     $("#sexo").val('');
     $("#estudios").val('');
     $("#nacionalidad").val('');
+    $("#discapacidad_desc").val('');
     $("#discapacidad").val('');
     $("#posee_representante").val('');
     $("#pertenece_lgbt").val('');
     /*Fin Solicitante*/
 
     /*Inicio represnetante persona*/
+    combo_tipo_representante('');
     $("#nombre_representante_persona").val('');
     $("#apellido_representante_persona").val('');
-    $("#tipo_representante_persona").val('');
     $("#dui_representante_persona").val('');
     $("#telefono_representante_persona").val('');
     $("#acreditacion_representante_persona").val('');
@@ -526,6 +541,7 @@ function cambiar_editar(id_personaci,bandera){
       $("#fecha_nacimiento").val(result.fnacimiento_personaci);
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
+      $("#discapacidad_desc").val(result.discapacidad);
       if (result.discapacidad_personaci=='1') {
           document.getElementById('si').checked = true;
       }else {
@@ -550,7 +566,7 @@ function cambiar_editar(id_personaci,bandera){
       $("#id_representante_persona").val(result.id_representantepersonaci);
       $("#nombre_representante_persona").val(result.nombre_representantepersonaci);
       $("#apellido_representante_persona").val(result.apellido_representantepersonaci);
-      $("#tipo_representante_persona").val(result.tipo_representantepersonaci);
+      combo_tipo_representante(result.tipo_representantepersonaci);
       $("#dui_representante_persona").val(result.dui_representantepersonaci);
       $("#telefono_representante_persona").val(result.tel_representantepersonaci);
       $("#acreditacion_representante_persona").val(result.acreditacion_representantepersonaci);
@@ -728,14 +744,14 @@ function volver(num) {
                               <div class="help-block"></div>
                         </div>
 
-                        <div class="form-group col-lg-2" style="height: 83px;">
-                            <h5>Representante:</h5>
-                            <input name="posee_representante" type="radio" id="si_posee" value='1'>
-                            <label for="si_posee">Si </label><Br>
-                            <input name="posee_representante" type="radio" id="no_posee" checked="" value='0' required>
-                            <label for="no_posee">No</label>
-                       <div class="help-block"></div>
-                     </div>
+                       <div class="form-group col-lg-2" style="height: 83px;">
+                           <h5>Pertenece LGBT:</h5>
+                           <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
+                           <label for="si_lgbt">Si </label><Br>
+                           <input name="pertenece_lgbt" type="radio" id="no_lgbt" checked="" value='0'>
+                           <label for="no_lgbt">No</label>
+                      <div class="help-block"></div>
+                    </div>
                           <div class="form-group col-lg-8" style="height: 83px;">
                               <h5>Dirección:</h5>
                               <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
@@ -744,22 +760,13 @@ function volver(num) {
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-2" style="height: 83px;">
-                                <h5>Discapacidad:</h5>
-                                <input name="discapacidad" type="radio" id="si" value='1'>
-                                <label for="si">Si </label><Br>
-                                <input name="discapacidad" type="radio" id="no" checked="" value='0'>
-                                <label for="no">No</label>
+                                <h5>Representante:</h5>
+                                <input name="posee_representante" type="radio" id="si_posee" value='1'>
+                                <label for="si_posee">Si </label><Br>
+                                <input name="posee_representante" type="radio" id="no_posee" checked="" value='0' required>
+                                <label for="no_posee">No</label>
                            <div class="help-block"></div>
                          </div>
-
-                           <div class="form-group col-lg-2" style="height: 83px;">
-                               <h5>Pertenece LGBT:</h5>
-                               <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
-                               <label for="si_lgbt">Si </label><Br>
-                               <input name="pertenece_lgbt" type="radio" id="no_lgbt" checked="" value='0'>
-                               <label for="no_lgbt">No</label>
-                          <div class="help-block"></div>
-                        </div>
 
                          <div class="form-group col-lg-4" style="height: 83px;">
                              <h5>Estudios realizados:</h5>
@@ -768,6 +775,23 @@ function volver(num) {
                          </div>
 
                          <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-lg-2" style="height: 83px;">
+                              <h5>Posee discapacidad:</h5>
+                              <input name="discapacidad" type="radio" id="si" value='1'>
+                              <label for="si">Si </label><Br>
+                              <input name="discapacidad" type="radio" id="no" checked="" value='0'>
+                              <label for="no">No</label>
+                         <div class="help-block"></div>
+                       </div>
+
+                       <div id="ocultar_div" class="form-group col-lg-8" style="height: 83px;">
+                           <h5>Discapacidad:</h5>
+                           <textarea type="text" id="discapacidad_desc" name="discapacidad_desc" class="form-control" placeholder="Ingrese la discapacidad"></textarea>
+                           <div class="help-block"></div>
+                       </div>
+
                         </div>
                             </blockquote>
 
@@ -797,7 +821,7 @@ function volver(num) {
                             <div id="cnt_form3" class="cnt_form" style="display: block;">
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
-                                Representante de la persona
+                                Asesor de la persona
                               </h3><hr class="m-t-0 m-b-30">
                               <input type="hidden" id="band6" name="band6" value="save">
                               <input type="hidden" id="id_representante_persona" name="id_representante_persona" value="">
@@ -839,12 +863,7 @@ function volver(num) {
                                 </div>
 
                                 <div class="row">
-                                  <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                      <h5>Tipo de representaci&oacute;n: <span class="text-danger">*</span></h5>
-                                      <div class="controls">
-                                          <input type="text" id="tipo_representante_persona" name="tipo_representante_persona" class="form-control" placeholder="Tipo de representante" required>
-                                      </div>
-                                  </div>
+                                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_representante"></div>
 
                                   <div class="form-group col-lg-8 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                       <h5>Acreditaci&oacute;n: <span class="text-danger">*</span></h5>
@@ -909,11 +928,8 @@ function volver(num) {
                                       <div class="controls">
                                         <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
                                           <option value="">[Seleccione]</option>
-                                          <option value="Indemnización">Indemnización</option>
-                                          <option value="Inasistencia Laboral">Inasistencia Laboral</option>
-                                          <option value="Despido Injustificado">Despido Injustificado</option>
-                                          <option value="Exige indeminización">Exige indeminización</option>
-                                          <option value="Insubordinación">Insubordinación</option>
+                                          <option value="Despido">Despido</option>
+                                          <option value="Diferencia laboral">Diferencia laboral</option>
                                         </select>
                                       </div>
                                   </div>
@@ -1531,6 +1547,16 @@ function ocultar(){
 
 $(function(){
     $(document).ready(function(){
+
+      $("input[name=discapacidad]").click(function(evento){
+            var valor = $(this).val();
+            if(valor == 0){
+                $("#ocultar_div").hide();
+            }else{
+                $("#ocultar_div").show();
+            }
+    });
+
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
         $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
