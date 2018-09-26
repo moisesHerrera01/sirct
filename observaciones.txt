@@ -18,13 +18,13 @@ Persona natural
 			ok- Acreditación es quien acreditará la audiencia
 
 		PASO 3 (Información del expediente).
-			- Sirve más la razón social y (nombre comercial = nombre del establecimiento) pero se ocupan los campos anteriores
-			- Fecha del conflicto deberia ser fecha del conflicto/despido
+			ok- Sirve más la razón social y (nombre comercial = nombre del establecimiento) pero se ocupan los campos anteriores
+			ok- Fecha del conflicto deberia ser fecha del conflicto/despido
 			ok- Revisar lo del motivo de la solicitud (Por despido o por diferencia laboral, nada más)
-			- Ocupación debe ser lo que aparece en el DUI escrito a mano
-			- La función es lo que hacía en la empresa
-			- Forma de pago debe ir en una lista (diario,Semanal, catorcenal, quincenal, mensual, etc).
-			- Jefe inmediato del solicitante no requerido
+			ok- Ocupación debe ser lo que aparece en el DUI escrito a mano
+			ok- La función es lo que hacía en la empresa
+			ok- Forma de pago debe ir en una lista (diario,Semanal, catorcenal, quincenal, mensual, etc).
+			ok- Jefe inmediato del solicitante no requerido
 
 	Porgramación de audiencia 
 		- Son 2 audiencias

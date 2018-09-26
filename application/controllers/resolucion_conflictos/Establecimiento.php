@@ -36,6 +36,7 @@ class Establecimiento extends CI_Controller {
 			$data = array(
                 'numinscripcion_empresa' => '1-2018 SS',
                 'nombre_empresa' => $this->input->post('nombre_establecimiento'),
+								'razon_social' => $this->input->post('razon_social'),
                 'abreviatura_empresa' => $this->input->post('abre_establecimiento'),
                 'direccion_empresa'  => $this->input->post('dir_establecimiento'),
                 'telefono_empresa' => $this->input->post('telefono_establecimiento'),

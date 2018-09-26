@@ -238,7 +238,7 @@
                       Ocupación:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->primarios_catalogociuo ?></h5>
+                          <h5><?= $expediente->ocupacion ?></h5>
                     </div>
                   </div>
                   <div class="row">

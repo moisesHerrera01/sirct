@@ -308,9 +308,9 @@ function combo_actividad_economica(){
 
 }
 
-function combo_ocupacion(seleccion){
+/*function combo_ocupacion(seleccion){
   $.ajax({
-    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_ocupacion",
+    url: "</*?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_ocupacion",
     type: "post",
     dataType: "html",
     data: {id : seleccion}
@@ -320,7 +320,7 @@ function combo_ocupacion(seleccion){
     $(".select2").select2();
   });
 
-}
+}*/
 
 function combo_municipio(){
 
@@ -477,12 +477,13 @@ function cambiar_nuevo(){
     /*Inicio Expediente*/
     combo_nacionalidades('');
     combo_doc_identidad('');
-    combo_ocupacion('');
+    //combo_ocupacion('');
     combo_delegado('');
     combo_actividad_economica();
     combo_municipio();
     $("#id_empleador").val($("#id_empleador").val()).trigger('change.select2');
     $("#nombres_jefe").val('');
+    $("#ocupacion").val('');
     $("#apellidos_jefe").val('');
     $("#cargo_jefe").val('');
     $("#motivo").val("").trigger('change.select2');
@@ -575,11 +576,11 @@ function cambiar_editar(id_personaci,bandera){
       /*Inicio Expediente*/
       combo_doc_identidad(result.id_doc_identidad);
       combo_nacionalidades(result.nacionalidad_personaci);
-      combo_ocupacion(result.id_catalogociuo);
+      //combo_ocupacion(result.id_catalogociuo);
       combo_delegado(result.id_personal);
       combo_actividad_economica(result.id_catalogociiu);
       combo_municipio(result.id_municipio1);
-
+      $("#ocupacion").val(result.ocupacion);
       $("#fecha_creacion_exp").val(result.fechacrea_expedienteci);
       $("#id_empleador").val(result.id_empleador);
       $("#id_emplea").val(result.id_empleador);
@@ -821,7 +822,7 @@ function volver(num) {
                             <div id="cnt_form3" class="cnt_form" style="display: block;">
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
-                                Asesor de la persona
+                                Representante de la persona
                               </h3><hr class="m-t-0 m-b-30">
                               <input type="hidden" id="band6" name="band6" value="save">
                               <input type="hidden" id="id_representante_persona" name="id_representante_persona" value="">
@@ -916,7 +917,7 @@ function volver(num) {
                                   <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
 
                                   <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                      <h5>Fecha del conflicto: <span class="text-danger">*</span></h5>
+                                      <h5>Fecha del conflicto/despido: <span class="text-danger">*</span></h5>
                                       <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy" readonly="">
                                       <div class="help-block"></div>
                                   </div>
@@ -942,7 +943,12 @@ function volver(num) {
                                 </div>
 
                                 <div class="row">
-                                  <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_ocupacion"></div>
+                                  <!-- <div class="col-lg-8 form-group <//?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_ocupacion"></div> -->
+                                  <div class="form-group col-lg-8" style="height: 83px;">
+                                      <h5>Ocupación según DUI:<span class="text-danger">*</h5>
+                                      <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI" required=""></textarea>
+                                      <div class="help-block"></div>
+                                  </div>
 
                                   <div class="form-group col-lg-4" style="height: 83px;">
                                       <h5>Salario($):<span class="text-danger">*</h5>
@@ -958,10 +964,18 @@ function volver(num) {
                                       <div class="help-block"></div>
                                   </div>
 
-                                  <div class="form-group col-lg-4" style="height: 83px;">
-                                      <h5>Forma de pago:<span class="text-danger">*</h5>
-                                      <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Forma de pago">
-                                      <div class="help-block"></div>
+                                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                      <h5>Forma de pago: <span class="text-danger">*</span></h5>
+                                      <div class="controls">
+                                        <select id="forma_pago" name="forma_pago" class="custom-select col-4" onchange="" required>
+                                          <option value="">[Seleccione]</option>
+                                          <option value="Diario">Diario</option>
+                                          <option value="Semanal">Semanal</option>
+                                          <option value="Catorcenal">Catorcenal</option>
+                                          <option value="Quincenal">Quincenal</option>
+                                          <option value="Mensual">Mensual</option>
+                                        </select>
+                                      </div>
                                   </div>
                                 </div>
 
@@ -979,18 +993,18 @@ function volver(num) {
                                 <div class="row">
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                         <h5>Nombres de jefe inmediato: </h5>
-                                        <input type="text" id="nombres_jefe" name="nombres_jefe" class="form-control" placeholder="Nombres de jefe inmediato" required="">
+                                        <input type="text" id="nombres_jefe" name="nombres_jefe" class="form-control" placeholder="Nombres de jefe inmediato">
                                         <div class="help-block"></div>
                                     </div>
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                         <h5>Apellidos de jefe inmediato:</h5>
-                                        <input type="text" id="apellidos_jefe" name="apellidos_jefe" class="form-control" placeholder="Apellidos de jefe inmediato" required="">
+                                        <input type="text" id="apellidos_jefe" name="apellidos_jefe" class="form-control" placeholder="Apellidos de jefe inmediato">
                                         <div class="help-block"></div>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                         <h5>Cargo de jefe inmediato: </h5>
-                                        <input type="text" id="cargo_jefe" name="cargo_jefe" class="form-control" placeholder="Cargo de jefe inmediato" required="">
+                                        <input type="text" id="cargo_jefe" name="cargo_jefe" class="form-control" placeholder="Cargo de jefe inmediato">
                                         <div class="help-block"></div>
                                     </div>
                               </div>
@@ -1114,9 +1128,18 @@ function volver(num) {
 
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
+                      <h5>Razon social del establecimiento:</h5>
                       <div class="controls">
-                          <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required="">
+                          <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control" required="">
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Nombre del establecimiento:</h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control">
                       </div>
                   </div>
                 </div>
@@ -1125,7 +1148,7 @@ function volver(num) {
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Abreviatura del establecimiento: <span class="text-danger">*</span></h5>
                       <div class="controls">
-                          <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control" required="">
+                          <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control">
                       </div>
                   </div>
                 </div>

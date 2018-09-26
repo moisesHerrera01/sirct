@@ -8,13 +8,14 @@ class Establecimiento_model extends CI_Model {
     }
 
     public function insertar_empresa($data) {
-        
+
         if(
             $this->db->insert(
-                'sge_empresa', 
+                'sge_empresa',
                 array(
-                    'numinscripcion_empresa' => $data['numinscripcion_empresa'], 
+                    'numinscripcion_empresa' => $data['numinscripcion_empresa'],
                     'nombre_empresa' => $data['nombre_empresa'],
+										'razon_social' => $data['razon_social'],
                     'abreviatura_empresa' => $data['abreviatura_empresa'],
                     'direccion_empresa' => $data['direccion_empresa'],
                     'telefono_empresa' => $data['telefono_empresa'],
@@ -28,7 +29,7 @@ class Establecimiento_model extends CI_Model {
         }
 
     }
-    
+
 }
 
 ?>

@@ -134,7 +134,7 @@ class Solicitudes extends CI_Controller {
 		);
 	}
 
-	public function combo_ocupacion() {
+	/*public function combo_ocupacion() {
 		$data = $this->db->get('sge_catalogociuo');
 		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_ocupacion',
 			array(
@@ -142,5 +142,5 @@ class Solicitudes extends CI_Controller {
 				'ocupacion' => $data
 			)
 		);
-	}
+	}*/
 }

@@ -42,7 +42,7 @@ class Expediente extends CI_Controller {
 								$data['formapago_personaci'] = $this->input->post('forma_pago');
 								$data['horarios_personaci'] = $this->input->post('horario');
 								$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
-								$data['id_catalogociuo'] = $this->input->post('ocupacion');
+								$data['ocupacion'] = $this->input->post('ocupacion');
 								$data['id_empleador'] = $id_empleador;
 							$this->solicitudes_model->editar_solicitud($data);
 							$this->expedientes_model->insertar_expediente($data2);
@@ -66,7 +66,7 @@ class Expediente extends CI_Controller {
 			$data['formapago_personaci'] = $this->input->post('forma_pago');
 			$data['horarios_personaci'] = $this->input->post('horario');
 			$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
-			$data['id_catalogociuo'] = $this->input->post('ocupacion');
+			$data['ocupacion'] = $this->input->post('ocupacion');
 
 			$data2 = array(
 					'id_expedienteci' => $this->input->post('id_expedienteci'),
@@ -193,7 +193,7 @@ class Expediente extends CI_Controller {
 					$data['tipocociliacion_expedienteci'] = $this->input->post('tipo_conciliacion');
 				}
 				$data['id_expedienteci'] = $this->input->post('id_expedienteci');
-				$data['resultado_expedienteci'] = $this->input->post('resolucion');				
+				$data['resultado_expedienteci'] = $this->input->post('resolucion');
 
 				if ("fracaso" == $this->expedientes_model->editar_expediente($data)) {
 					echo "fracaso";

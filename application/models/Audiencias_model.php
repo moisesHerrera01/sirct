@@ -21,9 +21,9 @@ class Audiencias_model extends CI_Model {
 			}
 	}
 
-	public function obtener_audiencias_delegado($id_delegado) {
+	public function obtener_audiencias_delegado($id_delegado,$fecha=FALSE,$hora=FALSE,$id_expedienteci=FALSE) {
 		$this->db->select('s.nombre_sindicato,e.motivo_expedienteci,e.numerocaso_expedienteci,f.id_expedienteci,f.id_fechasaudienciasci,
-												f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci, e.tiposolicitud_expedienteci,
+												f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci,e.tiposolicitud_expedienteci,
 												CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) delegado,
 												CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
 					->from('sct_fechasaudienciasci f')
@@ -34,8 +34,15 @@ class Audiencias_model extends CI_Model {
 					->group_by('f.id_fechasaudienciasci');
 		if ($id_delegado) {
 			$this->db->where('em.nr', $id_delegado);
+		}if ($fecha && $hora && $id_expedienteci) {
+			$hora_fin = date('H:i:s',strtotime($hora.'+ 1 hours'));
+			$this->db->where('e.id_expedienteci',$id_expedienteci)
+							 ->where('f.fecha_fechasaudienciasci',$fecha)
+							 ->where("f.hora_fechasaudienciasci>=",$hora)
+							 ->where("f.hora_fechasaudienciasci<=",$hora_fin)
+							 ->or_where("f.hora_fechasaudienciasci<=",$hora)
+							 ->where("(f.hora_fechasaudienciasci + INTERVAL 1 hour)>=",$hora);
 		}
-
 		$query=$this->db->get();
 		if ($query->num_rows() > 0) {
 				return $query;

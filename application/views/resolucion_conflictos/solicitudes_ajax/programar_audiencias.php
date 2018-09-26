@@ -75,12 +75,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="row">
                   <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Fecha de audiencia: <span class="text-danger">*</span></h5>
-                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_audiencia" name="fecha_audiencia" placeholder="dd/mm/yyyy" readonly="">
+                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_audiencia" name="fecha_audiencia" placeholder="dd/mm/yyyy" readonly="" required>
                       <div class="help-block"></div>
                   </div>
                   <div class="form-group col-lg-4" style="height: 83px;">
                       <h5>Hora de audiencia:</h5>
-                      <input type="time" id="hora_audiencia" name="hora_audiencia" class="form-control" placeholder="Hora de audiencia">
+                      <input type="time" id="hora_audiencia" name="hora_audiencia" class="form-control" placeholder="Hora de audiencia" required>
                       <div class="help-block"></div>
                   </div>
                 </div>
