@@ -84,6 +84,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                               	JOIN sge_empleador em ON em.id_empleador=p.id_empleador
                               	JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
                               	JOIN sir_empleado l on l.id_empleado=e.id_personal
+                              	WHERE p.id_personaci = '".$row->id_personaci."'
                               	ORDER BY e.id_expedienteci DESC");
 	                        	if($solicitudes->num_rows() > 0){
 	                        		foreach ($solicitudes->result() as $fila) {
@@ -100,9 +101,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 	                            <hr>
                             <?php
 	                        		}
+	                        	}else{
+	                        		echo "<blockquote>No posee registro de expediente</blockquote>";
 	                        	}
                             ?>
-
+                            <a href="javascript:void(0)" class="m-t-10 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
+                            <a href="javascript:void(0)" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
+                            <a href="javascript:void(0)" class="m-t-10 waves-effect waves-dark btn btn-secondary btn-rounded">Noticicación de <br>renuncia voluntaria</a>
                         </div>
                     </div>
                 </div>
