@@ -91,7 +91,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             	<div class="sl-item">
 	                                <div class="sl-left"> <span class="round">PN</span> </div>
 	                                <div class="sl-right">
-	                                    <div><a href="#" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
+	                                    <div><a href="#" class="link"><?=$fila->numero?></a> <span class="sl-date"><?=$fila->fecha?></span>
 	                                        <p>assign a new task <a href="#"> Design weblayout</a></p>
 	                                        <div class="like-comm"> <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> </div>
 	                                    </div>
