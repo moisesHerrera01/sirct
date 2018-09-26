@@ -56,12 +56,23 @@ class Historial_persona_model extends CI_Model {
   		}
 	}
 
+	public function obtener_personaci_complete($id) {
+		$this->db->select('')
+             ->from('sct_personaci p')
+             ->join('sct_doc_identidad di', 'di.id_doc_identidad = p.id_doc_identidad')
+             ->join('org_municipio m','m.id_municipio=p.id_municipio')
+             ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
+             ->where('p.id_personaci',$id);
+        $query=$this->db->get();
+		if ($query->num_rows() > 0) { return $query;
+		}else{ return FALSE; }
+	}
+
 	public function obtener_persona($id) {
 		$this->db->select('')->from('sct_personaci')->where('id_personaci', $id);
 		$query=$this->db->get();
 		if ($query->num_rows() > 0) { return $query;
 		}else{ return FALSE; }
-
 	}
 
 	function obtener_ultimo_id($tabla,$nombreid){

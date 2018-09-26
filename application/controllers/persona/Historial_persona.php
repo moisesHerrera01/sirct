@@ -21,7 +21,7 @@ class Historial_persona extends CI_Controller {
 	}
 
 	public function ver_persona(){
-		$data['personaci'] = $this->solicitud_juridica_model->obtener_personaci($this->input->post('id_per'));
+		$data['personaci'] = $this->historial_persona_model->obtener_personaci_complete($this->input->post('id'));
 		$this->load->view('persona/historial_persona_ajax/visualizar_persona', $data);
 	}
 
@@ -36,7 +36,7 @@ class Historial_persona extends CI_Controller {
 
 		if($this->input->post('band1') == "save"){
 			$data = array(
-		'nombre_personaci' => $this->input->post('nombres'),
+			'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
 			'conocido_por' => $this->input->post('conocido_por'),
 			'dui_personaci' => $this->input->post('dui'),

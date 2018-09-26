@@ -58,7 +58,7 @@
 
                     if(tiene_permiso($segmentos=2,$permiso=4)){
                         unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
-                        echo generar_boton($array,"visualizar","btn-info","mdi mdi-eye","Editar");
+                        echo generar_boton($array,"visualizar","btn-secondary","mdi mdi-magnify","Visaulizar");
                     }
 
                     if(tiene_permiso($segmentos=2,$permiso=1)){
