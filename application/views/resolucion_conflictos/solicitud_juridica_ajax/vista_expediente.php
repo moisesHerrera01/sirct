@@ -176,9 +176,7 @@
                       Delegado asignado:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.
-                          $expediente->primer_apellido.' '.$expediente->segundo_apellido.' '.
-                          (($expediente->apellido_casada) ? $expediente->apellido_casada : ' ') ?></h5>
+                          <h5><?php echo implode(" ", array($fila->primer_nombre, $fila->segundo_nombre, $fila->tercer_nombre, $fila->primer_apellido, $fila->segundo_apellido, $fila->apellido_casada)); ?></h5>
                     </div>
                   </div>
                 </tbody>

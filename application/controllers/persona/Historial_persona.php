@@ -16,8 +16,12 @@ class Historial_persona extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
-	public function tabla_solicitudes(){
+	public function tabla_persona_natural(){
 		$this->load->view('persona/historial_persona_ajax/tabla_persona_historial');
+	}
+
+	public function tabla_persona_juridica(){
+		$this->load->view('persona/historial_persona_ajax/tabla_persona_juridica');
 	}
 
 	public function ver_persona(){
@@ -25,14 +29,16 @@ class Historial_persona extends CI_Controller {
 		$this->load->view('persona/historial_persona_ajax/visualizar_persona', $data);
 	}
 
+	public function ver_persona_juridica(){
+		$data['empresa'] = $this->historial_persona_model->obtener_empresa_complete($this->input->post('id'));
+		$this->load->view('persona/historial_persona_ajax/visualizar_persona_juridica', $data);
+	}
+
 	public function registros_expedientes() {
-		print json_encode(
-			$this->historial_persona_model->obtener_persona($this->input->post('id'))->result()
-		);
+		print json_encode( $this->historial_persona_model->obtener_persona($this->input->post('id'))->result() );
 	}
 
 	public function gestionar_solicitudes(){
-
 
 		if($this->input->post('band1') == "save"){
 			$data = array(
@@ -87,6 +93,58 @@ class Historial_persona extends CI_Controller {
 			echo $this->solicitudes_model->eliminar_estado($data);
 		}*/
 	}
+
+	public function gestionar_establecimiento(){
+		if($this->input->post('band2') == "save"){
+			$data = array(
+			'tiposolicitud_empresa' => $this->input->post('tiposolicitud_empresa'),
+			'id_oficina' => $this->input->post('id_oficina'),
+			'nombre_empresa' => mb_strtoupper($this->input->post('nombre_empresa')),
+			'abreviatura_empresa' => mb_strtoupper($this->input->post('abreviatura_empresa')),
+			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
+			'numtotal_empresa' => $this->input->post('numtotal_empresa'),
+			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
+			'nit_empresa' => $this->input->post('nit_empresa'),
+			'id_municipio' => $this->input->post('id_municipio'),
+			'correoelectronico_empresa' => $this->input->post('correoelectronico_empresa'),
+			'direccion_empresa' => $this->input->post('direccion_empresa'),
+			'activobalance_empresa' => $this->input->post('activobalance_empresa'),
+			'capitalsocial_empresa' => $this->input->post('capitalsocial_empresa'),
+			'trabajadores_adomicilio_empresa' => $this->input->post('trabajadores_adomicilio_empresa'),
+			'tipo_empresa' => $this->input->post('tipo_empresa'),
+			'estado_empresa' => $this->input->post('estado_empresa')
+			);
+      		echo $this->historial_persona_model->insertar_establecimiento($data);
+		}else if($this->input->post('band2') == "edit"){
+      		$data = array(
+		    'id_empresa' => $this->input->post('id_empresa'),
+		    'tiposolicitud_empresa' => $this->input->post('tiposolicitud_empresa'),
+			'id_oficina' => $this->input->post('id_oficina'),
+			'nombre_empresa' => mb_strtoupper($this->input->post('nombre_empresa')),
+			'abreviatura_empresa' => mb_strtoupper($this->input->post('abreviatura_empresa')),
+			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
+			'numtotal_empresa' => $this->input->post('numtotal_empresa'),
+			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
+			'nit_empresa' => $this->input->post('nit_empresa'),
+			'id_municipio' => $this->input->post('id_municipio'),
+			'correoelectronico_empresa' => $this->input->post('correoelectronico_empresa'),
+			'direccion_empresa' => $this->input->post('direccion_empresa'),
+			'activobalance_empresa' => $this->input->post('activobalance_empresa'),
+			'capitalsocial_empresa' => $this->input->post('capitalsocial_empresa'),
+			'trabajadores_adomicilio_empresa' => $this->input->post('trabajadores_adomicilio_empresa'),
+			'tipo_empresa' => $this->input->post('tipo_empresa'),
+			'estado_empresa' => $this->input->post('estado_empresa')
+			);
+			echo $this->historial_persona_model->editar_establecimiento($data);
+		}else if($this->input->post('band2') == "delete"){
+			$data = array(
+			'id_empresa' => $this->input->post('id_empresa'),
+			'estado_empresa' => $this->input->post('estado_empresa')
+			);
+			echo $this->historial_persona_model->eliminar_establecimiento($data);
+		}
+	}
+
 
 	public function combo_establecimiento() {
 
