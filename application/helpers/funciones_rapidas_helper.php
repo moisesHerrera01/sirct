@@ -368,4 +368,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			return $dui_letras;
 		}
 
+		function convertir_numeros_cadena($cadena){
+			$cadena = str_replace(":", " y ", $cadena);
+			$array_cadena = explode(" ", $cadena);
+
+			foreach ($array_cadena as $key => $palabra) {
+				$numero = intval(preg_replace('/[^0-9]+/', '', $palabra), 10);
+				if(is_numeric($numero)) {
+					$letras = trim(CifrasEnLetras::convertirCifrasEnLetras($numero));
+					$array_cadena[$key] =trim( str_replace($numero, $letras, $palabra));
+				}
+			}
+			$cadena = implode(" ", $array_cadena);
+			$cadena = str_replace("y cerocero", "en punto", $cadena);
+			return mb_strtoupper($cadena) ;
+		}
 ?>

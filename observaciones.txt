@@ -27,8 +27,8 @@ Persona natural
 			ok- Jefe inmediato del solicitante no requerido
 
 	Porgramación de audiencia 
-		- Son 2 audiencias
-		- Validar choque de audiencias para un delegado
+		ok- Son 2 audiencias
+		ok- Validar choque de audiencias para un delegado
 
 	Generación de acta
 		- Todo el cuerpo de la generación de acta debe ir en letras, incluyendo las direcciones

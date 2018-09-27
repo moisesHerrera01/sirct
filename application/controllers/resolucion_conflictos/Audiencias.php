@@ -28,13 +28,14 @@ class Audiencias extends CI_Controller {
 			'hora_fechasaudienciasci' => date("H:i:s",strtotime($this->input->post('hora_audiencia'))),
 			'id_expedienteci' => $this->input->post('id_expedienteci1')
 			);
-			$resultado = $this->audiencias_model->obtener_audiencias_delegado(FALSE,$data['fecha_fechasaudienciasci'],$data['hora_fechasaudienciasci'],$data['id_expedienteci']);
+			$exp = $this->expedientes_model->obtener_expediente($data['id_expedienteci'])->result_array()[0];
+			$resultado = $this->audiencias_model->obtener_audiencias_delegado($exp['nr'],$data['fecha_fechasaudienciasci'],$data['hora_fechasaudienciasci']);
 			if ($resultado) {
-				var_dump('ya_existe');
+				echo 'ya_existe';
 			}else {
-				var_dump('no_existe');
+				echo $this->audiencias_model->insertar_audiencia($data);
 			}
-			echo $this->audiencias_model->insertar_audiencia($data);
+
 
 		}else if($this->input->post('band4') == "edit"){
 

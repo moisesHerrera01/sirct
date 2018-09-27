@@ -176,9 +176,14 @@ $(function(){
             }else{
               //cerrar_mantenimiento();
               if($("#band4").val() == "save"){
-                  cambiar_nuevo5();
-                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-              }else if($("#band4").val() == "edit"){
+                  if (res =='ya_existe') {
+                      cambiar_nuevo5();
+                      swal({ title: "¡Choque de horarios!", type: "warning", showConfirmButton: true });
+                  }else {
+                    cambiar_nuevo5();
+                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                  }
+                }else if($("#band4").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
