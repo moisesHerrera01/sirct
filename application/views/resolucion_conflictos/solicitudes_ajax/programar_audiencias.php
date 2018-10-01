@@ -12,7 +12,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="row">
 
       <div class="col-lg-1"></div>
-      <div class="col-lg-10">
+       <div class="col-lg-10">
         <div class="card">
           <div class="card-header bg-success2" id="ttl_form">
             <div class="card-actions text-white">

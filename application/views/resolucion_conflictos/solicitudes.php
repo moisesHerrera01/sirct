@@ -837,7 +837,7 @@ function volver(num) {
                         </div>
 
                        <div class="form-group col-lg-2" style="height: 83px;">
-                           <h5>Pertenece LGBT:</h5>
+                           <h5>Pertenece LGTBI:</h5>
                            <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
                            <label for="si_lgbt">Si </label><Br>
                            <input name="pertenece_lgbt" type="radio" id="no_lgbt" checked="" value='0'>
@@ -860,10 +860,17 @@ function volver(num) {
                            <div class="help-block"></div>
                          </div>
 
-                         <div class="form-group col-lg-4" style="height: 83px;">
-                             <h5>Estudios realizados:</h5>
-                             <input type="text" id="estudios" name="estudios" class="form-control" placeholder="Estudios realizados">
-                             <div class="help-block"></div>
+                         <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                             <h5>Estudios realizados: <span class="text-danger">*</span></h5>
+                             <div class="controls">
+                               <select id="estudios" name="estudios" class="custom-select col-4" onchange="" required>
+                                 <option value="">[Seleccione]</option>
+                                 <option value="Sin estudio">Sin estudio</option>
+                                 <option value="Educacion Básica">Educacion Básica</option>
+                                 <option value="Bachillerato">Bachillerato</option>
+                                 <option value="Universidad">Universidad</option>
+                               </select>
+                             </div>
                          </div>
 
                          <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>

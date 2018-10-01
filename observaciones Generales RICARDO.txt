@@ -1,21 +1,21 @@
 PERSONA NATURAL
-LGTBI no LGBT
+ok LGTBI no LGBT
 
-Estudios realizados:
+ok Estudios realizados:
 	-Sin estudio
-	-Educacion Basica
+	-Educacion Básica
 	-Bachillerato
 	-Universidad
 
-Tipos de representantes:
+ok Tipos de representantes:
 	-Representante legal
 	-Apoderado
 	-Representate de menor
 
-Cambiar ocupación a ocupación según DUI
+ok Cambiar ocupación a ocupación según DUI
 
 
--Folio, Libro, asiento, año, #. Cuando sea con partida de nacimiento
+ok -Folio, Libro, asiento, año, #. Cuando sea con partida de nacimiento
 -Si es apoderado hay que relacionar el poder
 -Pasar las audiencias a un solo paso al final de la solicitud
 -Es necesario se puedan reprogramar, indicar el motivo del retraso.
