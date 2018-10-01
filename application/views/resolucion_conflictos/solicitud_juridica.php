@@ -48,7 +48,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         })
         .done(function(res){
             $('#div_combo_ocupacion').html(res);
-            $("#id_catalogociuo").select2();
+            //$("#id_catalogociuo").select2();
             combo_establecimiento(seleccion2);
         });
     }
@@ -192,6 +192,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal,band){
         combo_ocupacion(id_catalogociuo, id_empresaci);
+        $("#id_catalogociuo").val(id_catalogociuo);
         $("#id_personaci").val(id_personaci);
         $("#nombre_personaci").val(nombre_personaci);
         $("#apellido_personaci").val(apellido_personaci);
@@ -683,19 +684,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_ocupacion"></div>
-                                <div class="form-group col-lg-4" >
-                                    <h5>Salario($):<span class="text-danger">*</h5>
-                                    <input type="number" id="salario_personaci" name="salario_personaci" class="form-control" placeholder="Salario" step="0.01">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-8" >
-                                    <h5>Horario laboral:<span class="text-danger">*</h5>
-                                    <textarea type="text" id="horarios_personaci" name="horarios_personaci" class="form-control" placeholder="Horario laboral"></textarea>
-                                </div>
-                            </div>
                             </blockquote>
                             <div class="row">
                                 <div class="col-lg-12" align="center">
@@ -1177,8 +1165,6 @@ $(function(){
         formData.append("id_empresaci", $('#establecimiento').val());
         formData.append("sexo", $('input:radio[name=sexo_personaci]:checked').val());
         formData.append("discapacidad", $('input:radio[name=discapacidad_personaci]:checked').val());
-
-        alert($("#id_catalogociuo").val())
 
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/gestionar_solicitado",

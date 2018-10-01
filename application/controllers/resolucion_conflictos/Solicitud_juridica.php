@@ -109,9 +109,6 @@ class Solicitud_juridica extends CI_Controller {
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion_personaci'),
 			'sexo_personaci' => $this->input->post('sexo'),
-			'salario_personaci' => $this->input->post('salario_personaci'),
-			'horarios_personaci' => $this->input->post('horarios_personaci'),
-			'id_catalogociuo' => $this->input->post('id_catalogociuo'),
 			'id_empresaci' => $this->input->post('id_empresaci'),
 			'discapacidad_personaci' => $this->input->post('discapacidad')
 			);
@@ -126,9 +123,6 @@ class Solicitud_juridica extends CI_Controller {
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion_personaci'),
 			'sexo_personaci' => $this->input->post('sexo_personaci'),
-			'salario_personaci' => $this->input->post('salario_personaci'),
-			'horarios_personaci' => $this->input->post('horarios_personaci'),
-			'id_catalogociuo' => $this->input->post('id_catalogociuo'),
 			'discapacidad_personaci' => $this->input->post('discapacidad_personaci')
 			);
 			echo $this->solicitud_juridica_model->editar_solicitado($data);
