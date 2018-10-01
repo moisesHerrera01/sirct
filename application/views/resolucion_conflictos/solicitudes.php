@@ -467,6 +467,7 @@ function cambiar_nuevo(){
 
     /*Inicio represnetante persona*/
     combo_tipo_representante('');
+    $("#id_representante_persona").val('');
     $("#nombre_representante_persona").val('');
     $("#apellido_representante_persona").val('');
     $("#dui_representante_persona").val('');
@@ -486,7 +487,7 @@ function cambiar_nuevo(){
     $("#ocupacion").val('');
     $("#apellidos_jefe").val('');
     $("#cargo_jefe").val('');
-    $("#motivo").val("").trigger('change.select2');
+    $("#motivo").val('');
     $("#id_personal").val('');
     $("#establecimiento").val('');
     $("#salario").val('');
@@ -587,7 +588,7 @@ function cambiar_editar(id_personaci,bandera){
       $("#nombres_jefe").val(result.nombre_empleador);
       $("#apellidos_jefe").val(result.apellido_empleador);
       $("#cargo_jefe").val(result.cargo_empleador);
-      $("#motivo").val(result.motivo_expedienteci).trigger('change.select2');
+      $("#motivo").val(result.motivo_expedienteci);
       $("#salario").val(result.salario_personaci);
       $("#funciones").val(result.funciones_personaci);
       $("#forma_pago").val(result.formapago_personaci);
@@ -1381,6 +1382,7 @@ $(function(){
             if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
+              $("#id_representante_persona").val(res);
               open_form(2);
             }
         });
@@ -1394,6 +1396,7 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax2"));
         formData.append("id_personaci", $('#id_personaci').val());
+        formData.append("id_representante_persona", $('#id_representante_persona').val());
         $.ajax({
           url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_expediente",
           type: "post",

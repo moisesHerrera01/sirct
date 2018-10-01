@@ -62,7 +62,6 @@ class Solicitudes extends CI_Controller {
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
-			'id_empleador' => $this->input->post('id_empleador'),
 			'posee_representante' => $this->input->post('posee_representante'),
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 			'discapacidad' => $this->input->post('discapacidad_desc')

@@ -10,7 +10,7 @@ class Representante_persona_model extends CI_Model {
 	public function editar_representante($data){
 		$this->db->where("id_representantepersonaci",$data["id_representantepersonaci"]);
 		if ($this->db->update('sct_representantepersonaci', $data)) {
-			return "exito";
+			return $data["id_representantepersonaci"];
 		}else {
 			return "fracaso";
 		}
@@ -18,7 +18,7 @@ class Representante_persona_model extends CI_Model {
 
   public function insertar_representante($data){
     if ($this->db->insert('sct_representantepersonaci', $data)) {
-      $this->db->insert_id();
+      return $this->db->insert_id();
     }else {
       return "fracaso";
     }

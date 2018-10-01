@@ -12,7 +12,6 @@ class Representante_persona extends CI_Controller {
 
 		if($this->input->post('band6') == "save"){
 			$data = array(
-			'id_personaci' => $this->input->post('id_personaci'),
 			'nombre_representantepersonaci' => $this->input->post('nombre_representante_persona'),
 			'apellido_representantepersonaci' => $this->input->post('apellido_representante_persona'),
 			'tipo_representantepersonaci' => $this->input->post('tipo_representante_persona'),
@@ -25,7 +24,6 @@ class Representante_persona extends CI_Controller {
 		}else if($this->input->post('band6') == "edit"){
 
 			$data = array(
-			'id_personaci' => $this->input->post('id_personaci'),
 			'id_representantepersonaci' => $this->input->post('id_representante_persona'),
 			'nombre_representantepersonaci' => $this->input->post('nombre_representante_persona'),
 			'apellido_representantepersonaci' => $this->input->post('apellido_representante_persona'),

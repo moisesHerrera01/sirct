@@ -5,9 +5,7 @@ class Expediente extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("solicitudes_model"));
-		$this->load->model(array("expedientes_model"));
-		$this->load->model(array("empleadores_model"));
+		$this->load->model(array("solicitudes_model","representante_persona_model","expedientes_model","empleadores_model"));
 	}
 
 	public function gestionar_expediente() {
@@ -30,25 +28,25 @@ class Expediente extends CI_Controller {
 								'id_estadosci' => 1,
 								'fechacrea_expedienteci' => $fecha_actual,
 								'tiposolicitud_expedienteci' =>"Conciliación",
-								'numerocaso_expedienteci' =>10
+								'numerocaso_expedienteci' =>10,
+								'salario_personaci' => $this->input->post('salario'),
+								'funciones_personaci' => $this->input->post('funciones'),
+								'formapago_personaci' => $this->input->post('forma_pago'),
+								'horarios_personaci' => $this->input->post('horario'),
+								'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
+								'ocupacion' => $this->input->post('ocupacion')
             );
-
-						$id_empleador=$this->empleadores_model->insertar_empleador($data3);
+						$id_empleador = $this->empleadores_model->insertar_empleador($data3);
 
             if ("fracaso" != $id_empleador) {
-								$data = $this->solicitudes_model->obtener_persona($this->input->post('id_personaci'))->result_array()[0];
-								$data['salario_personaci'] = $this->input->post('salario');
-								$data['funciones_personaci'] = $this->input->post('funciones');
-								$data['formapago_personaci'] = $this->input->post('forma_pago');
-								$data['horarios_personaci'] = $this->input->post('horario');
-								$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
-								$data['ocupacion'] = $this->input->post('ocupacion');
-								$data['id_empleador'] = $id_empleador;
-							$this->solicitudes_model->editar_solicitud($data);
-							$this->expedientes_model->insertar_expediente($data2);
-            } else {
-                echo "fracaso";
+								$data2['id_empleador'] = $id_empleador;
             }
+						$data = array(
+							'id_representantepersonaci'=>$this->input->post('id_representante_persona')
+						 );
+						$id_expedienteci = $this->expedientes_model->insertar_expediente($data2);
+						$data['id_expedienteci'] = $id_expedienteci;
+						$this->representante_persona_model->editar_representante($data);
 
 		} else if($this->input->post('band2') == "edit"){
 
@@ -59,15 +57,6 @@ class Expediente extends CI_Controller {
 				'cargo_empleador' => $this->input->post('cargo_jefe')
 			);
 
-			$data = $this->solicitudes_model->obtener_persona($this->input->post('id_personaci'))->result_array()[0];
-			$data['id_personaci'] = $this->input->post('id_personaci');
-			$data['salario_personaci'] = $this->input->post('salario');
-			$data['funciones_personaci'] = $this->input->post('funciones');
-			$data['formapago_personaci'] = $this->input->post('forma_pago');
-			$data['horarios_personaci'] = $this->input->post('horario');
-			$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
-			$data['ocupacion'] = $this->input->post('ocupacion');
-
 			$data2 = array(
 					'id_expedienteci' => $this->input->post('id_expedienteci'),
 					'motivo_expedienteci' => $this->input->post('motivo'),
@@ -77,14 +66,28 @@ class Expediente extends CI_Controller {
 					'id_empresaci' => $this->input->post('establecimiento'),
 					'fechacrea_expedienteci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_creacion_exp'))),
 					'tiposolicitud_expedienteci' =>"Conciliación",
+					'salario_personaci' => $this->input->post('salario'),
+					'funciones_personaci' => $this->input->post('funciones'),
+					'formapago_personaci' => $this->input->post('forma_pago'),
+					'horarios_personaci' => $this->input->post('horario'),
+					'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
+					'ocupacion' => $this->input->post('ocupacion'),
+					'id_empleador' => $this->input->post('id_emplea')
 			);
 
-			if ("fracaso" != $this->empleadores_model->editar_empleador($data3)) {
-				 $this->solicitudes_model->editar_solicitud($data);
+			$data = array(
+				'id_expedienteci' => $data2['id_expedienteci'],
+				'id_representantepersonaci'=>$this->input->post('id_representante_persona')
+			 );
+			$this->empleadores_model->editar_empleador($data3);
+			$this->representante_persona_model->editar_representante($data);
+			echo $this->expedientes_model->editar_expediente($data2);
+
+			/*if ("fracaso" != $this->empleadores_model->editar_empleador($data3)) {
 				 $this->expedientes_model->editar_expediente($data2);
 			} else {
 				echo "fracaso";
-			}
+			}*/
 
 		}/*else if($this->input->post('band') == "delete"){
 			$data = array(

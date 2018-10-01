@@ -7,39 +7,28 @@ class Expedientes_model extends CI_Model {
 		parent::__construct();
 	}
 
-  function insertar_expediente($data){
-    if($this->db->insert('sct_expedienteci', array(
-      'motivo_expedienteci' => $data['motivo_expedienteci'],
-      'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
-      'id_personaci' => $data['id_personaci'],
-      'id_personal' => $data['id_personal'],
-      'id_empresaci' => $data['id_empresaci'],
-			'id_estadosci' => $data['id_estadosci'],
-			'fechacrea_expedienteci' => $data['fechacrea_expedienteci'],
-			'tiposolicitud_expedienteci' => $data['tiposolicitud_expedienteci'],
-			'numerocaso_expedienteci' => $data['numerocaso_expedienteci']
-
-    ))){
-      return "exito,".$this->db->insert_id();
-    }else{
-      return "fracaso";
-    }
-  }
+	public function insertar_expediente($data){
+		if ($this->db->insert('sct_expedienteci', $data)) {
+			return $this->db->insert_id();
+		}else {
+			return "fracaso";
+		}
+	}
 
 	public function obtener_registros_expedientes($id) {
 
-			$this->db->select('n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,emp.*,ep.*,p.*, p.discapacidad')
+			$this->db->select('n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,emp.*,ep.*,p.*, p.discapacidad,e.id_expedienteci')
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 						 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
-						 ->join('sct_representantepersonaci rp','rp.id_personaci=p.id_personaci','left')
+						 ->join('sct_representantepersonaci rp','rp.id_expedienteci=e.id_expedienteci','left')
 						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')
 						 //->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo', 'left')
 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
 						 ->join('sge_catalogociiu c','c.id_catalogociiu=em.id_catalogociiu')
 						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
-						 ->join('sge_empleador emp','emp.id_empleador=p.id_empleador', 'left')
+						 ->join('sge_empleador emp','emp.id_empleador=e.id_empleador', 'left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 						 ->where('p.id_personaci', $id)
 						 ->group_by('e.id_expedienteci');
@@ -51,24 +40,6 @@ class Expedientes_model extends CI_Model {
 					return FALSE;
 			}
 	}
-
-	/*e.numerocaso_expedienteci,
-	 em.direccion_empresa,
-	 r.nombres_representante,
-	 c.actividad_catalogociiu,
-	 p.nombre_personaci,
-	 p.apellido_personaci,
-	 p.telefono_personaci,
-	 p.salario_personaci,
-	 p.direccion_personaci,
-	 p.formapago_personaci,
-	 p.funciones_personaci,
-	 p.horarios_personaci,
-	 ep.primer_nombre,
-	 ep.segundo_nombre,
-	 ep.primer_apellido,
-	 ep.segundo_apellido,
-	 ep.apellido_casada*/
 
 	public function obtener_municipio($id) {
 
@@ -99,7 +70,7 @@ class Expedientes_model extends CI_Model {
 	public function editar_expediente($data){
 		$this->db->where("id_expedienteci",$data["id_expedienteci"]);
 		if ($this->db->update('sct_expedienteci', $data)) {
-			return "exito";
+			return $data['id_expedienteci'];
 		}else {
 			return "fracaso";
 		}
