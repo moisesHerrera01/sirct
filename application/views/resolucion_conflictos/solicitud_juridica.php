@@ -8,11 +8,24 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 <script type="text/javascript">
     function iniciar(){
+        <?php if(isset($tipo_solicitud)){ ?>
+            $("#motivo_expedienteci").val('<?=$tipo_solicitud?>');
+            nuevo_reg_post();
+        <?php }else{ ?>
+            $("#motivo_expedienteci").val('');
+        <?php } ?>
+
         <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
             tablasolicitudes();
         <?php }else{ ?>
             $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
         <?php } ?>
+    }
+
+    function nuevo_reg_post(){
+        $("#cnt_tabla").hide(0);
+        $("#cnt_form_main").show(0);
+        combo_establecimiento('<?=$id_empresa?>');
     }
 
     function convert_lim_text(lim){
@@ -163,7 +176,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function cambiar_nuevo4(){
         /*Inicio Solicitante*/
-        $("#motivo_expedienteci").val('');
+        //$("#motivo_expedienteci").val('');
         $("#descripmotivo_expedienteci").val('');
         $("#id_personal").val('').trigger('change.select2');
         /*Fin Solicitante*/
@@ -544,7 +557,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de Resolución de Conflictos Persona Jurídica</h3>
+                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de Resolución de Conflictos Persona Jurídica </h3>
             </div>
         </div>
 
@@ -717,13 +730,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <select id="motivo_expedienteci" name="motivo_expedienteci" class="custom-select" onchange="" required style="width: 100%">
+                                            <select id="motivo_expedienteci" name="motivo_expedienteci" class="custom-select" required style="width: 100%">
                                                 <option value="">[Seleccione el motivo]</option>
-                                                <option value="Indemnización">Indemnización</option>
-                                                <option value="Inasistencia Laboral">Inasistencia Laboral</option>
-                                                <option value="Despido Injustificado">Despido Injustificado</option>
-                                                <option value="Exige indeminización">Exige indeminización</option>
-                                                <option value="Insubordinación">Insubordinación</option>
+                                                <option value="1">Despido de hecho o injustificado</option>
+                                                <option value="2">Diferencia laboral</option>
                                             </select>
                                         </div>
                                     </div>

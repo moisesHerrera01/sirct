@@ -11,8 +11,10 @@ class Solicitud_juridica extends CI_Controller {
 	}
 
   	public function index(){
+  		$data['id_empresa'] = $this->input->post('id_empresa');
+  		$data['tipo_solicitud'] = $this->input->post('tipo_solicitud');
 	    $this->load->view('templates/header');
-	    $this->load->view('resolucion_conflictos/solicitud_juridica');
+	    $this->load->view('resolucion_conflictos/solicitud_juridica', $data);
 	    $this->load->view('templates/footer');
   	}
 
@@ -24,7 +26,7 @@ class Solicitud_juridica extends CI_Controller {
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/tabla_representantes');
 	}
 
-	public function ver_expediente() {
+	public function ver_expediente(){
 		$data['personaci'] = $this->solicitud_juridica_model->obtener_personaci($this->input->post('id_per'));
 		$data['expediente'] = $this->solicitud_juridica_model->obtener_registros_expedientes( $this->input->post('id') );
 		$data['representantes'] = $this->solicitud_juridica_model->obtener_representantes( $this->input->post('id_emp') );

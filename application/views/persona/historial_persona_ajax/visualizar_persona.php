@@ -59,8 +59,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="tab-pane active show" id="home" role="tabpanel">
                     <div class="card-body">
 
-
                         <div class="profiletimeline">
+
+                          <div align="center">
+                        <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1,'<?=$row->id_personaci?>');" class="m-t-10 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1,'<?=$row->id_personaci?>');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(1,'<?=$row->id_personaci?>');" class="m-t-10 waves-effect waves-dark btn btn-secondary btn-rounded">Noticicación de <br>renuncia voluntaria</a>
+                        </div><br>
 
                         	<?php
                         	$solicitudes = $this->db->query("SELECT e.*,
@@ -81,7 +86,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                               	FROM sct_estadosci AS es
                               	JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                               	JOIN sct_personaci p ON p.id_personaci=e.id_personaci
-                              	JOIN sge_empleador em ON em.id_empleador=p.id_empleador
+                              	JOIN sge_empleador em ON em.id_empleador=e.id_empleador
                               	JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
                               	JOIN sir_empleado l on l.id_empleado=e.id_personal
                               	WHERE p.id_personaci = '".$row->id_personaci."'
@@ -105,9 +110,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 	                        		echo "<blockquote>No posee registro de expediente</blockquote>";
 	                        	}
                             ?>
-                            <a href="javascript:void(0)" class="m-t-10 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
-                            <a href="javascript:void(0)" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
-                            <a href="javascript:void(0)" class="m-t-10 waves-effect waves-dark btn btn-secondary btn-rounded">Noticicación de <br>renuncia voluntaria</a>
                         </div>
                     </div>
                 </div>

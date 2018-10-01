@@ -5,7 +5,6 @@
               <th>#</th>
               <th>Documento identidad</th>
               <th>Nombre Solicitante</th>
-              <th>Nacionalidad</th>
               <th>Teléfono</th>
               <th>Edad (años)</th>
               <th>Sexo</th>
@@ -32,7 +31,6 @@
                     echo "<td>".$correlativo."</td>";
                     echo "<td>".$fila->dui_personaci."</td>";
                     echo "<td>".$fila->nombre_personaci."</td>";
-                    echo "<td>".$fila->nacionalidad."</td>";
                     echo "<td>".$fila->telefono_personaci."</td>";
 
                     echo "<td>".calcular_edad(date("Y-m-d", strtotime($fila->fnacimiento_personaci)))."</td>";
@@ -61,29 +59,7 @@
                         echo generar_boton($array,"visualizar","btn-secondary","mdi mdi-magnify","Visualizar");
                     }
 
-                    if(tiene_permiso($segmentos=2,$permiso=1)){
-                        ?>
-                      <!-- <div class="btn-group">
-                          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                              aria-expanded="false">
-                              <i class="ti-settings"></i>
-                          </button>
-                          <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
-                              <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci.','.$fila->id_empresaci.','.$fila->id_personaci?>)">Visualizar</a>
-                              <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)"">Cambiar Delegado</a>
-                              <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_expedienteci?>)">Gestionar audiencias</a>
-                              <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a>
-                              <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas(<?=$fila->id_expedienteci?>)">Gestionar actas</a>
-                              <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/solicitud_juridica/emitir_ficha/'.$fila->id_expedienteci.'/')?>">Emitir Ficha</a>
-                              <?php if ($fila->id_estadosci == "1") { ?>
-                                    <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>
-                              <?php } else { ?>
-                                  	<a class="dropdown-item" href="javascript:;" onClick="habilitar(<?=$fila->id_expedienteci?>)">Habilitar Expediente</a>
-                              <?php } ?>
-                          </div>
-                      </div> -->
-                      <?php
-                    }
+                
                     echo "</td>";
                   echo "</tr>";
                 }

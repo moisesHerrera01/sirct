@@ -465,7 +465,7 @@ function cambiar_editar(id_personaci,bandera){
 }
 
 
-function OpenWindowWithPost(url, windowoption, name, params){
+function OpenWindowWithPost(url, params){
     var form = document.createElement("form");
     form.setAttribute("method", "post");
     form.setAttribute("action", url);
@@ -491,7 +491,7 @@ function redireccionar_despido_hecho(tipo, id){
         var param = { 'id_personaci' : id, 'tipo_solicitud' : '1' };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/", param);
     }else{
-        var param = { 'id_empresa' : id };
+        var param = { 'id_empresa' : id, 'tipo_solicitud' : '1' };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);  
     }
 }
@@ -501,9 +501,15 @@ function redireccionar_diferencia_laboral(tipo, id){
         var param = { 'id_personaci' : id, 'tipo_solicitud' : '2' };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/", param);
     }else{
-        var param = { 'id_empresa' : id };
+        var param = { 'id_empresa' : id, 'tipo_solicitud' : '2' };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);  
     }
+}
+
+function redireccionar_retiro_voluntario(tipo, id){
+    var param = { 'id_personaci' : id, 'tipo_solicitud' : '3' };
+    OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/", param);
+    
 }
 
 function volver(num) {
@@ -625,7 +631,7 @@ function volver(num) {
                                         <label for="femenino">Femenino</label>
                                     </div>
                                     <div class="form-group col-lg-2">
-                                       <h5>Pertenece LGBT:</h5>
+                                       <h5>Pertenece LGTBI:</h5>
                                        <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
                                        <label for="si_lgbt">Si </label><Br>
                                        <input name="pertenece_lgbt" type="radio" id="no_lgbt" checked="" value='0'>
