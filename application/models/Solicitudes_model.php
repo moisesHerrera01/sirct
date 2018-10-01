@@ -34,6 +34,23 @@ class Solicitudes_model extends CI_Model {
 		}
 	}
 
+	public function insertar_partida($data){
+		if ($this->db->insert('sct_partida', $data)) {
+			return $this->db->insert_id();
+		}else {
+			return "fracaso";
+		}
+	}
+
+	public function editar_partida($data){
+		$this->db->where("id_partida",$data["id_partida"]);
+		if ($this->db->update('sct_partida', $data)) {
+			return $data['id_partida'];
+		}else {
+			return "fracaso";
+		}
+	}
+
 	function mostrar_solicitud(){
 		$query = $this->db->get("sct_personaci");
 		if($query->num_rows() > 0) return $query;

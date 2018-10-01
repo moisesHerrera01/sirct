@@ -364,6 +364,12 @@ function open_form(num){
 }
 
 function cerrar_mantenimiento(){
+
+    $('#partida_div').hide();
+    $('#div_numero_doc_identidad').show();
+    $("#dui").attr("required",'required');
+    $("#ocultar_div").hide();
+    $('#div_numero_doc_identidad').show();
     $("#cnt_tabla").show(0);
     $("#cnt_tabla_solicitudes").show(0);
     $("#cnt_form_main").hide(0);
@@ -463,6 +469,13 @@ function cambiar_nuevo(){
     $("#discapacidad").val('');
     $("#posee_representante").val('');
     $("#pertenece_lgbt").val('');
+    //Partida de nacimiento
+    $("#id_partida").val('');
+    $("#numero_partida").val('');
+    $("#folio_partida").val('');
+    $("#libro_partida").val('');
+    $("#asiento_partida").val('');
+    $("#anio_partida").val('');
     /*Fin Solicitante*/
 
     /*Inicio represnetante persona*/
@@ -507,6 +520,7 @@ function cambiar_nuevo(){
 
     $("#btnadd").show(0);
     $("#btnedit").hide(0);
+    $("#ocultar_div").hide();
 
     $("#cnt_tabla").hide(0);
     $("#cnt_form_main").show(0);
@@ -520,7 +534,6 @@ function cambiar_nuevo(){
 function cambiar_editar(id_personaci,bandera){
   open_form(1);
   if(bandera == "edit"){
-
     $.ajax({
       url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/registros_expedientes",
       type: "POST",
@@ -544,6 +557,37 @@ function cambiar_editar(id_personaci,bandera){
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
       $("#discapacidad_desc").val(result.discapacidad);
+      /*Inicio partida nacimiento*/
+      if(result.discapacidad_personaci==0){
+          $("#ocultar_div").hide();
+      }else{
+          $("#ocultar_div").show();
+      }
+      if (result.id_doc_identidad!=1) {
+        $('#dui').mask('', {reverse: true});
+        $('#dui').unmask();
+        if (result.id_doc_identidad==4) {
+          $('#partida_div').show();
+          $('#div_numero_doc_identidad').hide();
+          $("#dui").removeAttr("required");
+        }else {
+          $('#partida_div').hide();
+          $('#div_numero_doc_identidad').show();
+          $("#dui").attr("required",'required');
+        }
+      }else {
+         $('#dui').mask('99999999-9', {reverse: true});
+         $('#partida_div').hide();
+         $('#div_numero_doc_identidad').show();
+         $("#dui").attr("required",'required');
+      }
+      $("#id_partida").val(result.id_partida);
+      $("#numero_partida").val(result.numero_partida);
+      $("#folio_partida").val(result.folio_partida);
+      $("#libro_partida").val(result.libro_partida);
+      $("#asiento_partida").val(result.asiento_partida);
+      $("#anio_partida").val(result.anio_partida);
+      /*Fin partida de nacimiento*/
       if (result.discapacidad_personaci=='1') {
           document.getElementById('si').checked = true;
       }else {
@@ -603,6 +647,8 @@ function cambiar_editar(id_personaci,bandera){
       $("#band2").val("edit");
       $("#band6").val('edit');
     });
+
+
 
     $("#ttl_form").removeClass("bg-success");
     $("#ttl_form").addClass("bg-info");
@@ -671,7 +717,7 @@ function volver(num) {
                             <input type="hidden" id="estado" name="estado" value="1">
                             <input type="hidden" id="id_personaci" name="id_personaci" value="">
                             <input type="hidden" id="id_empleador" name="id_empleador" value="">
-
+                            <input type="hidden" id="id_partida" name="id_partida" value="">
 
                             <span class="etiqueta">Expediente</span>
                             <blockquote class="m-t-0">
@@ -695,18 +741,62 @@ function volver(num) {
                             </div>
 
                             <div class="row">
+                              <div class="form-group col-lg-4" style="height: 83px;">
+                                  <h5>Teléfono 1: </h5>
+                                  <input data-mask="9999-9999" type="text" id="telefono" name="telefono" class="form-control" placeholder="Número de Telefóno">
+                                  <div class="help-block"></div>
+                              </div>
+
                               <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
 
-                                <div class="form-group col-lg-4" style="height: 83px;">
+                                <div id="div_numero_doc_identidad" class="form-group col-lg-4" style="height: 83px;">
                                     <h5>Número de documento identidad: <span class="text-danger">*</span></h5>
                                     <input data-mask="99999999-9" data-mask-reverse="true" type="text" id="dui" name="dui" class="form-control" placeholder="Documento Unico de Identidad" required="">
                                     <div class="help-block"></div>
                                 </div>
-                                <div class="form-group col-lg-4" style="height: 83px;">
-                                    <h5>Teléfono 1: </h5>
-                                    <input data-mask="9999-9999" type="text" id="telefono" name="telefono" class="form-control" placeholder="Número de Telefóno">
-                                    <div class="help-block"></div>
+
+                            </div>
+
+                            <div id="partida_div" style="display: none;">
+                              <div class="row">
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Número:</h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
+                                    </div>
                                 </div>
+
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Folio:</h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Folio partida nacimiento" id="folio_partida" name="folio_partida" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Libro: <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Libro partida nacimiento" id="libro_partida" name="libro_partida" class="form-control">
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Asiento: <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Asiento partida nacimiento" id="asiento_partida" name="asiento_partida" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <h5>Año: </h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Año partida nacimiento" id="anio_partida" name="anio_partida" class="form-control">
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                              </div>
                             </div>
 
                             <div class="row">
@@ -1200,75 +1290,6 @@ function volver(num) {
 </div>
     <!--FIN MODAL DE ESTABLECIMIENTOS -->
 
-    <!--INICIA MODAL PARTIDA NACIMIENTO -->
-<div class="modal fade" id="modal_pnacimiento" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-    <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-          <input type="hidden" id="band7" name="band7" value="save">
-          <input type="hidden" id="id_partida" name="id_partida" value="">
-            <div class="modal-header">
-                <h4 class="modal-title">Partida de nacimiento</h4>
-            </div>
-            <div class="modal-body" id="">
-
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Número:</h5>
-                      <div class="controls">
-                          <input type="text" placeholder="Número" id="numero_partida" name="numero_partida" class="form-control" required="">
-                      </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Folio:</h5>
-                      <div class="controls">
-                          <input type="text" placeholder="Folio" id="folio_partida" name="folio_partida" class="form-control">
-                      </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Libro: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" placeholder="Libro" id="libro_partida" name="libro_partida" class="form-control">
-                      </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Asiento: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="asiento_partida" name="asiento_partida" class="form-control" required="">
-                      </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Año: </h5>
-                      <div class="controls">
-                          <input type="text" id="anio_partida" name="anio_partida" class="form-control">
-                          <div class="help-block"></div>
-                      </div>
-                  </div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
-                <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Aceptar</button>
-            </div>
-          <?php echo form_close(); ?>
-    </div>
-  </div>
-</div>
-    <!--FIN MODAL PARTIDA NACIMIENTO -->
-
     <!--INICIO MODAL DE DELEGADO -->
     <div class="modal fade" id="modal_delegado" role="dialog">
       <div class="modal-dialog" role="document">
@@ -1636,10 +1657,19 @@ function ocultar(){
     $('#dui').mask('', {reverse: true});
     $('#dui').unmask();
     if (value==4) {
-      $('#modal_pnacimiento').modal('show');
+      $('#partida_div').show(500);
+      $('#div_numero_doc_identidad').hide(500);
+      $("#dui").removeAttr("required");
+    }else {
+      $('#partida_div').hide(500);
+      $('#div_numero_doc_identidad').show(500);
+      $("#dui").attr("required",'required');
     }
   }else {
      $('#dui').mask('99999999-9', {reverse: true});
+     $('#partida_div').hide(500);
+     $('#div_numero_doc_identidad').show(500);
+     $("#dui").attr("required",'required');
   }
 }
 
@@ -1649,9 +1679,9 @@ $(function(){
       $("input[name=discapacidad]").click(function(evento){
             var valor = $(this).val();
             if(valor == 0){
-                $("#ocultar_div").hide();
+                $("#ocultar_div").hide(500);
             }else{
-                $("#ocultar_div").show();
+                $("#ocultar_div").show(500);
             }
     });
 

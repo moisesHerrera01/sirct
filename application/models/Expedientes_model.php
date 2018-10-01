@@ -17,11 +17,12 @@ class Expedientes_model extends CI_Model {
 
 	public function obtener_registros_expedientes($id) {
 
-			$this->db->select('n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,emp.*,ep.*,p.*, p.discapacidad,e.id_expedienteci')
+			$this->db->select('pa.*,n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,emp.*,ep.*,p.*, p.discapacidad,e.id_expedienteci')
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 						 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
 						 ->join('sct_representantepersonaci rp','rp.id_expedienteci=e.id_expedienteci','left')
+						 ->join('sct_partida pa','pa.id_partida=p.id_partida','left')
 						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')
 						 //->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo', 'left')
 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
