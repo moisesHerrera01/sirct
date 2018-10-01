@@ -21,9 +21,6 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_municipio' => $data['id_municipio'],
 			'direccion_personaci' => $data['direccion_personaci'],
 			'sexo_personaci' => $data['sexo_personaci'],
-			'salario_personaci' => $data['salario_personaci'],
-			'horarios_personaci' => $data['horarios_personaci'],
-			'id_catalogociuo' => $data['id_catalogociuo'],
 			'discapacidad_personaci' => $data['discapacidad_personaci']
 		))){
 			return "exito,".$this->db->insert_id();
@@ -41,9 +38,6 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_municipio' => $data['id_municipio'],
 			'direccion_personaci' => $data['direccion_personaci'],
 			'sexo_personaci' => $data['sexo_personaci'],
-			'salario_personaci' => $data['salario_personaci'],
-			'horarios_personaci' => $data['horarios_personaci'],
-			'id_catalogociuo' => $data['id_catalogociuo'],
 			'discapacidad_personaci' => $data['discapacidad_personaci']
 		))){
 			return "exito";
