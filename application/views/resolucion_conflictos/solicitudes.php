@@ -1200,6 +1200,75 @@ function volver(num) {
 </div>
     <!--FIN MODAL DE ESTABLECIMIENTOS -->
 
+    <!--INICIA MODAL PARTIDA NACIMIENTO -->
+<div class="modal fade" id="modal_pnacimiento" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band7" name="band7" value="save">
+          <input type="hidden" id="id_partida" name="id_partida" value="">
+            <div class="modal-header">
+                <h4 class="modal-title">Partida de nacimiento</h4>
+            </div>
+            <div class="modal-body" id="">
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Número:</h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Número" id="numero_partida" name="numero_partida" class="form-control" required="">
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Folio:</h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Folio" id="folio_partida" name="folio_partida" class="form-control">
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Libro: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Libro" id="libro_partida" name="libro_partida" class="form-control">
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Asiento: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="asiento_partida" name="asiento_partida" class="form-control" required="">
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Año: </h5>
+                      <div class="controls">
+                          <input type="text" id="anio_partida" name="anio_partida" class="form-control">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Aceptar</button>
+            </div>
+          <?php echo form_close(); ?>
+    </div>
+  </div>
+</div>
+    <!--FIN MODAL PARTIDA NACIMIENTO -->
+
     <!--INICIO MODAL DE DELEGADO -->
     <div class="modal fade" id="modal_delegado" role="dialog">
       <div class="modal-dialog" role="document">
@@ -1566,6 +1635,9 @@ function ocultar(){
   if (value!=1) {
     $('#dui').mask('', {reverse: true});
     $('#dui').unmask();
+    if (value==4) {
+      $('#modal_pnacimiento').modal('show');
+    }
   }else {
      $('#dui').mask('99999999-9', {reverse: true});
   }
