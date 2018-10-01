@@ -100,6 +100,27 @@ function cambiar_delegado() {
     });
 }
 
+function open_audiencias(id_expedienteci) {
+    $.ajax({
+      url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
+      type: "post",
+      dataType: "html",
+      data: {
+        id: id_expedienteci
+      }
+    })
+    .done(function (res) {
+      $('#cnt_modal_acciones').html(res);
+      /*if(res == "exito"){
+        cerrar_mantenimiento()
+        tablasolicitudes();
+        swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+      }else{
+          swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+      }*/
+    });
+}
+
 function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_representante,estado) {
       $("#solicitud_pn_pj").show();
       $("#diferido_con").hide();
@@ -1202,6 +1223,7 @@ function volver(num) {
         <!-- Fin CUERPO DE LA SECCIÓN -->
         <!-- ============================================================== -->
     </div>
+    <div id="cnt_modal_acciones"></div>
 </div>
 <!-- ============================================================== -->
 <!-- Fin de DIV de inicio (ENVOLTURA) -->
@@ -1211,7 +1233,7 @@ function volver(num) {
     <button  id="submit_ubi" name="submit_ubi" type="button"  >clicks</button>
 </div>
 
-<div id="cnt_modal_acciones"></div>
+
     <!--INICIA MODAL DE ESTABLECIMIENTOS -->
 <div class="modal fade" id="modal_establecimiento" role="dialog">
   <div class="modal-dialog" role="document">
@@ -1508,6 +1530,10 @@ $(function(){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
               cerrar_mantenimiento();
+              $("#cnt_tabla_solicitudes").hide();
+              $("#cnt_tabla").hide();
+              open_audiencias(res);
+
               if($("#band2").val() == "save"){
                   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
               }else if($("#band2").val() == "edit"){
@@ -1515,7 +1541,7 @@ $(function(){
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
-              tablasolicitudes();
+              //tablasolicitudes();
             }
         });
 
