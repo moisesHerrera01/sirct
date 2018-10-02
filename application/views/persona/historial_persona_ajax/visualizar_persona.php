@@ -62,42 +62,28 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <div class="profiletimeline">
 
                           <div align="center">
-                        <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1,'<?=$row->id_personaci?>');" class="m-t-10 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
-                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1,'<?=$row->id_personaci?>');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
-                            <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(1,'<?=$row->id_personaci?>');" class="m-t-10 waves-effect waves-dark btn btn-secondary btn-rounded">Noticicación de <br>renuncia voluntaria</a>
+                        <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1,'<?=$row->id_personaci?>','save');" class="m-t-10 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1,'<?=$row->id_personaci?>','save');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(1,'<?=$row->id_personaci?>','save');" class="m-t-10 waves-effect waves-dark btn btn-secondary btn-rounded">Noticicación de <br>renuncia voluntaria</a>
                         </div><br>
 
                         	<?php
-                        	$solicitudes = $this->db->query("SELECT e.*,
-                              	e.numerocaso_expedienteci AS numero,
-                              	ep.nombre_empresa,
-                              	e.id_empresaci,
-                              	e.tiposolicitud_expedienteci AS tipo,
-                              	e.resultado_expedienteci AS resultado,
-                              	e.fechacrea_expedienteci AS fecha,
-                              	e.tipocociliacion_expedienteci AS tipo_conciliacion,
-                              	p.nombre_personaci,
-                              	p.apellido_personaci,
-                              	p.id_personaci,
-                              	p.posee_representante,
-                              	e.id_expedienteci,
-                              	es.id_estadosci AS estado,
-                              	(select count(*) from sct_fechasaudienciasci f where f.id_expedienteci=e.id_expedienteci) AS cuenta
-                              	FROM sct_estadosci AS es
-                              	JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
-                              	JOIN sct_personaci p ON p.id_personaci=e.id_personaci
-                              	JOIN sge_empleador em ON em.id_empleador=e.id_empleador
-                              	JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
-                              	JOIN sir_empleado l on l.id_empleado=e.id_personal
-                              	WHERE p.id_personaci = '".$row->id_personaci."'
-                              	ORDER BY e.id_expedienteci DESC");
+                        	$this->db->select('')
+                            ->from('sct_expedienteci e')
+                            ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
+                            ->join('org_municipio m','m.id_municipio=p.id_municipio')
+                            ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
+                            ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
+                            ->where('p.id_personaci', $row->id_personaci);
+                              	
+                            $solicitudes = $this->db->get();
 	                        	if($solicitudes->num_rows() > 0){
 	                        		foreach ($solicitudes->result() as $fila) {
                             ?>
                             	<div class="sl-item">
 	                                <div class="sl-left"> <span class="round">PN</span> </div>
 	                                <div class="sl-right">
-	                                    <div><a href="#" class="link"><?=$fila->numero?></a> <span class="sl-date"><?=$fila->fecha?></span>
+	                                    <div><a href="#" class="link"><?=$fila->numerocaso_expedienteci?></a> <span class="sl-date"><?=$fila->fechacrea_expedienteci?></span>
 	                                        <p>assign a new task <a href="#"> Design weblayout</a></p>
 	                                        <div class="like-comm"> <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> </div>
 	                                    </div>

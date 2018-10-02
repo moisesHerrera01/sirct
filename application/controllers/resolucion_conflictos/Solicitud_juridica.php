@@ -13,10 +13,17 @@ class Solicitud_juridica extends CI_Controller {
   	public function index(){
   		$data['id_empresa'] = $this->input->post('id_empresa');
   		$data['tipo_solicitud'] = $this->input->post('tipo_solicitud');
+  		$data['band_mantto'] = $this->input->post('band_mantto');
 	    $this->load->view('templates/header');
 	    $this->load->view('resolucion_conflictos/solicitud_juridica', $data);
 	    $this->load->view('templates/footer');
   	}
+
+  	public function obtener_expediente_juridico() {
+        print json_encode(
+            $this->solicitud_juridica_model->obtener_registros_expedientes(61)->result()
+        );
+    }
 
 	public function tabla_solicitud_juridica(){
 	    $this->load->view('resolucion_conflictos/solicitud_juridica_ajax/tabla_solicitud_juridica');

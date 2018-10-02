@@ -8,11 +8,29 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 <script type="text/javascript">
     function iniciar() {
+
+        <?php if(isset($tipo_solicitud)){ ?>
+            $("#motivo_expedienteci").val('<?=$tipo_solicitud?>');
+            <?php if($band_mantto == "save"){ ?>
+                nuevo_reg_post();
+            <?php }else{ ?>
+                cambiar_editar('<?=$id_personaci?>','edit');
+            <?php } ?>
+        <?php }else{ ?>
+            $("#motivo_expedienteci").val('');
+        <?php } ?>
+
         <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
         tablasolicitudes();
         <?php }else{ ?>
         $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
         <?php } ?>
+    }
+
+    function nuevo_reg_post(){
+        $("#cnt_tabla").hide(0);
+        $("#cnt_form_main").show(0);
+        
     }
 
     function convert_lim_text(lim) {

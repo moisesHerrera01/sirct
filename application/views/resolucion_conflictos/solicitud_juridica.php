@@ -10,7 +10,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function iniciar(){
         <?php if(isset($tipo_solicitud)){ ?>
             $("#motivo_expedienteci").val('<?=$tipo_solicitud?>');
-            nuevo_reg_post();
+            <?php if($band_mantto == "save"){ ?>
+                nuevo_reg_post();
+            <?php }else{ ?>
+                cambiar_editar_post('<?=$id_empresa?>','save');
+            <?php } ?>
         <?php }else{ ?>
             $("#motivo_expedienteci").val('');
         <?php } ?>
@@ -188,6 +192,59 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         open_form(3);
 
         $("#band4").val('save');
+    }
+
+    function cambiar_editar_post(id_expedienteci) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/obtener_expediente_juridico",
+            type: "POST",
+            data: {
+                id: id_expedienteci
+            }
+        })
+        .done(function (res) {
+            result = JSON.parse(res)[0];
+
+            combo_ocupacion(result.id_catalogociuo, result.id_empresaci);
+            $("#id_catalogociuo").val(result.id_catalogociuo);
+            alert(result.id_personaci)
+            $("#id_personaci").val(result.id_personaci);
+            $("#nombre_personaci").val(result.nombre_personaci);
+            $("#apellido_personaci").val(result.apellido_personaci);
+            if(result.sexo_personaci == 'M'){
+                document.getElementById('masculino').checked = 1;
+                document.getElementById('femenino').checked = 0;
+            }else{
+                document.getElementById('masculino').checked = 0;
+                document.getElementById('femenino').checked = 1;
+            }
+            if(result.discapacidad_personaci == '1'){
+                document.getElementById('si').checked = 1;
+                document.getElementById('no').checked = 0;
+            }else{
+                document.getElementById('si').checked = 0;
+                document.getElementById('no').checked = 1;
+            }
+            $("#direccion_personaci").val(result.direccion_personaci);
+            $("#discapacidad_personaci").val(result.discapacidad_personaci);
+            $("#telefono_personaci").val(result.telefono_personaci);
+            $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');      
+            $("#salario_personaci").val(result.salario_personaci);
+            $("#horarios_personaci").val(result.horarios_personaci);
+            $("#id_expedienteci").val(result.id_expedienteci);
+            $("#motivo_expedienteci").val(result.motivo_expedienteci);
+            $("#descripmotivo_expedienteci").val(result.descripmotivo_expedienteci);
+            $("#id_personal").val(result.id_personal).trigger('change.select2');
+            $("#band3").val("edit");
+
+            open_form(1)
+
+            $("#ttl_form").removeClass("bg-success");
+            $("#ttl_form").addClass("bg-info");
+            $("#cnt_tabla").hide(0);
+            $("#cnt_form_main").show(0);
+            $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Solicitud");
+        });
     }
 
     function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal,band){

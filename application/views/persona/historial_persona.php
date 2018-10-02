@@ -486,30 +486,29 @@ function OpenWindowWithPost(url, params){
 }
 
 
-function redireccionar_despido_hecho(tipo, id){
+function redireccionar_despido_hecho(tipo, id, band){
     if(tipo == "1"){
-        var param = { 'id_personaci' : id, 'tipo_solicitud' : '1' };
+        var param = { 'id_personaci' : id, 'tipo_solicitud' : '1', 'band_mantto' : band };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/", param);
     }else{
-        var param = { 'id_empresa' : id, 'tipo_solicitud' : '1' };
+        var param = { 'id_empresa' : id, 'tipo_solicitud' : '1', 'band_mantto' : band };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);  
     }
 }
 
-function redireccionar_diferencia_laboral(tipo, id){
+function redireccionar_diferencia_laboral(tipo, id, band){
     if(tipo == "1"){
-        var param = { 'id_personaci' : id, 'tipo_solicitud' : '2' };
+        var param = { 'id_personaci' : id, 'tipo_solicitud' : '2', 'band_mantto' : band };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/", param);
     }else{
-        var param = { 'id_empresa' : id, 'tipo_solicitud' : '2' };
+        var param = { 'id_empresa' : id, 'tipo_solicitud' : '2', 'band_mantto' : band };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);  
     }
 }
 
-function redireccionar_retiro_voluntario(tipo, id){
-    var param = { 'id_personaci' : id, 'tipo_solicitud' : '3' };
+function redireccionar_retiro_voluntario(tipo, id, band){
+    var param = { 'id_personaci' : id, 'tipo_solicitud' : '3', 'band_mantto' : band };
     OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/", param);
-    
 }
 
 function volver(num) {

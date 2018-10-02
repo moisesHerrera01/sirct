@@ -2,8 +2,77 @@
 <script type="text/javascript">
 
     function iniciar(){
-        
+        toogle_Options2(0);
 	}
+
+    function toogle_Options(inteval){
+        $("#cnt_options").hide(inteval);
+        $("#cnt_indicadores").show(inteval);
+        toogle_buttons2();
+        chart2.update();
+    }
+
+    function toogle_Options2(interval){
+        $("#cnt_options").show(interval);
+        $("#cnt_indicadores").hide(interval);
+        toogle_buttons();
+    }
+
+    function toogle_buttons(){
+        $("#btn_indicador").show(300);
+        $("#btn_menu").hide(300);
+    }
+
+    function toogle_buttons2(){
+        $("#btn_indicador").hide(300);
+        $("#btn_menu").show(300);
+    }
+
+    function OpenWindowWithPost(url, params){
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", url);
+    form.setAttribute("target", "_SELF");
+
+    for (var i in params) {
+        if (params.hasOwnProperty(i)) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = i;
+            input.value = params[i];
+            form.appendChild(input);
+        }
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
+
+function redireccionar_despido_hecho(tipo){
+    if(tipo == "1"){
+        var param = { 'tipo_solicitud' : '1' };
+        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
+    }else{
+        var param = { 'tipo_solicitud' : '1' };
+        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);  
+    }
+}
+
+function redireccionar_diferencia_laboral(tipo){
+    if(tipo == "1"){
+        var param = { 'tipo_solicitud' : '2' };
+        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
+    }else{
+        var param = { 'tipo_solicitud' : '2' };
+        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);  
+    }
+}
+
+function redireccionar_retiro_voluntario(tipo){
+    var param = { 'tipo_solicitud' : '3' };
+    OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario", param);
+}
 
 </script>
 <!-- ============================================================== -->
@@ -14,10 +83,78 @@
             <!-- Container fluid  -->
             <!-- ============================================================== -->
             <div class="container-fluid">
-                <br>
+                <div class="row page-titles">
+                    <div class="col-lg-12 align-self-center">
+                        <h3 class="text-themecolor pull-left">Dashboard</h3>
+
+                        <div class="pull-right">
+                        <div id="btn_indicador" style="display: none;"><button class="btn btn-info" onclick="toogle_Options(500);"><span class="mdi mdi-chart-bar"></span> Indicadores</button></div>
+                        <div id="btn_menu"><button class="btn btn-info" onclick="toogle_Options2(500);"><span class="mdi mdi-apps"></span> Menú opciones</button></div>
+                    </div>
+
+                    </div>
+                </div>
+
                 <!-- ============================================================== -->
                 <!-- Start Page Content -->
                 <!-- ============================================================== -->
+        <div id="cnt_options">
+            <div class="row">
+                <div class="col-lg-4 col-xlg-3 col-md-5">
+                    <div class="card blog-widget">
+                        <div class="card-body text-center">
+                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/despido_injustificado.jpg'?>" alt="img" class="img-responsive"></div>
+                            <h3>Despido de Hecho o injustificado</h3>
+                            <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2)" class="m-t-10 waves-effect waves-dark btn btn-warning btn-md btn-rounded">Persona jurídica</a>
+                            <div class="d-flex">
+                                <div class="read"><a href="javascript:void(0)" class="link font-medium">Read More</a></div>
+                                <div class="ml-auto">
+                                    <a href="javascript:void(0)" class="link m-r-10 " data-toggle="tooltip" title="" data-original-title="Like"><i class="mdi mdi-heart-outline"></i></a> <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Share"><i class="mdi mdi-share-variant"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-xlg-3 col-md-5">
+                    <div class="card blog-widget">
+                        <div class="card-body text-center">
+                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/diferencia_laboral.jpg'?>" alt="img" class="img-responsive"></div>
+                            <h3>Diferencia laboral</h3>
+                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2)" class="m-t-10 waves-effect waves-dark btn btn-warning btn-md btn-rounded">Persona jurídica</a>
+                            <div class="d-flex">
+                                <div class="read"><a href="javascript:void(0)" class="link font-medium">Read More</a></div>
+                                <div class="ml-auto">
+                                    <a href="javascript:void(0)" class="link m-r-10 " data-toggle="tooltip" title="" data-original-title="Like"><i class="mdi mdi-heart-outline"></i></a> <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Share"><i class="mdi mdi-share-variant"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-xlg-3 col-md-5">
+                    <div class="card blog-widget">
+                        <div class="card-body text-center">
+                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/renuncia_voluntaria.png'?>" alt="img" class="img-responsive"></div>
+                            <h3>Retiro voluntario</h3>
+                            <div>
+                            <br>
+                            <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(3)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
+                            <br><br>
+                            </div>
+                            <div class="d-flex">
+                                <div class="read"><a href="javascript:void(0)" class="link font-medium">Read More</a></div>
+                                <div class="ml-auto">
+                                    <a href="javascript:void(0)" class="link m-r-10 " data-toggle="tooltip" title="" data-original-title="Like"><i class="mdi mdi-heart-outline"></i></a> <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Share"><i class="mdi mdi-share-variant"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div id="cnt_indicadores" >
                 <div class="row">
 
 	                <div class="col-lg-12">
@@ -54,7 +191,7 @@
 		                                <h3 class="card-title">Estadísticas por estado </h3>
 		                                <h3 align="center" class="text-muted" style="z-index: 0; left:50%; top: 60%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">Estados</h3>
 	                                    <div style="margin-left: 10px; margin-right: 10px;">
-	                                        <canvas id="myChart2" style="height: 200px;"></canvas>
+	                                        <canvas id="myChart2" style="min-height: 200px;"></canvas>
 	                                    </div>
 		                            </div>
 		                            <div>
@@ -92,7 +229,7 @@
                 <!-- ============================================================== -->
                 <!-- Right sidebar -->
                 <!-- ============================================================== -->
-
+            </div>
             </div>
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
