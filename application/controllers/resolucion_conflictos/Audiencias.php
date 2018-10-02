@@ -13,6 +13,17 @@ class Audiencias extends CI_Controller {
     $this->load->view('resolucion_conflictos/solicitudes_ajax/programar_audiencias', $data);
   }
 
+	public function reprogramar_audiencia(){
+
+		$audiencia = $this->audiencias_model->obtener_audiencias($this->input->post('id'),$this->input->post('orden'),1)->result_array()[0];
+		$data2 = array(
+			'id_fechasaudienciasci' => $audiencia['id_fechasaudienciasci'],
+			'estado_audiencia' => 0,
+			'motivo_reprogramacion' => $this->input->post('motivo')
+		);
+		$this->audiencias_model->editar_audiencia($data2);
+	}
+
   public function tabla_audiencias(){
     $data['audiencia'] = $this->audiencias_model->obtener_audiencias( $this->input->get('id_expedienteci') );
     $this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_audiencias',$data);
@@ -26,7 +37,9 @@ class Audiencias extends CI_Controller {
 			$data = array(
 			'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
 			'hora_fechasaudienciasci' => date("H:i:s",strtotime($this->input->post('hora_audiencia'))),
-			'id_expedienteci' => $this->input->post('id_expedienteci1')
+			'id_expedienteci' => $this->input->post('id_expedienteci1'),
+			'numero_fechasaudienciasci' => $this->input->post('numero_audiencia'),
+			'estado_audiencia' => 1
 			);
 			$exp = $this->expedientes_model->obtener_expediente($data['id_expedienteci'])->result_array()[0];
 			$resultado = $this->audiencias_model->obtener_audiencias_delegado($exp['nr'],$data['fecha_fechasaudienciasci'],$data['hora_fechasaudienciasci']);

@@ -15,11 +15,11 @@ ok Tipos de representantes:
 ok Cambiar ocupación a ocupación según DUI
 
 
-ok -Folio, Libro, asiento, año, #. Cuando sea con partida de nacimiento
--Si es apoderado hay que relacionar el poder
--Pasar las audiencias a un solo paso al final de la solicitud
--Es necesario se puedan reprogramar, indicar el motivo del retraso.
--Llevar un historial de las reprogramaciones
+ok 		 -Folio, Libro, asiento, año, #. Cuando sea con partida de nacimiento
+Falta de insumos -Si es apoderado hay que relacionar el poder
+ok -Pasar las audiencias a un solo paso al final de la solicitud
+ -Es necesario se puedan reprogramar, indicar el motivo del retraso.
+ok -Llevar un historial de las reprogramaciones
 
 
 SOLICITUD JURÍDICA

@@ -77,7 +77,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <input type="hidden" id="band4" name="band4" value="save">
 
                 <div class="row">
-                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Fecha de audiencia: <span class="text-danger">*</span></h5>
                       <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_audiencia" name="fecha_audiencia" placeholder="dd/mm/yyyy" readonly="" required>
                       <div class="help-block"></div>
@@ -87,6 +87,15 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <input type="time" id="hora_audiencia" name="hora_audiencia" class="form-control" placeholder="Hora de audiencia" required>
                       <div class="help-block"></div>
                   </div>
+
+                  <div class="form-group col-lg-4" style="height: 83px;">
+                      <h5>Orden:</h5>
+                      <input name="numero_audiencia" type="radio" id="primera" checked="" value="1">
+                      <label for="primera">Primera</label>
+                      <input name="numero_audiencia" type="radio" id="segunda" value="2">
+                      <label for="segunda">Segunda</label>
+                      <div class="help-block"></div>
+                </div>
                 </div>
 
               <div align="right" id="btnadd6">
@@ -100,7 +109,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
                 <button type="submit" class="btn waves-effect waves-light btn-info">
-                  Finalizar <i class="mdi mdi-chevron-right"></i>
+                  Editar <i class="mdi mdi-chevron-right"></i>
                 </button>
               </div>
             <?php echo form_close(); ?>
@@ -150,6 +159,7 @@ function cambiar_nuevo5(){
     //$("#id_expedienteci1").val('');
     $("#fecha_fechasaudienciasci").val('');
     $("#hora_fechasaudienciasci").val('');
+    $("#numero_audiencia").val('');
     $("#band4").val("save");
 
     $("#ttl_form").addClass("bg-success");
@@ -157,11 +167,17 @@ function cambiar_nuevo5(){
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> programar_audiencias");
 }
 
-function cambiar_editar5(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,bandera){
+function cambiar_editar5(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,estado_audiencia,numero_fechasaudienciasci,bandera){
     $("#id_fechasaudienciasci").val(id_fechasaudienciasci);
     $("#fecha_audiencia").val(fecha_fechasaudienciasci);
     $("#hora_audiencia").val(hora_fechasaudienciasci);
     $("#id_expedienteci1").val(id_expedienteci);
+    $("#estado_audiencia").val(estado_audiencia);
+    if (numero_fechasaudienciasci=='1') {
+        document.getElementById('primera').checked = true;
+    }else {
+        document.getElementById('segunda').checked = true;
+    }
 
     if(bandera == "edit"){
         $("#ttl_form").removeClass("bg-success");
@@ -179,6 +195,44 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax6"));
+
+        /*Validar si pedir motivo*/
+        swal({
+          title: "Reprogramar audiencias",
+          text: "Motivo para reprogramar audiencia: *",
+          type: "input",
+          showCancelButton: true,
+          closeOnConfirm: false,
+          inputPlaceholder: "Motivo para reprogramar"
+        }, function (inputValue) {
+          if (inputValue === false) return false;
+          if (inputValue === "") {
+            swal.showInputError("Se necesita un motivo para reprogramar.");
+            return false
+          }
+          $.ajax({
+              url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/reprogramar_audiencia",
+              type: "post",
+              dataType: "html",
+              data: {
+                id: formData.get('id_expedienteci1'),
+                orden: formData.get('numero_fechasaudienciasci'),
+                motivo: inputValue
+              }
+            })
+            .done(function (res) {
+              if(res == "exito"){
+                console.log(res)
+                //tablasolicitudes();
+                //swal({ title: "¡Expediente inhabilitado exitosamente!", type: "success", showConfirmButton: true });
+              }else{
+                console.log(res)
+                    //swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+                }
+            });
+        });
+        /*FIN Validar si pedir motivo*/
+
         $.ajax({
           url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/gestionar_audiencia",
           type: "post",
@@ -203,6 +257,8 @@ $(function(){
                   }
                 }else if($("#band4").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                  $("#btnadd6").show(0);
+                  $("#btnedit6").hide(0);
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }

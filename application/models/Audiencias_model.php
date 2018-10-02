@@ -7,11 +7,15 @@ class Audiencias_model extends CI_Model {
 		parent::__construct();
 	}
 
-	public function obtener_audiencias($id) {
+	public function obtener_audiencias($id, $orden=FALSE, $estado=FALSE) {
 
-			$this->db->select('id_expedienteci,id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci')
+			$this->db->select('id_expedienteci,id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,estado_audiencia,numero_fechasaudienciasci')
 						 ->from('sct_fechasaudienciasci')
 						 ->where('id_expedienteci', $id);
+			if ($orden && $estado) {
+				$this->db->where('estado_audiencia',$estado)
+								 ->where('numero_fechasaudienciasci',$orden);
+			}
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {
 					return $query;
@@ -52,15 +56,10 @@ class Audiencias_model extends CI_Model {
 		}
 	}
 
-
-	function insertar_audiencia($data){
-		if($this->db->insert('sct_fechasaudienciasci', array(
-			'fecha_fechasaudienciasci' => $data['fecha_fechasaudienciasci'],
-			'hora_fechasaudienciasci' => $data['hora_fechasaudienciasci'],
-			'id_expedienteci' => $data['id_expedienteci']
-		))){
-			return $data['id_expedienteci'];
-		}else{
+	public function insertar_audiencia($data){
+		if ($this->db->insert('sct_fechasaudienciasci', $data)) {
+			return $this->db->insert_id();
+		}else {
 			return "fracaso";
 		}
 	}

@@ -13,6 +13,8 @@
                         <th>N&uacute;mero</th>
                         <th>Fecha de audiencia</th>
                         <th>Hora de audiencia</th>
+                        <th>Orden</th>
+                        <th>Estado Actual</th>
                         <th style="min-width: 85px;">(*)</th>
                     </tr>
                 </thead>
@@ -27,20 +29,34 @@
                           echo "<td>".$contador."</td>";
                           echo "<td>".date("d-M-Y", strtotime($fila->fecha_fechasaudienciasci))."</td>";
                           echo "<td>".date("g:i:s A", strtotime($fila->hora_fechasaudienciasci))."</td>";
+                          if($fila->numero_fechasaudienciasci == 1){
+                              echo '<td><span>Primera</span></td>';
+                          }else{
+                              echo '<td><span>Segunda</span></td>';
+                          }
+                          if($fila->estado_audiencia == 0){
+                              echo '<td><span class="label label-danger">Inactiva</span></td>';
+                          }else{
+                              echo '<td><span class="label label-success">Activa</span></td>';
+                          }
+
                           echo "<td>";
                           $array = array($fila->id_fechasaudienciasci, $fila->fecha_fechasaudienciasci,
-                          $fila->hora_fechasaudienciasci, $fila->id_expedienteci);
+                          $fila->hora_fechasaudienciasci, $fila->id_expedienteci, $fila->estado_audiencia, $fila->numero_fechasaudienciasci);
 
-                          if(tiene_permiso($segmentos=2,$permiso=4)){
-                            array_push($array, "edit");
-                            echo generar_boton($array,"cambiar_editar5","btn-info","fa fa-wrench","Editar");
+                          if ($fila->estado_audiencia) {
+                            if(tiene_permiso($segmentos=2,$permiso=4)){
+                              array_push($array, "edit");
+                              echo generar_boton($array,"cambiar_editar5","btn-info","fa fa-wrench","Editar");
+                            }
+
+                            if(tiene_permiso($segmentos=2,$permiso=1)){
+                              unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
+                              array_push($array, "delete");
+                                echo generar_boton($array,"cambiar_editar5","btn-danger","fa fa-times","Eliminar");
+                            }
                           }
 
-                          if(tiene_permiso($segmentos=2,$permiso=1)){
-                            unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
-                            array_push($array, "delete");
-                              echo generar_boton($array,"cambiar_editar5","btn-danger","fa fa-times","Eliminar");
-                          }
                           echo "</td>";
                           echo "</tr>";
                         }

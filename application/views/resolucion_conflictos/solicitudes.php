@@ -1632,7 +1632,7 @@ function audiencias(id_expedienteci,origen) {
     data: {id : id_expedienteci}
   })
   .done(function(res){
-    console.log(res)
+    //console.log(res)
     $('#cnt_actions').html(res);
     $("#cnt_actions").show(0);
     $("#cnt_tabla").hide(0);
