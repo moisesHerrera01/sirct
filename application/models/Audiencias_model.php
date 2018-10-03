@@ -9,10 +9,18 @@ class Audiencias_model extends CI_Model {
 
 	public function obtener_audiencias($id, $orden=FALSE, $estado=FALSE) {
 
-			$this->db->select('id_expedienteci,id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,estado_audiencia,numero_fechasaudienciasci')
+			$this->db->select(
+												'id_expedienteci,
+												 id_fechasaudienciasci,
+												 fecha_fechasaudienciasci,
+												 hora_fechasaudienciasci,
+												 estado_audiencia,
+												 numero_fechasaudienciasci'
+											  )
 						 ->from('sct_fechasaudienciasci')
 						 ->where('id_expedienteci', $id)
-						 ->order_by('estado_audiencia','desc');
+						 ->order_by('estado_audiencia','desc')
+						 ->order_by('id_fechasaudienciasci','asc');
 			if ($orden && $estado) {
 				$this->db->where('estado_audiencia',$estado)
 								 ->where('numero_fechasaudienciasci',$orden);

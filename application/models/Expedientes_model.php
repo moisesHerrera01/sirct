@@ -32,7 +32,8 @@ class Expedientes_model extends CI_Model {
 						 ->join('sge_empleador emp','emp.id_empleador=e.id_empleador', 'left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 						 ->where('p.id_personaci', $id)
-						 ->group_by('e.id_expedienteci');
+						 ->group_by('e.id_expedienteci')
+						 ->where('f.estado_audiencia',1);
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {
 					return  $query;

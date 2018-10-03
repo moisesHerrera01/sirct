@@ -14,12 +14,27 @@ function nav(value) {
 }
 
 function iniciar(){
+  <?php if(isset($tipo_solicitud)){ ?>
+      $("#motivo").val('<?=$tipo_solicitud?>');
+      <?php if($band_mantto == "save"){ ?>
+          nuevo_reg_post();
+      <?php }else{ ?>
+          cambiar_editar('<?=$id_personaci?>','edit');
+      <?php } ?>
+  <?php }else{ ?>
+      $("#motivo").val('');
+  <?php } ?>
 
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
     tablasolicitudes();
     <?php }else{ ?>
         $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
+}
+
+function nuevo_reg_post(){
+    $("#cnt_tabla").hide(0);
+    $("#cnt_form_main").show(0);
 }
 
 function adjuntar_actas(id_expediente) {
@@ -1028,13 +1043,20 @@ function volver(num) {
                                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                       <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
                                       <div class="controls">
-                                        <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
+                                        <!-- <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
                                           <option value="">[Seleccione]</option>
                                           <option value="Despido">Despido</option>
                                           <option value="Diferencia laboral">Diferencia laboral</option>
+                                        </select> -->
+                                        <select id="motivo" name="motivo" class="custom-select" required style="width: 100%">
+                                            <option value="">[Seleccione el motivo]</option>
+                                            <option value="1">Despido de hecho o injustificado</option>
+                                            <option value="2">Diferencia laboral</option>
                                         </select>
                                       </div>
                                   </div>
+
+
 
                                   <div class="form-group col-lg-8" style="height: 83px;">
                                       <h5>Descripción del motivo:<span class="text-danger">*</h5>

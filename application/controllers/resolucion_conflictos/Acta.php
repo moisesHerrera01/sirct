@@ -213,7 +213,7 @@ class Acta extends CI_Controller {
               $templateWord->setValue('representante_persona', mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci));
         }
         if ($caso==5) {
-          $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci);
+          $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,1);
           $segunda= $audiencias->result()[1];
           $templateWord->setValue('direccion_empresa', mb_strtoupper($expediente->direccion_empresa));
           $templateWord->setValue('direccion_solicitante', mb_strtoupper($expediente->direccion_personaci));

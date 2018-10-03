@@ -15,23 +15,23 @@ ok Tipos de representantes:
 ok Cambiar ocupación a ocupación según DUI
 
 
-ok 		 -Folio, Libro, asiento, año, #. Cuando sea con partida de nacimiento
+ok -Folio, Libro, asiento, año, #. Cuando sea con partida de nacimiento
 Falta de insumos -Si es apoderado hay que relacionar el poder
 ok -Pasar las audiencias a un solo paso al final de la solicitud
- -Es necesario se puedan reprogramar, indicar el motivo del retraso.
+ok -Es necesario se puedan reprogramar, indicar el motivo del retraso.
 ok -Llevar un historial de las reprogramaciones
 
 
 SOLICITUD JURÍDICA
 
 Motivos:
--Diferencia laboral
--Despido injustificado o de hecho
+ok -Diferencia laboral
+ok -Despido injustificado o de hecho
 
 Solo estos son los requeridos
--Nombre 
--direccion .
--municipio 
+ok-Nombre 
+ok-direccion .
+ok-municipio 
 
 
 NOTIFICACION DE RENUNCIA VOLUNTARIA

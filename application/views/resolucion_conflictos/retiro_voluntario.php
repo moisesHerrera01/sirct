@@ -29,8 +29,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function nuevo_reg_post(){
         $("#cnt_tabla").hide(0);
-        $("#cnt_form_main").show(0);
-        
+        $("#cnt_form_main").show(0);        
     }
 
     function convert_lim_text(lim) {
@@ -366,7 +365,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         type: "success",
                         showConfirmButton: true
                     });
-                    tabla_acta(id_expediente);                    
+                    tabla_acta(id_expediente);
                 }
             });
         });
