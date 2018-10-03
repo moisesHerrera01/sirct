@@ -383,4 +383,48 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$cadena = str_replace("y cerocero", "en punto", $cadena);
 			return mb_strtoupper($cadena) ;
 		}
+
+
+	function head_table_html($titles, $data, $tipo){
+
+		if($tipo == 'pdf'){
+			$cabecera_vista = '
+		 	<table style="width: 100%;">
+		 		<tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
+		 			<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="130px"></td>
+					<td align="center" style="font-size: 13px; font-weight: bold; line-height: 1.3;">';
+		}else{
+			$cabecera_vista = '
+		 	<table style="width: 100%;">
+			 	<tr style="font-size: 20px; vertical-align: center; font-family: "Poppins", sans-serif;">
+			 		<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="130px"></td>
+					<td align="center" style="font-size: 15px; font-weight: bold; vertical-align: center; line-height: 1.5;">';
+		}
+		for($i=0; $i <= count($titles); $i++){
+			if($i < 2){
+				$cabecera_vista .= mb_strtoupper($titles[$i])."<br>";
+			}elseif($i == 2){
+				$cabecera_vista .= '<span style="font-size: 12px; text-decoration: underline;">'.mb_strtoupper($titles[$i])."</span><br>";
+			}
+		}
+		if($data["tipo"] == "mensual"){
+			$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al MES: ".mes($data["value"])." DE ".$data["anio"])."</span>";
+		}else if($data["tipo"] == "trimestral"){
+ 			$tmfin = (intval($data["value"])*3);
+ 			$tminicio = $tmfin-2;
+ 			$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al TRIMESTRE: ".mes($tminicio)." - ".mes($tmfin)." DE ".$data["anio"])."</span>";
+	 	}else if($data["tipo"] == "semestral"){
+ 			$smfin = (intval($data["value"])*6);
+ 			$sminicio = $smfin-5;
+	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al SEMESTRE: ".mes($sminicio)." - ".mes($smfin)." DE ".$data["anio"])."</span>";
+	 	}else{
+	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al AÑO: ".$data["anio"])."</span>";
+	 	}
+		$cabecera_vista .= '</td>
+				<td width="150px"><img src="'.base_url().'assets/logos_vista/logo_derecho.jpg"  width="150px"></td>
+		 	</tr>
+	 	</table><br>';
+	 	return $cabecera_vista;
+	}
+
 ?>
