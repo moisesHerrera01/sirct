@@ -1111,13 +1111,13 @@ function volver(num) {
                               <button type="reset" class="btn waves-effect waves-light btn-success">
                                 <i class="mdi mdi-recycle"></i> Limpiar
                               </button>
-                              <button type="submit" class="btn waves-effect waves-light btn-success2">Finalizar
+                              <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente
                                 <i class="mdi mdi-chevron-right"></i></button>
                             </div>
                             <div align="right" id="btnedit2" style="display: none;">
                               <button type="reset" class="btn waves-effect waves-light btn-success">
                                 <i class="mdi mdi-recycle"></i> Limpiar</button>
-                              <button type="submit" class="btn waves-effect waves-light btn-info">Finalizar
+                              <button type="submit" class="btn waves-effect waves-light btn-info">Siguiente
                                 <i class="mdi mdi-chevron-right"></i></button>
                             </div>
                           </div>
@@ -1202,6 +1202,7 @@ function volver(num) {
         <!-- Fin CUERPO DE LA SECCIÓN -->
         <!-- ============================================================== -->
     </div>
+    <div id="cnt_modal_acciones"></div>
 </div>
 <!-- ============================================================== -->
 <!-- Fin de DIV de inicio (ENVOLTURA) -->
@@ -1211,7 +1212,7 @@ function volver(num) {
     <button  id="submit_ubi" name="submit_ubi" type="button"  >clicks</button>
 </div>
 
-<div id="cnt_modal_acciones"></div>
+
     <!--INICIA MODAL DE ESTABLECIMIENTOS -->
 <div class="modal fade" id="modal_establecimiento" role="dialog">
   <div class="modal-dialog" role="document">
@@ -1508,14 +1509,15 @@ $(function(){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
               cerrar_mantenimiento();
-              if($("#band2").val() == "save"){
+              audiencias(res,1);
+              /*if($("#band2").val() == "save"){
                   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
               }else if($("#band2").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-              }
-              tablasolicitudes();
+              }*/
+              //tablasolicitudes();
             }
         });
 
@@ -1622,7 +1624,7 @@ function habilitar(id_expedienteci) {
     });
 }
 
-function audiencias(id_expedienteci) {
+function audiencias(id_expedienteci,origen) {
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
     type: "post",
@@ -1636,7 +1638,14 @@ function audiencias(id_expedienteci) {
     $("#cnt_tabla").hide(0);
     $("#cnt_tabla_solicitudes").hide(0);
     $("#cnt_form_main").hide(0);
-    tabla_audiencias(id_expedienteci);
+    if (origen==1) {
+        $("#paso4").show(0);
+        tabla_audiencias(id_expedienteci);
+        $("#div_finalizar").show(0);
+    }else {
+      tabla_audiencias(id_expedienteci);
+    }
+
   });
 }
 

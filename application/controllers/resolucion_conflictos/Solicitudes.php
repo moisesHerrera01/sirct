@@ -92,13 +92,7 @@ class Solicitudes extends CI_Controller {
 			$this->solicitudes_model->editar_partida($data2);
 			echo $this->solicitudes_model->editar_solicitud($data);
 
-		}/*else if($this->input->post('band') == "delete"){
-			$data = array(
-			'id_personaci' => $this->input->post('id_personaci'),
-			'id_estadosci' => $this->input->post('id_estadosci')
-			);
-			echo $this->solicitudes_model->eliminar_estado($data);
-		}*/
+		}
 	}
 
 	public function combo_establecimiento() {
@@ -156,14 +150,4 @@ class Solicitudes extends CI_Controller {
 			)
 		);
 	}
-
-	/*public function combo_ocupacion() {
-		$data = $this->db->get('sge_catalogociuo');
-		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_ocupacion',
-			array(
-				'id' => $this->input->post('id'),
-				'ocupacion' => $data
-			)
-		);
-	}*/
 }

@@ -20,9 +20,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <i class="mdi mdi-window-close"></i>
               </a>
             </div>
-            <h4 class="card-title m-b-0 text-white">Programar audiencias</h4>
+            <h4 class="card-title m-b-0 text-white">Audiencias</h4>
           </div>
           <div class="card-body b-t">
+            <h3 id="paso4" class="box-title" style="margin: 0px; display:none;">
+                <button  type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 4</button>&emsp;
+                Programar audiencias
+              </h3><hr class="m-t-0 m-b-30">
             <blockquote class="m-t-0">
                 <table class="table no-border">
                     <tbody>
@@ -102,10 +106,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <?php echo form_close(); ?>
             </div>
           </div>
-          <div class="col-lg-12" id="cnt_tabla_audiencias" style="/*display:none;*/"></div>
+          <div class="col-lg-12" id="cnt_tabla_audiencias"></div>
+          <div style="display:none" class="row" id="div_finalizar">
+            <div class="col-lg-12" align="right">
+              <div class="card-body">
+                <button type="submit" onclick="finalizar();" class="btn waves-effect waves-light btn-success2">
+                  Finalizar <i class="mdi mdi-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -128,6 +140,11 @@ function eliminar_audiencia(){
   });
  }
 
+ function finalizar(){
+   cerrar_mantenimiento();
+   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+ }
+
 function cambiar_nuevo5(){
     //$("#id_fechasaudienciasci").val('');
     //$("#id_expedienteci1").val('');
@@ -137,6 +154,7 @@ function cambiar_nuevo5(){
 
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
+    $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> programar_audiencias");
 }
 
 function cambiar_editar5(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,bandera){
