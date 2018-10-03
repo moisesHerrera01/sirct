@@ -861,6 +861,13 @@ function volver(num) {
                                         <textarea type="text" id="direccion_empresa" name="direccion_empresa" class="form-control" placeholder="Dirección completa de la empresa"></textarea>
                                     </div>
                                   </div>
+                                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>" style="display: none;">
+                                        <h5>Estado: <span class="text-danger">*</span></h5>
+                                        <select id="estado_empresa" name="estado_empresa" class="form-control custom-select"  style="width: 100%" required="">
+                                            <option class="m-l-50" value="1">Activo</option>
+                                            <option class="m-l-50" value="0">Inactivo</option>
+                                        </select>
+                                    </div>
                                 </blockquote>
 
                                 <button id="submit2" type="submit" style="display: none;"></button>
@@ -1081,7 +1088,6 @@ $("#formajax2").on("submit", function(e){
         processData: false
     })
     .done(function(res){
-        alert(res)
       console.log(res)
       res = res.split(",");
         if(res[0] == "exito"){

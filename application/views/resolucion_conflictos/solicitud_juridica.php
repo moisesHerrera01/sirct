@@ -207,7 +207,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
             combo_ocupacion(result.id_catalogociuo, result.id_empresaci);
             $("#id_catalogociuo").val(result.id_catalogociuo);
-            alert(result.id_personaci)
             $("#id_personaci").val(result.id_personaci);
             $("#nombre_personaci").val(result.nombre_personaci);
             $("#apellido_personaci").val(result.apellido_personaci);
