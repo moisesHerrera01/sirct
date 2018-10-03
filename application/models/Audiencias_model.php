@@ -11,7 +11,8 @@ class Audiencias_model extends CI_Model {
 
 			$this->db->select('id_expedienteci,id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,estado_audiencia,numero_fechasaudienciasci')
 						 ->from('sct_fechasaudienciasci')
-						 ->where('id_expedienteci', $id);
+						 ->where('id_expedienteci', $id)
+						 ->order_by('estado_audiencia','desc');
 			if ($orden && $estado) {
 				$this->db->where('estado_audiencia',$estado)
 								 ->where('numero_fechasaudienciasci',$orden);

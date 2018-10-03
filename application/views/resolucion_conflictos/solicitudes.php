@@ -420,6 +420,9 @@ function tabla_audiencias(id_expedienteci){
             document.getElementById("cnt_tabla_audiencias").innerHTML=xmlhttpB.responseText;
             $('[data-toggle="tooltip"]').tooltip();
             $('#myTable2').DataTable();
+            if ($("#myTable2 tbody tr").length>=2) {
+              $('#div_orden').hide(0);
+            }
         }
     }
     xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/audiencias/tabla_audiencias?id_expedienteci="+id_expedienteci,true);

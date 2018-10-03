@@ -15,13 +15,22 @@ class Audiencias extends CI_Controller {
 
 	public function reprogramar_audiencia(){
 
-		$audiencia = $this->audiencias_model->obtener_audiencias($this->input->post('id'),$this->input->post('orden'),1)->result_array()[0];
+		$audiencia = $this->audiencias_model->obtener_audiencias($this->input->post('id'),2,1)->result_array()[0];
+		$data = array(
+		'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha'))),
+		'hora_fechasaudienciasci' => date("H:i:s",strtotime($this->input->post('hora'))),
+		'id_expedienteci' => $this->input->post('id'),
+		'numero_fechasaudienciasci' => 2,
+		'estado_audiencia' => 1
+		);
+
 		$data2 = array(
 			'id_fechasaudienciasci' => $audiencia['id_fechasaudienciasci'],
 			'estado_audiencia' => 0,
-			'motivo_reprogramacion' => $this->input->post('motivo')
+			'motivo_reprogramacion' =>$this->input->post('motivo')
 		);
 		$this->audiencias_model->editar_audiencia($data2);
+		echo $this->audiencias_model->insertar_audiencia($data);
 	}
 
   public function tabla_audiencias(){
@@ -33,7 +42,6 @@ class Audiencias extends CI_Controller {
 	public function gestionar_audiencia(){
 
 		if($this->input->post('band4') == "save"){
-
 			$data = array(
 			'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
 			'hora_fechasaudienciasci' => date("H:i:s",strtotime($this->input->post('hora_audiencia'))),
@@ -46,7 +54,12 @@ class Audiencias extends CI_Controller {
 			if ($resultado) {
 				echo 'ya_existe';
 			}else {
+				$numero = $this->audiencias_model->obtener_audiencias($this->input->post('id_expedienteci1'),FALSE,1)->num_rows();
+				if ($numero>=2) {
+				echo 'reprogramar';
+			}else {
 				echo $this->audiencias_model->insertar_audiencia($data);
+			}
 			}
 
 
