@@ -88,7 +88,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <div class="help-block"></div>
                   </div>
 
-                  <div class="form-group col-lg-4" style="height: 83px;">
+                  <div id="div_orden" class="form-group col-lg-4" style="height: 83px;">
                       <h5>Orden:</h5>
                       <input name="numero_audiencia" type="radio" id="primera" checked="" value="1">
                       <label for="primera">Primera</label>
@@ -196,43 +196,6 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax6"));
 
-        /*Validar si pedir motivo*/
-        swal({
-          title: "Reprogramar audiencias",
-          text: "Motivo para reprogramar audiencia: *",
-          type: "input",
-          showCancelButton: true,
-          closeOnConfirm: false,
-          inputPlaceholder: "Motivo para reprogramar"
-        }, function (inputValue) {
-          if (inputValue === false) return false;
-          if (inputValue === "") {
-            swal.showInputError("Se necesita un motivo para reprogramar.");
-            return false
-          }
-          $.ajax({
-              url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/reprogramar_audiencia",
-              type: "post",
-              dataType: "html",
-              data: {
-                id: formData.get('id_expedienteci1'),
-                orden: formData.get('numero_fechasaudienciasci'),
-                motivo: inputValue
-              }
-            })
-            .done(function (res) {
-              if(res == "exito"){
-                console.log(res)
-                //tablasolicitudes();
-                //swal({ title: "¡Expediente inhabilitado exitosamente!", type: "success", showConfirmButton: true });
-              }else{
-                console.log(res)
-                    //swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-                }
-            });
-        });
-        /*FIN Validar si pedir motivo*/
-
         $.ajax({
           url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/gestionar_audiencia",
           type: "post",
@@ -246,11 +209,45 @@ $(function(){
             if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
-              //cerrar_mantenimiento();
               if($("#band4").val() == "save"){
                   if (res =='ya_existe') {
                       cambiar_nuevo5();
                       swal({ title: "¡Choque de horarios!", type: "warning", showConfirmButton: true });
+                  }else if (res == 'reprogramar') {
+                    /*Validar si pedir motivo*/
+                    swal({
+                      title: "Reprogramar audiencias",
+                      text: "Motivo para reprogramar audiencia: *",
+                      type: "input",
+                      showCancelButton: true,
+                      closeOnConfirm: false,
+                      inputPlaceholder: "Motivo para reprogramar"
+                    }, function (inputValue) {
+                      if (inputValue === false) return false;
+                      if (inputValue === "") {
+                        swal.showInputError("Se necesita un motivo para reprogramar.");
+                        return false
+                      }
+                      $.ajax({
+                          url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/reprogramar_audiencia",
+                          type: "post",
+                          dataType: "html",
+                          data: {
+                            id: formData.get('id_expedienteci1'),
+                            orden: formData.get('numero_audiencia'),
+                            fecha: formData.get('fecha_audiencia'),
+                            hora: formData.get('hora_audiencia'),
+                            hora: formData.get('hora_audiencia'),
+                            motivo: inputValue
+                          }
+                        })
+                        .done(function (res) {
+                            swal({ title: "¡Audiencia reprogramada!", type: "success", showConfirmButton: true });
+                            tabla_audiencias(formData.get('id_expedienteci1'));
+                            $('#formajax6').trigger("reset");
+                        });
+                    });
+                    /*FIN Validar si pedir motivo*/
                   }else {
                     cambiar_nuevo5();
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
