@@ -74,7 +74,7 @@
                             echo "<td>";
 
 
-                            $array = array($fila->id_personaci);
+                            $array = array($fila->id_expedienteci);
                             if(tiene_permiso($segmentos=2,$permiso=4)){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");

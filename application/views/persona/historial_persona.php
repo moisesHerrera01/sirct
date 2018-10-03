@@ -464,6 +464,47 @@ function cambiar_editar(id_personaci,bandera){
   }
 }
 
+function cambiar_editar2(id_empresa,band){
+        
+
+        $.ajax({
+          url: "<?php echo site_url(); ?>/persona/historial_persona/registro_empresa",
+          type: "POST",
+          data: {id : id_empresa}
+        })
+        .done(function(res){
+          result = JSON.parse(res)[0];
+
+          $("#id_empresa").val(result.id_empresa);
+          $("#tiposolicitud_empresa").val(result.tiposolicitud_empresa);
+          $("#id_oficina").val(result.id_oficina).trigger('change.select2');
+          $("#nombre_empresa").val(result.nombre_empresa);
+          $("#abreviatura_empresa").val(result.abreviatura_empresa);
+          $("#telefono_empresa").val(result.telefono_empresa);
+          $("#numtotal_empresa").val(result.numtotal_empresa);
+          $("#id_catalogociiu").val(result.id_catalogociiu).trigger('change.select2');
+          $("#nit_empresa").val(result.nit_empresa);
+          $("#id_municipio").val(result.id_municipio.padStart(5, "00000")).trigger('change.select2');
+          $("#correoelectronico_empresa").val(result.correoelectronico_empresa);
+          $("#direccion_empresa").val(result.direccion_empresa);
+          $("#activobalance_empresa").val(result.activobalance_empresa);
+          $("#capitalsocial_empresa").val(result.capitalsocial_empresa);
+          $("#trabajadores_adomicilio_empresa").val(result.trabajadores_adomicilio_empresa);
+          $("#tipo_empresa").val(result.tipo_empresa);
+          $("#estado_empresa").val(result.estado_empresa);
+          $("#band2").val(band);
+
+        });
+
+        $("#ttl_form2").removeClass("bg-success");
+        $("#ttl_form2").addClass("bg-info");
+        //$("#btnadd2").hide(0);
+        //$("#btnedit2").show(0);
+        $("#cnt_tabla").hide(0);
+        $("#cnt_form_main2").show(0);
+        $("#ttl_form2").children("h4").html("<span class='fa fa-wrench'></span> Editar empresa");
+    }
+
 
 function OpenWindowWithPost(url, params){
     var form = document.createElement("form");
@@ -486,30 +527,29 @@ function OpenWindowWithPost(url, params){
 }
 
 
-function redireccionar_despido_hecho(tipo, id){
+function redireccionar_despido_hecho(tipo, id, band){
     if(tipo == "1"){
-        var param = { 'id_personaci' : id, 'tipo_solicitud' : '1' };
+        var param = { 'id_personaci' : id, 'tipo_solicitud' : '1', 'band_mantto' : band };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/", param);
     }else{
-        var param = { 'id_empresa' : id, 'tipo_solicitud' : '1' };
+        var param = { 'id_empresa' : id, 'tipo_solicitud' : '1', 'band_mantto' : band };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);  
     }
 }
 
-function redireccionar_diferencia_laboral(tipo, id){
+function redireccionar_diferencia_laboral(tipo, id, band){
     if(tipo == "1"){
-        var param = { 'id_personaci' : id, 'tipo_solicitud' : '2' };
+        var param = { 'id_personaci' : id, 'tipo_solicitud' : '2', 'band_mantto' : band };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/", param);
     }else{
-        var param = { 'id_empresa' : id, 'tipo_solicitud' : '2' };
+        var param = { 'id_empresa' : id, 'tipo_solicitud' : '2', 'band_mantto' : band };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);  
     }
 }
 
-function redireccionar_retiro_voluntario(tipo, id){
-    var param = { 'id_personaci' : id, 'tipo_solicitud' : '3' };
+function redireccionar_retiro_voluntario(tipo, id, band){
+    var param = { 'id_personaci' : id, 'tipo_solicitud' : '3', 'band_mantto' : band };
     OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/", param);
-    
 }
 
 function volver(num) {

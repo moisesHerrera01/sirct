@@ -51,13 +51,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                         <div class="profiletimeline">
                         	<div align="center">
-	                        	<a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2,'<?=$row->id_empresa?>');" class="m-t-10 m-r-20 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
-	                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2,'<?=$row->id_empresa?>');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
+	                        	<a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2,'<?=$row->id_empresa?>','save');" class="m-t-10 m-r-20 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
+	                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2,'<?=$row->id_empresa?>','save');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
 	                        </div>
                             <br><br>
                         	<?php
 
-								$this->db->select('')
+								$this->db->select('e.id_expedienteci AS id_expedienteciem, e.*, ep.*, p.*, es.*, em.*')
 								->from('sge_empresa em')
 								->join('sct_expedienteci e','em.id_empresa = e.id_empresaci')
 								->join('sir_empleado ep','ep.id_empleado=e.id_personal')
@@ -71,7 +71,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 	                        		foreach ($solicitudes->result() as $fila) {
                             ?>
                             	<div class="sl-item m-b-10">
-	                                <div class="sl-left"> <span class="round bg-warning">PJ</span> </div>
+                                    <?php if($fila->motivo_expedienteci == '1'){ ?>
+                                      <div class="sl-left"> <span class="round bg-success">DHI</span> </div>
+                                    <?php }else{ ?>
+                                        <div class="sl-left"> <span class="round bg-info">DL</span> </div>
+                                    <?php } ?>
 	                                <div class="sl-right">
 	                                    <div>
 	                                    	<div style="margin-bottom: 10px;">
@@ -86,8 +90,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 		                                    	<div class="col-lg-6"><p class="m-b-0"><b>Resultado:</b> <?=$fila->resultado_expedienteci?></p></div>
 		                                    </div>
 	                                        <br>
-	                                        <div class="like-comm"> 
-	                                        	<a href="javascript:void(0)" class="m-r-10 btn btn-info text-white"> <span class="mdi mdi-wrench"></span> Editar expediente</a> 
+	                                        <div class="like-comm">
+                                                <?php if($fila->motivo_expedienteci == '1'){ ?>
+	                                        	  <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2,'<?=$fila->id_expedienteciem?>','edit');" class="m-r-10 btn btn-info text-white"> <span class="mdi mdi-wrench"></span> Editar expediente</a>
+                                                <?php }else{ ?>
+                                                    <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2,'<?=$fila->id_expedienteciem?>','edit');" class="m-r-10 btn btn-info text-white"> <span class="mdi mdi-wrench"></span> Editar expediente</a>
+                                                <?php } ?>
 	                                        	<a href="javascript:void(0)" class="btn btn-secondary m-r-10"><?=$fila->nombre_estadosci?></a>
 	                                        </div>
 	                                    </div>

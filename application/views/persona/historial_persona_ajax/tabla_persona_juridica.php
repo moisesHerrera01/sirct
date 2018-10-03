@@ -28,7 +28,7 @@
                    
                   if(tiene_permiso($segmentos=2,$permiso=4)){
                     array_push($array, "edit");
-                    echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
+                    echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
                     unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
                   }
 
