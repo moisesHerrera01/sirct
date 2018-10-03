@@ -38,6 +38,10 @@ class Historial_persona extends CI_Controller {
 		print json_encode( $this->historial_persona_model->obtener_persona($this->input->post('id'))->result() );
 	}
 
+	public function registro_empresa() {
+		print json_encode( $this->historial_persona_model->obtener_empresa( $this->input->post('id'))->result() );
+	}
+
 	public function gestionar_solicitudes(){
 
 		if($this->input->post('band1') == "save"){

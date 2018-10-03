@@ -709,7 +709,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <div class="row">
                                 <div class="form-group col-lg-8">
                                     <h5>Dirección:</h5>
-                                    <textarea type="text" id="direccion_personaci" name="direccion_personaci" class="form-control" placeholder="Dirección completa"></textarea>
+                                    <textarea type="text" id="direccion_personaci" name="direccion_personaci" class="form-control" placeholder="Dirección completa" required=""></textarea>
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <center>

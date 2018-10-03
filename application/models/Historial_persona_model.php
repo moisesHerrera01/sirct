@@ -90,6 +90,15 @@ class Historial_persona_model extends CI_Model {
 		}
 	}
 
+	public function editar_establecimiento($data){
+		$this->db->where("id_empresa",$data["id_empresa"]);
+		if ($this->db->update('sge_empresa', $data)) {
+			return "exito";
+		}else {
+			return "fracaso";
+		}
+	}
+
 	function eliminar_solicitud($data){
   		if($this->db->delete("sct_personaci",array('id_personaci' => $data['id_personaci']))){
   			return "exito";
@@ -122,6 +131,13 @@ class Historial_persona_model extends CI_Model {
 
 	public function obtener_persona($id) {
 		$this->db->select('')->from('sct_personaci')->where('id_personaci', $id);
+		$query=$this->db->get();
+		if ($query->num_rows() > 0) { return $query;
+		}else{ return FALSE; }
+	}
+
+	public function obtener_empresa($id) {
+		$this->db->select('')->from('sge_empresa')->where('id_empresa', $id);
 		$query=$this->db->get();
 		if ($query->num_rows() > 0) { return $query;
 		}else{ return FALSE; }

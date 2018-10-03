@@ -68,11 +68,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         </div><br>
 
                         	<?php
-                        	$this->db->select('')
+                        	$this->db->select('e.id_expedienteci AS id_expedienteciem, e.*, ep.*, p.*, em.*, m.*, es.*')
                             ->from('sct_expedienteci e')
                             ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
                             ->join('org_municipio m','m.id_municipio=p.id_municipio')
                             ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
+                            ->join('sct_estadosci es','e.id_estadosci=es.id_estadosci')
                             ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
                             ->where('p.id_personaci', $row->id_personaci);
                               	
@@ -81,12 +82,40 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 	                        		foreach ($solicitudes->result() as $fila) {
                             ?>
                             	<div class="sl-item">
-	                                <div class="sl-left"> <span class="round">PN</span> </div>
+	                                <div class="sl-left">
+                                   <?php if($fila->motivo_expedienteci == '1'){ ?>
+                                      <span class="round bg-success">DHI</span>
+                                    <?php }elseif($fila->motivo_expedienteci == '2'){ ?>
+                                      <span class="round bg-info">DL</span>
+                                    <?php }else{ ?>
+                                      <span class="round bg-secondary">NRV</span>
+                                    <?php } ?>
+                                  </div>
 	                                <div class="sl-right">
-	                                    <div><a href="#" class="link"><?=$fila->numerocaso_expedienteci?></a> <span class="sl-date"><?=$fila->fechacrea_expedienteci?></span>
-	                                        <p>assign a new task <a href="#"> Design weblayout</a></p>
-	                                        <div class="like-comm"> <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a> </div>
-	                                    </div>
+	                                    <div>
+                                        <div style="margin-bottom: 10px;">
+                                          <a href="#" class="link"><?=$fila->numerocaso_expedienteci?></a> <span class="sl-date"><?=$fila->fechacrea_expedienteci?></span>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-lg-6"><p class="m-b-0"><b>Solicitado:</b> <?php echo $fila->nombre_empresa; ?></p></div>
+                                          <div class="col-lg-6"><p class="m-b-0"><b>Delegado:</b> <?php echo implode(" ", array($fila->primer_nombre, $fila->segundo_nombre, $fila->tercer_nombre, $fila->primer_apellido, $fila->segundo_apellido, $fila->apellido_casada)); ?></p></div>
+                                        </div>
+                                          <div class="row">
+                                          <div class="col-lg-6"><p class="m-b-0"><b>Motivo:</b> <?=$fila->motivo_expedienteci?></p></div>
+                                          <div class="col-lg-6"><p class="m-b-0"><b>Resultado:</b> <?=$fila->resultado_expedienteci?></p></div>
+                                        </div>
+                                          <br>
+                                          <div class="like-comm">
+                                                <?php if($fila->motivo_expedienteci == '1'){ ?>
+                                                  <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1,'<?=$fila->id_expedienteciem?>','edit');" class="m-r-10 btn btn-info text-white"> <span class="mdi mdi-wrench"></span> Editar expediente</a>
+                                                <?php }elseif($fila->motivo_expedienteci == '2'){ ?>
+                                                  <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1,'<?=$fila->id_expedienteciem?>','edit');" class="m-r-10 btn btn-info text-white"> <span class="mdi mdi-wrench"></span> Editar expediente</a>
+                                                <?php }else{ ?>
+                                                  <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(1,'<?=$fila->id_expedienteciem?>','edit');" class="m-r-10 btn btn-info text-white"> <span class="mdi mdi-wrench"></span> Editar expediente</a>
+                                                <?php } ?>
+                                            <a href="javascript:void(0)" class="btn btn-secondary m-r-10"><?=$fila->nombre_estadosci?></a>
+                                          </div>
+                                      </div>
 	                                </div>
 	                            </div>
 	                            <hr>

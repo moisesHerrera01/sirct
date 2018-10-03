@@ -51,26 +51,26 @@
 
 function redireccionar_despido_hecho(tipo){
     if(tipo == "1"){
-        var param = { 'tipo_solicitud' : '1' };
+        var param = { 'tipo_solicitud' : '1', 'band_mantto' : 'save' };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
     }else{
-        var param = { 'tipo_solicitud' : '1' };
+        var param = { 'tipo_solicitud' : '1', 'band_mantto' : 'save' };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);  
     }
 }
 
 function redireccionar_diferencia_laboral(tipo){
     if(tipo == "1"){
-        var param = { 'tipo_solicitud' : '2' };
+        var param = { 'tipo_solicitud' : '2', 'band_mantto' : 'save' };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
     }else{
-        var param = { 'tipo_solicitud' : '2' };
+        var param = { 'tipo_solicitud' : '2', 'band_mantto' : 'save' };
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);  
     }
 }
 
 function redireccionar_retiro_voluntario(tipo){
-    var param = { 'tipo_solicitud' : '3' };
+    var param = { 'tipo_solicitud' : '3', 'band_mantto' : 'save' };
     OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario", param);
 }
 
@@ -108,7 +108,7 @@ function redireccionar_retiro_voluntario(tipo){
                             <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
                             <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2)" class="m-t-10 waves-effect waves-dark btn btn-warning btn-md btn-rounded">Persona jurídica</a>
                             <div class="d-flex">
-                                <div class="read"><a href="javascript:void(0)" class="link font-medium">Read More</a></div>
+                                <div class="read"></div>
                                 <div class="ml-auto">
                                     <a href="javascript:void(0)" class="link m-r-10 " data-toggle="tooltip" title="" data-original-title="Like"><i class="mdi mdi-heart-outline"></i></a> <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Share"><i class="mdi mdi-share-variant"></i></a>
                                 </div>
@@ -124,7 +124,7 @@ function redireccionar_retiro_voluntario(tipo){
                             <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
                             <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2)" class="m-t-10 waves-effect waves-dark btn btn-warning btn-md btn-rounded">Persona jurídica</a>
                             <div class="d-flex">
-                                <div class="read"><a href="javascript:void(0)" class="link font-medium">Read More</a></div>
+                                <div class="read"></div>
                                 <div class="ml-auto">
                                     <a href="javascript:void(0)" class="link m-r-10 " data-toggle="tooltip" title="" data-original-title="Like"><i class="mdi mdi-heart-outline"></i></a> <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Share"><i class="mdi mdi-share-variant"></i></a>
                                 </div>
@@ -143,7 +143,7 @@ function redireccionar_retiro_voluntario(tipo){
                             <br><br>
                             </div>
                             <div class="d-flex">
-                                <div class="read"><a href="javascript:void(0)" class="link font-medium">Read More</a></div>
+                                <div class="read"></div>
                                 <div class="ml-auto">
                                     <a href="javascript:void(0)" class="link m-r-10 " data-toggle="tooltip" title="" data-original-title="Like"><i class="mdi mdi-heart-outline"></i></a> <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Share"><i class="mdi mdi-share-variant"></i></a>
                                 </div>
