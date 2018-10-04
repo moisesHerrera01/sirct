@@ -16,7 +16,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <h4 class="card-title m-t-10"><?=$row->nombre_personaci." ".$row->apellido_personaci?></h4>
                     <h6 class="card-subtitle"><?php echo (empty($row->conocido_por)) ? '<br>' : 'Persona conocida por: '.$row->conocido_por; ?></h6>
                     <?php echo (empty($row->estado_persona)) ? '<span class="label label-info">Cuenta activa</span>' : '<span class="label label-danger">Cuenta inactiva</span>'; ?>
-                    
+
                     <div class="row" align="left">
                         <div class="col-6"><a href="javascript:void(0)" class="link"><i class="icon-people"></i> <font class="font-medium">Edad: <?=calcular_edad($row->fnacimiento_personaci)?> años<br>Sexo: <?php echo ($row->sexo_personaci == 'M') ? 'Masculino' : 'Femenino'; ?></font></a></div>
                         <div class="col-6"><a href="javascript:void(0)" class="link"><i class="icon-picture"></i> <font class="font-medium"><br>
@@ -28,9 +28,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </center>
             </div>
             <div><hr></div>
-            <div class="card-body"> 
+            <div class="card-body">
             	<small class="text-muted"><?=$row->doc_identidad?> </small>
-                <h6><?=$row->dui_personaci?></h6> 
+                <h6><?=$row->dui_personaci?></h6>
                 <small class="text-muted db">Nacionalidad</small>
                 <h6><?=$row->nacionalidad?></h6>
                 <small class="text-muted db">Fecha de nacimiento</small>
@@ -49,7 +49,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="col-lg-8 col-xlg-9 col-md-7">
         <div class="card">
             <!-- Nav tabs -->
-            
+
             <ul class="nav nav-tabs profile-tab" role="tablist">
             	<li class="nav-item bg-secondary"> <a class="nav-link show text-white" onclick="cerrar_mantenimiento();" data-toggle="tab" href="#!" role="tab" aria-selected="true"><span class="mdi mdi-keyboard-backspace"></span> Volver</a> </li>
                 <li class="nav-item"> <a class="nav-link show" data-toggle="tab" href="#home" role="tab" aria-selected="true">Lista de expedientes</a> </li>
@@ -62,9 +62,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <div class="profiletimeline">
 
                           <div align="center">
-                        <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1,'<?=$row->id_personaci?>','save');" class="m-t-10 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
-                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1,'<?=$row->id_personaci?>','save');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
-                            <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(1,'<?=$row->id_personaci?>','save');" class="m-t-10 waves-effect waves-dark btn btn-secondary btn-rounded">Noticicación de <br>renuncia voluntaria</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1,'<?=$row->id_personaci?>','update_post');" class="m-t-10 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1,'<?=$row->id_personaci?>','update_post');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(1,'<?=$row->id_personaci?>','update_post');" class="m-t-10 waves-effect waves-dark btn btn-secondary btn-rounded">Noticicación de <br>renuncia voluntaria</a>
                         </div><br>
 
                         	<?php
@@ -76,7 +76,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             ->join('sct_estadosci es','e.id_estadosci=es.id_estadosci')
                             ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
                             ->where('p.id_personaci', $row->id_personaci);
-                              	
+
                             $solicitudes = $this->db->get();
 	                        	if($solicitudes->num_rows() > 0){
 	                        		foreach ($solicitudes->result() as $fila) {
@@ -128,7 +128,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         </div>
                     </div>
                 </div>
-              
+
 
             </div>
         </div>
