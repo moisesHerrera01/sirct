@@ -16,10 +16,12 @@ function nav(value) {
 function iniciar(){
   <?php if(isset($tipo_solicitud)){ ?>
       $("#motivo").val('<?=$tipo_solicitud?>');
-      <?php if($band_mantto == "save"){ ?>
-          nuevo_reg_post();
+      <?php if($band_mantto == "save"){
+          echo "cambiar_nuevo();";
+          } elseif ($band_mantto == 'update_post') { ?>
+            cambiar_update_post('<?=$id_expedienteci?>','update_post');
       <?php }else{ ?>
-          cambiar_editar('<?=$id_personaci?>','edit');
+          cambiar_editar('<?=$id_expedienteci?>','edit');
       <?php } ?>
   <?php }else{ ?>
       $("#motivo").val('');
@@ -32,9 +34,138 @@ function iniciar(){
     <?php } ?>
 }
 
-function nuevo_reg_post(){
-    $("#cnt_tabla").hide(0);
-    $("#cnt_form_main").show(0);
+function cambiar_update_post(id_personaci,bandera){
+  open_form(1);
+  if(bandera == "update_post"){
+    $.ajax({
+      url: "<?php echo site_url(); ?>/persona/historial_persona/registros_expedientes",
+      type: "POST",
+      data: {id : id_personaci}
+    })
+    .done(function(res){
+      result = JSON.parse(res)[0];
+
+      $("#id_personaci").val(result.id_personaci);
+      $("#id_expedienteci").val(result.id_expedienteci);
+      $("#nr").val($("#nr_search").val()).trigger('change.select2');
+      $("#nombres").val(result.nombre_personaci);
+      $("#conocido_por").val(result.conocido_por);
+      $("#apellidos").val(result.apellido_personaci);
+      $("#dui").val(result.dui_personaci);
+      $("#telefono").val(result.telefono_personaci);
+      $("#telefono2").val(result.telefono2_personaci);
+      $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
+      $("#direccion").val(result.direccion_personaci);
+      $("#fecha_nacimiento").val(result.fnacimiento_personaci);
+      $("#estudios").val(result.estudios_personaci);
+      $("#nacionalidad").val(result.nacionalidad_personaci);
+      $("#discapacidad_desc").val(result.discapacidad);
+      /*Inicio partida nacimiento*/
+      if(result.discapacidad_personaci==0){
+          $("#ocultar_div").hide();
+      }else{
+          $("#ocultar_div").show();
+      }
+      if (result.id_doc_identidad!=1) {
+        $('#dui').mask('', {reverse: true});
+        $('#dui').unmask();
+        if (result.id_doc_identidad==4) {
+          $('#partida_div').show();
+          $('#div_numero_doc_identidad').hide();
+          $("#dui").removeAttr("required");
+        }else {
+          $('#partida_div').hide();
+          $('#div_numero_doc_identidad').show();
+          $("#dui").attr("required",'required');
+        }
+      }else {
+         $('#dui').mask('99999999-9', {reverse: true});
+         $('#partida_div').hide();
+         $('#div_numero_doc_identidad').show();
+         $("#dui").attr("required",'required');
+      }
+      $("#id_partida").val(result.id_partida);
+      $("#numero_partida").val(result.numero_partida);
+      $("#folio_partida").val(result.folio_partida);
+      $("#libro_partida").val(result.libro_partida);
+      $("#asiento_partida").val(result.asiento_partida);
+      $("#anio_partida").val(result.anio_partida);
+      /*Fin partida de nacimiento*/
+      if (result.discapacidad_personaci=='1') {
+          document.getElementById('si').checked = true;
+      }else {
+          document.getElementById('no').checked = true;
+      }
+      if (result.posee_representante=='1') {
+        document.getElementById('si_posee').checked =true;
+      }else {
+        document.getElementById('no_posee').checked =true;
+      }
+      if (result.sexo_personaci=='M') {
+        document.getElementById('masculino').checked =true;
+      }else {
+        document.getElementById('femenino').checked =true;
+      }
+      if (result.pertenece_lgbt=='1') {
+        document.getElementById('si_lgbt').checked =true;
+      }else {
+        document.getElementById('no_lgbt').checked =true;
+      }
+
+      /*Inicio represnetante persona*/
+      combo_tipo_representante('');
+      $("#id_representante_persona").val('');
+      $("#nombre_representante_persona").val('');
+      $("#apellido_representante_persona").val('');
+      $("#dui_representante_persona").val('');
+      $("#telefono_representante_persona").val('');
+      $("#acreditacion_representante_persona").val('');
+      /*Fin representante persona*/
+
+      /*Inicio Expediente*/
+      combo_nacionalidades(result.nacionalidad_personaci);
+      combo_doc_identidad(result.id_doc_identidad);
+      //combo_ocupacion('');
+      combo_delegado('');
+      combo_actividad_economica();
+      combo_municipio();
+      $("#id_empleador").val($("#id_empleador").val()).trigger('change.select2');
+      $("#nombres_jefe").val('');
+      $("#ocupacion").val('');
+      $("#apellidos_jefe").val('');
+      $("#cargo_jefe").val('');
+      $("#id_personal").val('');
+      $("#establecimiento").val('');
+      $("#salario").val('');
+      $("#funciones").val('');
+      $("#forma_pago").val('');
+      $("#horario").val('');
+      $("#fecha_conflicto").val('');
+      /*Fin expediente*/
+
+      $("#band").val("save");
+      $("#band1").val("edit");
+      $("#band2").val("save");
+      $("#band6").val('save');
+
+      $("#ttl_form").addClass("bg-success");
+      $("#ttl_form").removeClass("bg-info");
+
+      $("#btnadd").show(0);
+      $("#btnedit").hide(0);
+      $("#ocultar_div").hide();
+
+      $("#cnt_tabla").hide(0);
+      $("#cnt_form_main").show(0);
+
+      $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
+      combo_establecimiento('');
+      // $("#band").val("update_post");
+      // $("#band1").val("update_post");
+      // $("#band2").val("update_post");
+      // $("#band6").val('update_post');
+    });
+  }
 }
 
 function adjuntar_actas(id_expediente) {
@@ -196,7 +327,7 @@ function cambiar_estado() {
       }
     })
     .done(function (res) {
-      if(res == "exito"){
+      if(res != "fracaso"){
         cerrar_mantenimiento()
         tablasolicitudes();
         swal({ title: "¡Estado modificado exitosamente!", type: "success", showConfirmButton: true });
@@ -293,12 +424,12 @@ function combo_doc_identidad(seleccion){
   });
 }
 
-function visualizar(id_personaci,id_empresaci) {
+function visualizar(id_expedienteci,id_empresaci) {
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/ver_expediente",
     type: "post",
     dataType: "html",
-    data: {id : id_personaci, id_emp : id_empresaci}
+    data: {id : id_expedienteci, id_emp : id_empresaci}
   })
   .done(function(res){
     $('#cnt_actions').html(res);
@@ -322,20 +453,6 @@ function combo_actividad_economica(){
   });
 
 }
-
-/*function combo_ocupacion(seleccion){
-  $.ajax({
-    url: "</*?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_ocupacion",
-    type: "post",
-    dataType: "html",
-    data: {id : seleccion}
-  })
-  .done(function(res){
-    $('#div_combo_ocupacion').html(res);
-    $(".select2").select2();
-  });
-
-}*/
 
 function combo_municipio(){
 
@@ -467,7 +584,7 @@ function alertFunc() {
 }
 
 function cambiar_nuevo(){
-    open_form(1);
+    //  open_form(1);
     /*Inicio Solicitante*/
     $("#id_personaci").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
@@ -518,7 +635,6 @@ function cambiar_nuevo(){
     $("#ocupacion").val('');
     $("#apellidos_jefe").val('');
     $("#cargo_jefe").val('');
-    $("#motivo").val('');
     $("#id_personal").val('');
     $("#establecimiento").val('');
     $("#salario").val('');
@@ -549,18 +665,18 @@ function cambiar_nuevo(){
 
 
 
-function cambiar_editar(id_personaci,bandera){
+function cambiar_editar(id_expedienteci,bandera){
   open_form(1);
   if(bandera == "edit"){
     $.ajax({
       url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/registros_expedientes",
       type: "POST",
-      data: {id : id_personaci}
+      data: {id : id_expedienteci}
     })
     .done(function(res){
       result = JSON.parse(res)[0];
 
-      $("#id_personaci").val(id_personaci);
+      $("#id_personaci").val(result.id_personaci);
       $("#id_expedienteci").val(result.id_expedienteci);
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
       $("#nombres").val(result.nombre_personaci);

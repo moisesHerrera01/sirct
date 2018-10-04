@@ -163,8 +163,7 @@ class Acta extends CI_Controller {
     }
 
     public function generar_acta_tipo($caso,$id_expedienteci) {
-        $data = $this->expedientes_model->obtener_expediente( $id_expedienteci )->result_array()[0];
-        $expediente = $this->expedientes_model->obtener_registros_expedientes( $data['id_personaci'])->result()[0];
+        $expediente = $this->expedientes_model->obtener_registros_expedientes($id_expedienteci)->result()[0];
         //$jefe = $this->reglamento_model->jefe_direccion_trabajo()->result()[0];
 
         $this->load->library("phpword");

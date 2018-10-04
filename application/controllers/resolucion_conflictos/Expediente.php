@@ -203,7 +203,6 @@ class Expediente extends CI_Controller {
 				} else {
 					echo "exito";
 				}
-
 			}
 }
 ?>

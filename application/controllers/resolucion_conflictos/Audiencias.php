@@ -54,14 +54,18 @@ class Audiencias extends CI_Controller {
 			if ($resultado) {
 				echo 'ya_existe';
 			}else {
-				$numero = $this->audiencias_model->obtener_audiencias($this->input->post('id_expedienteci1'),FALSE,1)->num_rows();
+				$numero = $this->audiencias_model->obtener_audiencias($this->input->post('id_expedienteci1'),FALSE,1);
+				if ($numero) {
+					$numero = $this->audiencias_model->obtener_audiencias($this->input->post('id_expedienteci1'),FALSE,1)->num_rows();
+				}else {
+					$numero = 0;
+				}
 				if ($numero>=2) {
 				echo 'reprogramar';
 			}else {
 				echo $this->audiencias_model->insertar_audiencia($data);
 			}
 			}
-
 
 		}else if($this->input->post('band4') == "edit"){
 

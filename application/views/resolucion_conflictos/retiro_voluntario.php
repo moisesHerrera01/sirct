@@ -12,7 +12,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <?php if(isset($tipo_solicitud)){ ?>
             $("#motivo_expedienteci").val('<?=$tipo_solicitud?>');
             <?php if($band_mantto == "save"){ ?>
-                nuevo_reg_post();
+                cambiar_nuevo();
             <?php }else{ ?>
                 cambiar_editar('<?=$id_personaci?>','edit');
             <?php } ?>
@@ -27,10 +27,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <?php } ?>
     }
 
-    function nuevo_reg_post(){
-        $("#cnt_tabla").hide(0);
-        $("#cnt_form_main").show(0);        
-    }
+    // function nuevo_reg_post(){
+    //     $("#cnt_tabla").hide(0);
+    //     $("#cnt_form_main").show(0);
+    // }
 
     function convert_lim_text(lim) {
         var tlim = "-" + lim + "d";

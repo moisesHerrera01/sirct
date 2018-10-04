@@ -11,10 +11,10 @@ class Solicitudes extends CI_Controller {
 
 	public function index(){
 		$data['tipo_solicitud'] = $this->input->post('tipo_solicitud');
-		$data['id_personaci'] = $this->input->post('id_personaci');
+		$data['id_expedienteci'] = $this->input->post('id_personaci');
 		$data['band_mantto'] = $this->input->post('band_mantto');
 		$this->load->view('templates/header');
-		$this->load->view('resolucion_conflictos/solicitudes');
+		$this->load->view('resolucion_conflictos/solicitudes',$data);
 		$this->load->view('templates/footer');
 	}
 
@@ -72,7 +72,7 @@ class Solicitudes extends CI_Controller {
 			'telefono2_personaci' => $this->input->post('telefono2'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion'),
-			'fnacimiento_personaci' => $this->input->post('fecha_nacimiento'),
+			'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
 			'sexo_personaci' => $this->input->post('sexo'),
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),

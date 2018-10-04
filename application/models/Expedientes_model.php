@@ -15,23 +15,30 @@ class Expedientes_model extends CI_Model {
 		}
 	}
 
-	public function obtener_registros_expedientes($id) {
+	public function obtener_registros_expedientes($id_expedienteci) {
 
-			$this->db->select('pa.*,n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,emp.*,ep.*,p.*, p.discapacidad,e.id_expedienteci')
+			$this->db->select('pa.*,n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,emp.*,ep.*,p.*,
+												 p.discapacidad,
+												 e.id_expedienteci,
+												 e.ocupacion,
+												 e.salario_personaci,
+												 e.funciones_personaci,
+												 e.formapago_personaci,
+												 horarios_personaci'
+											  )
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 						 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
 						 ->join('sct_representantepersonaci rp','rp.id_expedienteci=e.id_expedienteci','left')
 						 ->join('sct_partida pa','pa.id_partida=p.id_partida','left')
 						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')
-						 //->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo', 'left')
 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
 						 ->join('sge_catalogociiu c','c.id_catalogociiu=em.id_catalogociiu')
 						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
 						 ->join('sge_empleador emp','emp.id_empleador=e.id_empleador', 'left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
-						 ->where('p.id_personaci', $id)
+						 ->where('e.id_expedienteci', $id_expedienteci)
 						 ->group_by('e.id_expedienteci')
 						 ->where('f.estado_audiencia',1);
 			$query=$this->db->get();

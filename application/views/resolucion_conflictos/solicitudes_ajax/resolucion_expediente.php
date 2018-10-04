@@ -90,6 +90,7 @@ $(function(){
         });
       $('#modal_resolucion').remove();
       $('.modal-backdrop').remove();
+      $('body').removeClass('modal-open');
       tablasolicitudes();
     });
 });
