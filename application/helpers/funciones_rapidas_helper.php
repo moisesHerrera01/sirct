@@ -236,8 +236,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	}
 
 	function fecha_ESP($fecha){
-		$fecha = explode("-", $fecha);
-		return $fecha[2]."/".$fecha[1]."/".$fecha[0];
+		return date("d-m-Y",strtotime($fecha));
 	}
 
 		function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtolower($mesesarray[($mes-1)]); }

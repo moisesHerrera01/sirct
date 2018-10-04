@@ -97,12 +97,26 @@ class Reportes_individuales extends CI_Controller {
 					foreach ($registros->result() as $rows) {
 						$cuerpo .= '
 						<tr>
-							<td align="center" style="width:180px">'.date("d/m/Y",strtotime($filahi->fecha)).'</td>
-							<td align="center" style="width:180px">$ '.number_format($filahi->column1,2,".",",").'</td>
-							<td align="center" style="width:180px">$ '.number_format($filahi->column2,2,".",",").'</td>
-							<td align="center" style="width:180px">$ '.number_format($filahi->column3,2,".",",").'</td>
-							<td align="center" style="width:180px">$ '.number_format($filahi->column4,2,".",",").'</td>
-							<td align="center" style="width:180px">$ '.number_format($totalcentros,2,".",",").'</td>
+							<td align="center" style="width:180px">'.$rows->numerocaso_expedienteci.'</td>
+							<td align="center" style="width:180px">'.$rows->numerocaso_expedienteci.'</td>
+							<td align="center" style="width:180px">'.implode(" ", array($rows->primer_nombre, $rows->segundo_nombre, $rows->tercer_nombre, $rows->primer_apellido, $rows->segundo_apellido, $rows->apellido_casada)).'</td>
+							<td align="center" style="width:180px">'.fecha_ESP($rows->fechacrea_expedienteci).'</td>
+							<td align="center" style="width:180px">'.fecha_ESP($rows->fechacrea_expedienteci).'</td>
+							<td align="center" style="width:180px">'.$rows->nombre_personaci.' '.$rows->apellido_personaci.'</td>
+							<td align="center" style="width:180px">'.$rows->cant_masc.'</td>
+							<td align="center" style="width:180px">'.$rows->cant_feme.'</td>
+							<td align="center" style="width:180px">'.$rows->numerocaso_expedienteci.'</td>
+							<td align="center" style="width:180px">'.calcular_edad($rows->fnacimiento_personaci).'</td>
+							<td align="center" style="width:180px">'.$rows->discapacidadci.'</td>
+							<td align="center" style="width:180px">'.$rows->nombre_empresa.'</td>
+							<td align="center" style="width:180px">'.$rows->numerocaso_expedienteci.'</td>
+							<td align="center" style="width:180px">'.$rows->grupo_catalogociiu.'</td>
+							<td align="center" style="width:180px">'.$rows->actividad_catalogociiu.'</td>
+							<td align="center" style="width:180px">'.$rows->resultado_expedienteci.'</td>
+							<td align="center" style="width:180px">'.$rows->numerocaso_expedienteci.'</td>
+							<td align="center" style="width:180px">'.$rows->numerocaso_expedienteci.'</td>
+							<td align="center" style="width:180px">'.$rows->numerocaso_expedienteci.'</td>
+							<td align="center" style="width:180px">'.$rows->numerocaso_expedienteci.'</td>
 						</tr>';
 					}
 				}
@@ -268,38 +282,5 @@ class Reportes_individuales extends CI_Controller {
 		$writer->save('php://output');
 	}
 
-
-
-	public function mostrarActividad($id){
-		$nuevo['depende_vyp_actividades']=$id;
-		$this->load->view('configuraciones/actividad_ajax/combo_actividad',$nuevo);
-	}
-
-	public function tabla_actividad(){
-		//$data['id_modulo']=$id_modulo;
-		$this->load->view('configuraciones/actividad_ajax/tabla_actividad');
-	}
-
-	public function gestionar_actividad(){
-		if($this->input->post('band') == "save"){
-			$data = array(
-			'nombre_vyp_actividades' => mb_strtoupper($this->input->post('nombre_vyp_actividades')),
-			'depende_vyp_actividades' => $this->input->post('depende_vyp_actividades'),
-			);
-      		echo $this->actividad_model->insertar_actividad($data);
-		}else if($this->input->post('band') == "edit"){
-      		$data = array(
-		    'id_vyp_actividades' => $this->input->post('id_vyp_actividades'),
-		    'nombre_vyp_actividades' => mb_strtoupper($this->input->post('nombre_vyp_actividades')),
-			'depende_vyp_actividades' => $this->input->post('depende_vyp_actividades'),
-			);
-			echo $this->actividad_model->editar_actividad($data);
-		}else if($this->input->post('band') == "delete"){
-			$data = array(
-			'id_vyp_actividades' => $this->input->post('id_vyp_actividades')
-			);
-			echo $this->actividad_model->eliminar_actividad($data);
-		}
-	}
 }
 ?>
