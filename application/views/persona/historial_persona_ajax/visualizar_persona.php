@@ -101,7 +101,15 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                           <div class="col-lg-6"><p class="m-b-0"><b>Delegado:</b> <?php echo implode(" ", array($fila->primer_nombre, $fila->segundo_nombre, $fila->tercer_nombre, $fila->primer_apellido, $fila->segundo_apellido, $fila->apellido_casada)); ?></p></div>
                                         </div>
                                           <div class="row">
-                                          <div class="col-lg-6"><p class="m-b-0"><b>Motivo:</b> <?=$fila->motivo_expedienteci?></p></div>
+                                          <div class="col-lg-6"><p class="m-b-0"><b>Motivo:</b> 
+                                            <?php if($fila->motivo_expedienteci == '1'){ ?>
+                                              Despido de hecho o injustificado
+                                            <?php }elseif($fila->motivo_expedienteci == '2'){ ?>
+                                              Diferencia laboral
+                                            <?php }else{ ?>
+                                              Notificación de renuncia voluntaria
+                                            <?php } ?>
+                                          </p></div>
                                           <div class="col-lg-6"><p class="m-b-0"><b>Resultado:</b> <?=$fila->resultado_expedienteci?></p></div>
                                         </div>
                                           <br>

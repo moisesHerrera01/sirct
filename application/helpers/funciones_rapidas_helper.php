@@ -231,6 +231,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		return $pie;
     }
 
+    function fecha_ENG($fecha){
+		return date("Y-m-d",strtotime($fecha));
+	}
+
+	function fecha_ESP($fecha){
+		$fecha = explode("-", $fecha);
+		return $fecha[2]."/".$fecha[1]."/".$fecha[0];
+	}
+
 		function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtolower($mesesarray[($mes-1)]); }
 
 		function hora($hora) {
@@ -391,7 +400,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$cabecera_vista = '
 		 	<table style="width: 100%;">
 		 		<tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
-		 			<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="130px"></td>
+		 			<td width="110px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="110px"></td>
 					<td align="center" style="font-size: 13px; font-weight: bold; line-height: 1.3;">';
 		}else{
 			$cabecera_vista = '
@@ -417,13 +426,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  			$smfin = (intval($data["value"])*6);
  			$sminicio = $smfin-5;
 	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al SEMESTRE: ".mes($sminicio)." - ".mes($smfin)." DE ".$data["anio"])."</span>";
+	 	}else if($data["tipo"] == "periodo"){
+	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al PERIODO: ".fecha_ESP($data["value"])." - ".fecha_ESP($data["value2"]))."</span>";
 	 	}else{
 	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al AÑO: ".$data["anio"])."</span>";
 	 	}
-		$cabecera_vista .= '</td>
+
+	 	if($tipo == 'pdf'){
+			$cabecera_vista .= '</td>
+				<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_derecho.jpg"  width="130px"></td>
+				 	</tr>
+			 	</table><br>';
+		}else{
+			$cabecera_vista .= '</td>
 				<td width="150px"><img src="'.base_url().'assets/logos_vista/logo_derecho.jpg"  width="150px"></td>
-		 	</tr>
-	 	</table><br>';
+				 	</tr>
+			 	</table><br>';
+		}
+		
 	 	return $cabecera_vista;
 	}
 

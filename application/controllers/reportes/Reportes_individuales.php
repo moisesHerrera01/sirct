@@ -5,7 +5,7 @@ class Reportes_individuales extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('actividad_model');
+		$this->load->model('reportes_colectivos_model');
 	}
 
 	public function index(){
@@ -26,7 +26,7 @@ class Reportes_individuales extends CI_Controller {
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
 			'value' => $this->input->post('value'),
-			'fecha_fin' => $this->input->post('value2')
+			'value2' => $this->input->post('value2')
 		);
 
 		$titles = array(
@@ -34,9 +34,11 @@ class Reportes_individuales extends CI_Controller {
 				'DIRECCIÓN GENERAL DE TRABAJO', 
 				'INFORME DE RELACIONES COLECTIVAS');
 
+		$body = '';
 		if($this->input->post('report_type') == "html"){
-			$header = head_table_html($titles, $data, 'html');
-			echo $header;
+			$body .= head_table_html($titles, $data, 'html');
+			$body .= $this->relaciones_colectivas_html($data);
+			echo $body;
 		}else{
 			$this->load->library('mpdf');
 			$this->mpdf=new mPDF('c','A4','10','Arial',10,10,35,17,3,9);
@@ -45,93 +47,54 @@ class Reportes_individuales extends CI_Controller {
 
 		 	$this->mpdf->SetHTMLHeader($header);
 		 	
-		 	$cuerpo = 'hola';//$this->cuerpo($data);
+		 	$body .= $this->relaciones_colectivas_html($data);
 
 		 	$pie = piePagina($this->session->userdata('usuario_centro'));
 			$this->mpdf->setFooter($pie);
 
 			$stylesheet = file_get_contents(base_url().'assets/css/bootstrap.min.css');
-			$this->mpdf->AddPage('P','','','','',10,10,35,17,5,10);
+			$this->mpdf->AddPage('L','','','','',10,10,35,17,5,10);
 			$this->mpdf->SetTitle('Asistencia a personas usuarias');
 			$this->mpdf->WriteHTML($stylesheet,1);  // The parameter 1 tells that this iscss/style only and no body/html/
-			$this->mpdf->WriteHTML($cuerpo);
+			$this->mpdf->WriteHTML($body);
 			$this->mpdf->Output('Informe de gestion - '.$sufijo.'.pdf','I');
 		}
 	}
 
-	function pdf(){
-
-		$this->load->library('mpdf');
-		$this->mpdf=new mPDF('c','A4','10','Arial',10,10,35,17,3,9);
-
-	 	$cabecera_vista = '
-	 	<table style="width: 100%;">
-		 	<tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
-		 		<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="130px"></td>
-				<td align="center" style="font-size: 13px; font-weight: bold; line-height: 1.3;">
-					MINISTERIO DE TRABAJO Y PREVISION SOCIAL <br>
-					UNIDAD FINANCIERA INSTITUCIONAL <br>
-					<span style="font-size: 12px; text-decoration: underline;">INFORME DE INGRESO CONSOLIDADO POR CENTROS DE RECREACIÓN</span>
-				</td>
-				<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_derecho.jpg" width="130px"></td>
-		 	</tr>
-	 	</table><br>';
-
-	 	$this->mpdf->SetHTMLHeader($cabecera_vista);
-	 	
-	 	$cuerpo = 'hola';//$this->cuerpo($data);
-
-	 	$pie = piePagina($this->session->userdata('usuario_centro'));
-		$this->mpdf->setFooter($pie);
-
-		$stylesheet = file_get_contents(base_url().'assets/css/bootstrap.min.css');
-		$this->mpdf->AddPage('P','','','','',10,10,35,17,5,10);
-		$this->mpdf->SetTitle('Asistencia a personas usuarias');
-		$this->mpdf->WriteHTML($stylesheet,1);  // The parameter 1 tells that this iscss/style only and no body/html/
-		$this->mpdf->WriteHTML($cuerpo);
-		$this->mpdf->Output('Informe de gestion - '.$sufijo.'.pdf','I');
-	}
-
-	function cuerpo($data){
+	function relaciones_colectivas_html($data){
 		$cuerpo = "";
 
-		$centro = $this->reportes_model->obtener_centros($data);
-		$labels = array();
-		$cuerpo .= '
+		$cuerpo .= '<div class="table table-responsive">
 			<table border="1" style="width:100%; border-collapse: collapse;">
 				<thead>
 					<tr>
-						<th align="center">Fecha</th>';
-						if($centro->num_rows()>0){
-							foreach ($centro->result() as $filas) {
-								$cuerpo .= '<th align="center">'.$filas->nickname.'</th>';
-								array_push($labels, $filas->nickname);
-							}
-						}
-
-		$cuerpo .= '<th align="center">Total</th>	
+						<th align="center">N° Exp.</th>
+						<th align="center">Depto.</th>
+						<th align="center">Delegado</th>
+						<th align="center">Fecha inicio</th>
+						<th align="center">Fecha fin</th>
+						<th align="center">Persona Solicitante</th>
+						<th align="center">M</th>
+						<th align="center">F</th>
+						<th align="center">Patronos</th>
+						<th align="center">Edad</th>
+						<th align="center">Personas con discapacidad</th>
+						<th align="center">Persona solicitada</th>
+						<th align="center">Causas</th>	
+						<th align="center">Rama económica</th>
+						<th align="center">Actividad económica</th>
+						<th align="center">Resolución</th>
+						<th align="center">Cantidad pagada Hombres</th>
+						<th align="center">Cantidad pagada Mujeres</th>
+						<th align="center">Cantidad pagada Total</th>
+						<th align="center">Observaciones</th>
 					</tr>
 				</thead>
 				<tbody>';
 
-				$total1 = 0;
-				$total2 = 0;
-				$total3 = 0;
-				$total4 = 0;
-
-				$totalcentros = 0;
-
-				$ingresos_centro = $this->reportes_model->obtener_ingresos_diarios();
-				if($ingresos_centro->num_rows()>0){
-					foreach ($ingresos_centro->result() as $filahi) {
-						$totalcentros = 0;
-						$total1 += $filahi->column1;
-						$total2 += $filahi->column2;
-						$total3 += $filahi->column3;
-						$total4 += $filahi->column4;
-
-						$totalcentros += floatval($filahi->column1)+floatval($filahi->column2)+floatval($filahi->column3)+floatval($filahi->column4);					
-
+				$registros = $this->reportes_colectivos_model->registros_relaciones_colectivas($data);
+				if($registros->num_rows()>0){
+					foreach ($registros->result() as $rows) {
 						$cuerpo .= '
 						<tr>
 							<td align="center" style="width:180px">'.date("d/m/Y",strtotime($filahi->fecha)).'</td>
@@ -144,30 +107,13 @@ class Reportes_individuales extends CI_Controller {
 					}
 				}
 
-				$cuerpo .= '
-					<tr>
-						<th align="center" style="width:180px">Total por centro</th>
-						<th align="center" style="width:180px">$ '.number_format($total1,2,".",",").'</th>
-						<th align="center" style="width:180px">$ '.number_format($total2,2,".",",").'</th>
-						<th align="center" style="width:180px">$ '.number_format($total3,2,".",",").'</th>
-						<th align="center" style="width:180px">$ '.number_format($total4,2,".",",").'</th>
-						<th align="center" style="width:180px">$ '.number_format(($total1+$total2+$total3+$total4),2,".",",").'</th>
-					</tr>';
-
 				$cuerpo .= '	
 				</tbody>
-			</table>';
+			</table></div>';
 		return $cuerpo;
 	}
 
 	function excel(){
-		//echo "VISTA NO DISPONIBLE ACTUALMENTE (AUN EN DESARROLLO)";
-		$data = array(
-			'anio' => $this->input->get('anio'),
-			'tipo' => $this->input->get('tipo'),
-			'value' => $this->input->get('value'),
-			'id_centro' => ''
-		);
 
 		$this->load->library('phpe');
 		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE); date_default_timezone_set('America/Mexico_City');

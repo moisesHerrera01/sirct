@@ -27,7 +27,7 @@
         	|| ($("#trimestre").val()!="0" && document.getElementById('radio_trimestral').checked==true)	
         	|| ($("#semestre").val()!="0" && document.getElementById('radio_semestral').checked==true)	
         	|| document.getElementById('radio_anual').checked==true
-        	|| ($("#fecha_inicio").val()!="" && $("#fecha_fin").val()!="" && document.getElementById('radio_semestral').checked==true)
+        	|| ($("#fecha_inicio").val()!="" && $("#fecha_fin").val()!="" && document.getElementById('radio_periodo').checked==true)
         )){
           
           	var url = "<?php echo site_url()?>"+"/reportes/reportes_individuales/relaciones_colectivas_report";
