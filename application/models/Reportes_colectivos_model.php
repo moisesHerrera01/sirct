@@ -11,14 +11,15 @@ class Reportes_colectivos_model extends CI_Model {
 		$this->db->select("
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.sexo_personaci = 'M') AS cant_masc, 
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci  AND p2.sexo_personaci = 'F') AS cant_feme,
-			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp WHERE fp.id_expedienteci = ecc.id_expedienteci) AS monto, 
+			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp JOIN sct_personaci AS p3 WHERE p3.id_personaci = fp.id_persona AND fp.id_expedienteci = ecc.id_expedienteci AND p3.sexo_personaci = 'M') AS monto, 
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci  AND p2.discapacidad_personaci = '1') AS discapacidadci,
 			ecc.*, p.*, emp.*, est.*, ciiu.*")
 			->from('sct_expedienteci AS ecc')
-			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+			->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
-			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu');
+			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
+			->group_by('ecc.id_expedienteci');
 
 		if($data["tipo"] == "mensual"){
 			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])

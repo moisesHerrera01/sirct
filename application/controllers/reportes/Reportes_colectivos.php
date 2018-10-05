@@ -101,26 +101,26 @@ class Reportes_colectivos extends CI_Controller {
 
 						$cuerpo .= '
 						<tr>
-							<td align="center" style="width:180px">'.$rows->numerocaso_expedienteci.'</td>
-							<td align="center" style="width:180px">'.extraer_departamento($rows->numerocaso_expedienteci).'</td>
-							<td align="center" style="width:180px">'.implode(" ", array($rows->primer_nombre, $rows->segundo_nombre, $rows->tercer_nombre, $rows->primer_apellido, $rows->segundo_apellido, $rows->apellido_casada)).'</td>
-							<td align="center" style="width:180px">'.fecha_ESP($rows->fechacrea_expedienteci).'</td>
-							<td align="center" style="width:180px">'.fecha_ESP($rows->fechacrea_expedienteci).'</td>
-							<td align="center" style="width:180px">'.$rows->nombre_personaci.' '.$rows->apellido_personaci.'</td>
-							<td align="center" style="width:180px">'.$rows->cant_masc.'</td>
-							<td align="center" style="width:180px">'.$rows->cant_feme.'</td>
-							<td align="center" style="width:180px">'.$rows->monto.'</td>
-							<td align="center" style="width:180px">'.calcular_edad($rows->fnacimiento_personaci).'</td>
-							<td align="center" style="width:180px">'.$rows->discapacidadci.'</td>
-							<td align="center" style="width:180px">'.$rows->nombre_empresa.'</td>
-							<td align="center" style="width:180px">'.$rows->tiposolicitud_expedienteci.'</td>
-							<td align="center" style="width:180px">'.$rows->grupo_catalogociiu.'</td>
-							<td align="center" style="width:180px">'.$rows->actividad_catalogociiu.'</td>
-							<td align="center" style="width:180px">'.$rows->resultado_expedienteci.'</td>
-							<td align="center" style="width:180px">$ '.number_format($rows->monto,2,'.',',').'</td>
-							<td align="center" style="width:180px">$ '.number_format($rows->monto,2,'.',',').'</td>
-							<td align="center" style="width:180px">$ '.number_format($rows->monto,2,'.',',').'</td>
-							<td align="center" style="width:180px">'.$rows->monto.'</td>
+							<td align="center">'.$rows->numerocaso_expedienteci.'</td>
+							<td align="center">'.extraer_departamento($rows->numerocaso_expedienteci).'</td>
+							<td align="center">'.implode(" ", array($rows->primer_nombre, $rows->segundo_nombre, $rows->tercer_nombre, $rows->primer_apellido, $rows->segundo_apellido, $rows->apellido_casada)).'</td>
+							<td align="center">'.fecha_ESP($rows->fechacrea_expedienteci).'</td>
+							<td align="center">'.fecha_ESP($rows->fechacrea_expedienteci).'</td>
+							<td align="center">'.$rows->nombre_personaci.' '.$rows->apellido_personaci.'</td>
+							<td align="center">'.$rows->cant_masc.'</td>
+							<td align="center">'.$rows->cant_feme.'</td>
+							<td align="center">'.$rows->monto.'</td>
+							<td align="center">'.calcular_edad($rows->fnacimiento_personaci).'</td>
+							<td align="center">'.$rows->discapacidadci.'</td>
+							<td align="center">'.$rows->nombre_empresa.'</td>
+							<td align="center">'.$rows->tiposolicitud_expedienteci.'</td>
+							<td align="center">'.$rows->grupo_catalogociiu.'</td>
+							<td align="center">'.$rows->actividad_catalogociiu.'</td>
+							<td align="center">'.$rows->resultado_expedienteci.'</td>
+							<td align="center">$ '.number_format($rows->monto,2,'.',',').'</td>
+							<td align="center">$ '.number_format($rows->monto,2,'.',',').'</td>
+							<td align="center">$ '.number_format($rows->monto,2,'.',',').'</td>
+							<td align="center">'.$rows->monto.'</td>
 						</tr>';
 					}
 				}
@@ -134,7 +134,7 @@ class Reportes_colectivos extends CI_Controller {
 	function relaciones_colectivas_excel($data, $titulos){
 
 		$this->load->library('phpe');
-		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE); date_default_timezone_set('America/Mexico_City');
+		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE); 
 		$estilo = array( 'borders' => array( 'outline' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) ) );
 
 		if (PHP_SAPI == 'cli') die('Este reporte solo se ejecuta en un navegador web');
@@ -145,7 +145,7 @@ class Reportes_colectivos extends CI_Controller {
 		// Set document properties
 		PhpExcelSetProperties($this->objPHPExcel,"Sistema de conciliación de conflictos de trabajo");
 
-		$titulo = $titulos[3];
+		$titulo = $titulos[2].date(" - Ymd_His");
 
 		$f=1;
 		$letradesde = 'A';
@@ -153,7 +153,7 @@ class Reportes_colectivos extends CI_Controller {
 
 		//MODIFICANDO ANCHO DE LAS COLUMNAS
 		PhpExcelSetColumnWidth($this->objPHPExcel,
-			$width = array(10,20,40,15,15,40,5,5,10,5,10,40,20,60,60,20,20,20,20,20), 
+			$width = array(10,20,40,15,15,40,5,5,10,5,12,40,20,60,60,20,20,20,20,20), 
 			$letradesde, $letrahasta);
 
 		//AGREGAMOS LOS TITULOS DEL REPORTE
@@ -204,6 +204,7 @@ class Reportes_colectivos extends CI_Controller {
 
 		/******************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	***********************************/
 		
+		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true); 
 
 		$f+=3;
 
