@@ -117,9 +117,9 @@ class Reportes_colectivos extends CI_Controller {
 							<td align="center">'.$rows->grupo_catalogociiu.'</td>
 							<td align="center">'.$rows->actividad_catalogociiu.'</td>
 							<td align="center">'.$rows->resultado_expedienteci.'</td>
-							<td align="center">$ '.number_format($rows->monto,2,'.',',').'</td>
-							<td align="center">$ '.number_format($rows->monto,2,'.',',').'</td>
-							<td align="center">$ '.number_format($rows->monto,2,'.',',').'</td>
+							<td align="center">$ '.number_format($rows->monto_masc,2,'.',',').'</td>
+							<td align="center">$ '.number_format($rows->monto_feme,2,'.',',').'</td>
+							<td align="center">$ '.number_format($rows->monto_masc+$rows->monto_feme,2,'.',',').'</td>
 							<td align="center">'.$rows->monto.'</td>
 						</tr>';
 					}
