@@ -392,58 +392,57 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			return mb_strtoupper($cadena) ;
 		}
 
+	function extraer_departamento($expedienteci){
+		$fragmentos = explode(" ", $expedienteci);
 
-	function head_table_html($titles, $data, $tipo){
-
-		if($tipo == 'pdf'){
-			$cabecera_vista = '
-		 	<table style="width: 100%;">
-		 		<tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
-		 			<td width="110px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="110px"></td>
-					<td align="center" style="font-size: 13px; font-weight: bold; line-height: 1.3;">';
-		}else{
-			$cabecera_vista = '
-		 	<table style="width: 100%;">
-			 	<tr style="font-size: 20px; vertical-align: center; font-family: "Poppins", sans-serif;">
-			 		<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="130px"></td>
-					<td align="center" style="font-size: 15px; font-weight: bold; vertical-align: center; line-height: 1.5;">';
-		}
-		for($i=0; $i <= count($titles); $i++){
-			if($i < 2){
-				$cabecera_vista .= mb_strtoupper($titles[$i])."<br>";
-			}elseif($i == 2){
-				$cabecera_vista .= '<span style="font-size: 12px; text-decoration: underline;">'.mb_strtoupper($titles[$i])."</span><br>";
+		$depto = 'N/A';
+		if(count($fragmentos) == 2){
+			switch ($fragmentos[1]) {
+			    case 'SO':
+			        $depto = "SONSONATE";
+			        break;
+			    case 'AH':
+			        $depto = "AHUACHAPÁN";
+			        break;
+			    case 'SA':
+			        $depto = "SANTA ANA";
+			        break;
+			    case 'CH':
+			        $depto = "CHALATENANGO";
+			        break;
+			    case 'LL':
+			        $depto = "LA LIBERTAD";
+			        break;
+			    case 'SS':
+			        $depto = "SAN SALVADOR";
+			        break;
+			    case 'CU':
+			        $depto = "CUSCATLÁN";
+			        break;
+			    case 'LP':
+			        $depto = "LA PAZ";
+			        break;
+			    case 'CA':
+			        $depto = "CABAÑAS";
+			        break;
+			    case 'SV':
+			        $depto = "AN VICENTE";
+			        break;
+			    case 'US':
+			        $depto = "USULUTÁN";
+			        break;
+			    case 'SM':
+			        $depto = "SAN MIGUEL";
+			        break;
+			    case 'MO':
+			        $depto = "MORAZÁN";
+			        break;
+			    case 'LU':
+			        $depto = "LA UNIÓN";
+			        break;
 			}
 		}
-		if($data["tipo"] == "mensual"){
-			$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al MES: ".mes($data["value"])." DE ".$data["anio"])."</span>";
-		}else if($data["tipo"] == "trimestral"){
- 			$tmfin = (intval($data["value"])*3);
- 			$tminicio = $tmfin-2;
- 			$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al TRIMESTRE: ".mes($tminicio)." - ".mes($tmfin)." DE ".$data["anio"])."</span>";
-	 	}else if($data["tipo"] == "semestral"){
- 			$smfin = (intval($data["value"])*6);
- 			$sminicio = $smfin-5;
-	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al SEMESTRE: ".mes($sminicio)." - ".mes($smfin)." DE ".$data["anio"])."</span>";
-	 	}else if($data["tipo"] == "periodo"){
-	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al PERIODO: ".fecha_ESP($data["value"])." - ".fecha_ESP($data["value2"]))."</span>";
-	 	}else{
-	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al AÑO: ".$data["anio"])."</span>";
-	 	}
-
-	 	if($tipo == 'pdf'){
-			$cabecera_vista .= '</td>
-				<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_derecho.jpg"  width="130px"></td>
-				 	</tr>
-			 	</table><br>';
-		}else{
-			$cabecera_vista .= '</td>
-				<td width="150px"><img src="'.base_url().'assets/logos_vista/logo_derecho.jpg"  width="150px"></td>
-				 	</tr>
-			 	</table><br>';
-		}
-		
-	 	return $cabecera_vista;
+		return $depto;
 	}
 
 ?>

@@ -11,6 +11,7 @@ class Reportes_colectivos_model extends CI_Model {
 		$this->db->select("
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.sexo_personaci = 'M') AS cant_masc, 
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci  AND p2.sexo_personaci = 'F') AS cant_feme,
+			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp WHERE fp.id_expedienteci = ecc.id_expedienteci) AS monto, 
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci  AND p2.discapacidad_personaci = '1') AS discapacidadci,
 			ecc.*, p.*, emp.*, est.*, ciiu.*")
 			->from('sct_expedienteci AS ecc')
