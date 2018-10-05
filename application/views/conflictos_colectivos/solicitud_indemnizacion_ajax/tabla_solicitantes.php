@@ -13,7 +13,7 @@
           <?php } ?>
         </div>
         <div class="table-responsive">
-          
+
             <table id="myTable" class="table table-bordered product-overview">
                 <thead class="bg-info text-white">
                     <tr>
@@ -43,18 +43,18 @@
                                 }
                                 echo "<td>";
                                 $array = array($fila->id_personaci);
-                                
+
                                 if(true){
                                     array_push($array, "edit");
                                     echo generar_boton($array,"cambiar_editar_solicitante","btn-info","fa fa-wrench","Editar");
                                 }
 
                                 array_pop($array);
-                                
+
                                 echo generar_boton($array,"resultado","btn-info","mdi mdi-checkbox-marked","Registrar Resultado");
 
                                 echo generar_boton($array,"pagos","btn-info","mdi mdi-square-inc-cash","Gestionar Pagos");
-                                
+
                                 if($fila->estado_persona == "1"){
                                     echo generar_boton($array,"desactivar","btn-danger","fa fa-chevron-down","Dar de baja");
                                 }else{

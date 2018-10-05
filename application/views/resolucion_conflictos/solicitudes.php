@@ -584,7 +584,7 @@ function alertFunc() {
 }
 
 function cambiar_nuevo(){
-    //  open_form(1);
+      open_form(1);
     /*Inicio Solicitante*/
     $("#id_personaci").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
@@ -1278,6 +1278,7 @@ function volver(num) {
                     </div>
                     <div class="card-body b-t" style="padding-top: 7px;">
                     <div>
+                      <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                         <div class="pull-left">
                             <div class="form-group" style="width: 400px;">
                                 <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablasolicitudes();">
@@ -1297,6 +1298,9 @@ function volver(num) {
                                 </select>
                             </div>
                         </div>
+                      <?php }else{ ?>
+                        <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">      
+                      <?php } ?>
                         <div class="pull-right">
                             <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
                             <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2" data-toggle="tooltip" title="Clic para agregar un nuevo registro"><span class="mdi mdi-plus"></span> Nuevo registro</button>

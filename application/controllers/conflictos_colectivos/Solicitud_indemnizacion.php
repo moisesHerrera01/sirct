@@ -19,7 +19,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 	}
 
 	public function gestionar_solicitud() {
-		
+
 		if($this->input->post('band1') == "save"){
 			$data = array(
                 'numerocaso_expedienteci' => 'N/A',
@@ -32,7 +32,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 			echo $this->Expediente_cc_model->insertar_expediente($data);
 
 		} else if ($this->input->post('band1') == "edit") {
-			
+
 			$data = $this->Expediente_cc_model->obtener_expediente($this->input->post('id_expediente'))->result_array()[0];
 
 			$data['id_empresaci'] = $this->input->post('establecimiento');
@@ -51,13 +51,13 @@ class Solicitud_indemnizacion extends CI_Controller {
 	}
 
 	public function gestionar_solicitud_persona() {
-		
+
 		if($this->input->post('band2') == "save"){
 			$data = array(
-                'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
+                //'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
                 'nombre_personaci' => $this->input->post('nombre_persona'),
                 'apellido_personaci' => $this->input->post('apellido_persona'),
-                'funciones_personaci' => $this->input->post('cago_persona'),
+                //'funciones_personaci' => $this->input->post('cago_persona'),
 				'sexo_personaci' => 'N/A',
 				'id_municipio' => 0
 			);
@@ -65,8 +65,8 @@ class Solicitud_indemnizacion extends CI_Controller {
 			$id_persona = $this->Persona_cc_model->insertar_persona_conflicto($data);
 
 			$res = $this->Expediente_cc_model->editar_expediente(array(
-				'id_expedienteci' => $this->input->post('id_expediente'), 
-				'id_personaci' => $id_persona, 
+				'id_expedienteci' => $this->input->post('id_expediente'),
+				'id_personaci' => $id_persona,
 			));
 
 			if ($res == 'exito') {
@@ -76,13 +76,13 @@ class Solicitud_indemnizacion extends CI_Controller {
 			}
 
 		}else if ($this->input->post('band2') == "edit") {
-			
+
 			$data = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
-			$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
+			//$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
 			$data['nombre_personaci'] = $this->input->post('nombre_persona');
 			$data['apellido_personaci'] = $this->input->post('apellido_persona');
-			$data['funciones_personaci'] = $this->input->post('cago_persona');
+			//$data['funciones_personaci'] = $this->input->post('cago_persona');
 
 			if ($this->Persona_cc_model->editar_persona($data) == "exito") {
 				echo $this->input->post('id_persona');
@@ -119,14 +119,14 @@ class Solicitud_indemnizacion extends CI_Controller {
 	}
 
 	public function gestionar_solicitante() {
-		
+
 		if($this->input->post('band4') == "save"){
 			$data = array(
                 'nombre_personaci' => $this->input->post('nombre_solicitante'),
 				'apellido_personaci' => $this->input->post('apellido_solicitante'),
 				'id_expedienteci' => $this->input->post('id_expediente'),
 				'dui_personaci' => $this->input->post('dui'),
-                'funciones_personaci' => $this->input->post('cago_persona'),
+                /*'funciones_personaci' => $this->input->post('cago_persona'),*/
                 'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
                 'telefono_personaci' => $this->input->post('telefono_personaci'),
 				'id_municipio' => $this->input->post('municipio_solicitante'),
@@ -139,14 +139,14 @@ class Solicitud_indemnizacion extends CI_Controller {
 			echo $this->Persona_cc_model->insertar_persona_conflicto($data);
 
 		} else if ($this->input->post('band4') == "edit") {
-			
+
 			$data = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
 			$data['nombre_personaci'] = $this->input->post('nombre_solicitante');
 			$data['apellido_personaci'] = $this->input->post('apellido_solicitante');
 			$data['dui_personaci'] = $this->input->post('dui');
-			$data['funciones_personaci'] = $this->input->post('cago_persona');
-			$data['fnacimiento_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_nacimiento')));
+			//$data['funciones_personaci'] = $this->input->post('cago_persona');
+			//$data['fnacimiento_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_nacimiento')));
 			$data['telefono_personaci'] = $this->input->post('telefono_personaci');
 			$data['id_municipio'] = $this->input->post('municipio_solicitante');
 			$data['direccion_personaci'] = $this->input->post('direccion');
@@ -166,7 +166,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 	}
 
 	public function gestionar_representante() {
-		
+
 		if($this->input->post('band5') == "save"){
 			$data = array(
                 'id_personaci' => $this->input->post('id_persona'),
@@ -180,11 +180,11 @@ class Solicitud_indemnizacion extends CI_Controller {
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
 			$data2['tipopeticion_personaci'] = $this->input->post('motivo');
-			$data2['id_catalogociuo'] = $this->input->post('ocupacion');
-			$data2['funciones_personaci'] = $this->input->post('funciones');
-			$data2['salario_personaci'] = $this->input->post('salario');
-			$data2['formapago_personaci'] = $this->input->post('forma_pago');
-			$data2['horarios_personaci'] = $this->input->post('horario');
+			//$data2['id_catalogociuo'] = $this->input->post('ocupacion');
+			//$data2['funciones_personaci'] = $this->input->post('funciones');
+			//$data2['salario_personaci'] = $this->input->post('salario');
+			//$data2['formapago_personaci'] = $this->input->post('forma_pago');
+			//$data2['horarios_personaci'] = $this->input->post('horario');
 
 			$this->Persona_cc_model->editar_persona($data2);
 
@@ -201,11 +201,11 @@ class Solicitud_indemnizacion extends CI_Controller {
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
 			$data2['tipopeticion_personaci'] = $this->input->post('motivo');
-			$data2['id_catalogociuo'] = $this->input->post('ocupacion');
-			$data2['funciones_personaci'] = $this->input->post('funciones');
-			$data2['salario_personaci'] = $this->input->post('salario');
-			$data2['formapago_personaci'] = $this->input->post('forma_pago');
-			$data2['horarios_personaci'] = $this->input->post('horario');
+			//$data2['id_catalogociuo'] = $this->input->post('ocupacion');
+			//$data2['funciones_personaci'] = $this->input->post('funciones');
+			//$data2['salario_personaci'] = $this->input->post('salario');
+			//$data2['formapago_personaci'] = $this->input->post('forma_pago');
+			//$data2['horarios_personaci'] = $this->input->post('horario');
 
 			$this->Persona_cc_model->editar_persona($data2);
 
@@ -220,7 +220,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
         $this->load->view('conflictos_colectivos/solicitud_indemnizacion_ajax/vista_expediente', $data);
 	}
-	
+
 	public function gestionar_inhabilitar_expediente()
 	{
 		# code...

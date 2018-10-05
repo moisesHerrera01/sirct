@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Login_model extends CI_Model {
-	
+
 	function __construct(){
 		parent::__construct();
 	}
@@ -35,8 +35,14 @@ class Login_model extends CI_Model {
 	}
 
 	function get_data_user($data){
-		$query = $this->db->query("SELECT * FROM org_usuario WHERE usuario = '".$data['usuario']."' AND estado = 1");
+		// $query = $this->db->query("SELECT * FROM org_usuario WHERE usuario = '".$data['usuario']."' AND estado = 1");
+
+		$this->db->select('')
+						 ->from('org_usuario o')
+						 ->join('sir_empleado e','e.nr=o.nr')
+						 ->where('o.usuario',$data['usuario'])
+						 ->where('o.estado','1');
+		$query = $this->db->get();
 		return $query;
 	}
-
 }

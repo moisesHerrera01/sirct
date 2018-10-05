@@ -34,7 +34,7 @@ class Login extends CI_Controller {
 		);
 
 		$response = "";
-		
+
 		$usuario = $this->login_model->verificar_usuario($data);// verifica si el usuario existe
 
 		if($usuario == "existe"){
@@ -70,7 +70,7 @@ class Login extends CI_Controller {
 				$response = "password";
 			}
 		}
-		
+
 		if($response == "exito"){
 			$login = $this->login_model->get_data_user($data);
 			if($login->num_rows() > 0){
@@ -80,12 +80,14 @@ class Login extends CI_Controller {
 	               'id_usuario' => $fila->id_usuario,
 	               'usuario' => $fila->usuario,
 	               'nombre_usuario' => $fila->nombre_completo,
-	               'sesion' => TRUE
+								 'nr' => $fila->nr,
+	               'sesion' => TRUE,
+
 	            );
 				$this->session->set_userdata($usuario_data);
 				/************** Inicio de fragmento bitácora *********************/
 				$this->bitacora_model->bitacora(array( 'descripcion' => "Inició sesión", 'id_accion' => "1"));
-	            /************** Fin de fragmento bitácora *********************/		
+	            /************** Fin de fragmento bitácora *********************/
 			}else{
 				$response = "sesion";
 				$this->session->sess_destroy();
@@ -93,7 +95,7 @@ class Login extends CI_Controller {
 		}
 
 		echo $response;
-		
+
 	}
 
 	public function cerrar_sesion(){
@@ -112,13 +114,13 @@ class Login extends CI_Controller {
 	}
 
 	function ldap_login($user,$pass){
-		error_reporting(0); $ldaprdn = $user.'@mtps.local'; $ldappass = $pass; $ds = 'mtps.local'; $dn = 'dc=mtps,dc=local'; $puertoldap = 389;  $ldapconn = @ldap_connect($ds,$puertoldap); 
-		if ($ldapconn){ 
-			ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION,3);  ldap_set_option($ldapconn, LDAP_OPT_REFERRALS,0); 
+		error_reporting(0); $ldaprdn = $user.'@mtps.local'; $ldappass = $pass; $ds = 'mtps.local'; $dn = 'dc=mtps,dc=local'; $puertoldap = 389;  $ldapconn = @ldap_connect($ds,$puertoldap);
+		if ($ldapconn){
+			ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION,3);  ldap_set_option($ldapconn, LDAP_OPT_REFERRALS,0);
 			$ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
 			if ($ldapbind){  return "login";
-			}else{  return "error"; } 
-		}else{ 
+			}else{  return "error"; }
+		}else{
 			return "error";
 		}
 		ldap_close($ldapconn);
