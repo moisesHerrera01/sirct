@@ -112,7 +112,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			 		<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="130px"></td>
 					<td align="center" style="font-size: 15px; font-weight: bold; vertical-align: center; line-height: 1.5;">';
 		}
-		for($i=0; $i <= count($titles); $i++){
+		for($i=0; $i < count($titles); $i++){
 			if($i < 2){
 				$cabecera_vista .= mb_strtoupper($titles[$i])."<br>";
 			}elseif($i == 2){
@@ -133,6 +133,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			 	</table><br>';
 		}
 		
+	 	return $cabecera_vista;
+	}
+
+	function table_header($titles){
+
+		$cabecera_vista = '<div class="table table-responsive">
+			<table border="1" style="width:100%; border-collapse: collapse;">
+				<thead>
+					<tr>';
+		
+		for($i=0; $i < count($titles); $i++){
+			$cabecera_vista .= '<th align="center">'.mb_strtoupper($titles[$i])."</th>";
+		}
+	 	
+		$cabecera_vista .= '</tr>
+				</thead>
+				<tbody>';
+	 	return $cabecera_vista;
+	}
+
+	function table_row($registros){
+		$cabecera_vista = '<tr>';
+		for($i=0; $i < count($registros); $i++){
+			$cabecera_vista .= '<td align="center">'.$registros[$i].'</td>';
+		}
+		$cabecera_vista .= '</tr>';
+
+	 	return $cabecera_vista;
+	}
+
+	function table_footer(){
+		$cabecera_vista = '</tbody>
+			</table></div>';	
 	 	return $cabecera_vista;
 	}
 

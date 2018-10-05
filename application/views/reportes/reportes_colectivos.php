@@ -35,13 +35,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status online pull-right"></span> </div>
                                             <div class="mail-contnet">
                                                 <h5>Reporte de relaciones colectivas</h5>
-                                                <span class="mail-desc">info@wrappixel.com</span></div>
+                                                <span class="mail-desc">Muestra todos registros de expediente con sus respectivos datos</span></div>
                                         </a>
                                         <!-- Message -->
-                                        <a href="#">
-                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status busy pull-right"></span> </div>
+                                        <a href="<?=site_url()?>/reportes/reportes_colectivos/registro_edades">
+                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status online pull-right"></span> </div>
                                             <div class="mail-contnet">
-                                                <h5>Sonu Nigam</h5> <span class="mail-desc">pamela1987@gmail.com</span></div>
+                                                <h5>Reporte de registro de edades</h5> 
+                                                <span class="mail-desc">Muestra los expedientes con el conteo de edades segregados por sexo</span></div>
                                         </a>
                                         <!-- Message -->
                                         <a href="#">
