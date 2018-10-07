@@ -51,7 +51,6 @@ class Retiro_voluntario extends CI_Controller {
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
-			'id_empleador' => $this->input->post('id_empleador')
 			);
 			echo $this->solicitudes_model->editar_solicitud($data);
 
@@ -83,22 +82,6 @@ class Retiro_voluntario extends CI_Controller {
 
        } else if($this->input->post('band2') == "edit"){
 
-           $data3 = array(
-               'id_empleador' => $this->input->post('id_emplea'),
-               'nombre_empleador' => $this->input->post('nombres_jefe'),
-               'apellido_empleador' => $this->input->post('apellidos_jefe'),
-               'cargo_empleador' => $this->input->post('cargo_jefe')
-           );
-
-           $data = $this->solicitudes_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
-           $data['id_personaci'] = $this->input->post('id_persona');
-           $data['salario_personaci'] = $this->input->post('salario');
-           $data['funciones_personaci'] = $this->input->post('funciones');
-           $data['formapago_personaci'] = $this->input->post('forma_pago');
-           $data['horarios_personaci'] = $this->input->post('horario');
-           $data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
-           $data['id_catalogociuo'] = $this->input->post('ocupacion');
-
            $data2 = array(
                 'id_expedienteci' => $this->input->post('id_expedienteci'),
                 'motivo_expedienteci' => $this->input->post('motivo'),
@@ -110,9 +93,8 @@ class Retiro_voluntario extends CI_Controller {
                 'tiposolicitud_expedienteci' =>"Conciliación",
            );
 
-           if ("fracaso" != $this->empleadores_model->editar_empleador($data3)) {
-                $this->solicitudes_model->editar_solicitud($data);
-                $this->expedientes_model->editar_expediente($data2);
+           if ("fracaso" != $this->expedientes_model->editar_expediente($data2)) {
+               echo "exito";
            } else {
                echo "fracaso";
            }

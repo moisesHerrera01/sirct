@@ -8,26 +8,7 @@ class Solicitudes_model extends CI_Model {
 	}
 
 	function insertar_solicitud($data){
-		if($this->db->insert('sct_personaci', array(
-			'nombre_personaci' => $data['nombre_personaci'],
-			'apellido_personaci' => $data['apellido_personaci'],
-			'conocido_por' => $data['conocido_por'],
-			'dui_personaci' => $data['dui_personaci'],
-			'id_doc_identidad' => $data['id_doc_identidad'],
-			'telefono_personaci' => $data['telefono_personaci'],
-			'telefono2_personaci' => $data['telefono2_personaci'],
-			'id_municipio' => $data['id_municipio'],
-			'direccion_personaci' => $data['direccion_personaci'],
-			'fnacimiento_personaci' => $data['fnacimiento_personaci'],
-			'sexo_personaci' => $data['sexo_personaci'],
-			'estudios_personaci' => $data['estudios_personaci'],
-			'nacionalidad_personaci' => $data['nacionalidad_personaci'],
-			'discapacidad_personaci' => $data['discapacidad_personaci'],
-			'posee_representante' => $data['posee_representante'],
-			'pertenece_lgbt' => $data['pertenece_lgbt'],
-			'discapacidad' => $data['discapacidad'],
-			'tipopeticion_personaci' => 0
-		))){
+		if ($this->db->insert('sct_personaci',$data)) {
 			return $this->db->insert_id();
 		}else{
 			return "fracaso";
@@ -72,42 +53,7 @@ class Solicitudes_model extends CI_Model {
   		}else{
   			return "fracaso";
   		}
-	}
-
-	/*function insertar_representante($data){
-		if($this->db->insert('sge_representante', array(
-			'id_empresa' => $data['id_empresa'],
-			'nombres_representante' => $data['nombres_representante'],
-			'alias_representante' => $data['alias_representante'],
-			'tipo_representante' => $data['tipo_representante']
-		))){
-			return "exito";
-		}else{
-			return "fracaso";
-		}
-	}
-
-	function editar_representante($data){
-		$this->db->where("id_representante",$data["id_representante"]);
-		if($this->db->update('sge_representante', array(
-			'id_empresa' => $data['id_empresa'],
-			'nombres_representante' => $data['nombres_representante'],
-			'alias_representante' => $data['alias_representante'],
-			'tipo_representante' => $data['tipo_representante']
-		))){
-			return "exito";
-		}else{
-			return "fracaso";
-		}
-	}
-
-	function eliminar_representante($data){
-  		if($this->db->delete("sge_representante",array('id_representante' => $data['id_representante']))){
-  			return "exito";
-  		}else{
-  			return "fracaso";
-  		}
-	}*/
+	}	
 
 	public function obtener_persona($id) {
 

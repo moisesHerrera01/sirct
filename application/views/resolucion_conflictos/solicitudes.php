@@ -1083,14 +1083,14 @@ function volver(num) {
                                   <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                       <h5>DUI de representante: <span class="text-danger">*</span></h5>
                                       <div class="controls">
-                                          <input type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
+                                          <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
                                       </div>
                                   </div>
 
                                   <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                       <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
                                       <div class="controls">
-                                          <input type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
+                                          <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
                                       </div>
                                   </div>
                                 </div>
@@ -1299,7 +1299,7 @@ function volver(num) {
                             </div>
                         </div>
                       <?php }else{ ?>
-                        <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">      
+                        <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
                       <?php } ?>
                         <div class="pull-right">
                             <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
