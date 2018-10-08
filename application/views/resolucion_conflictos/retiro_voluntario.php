@@ -212,6 +212,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#estudios").val('');
         $("#nacionalidad").val('');
         $("#discapacidad").val('');
+        $("#fecha_preaviso").val('');
+        $("#fecha_conflicto").val('');
+        $("#descripcion_motivo").val('');
         /*Fin Solicitante*/
 
         /*Inicio Expediente*/
@@ -269,6 +272,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     $("#sexo").val(result.sexo_personaci);
                     $("#estudios").val(result.estudios_personaci);
                     $("#discapacidad").val(result.discapacidad_personaci);
+                    $("#fecha_preaviso").val(result.fechaconflicto_personaci);
+                    $("#fecha_renuncia").val(result.fecha_renuncia);
+                    $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
 
                     /*Inicio Expediente*/
                     combo_delegado(result.id_personal);
@@ -371,22 +377,29 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
-    function audiencias(id_expedienteci) {
-        $.ajax({
-            url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
-            type: "post",
-            dataType: "html",
-            data: {id : id_expedienteci}
-        })
-        .done(function(res){
-            console.log(res)
-            $('#cnt_actions').html(res);
-            $("#cnt_actions").show(0);
-            $("#cnt_tabla").hide(0);
-            $("#cnt_tabla_solicitudes").hide(0);
-            $("#cnt_form_main").hide(0);
+    function audiencias(id_expedienteci,origen) {
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
+        type: "post",
+        dataType: "html",
+        data: {id : id_expedienteci}
+      })
+      .done(function(res){
+        //console.log(res)
+        $('#cnt_actions').html(res);
+        $("#cnt_actions").show(0);
+        $("#cnt_tabla").hide(0);
+        $("#cnt_tabla_solicitudes").hide(0);
+        $("#cnt_form_main").hide(0);
+        if (origen==1) {
+            $("#paso3").show(0);
             tabla_audiencias(id_expedienteci);
-        });
+            $("#div_finalizar").show(0);
+        }else {
+          tabla_audiencias(id_expedienteci);
+        }
+
+      });
     }
 
     function tabla_audiencias(id_expedienteci){
@@ -400,6 +413,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 document.getElementById("cnt_tabla_audiencias").innerHTML=xmlhttpB.responseText;
                 $('[data-toggle="tooltip"]').tooltip();
                 $('#myTable2').DataTable();
+                if ($("#myTable2 tbody tr").length>=1) {
+                  $('#div_orden').hide(0);
+                }
             }
         }
         xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/audiencias/tabla_audiencias?id_expedienteci="+id_expedienteci,true);
@@ -654,9 +670,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                                 <div class="row">
                                     <div class="form-group col-lg-4" style="height: 83px;">
-                                      <h5>Estudios realizados: <span class="text-danger">*</span></h5>
+                                      <h5>Estudios realizados:</h5>
                                       <div class="controls">
-                                        <select id="estudios" name="estudios" class="custom-select col-4" onchange="" required>
+                                        <select id="estudios" name="estudios" class="custom-select col-4" onchange="">
                                           <option value="">[Seleccione]</option>
                                           <option value="Sin estudio">Sin estudio</option>
                                           <option value="Educacion Básica">Educacion Básica</option>
@@ -679,9 +695,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-8" style="height: 83px;">
-                                        <h5>Dirección:</h5>
+                                        <h5>Dirección:<span class="text-danger">*</span></h5>
                                         <textarea type="text" id="direccion" name="direccion" class="form-control"
-                                            placeholder="Dirección completa"></textarea>
+                                            placeholder="Dirección completa" required></textarea>
                                         <div class="help-block"></div>
                                     </div>
 
@@ -736,11 +752,33 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <div class="row">
                                     <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
                                         id="div_combo_establecimiento"></div>
+                                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                        <h5>Fecha de preaviso: <span class="text-danger">*</span></h5>
+                                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
+                                            id="fecha_preaviso" name="fecha_preaviso" placeholder="dd/mm/yyyy"
+                                            readonly="">
+                                        <div class="help-block"></div>
+                                    </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
                                         id="div_combo_delegado"></div>
+                                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                        <h5>Fecha de renuncia: <span class="text-danger">*</span></h5>
+                                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
+                                            id="fecha_renuncia" name="fecha_renuncia" placeholder="dd/mm/yyyy"
+                                            readonly="">
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="form-group col-lg-8" style="height: 83px;">
+                                      <h5>Descripción del motivo:<span class="text-danger">*</h5>
+                                      <textarea type="text" id="descripcion_motivo" name="descripcion_motivo" class="form-control" placeholder="Descipción del motivo"></textarea>
+                                      <div class="help-block"></div>
+                                  </div>
                                 </div>
 
                             </blockquote>
@@ -748,13 +786,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <button type="reset" class="btn waves-effect waves-light btn-success">
                                     <i class="mdi mdi-recycle"></i> Limpiar
                                 </button>
-                                <button type="submit" class="btn waves-effect waves-light btn-success2">Finalizar
+                                <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente
                                     <i class="mdi mdi-chevron-right"></i></button>
                             </div>
                             <div align="right" id="btnedit2" style="display: none;">
                                 <button type="reset" class="btn waves-effect waves-light btn-success">
                                     <i class="mdi mdi-recycle"></i> Limpiar</button>
-                                <button type="submit" class="btn waves-effect waves-light btn-info">Finalizar
+                                <button type="submit" class="btn waves-effect waves-light btn-info">Siguiente
                                     <i class="mdi mdi-chevron-right"></i></button>
                             </div>
                         </div>
@@ -1081,7 +1119,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         });
                     } else {
                         cerrar_mantenimiento();
-                        if ($("#band2").val() == "save") {
+                        audiencias(res,1);
+                        /*if ($("#band2").val() == "save") {
                             swal({
                                 title: "¡Registro exitoso!",
                                 type: "success",
@@ -1100,7 +1139,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 showConfirmButton: true
                             });
                         }
-                        tablasolicitudes();
+                        tablasolicitudes();*/
                     }
                 });
 
@@ -1159,6 +1198,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             var currentDate = date.getDate();
             var currentYear = date.getFullYear();
             $('#fecha_nacimiento').datepicker({
+                format: 'dd-mm-yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                endDate: moment().format("DD-MM-YYYY")
+            }).datepicker("setDate", new Date());
+
+            $('#fecha_preaviso').datepicker({
+                format: 'dd-mm-yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                endDate: moment().format("DD-MM-YYYY")
+            }).datepicker("setDate", new Date());
+
+            $('#fecha_renuncia').datepicker({
                 format: 'dd-mm-yyyy',
                 autoclose: true,
                 todayHighlight: true,

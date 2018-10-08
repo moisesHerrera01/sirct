@@ -14,8 +14,13 @@ class Audiencias extends CI_Controller {
   }
 
 	public function reprogramar_audiencia(){
+		$exp = $this->expedientes_model->obtener_expediente($this->input->post('id'))->result_array()[0];
+		if ($exp['tiposolicitud_expedienteci'] == 'Renuncia Voluntaria') {
+			$audiencia = $this->audiencias_model->obtener_audiencias($this->input->post('id'),1,1)->result_array()[0];
+		}elseif ($exp['tiposolicitud_expedienteci'] == 'Conciliación') {
+			$audiencia = $this->audiencias_model->obtener_audiencias($this->input->post('id'),2,1)->result_array()[0];
+		}
 
-		$audiencia = $this->audiencias_model->obtener_audiencias($this->input->post('id'),2,1)->result_array()[0];
 		$data = array(
 		'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha'))),
 		'hora_fechasaudienciasci' => date("H:i:s",strtotime($this->input->post('hora'))),
@@ -40,7 +45,6 @@ class Audiencias extends CI_Controller {
 
 
 	public function gestionar_audiencia(){
-
 		if($this->input->post('band4') == "save"){
 			$data = array(
 			'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
@@ -60,11 +64,19 @@ class Audiencias extends CI_Controller {
 				}else {
 					$numero = 0;
 				}
-				if ($numero>=2) {
-				echo 'reprogramar';
-			}else {
-				echo $this->audiencias_model->insertar_audiencia($data);
-			}
+				if ($exp['tiposolicitud_expedienteci'] == 'Renuncia Voluntaria') {
+						if ($numero>=1) {
+						echo 'reprogramar';
+						}else {
+						echo $this->audiencias_model->insertar_audiencia($data);
+					}
+				}elseif($exp['tiposolicitud_expedienteci'] == 'Conciliación') {
+						if ($numero>=2) {
+						echo 'reprogramar';
+						}else {
+						echo $this->audiencias_model->insertar_audiencia($data);
+					}
+				}
 			}
 
 		}else if($this->input->post('band4') == "edit"){
@@ -84,5 +96,4 @@ class Audiencias extends CI_Controller {
 			echo $this->audiencias_model->eliminar_audiencia($data);
 		}
 	}
-
 }

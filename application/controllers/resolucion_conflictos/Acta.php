@@ -111,10 +111,7 @@ class Acta extends CI_Controller {
   }
 
     public function generar_acta($id) {
-        $data = $this->expedientes_model->obtener_expediente( $id )->result_array()[0];
-        $expediente = $this->expedientes_model->obtener_registros_expedientes( $data['id_personaci'] )->result()[0];
-
-        //$jefe = $this->reglamento_model->jefe_direccion_trabajo()->result()[0];
+        $expediente = $this->expedientes_model->obtener_registros_expedientes($id)->result()[0];
 
         $this->load->library("phpword");
         $this->load->library("NumeroALetras");

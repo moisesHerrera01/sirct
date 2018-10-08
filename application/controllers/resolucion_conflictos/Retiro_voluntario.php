@@ -33,6 +33,7 @@ class Retiro_voluntario extends CI_Controller {
                 'nacionalidad_personaci' => $this->input->post('nacionalidad'),
                 'discapacidad_personaci' => $this->input->post('discapacidad'),
                 'posee_representante' => null
+
 			);
 			echo $this->solicitudes_model->insertar_solicitud($data);
 
@@ -50,10 +51,9 @@ class Retiro_voluntario extends CI_Controller {
 			'sexo_personaci' => $this->input->post('sexo'),
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
-			'discapacidad_personaci' => $this->input->post('discapacidad'),
+			'discapacidad_personaci' => $this->input->post('discapacidad')
 			);
 			echo $this->solicitudes_model->editar_solicitud($data);
-
 		}
     }
 
@@ -61,7 +61,6 @@ class Retiro_voluntario extends CI_Controller {
         $fecha_actual=date("Y-m-d H:i:s");
 
         if($this->input->post('band2') == "save"){
-
             $data = array(
                 'motivo_expedienteci' => '',
                 'descripmotivo_expedienteci' => '',
@@ -71,17 +70,16 @@ class Retiro_voluntario extends CI_Controller {
                 'id_estadosci' => 1,
                 'fechacrea_expedienteci' => $fecha_actual,
                 'tiposolicitud_expedienteci' => "Renuncia Voluntaria",
-                'numerocaso_expedienteci' =>10
+                'numerocaso_expedienteci' =>10,
+                'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_preaviso'))),
+                'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),
+                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo')
             );
 
-            if ("fracaso" == $this->expedientes_model->insertar_expediente($data)) {
-                echo "fracaso";
-            } else {
-                echo "exito";
-            }
+              echo $this->expedientes_model->insertar_expediente($data);
+
 
        } else if($this->input->post('band2') == "edit"){
-
            $data2 = array(
                 'id_expedienteci' => $this->input->post('id_expedienteci'),
                 'motivo_expedienteci' => $this->input->post('motivo'),
@@ -90,17 +88,15 @@ class Retiro_voluntario extends CI_Controller {
                 'id_personal' => $this->input->post('id_personal'),
                 'id_empresaci' => $this->input->post('establecimiento'),
                 'fechacrea_expedienteci' => $fecha_actual,
-                'tiposolicitud_expedienteci' =>"Conciliación",
+                'tiposolicitud_expedienteci' =>"Renuncia Voluntaria",
+                'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_preaviso'))),
+                'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),   
+                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo')
            );
 
-           if ("fracaso" != $this->expedientes_model->editar_expediente($data2)) {
-               echo "exito";
-           } else {
-               echo "fracaso";
-           }
+            echo $this->expedientes_model->editar_expediente($data2);
 
        }
-
     }
 
     public function tabla_solicitudes() {

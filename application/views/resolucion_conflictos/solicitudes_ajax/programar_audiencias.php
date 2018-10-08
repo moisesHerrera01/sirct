@@ -26,7 +26,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <h3 id="paso4" class="box-title" style="margin: 0px; display:none;">
                 <button  type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 4</button>&emsp;
                 Programar audiencias
-              </h3><hr class="m-t-0 m-b-30">
+              </h3>
+            <h3 id="paso3" class="box-title" style="margin: 0px; display:none;">
+                <button  type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
+                Programar audiencias
+              </h3>
+              <hr class="m-t-0 m-b-30">
             <blockquote class="m-t-0">
                 <table class="table no-border">
                     <tbody>
@@ -99,14 +104,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
 
               <div align="right" id="btnadd6">
-                <button type="reset" class="btn waves-effect waves-light btn-success">
+                <button type="reset" onclick="cambiar();" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
                 <button type="submit" onclick="cambiar_nuevo5();" class="btn waves-effect waves-light btn-success2">
                   Guardar <i class="mdi mdi-chevron-right"></i>
                 </button>
               </div>
               <div align="right" id="btnedit6" style="display: none;">
-                <button type="reset" class="btn waves-effect waves-light btn-success">
+                <button type="reset" onclick="cambiar();" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
                 <button type="submit" class="btn waves-effect waves-light btn-info">
                   Editar <i class="mdi mdi-chevron-right"></i>
@@ -151,7 +156,15 @@ function eliminar_audiencia(){
 
  function finalizar(){
    cerrar_mantenimiento();
-   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+   swal({ title: "¡Programación de horarios exitosa!", type: "success", showConfirmButton: true });
+ }
+
+ function cambiar(){
+   $("#ttl_form").addClass("bg-success");
+   $("#ttl_form").removeClass("bg-info");
+   $("#btnadd6").show(0);
+   $("#btnedit6").hide(0);
+   $("#band4").val("save")
  }
 
 function cambiar_nuevo5(){
@@ -237,7 +250,7 @@ $(function(){
                             orden: formData.get('numero_audiencia'),
                             fecha: formData.get('fecha_audiencia'),
                             hora: formData.get('hora_audiencia'),
-                            hora: formData.get('hora_audiencia'),
+                            orden: formData.get('orden'),
                             motivo: inputValue
                           }
                         })
