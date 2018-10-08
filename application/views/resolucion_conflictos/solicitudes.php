@@ -160,10 +160,6 @@ function cambiar_update_post(id_personaci,bandera){
 
       $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
       combo_establecimiento('');
-      // $("#band").val("update_post");
-      // $("#band1").val("update_post");
-      // $("#band2").val("update_post");
-      // $("#band6").val('update_post');
     });
   }
 }
