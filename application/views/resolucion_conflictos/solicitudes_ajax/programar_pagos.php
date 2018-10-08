@@ -58,6 +58,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                           </h5>
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="form-group col-lg-5" style="height: 20px;">
+                          Acuerdo de pagos:
+                        </div>
+                        <div class="form-group col-lg-5" style="height: 20px;">
+                        <h5><?= $expediente->tipocociliacion_expedienteci ?></h5>
+                        </div>
+                      </div>
                     </tbody>
                 </table>
             </blockquote>

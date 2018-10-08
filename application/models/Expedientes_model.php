@@ -92,6 +92,8 @@ class Expedientes_model extends CI_Model {
 											  'e.id_expedienteci,
 												 e.numerocaso_expedienteci,
 												 e.tiposolicitud_expedienteci,
+												 e.tipocociliacion_expedienteci,
+												 e.tiposolicitud_expedienteci,
 												 ep.apellido_casada,
 												 ep.primer_nombre,
 												 ep.segundo_nombre,
@@ -102,8 +104,7 @@ class Expedientes_model extends CI_Model {
 												 p.nombre_personaci,
 												 p.apellido_personaci,
 												 em.nombre_empresa,
-												 s.nombre_sindicato,
-												 e.tiposolicitud_expedienteci'
+												 s.nombre_sindicato'
 												)
              ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci','left')
