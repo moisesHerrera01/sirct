@@ -336,7 +336,7 @@ class Reportes_colectivos extends CI_Controller {
 
 		//MODIFICANDO ANCHO DE LAS COLUMNAS
 		PhpExcelSetColumnWidth($this->objPHPExcel,
-			$width = array(10,20,40,15,15,40,5,5,10,5), 
+			$width = array(10,12,25,40,10,10,10,9,9,9), 
 			$letradesde, $letrahasta);
 
 		//AGREGAMOS LOS TITULOS DEL REPORTE
