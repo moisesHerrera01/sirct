@@ -1,5 +1,10 @@
 <?php
-$expediente = $expediente->result()[0];
+$expediente = $expediente->row();
+$sub_total=0.0;
+if ($pagos) {
+  $pagos = $pagos->row();
+  $sub_total = $pagos->indemnizacion_fechaspagosci;
+}
 // Características del navegador
 $ua=$this->config->item("navegator");
 $navegatorless = false;
@@ -66,6 +71,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <h5><?= $expediente->tipocociliacion_expedienteci ?></h5>
                         </div>
                       </div>
+                      <?php if ($expediente->tipocociliacion_expedienteci=='Pago diferido') {?>
+                      <div class="row">
+                        <div class="form-group col-lg-5" style="height: 20px;">
+                          Total de indemnización restante a pagar:
+                        </div>
+                        <div class="form-group col-lg-5" style="height: 20px;">
+                        <h5><?= '$'.number_format($sub_total,2);?></h5>
+                        </div>
+                      </div>
+                    <?php } ?>
                     </tbody>
                 </table>
             </blockquote>
@@ -79,12 +94,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <input type="hidden" id="band5" name="band5" value="save">
 
                 <div class="row">
-                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                  <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Fecha y hora de pago: <span class="text-danger">*</span></h5>
                     <div class="controls">
                       <input type="datetime-local" class="form-control" id="fecha_pago" nombre="fecha_pago"  required>
                     </div>
                   </div>
+                  <?php if ($expediente->tipocociliacion_expedienteci=='Pago diferido'
+                  && number_format($sub_total)==0.00) {?>
+                  <div class="form-group col-lg-4" style="height: 83px;">
+                      <h5>Monto total indemnización:</h5>
+                      <input type="number" id="monto_total" name="monto_total" class="form-control" placeholder="Monto total indeminización" step="0.01">
+                      <div class="help-block"></div>
+                  </div>
+                <?php }else{ ?>
+                  <input type="hidden" id="monto_total" name="monto_total" value="<?=$sub_total?>">
+                <?php } ?>
                   <div class="form-group col-lg-4" style="height: 83px;">
                       <h5>Monto de pago:</h5>
                       <input type="number" id="monto" name="monto" class="form-control" placeholder="Monto de pago" step="0.01">
@@ -186,10 +211,13 @@ $(function(){
               if($("#band5").val() == "save"){
                   cambiar_nuevo6();
                   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                  pagos(formData.get('id_expedienteci1'));
               }else if($("#band5").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                  pagos(formData.get('id_expedienteci1'));
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+                  pagos(formData.get('id_expedienteci1'));
               }
               tabla_pagos(formData.get('id_expedienteci1'));
               $('#formajax7').trigger("reset");

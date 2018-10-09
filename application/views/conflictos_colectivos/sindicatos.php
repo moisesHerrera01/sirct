@@ -382,7 +382,7 @@ function cambiar_nuevo(){
     combo_delegado('');
     combo_actividad_economica('');
     combo_municipio('');
-    $("#motivo").val("").trigger('change.select2');
+    $("#motivo").val('');
     $("#descripcion_motivo").val();
     $("#id_personal").val('');
     $("#establecimiento").val('');
@@ -445,7 +445,7 @@ function cambiar_editar(id_expedienteci,bandera){
       /*Inicio Expediente*/
       combo_delegado(result.id_personal);
       $("#fecha_creacion_exp").val(result.fechacrea_expedienteci);
-      $("#motivo").val(result.motivo_expedienteci).trigger('change.select2');
+      $("#motivo").val(result.motivo_expedienteci);
       $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
       combo_establecimiento(result.id_empresaci);
       /*Fin expediente*/
@@ -910,7 +910,7 @@ function volver(num) {
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>DUI del directivo: <span class="text-danger">*</span></h5>
                       <div class="controls">
-                          <input type="text" id="dui_directivo" name="dui_directivo" class="form-control">
+                          <input data-mask="99999999-9" type="text" id="dui_directivo" name="dui_directivo" class="form-control">
                       </div>
                   </div>
                 </div>

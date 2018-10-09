@@ -12,6 +12,7 @@
                     <tr>
                         <th>N&uacute;mero</th>
                         <th>Fecha de pago</th>
+                        <th>indemnizaci&oacute;n restante</th>
                         <th>Monto de pago</th>
                         <th style="min-width: 85px;">(*)</th>
                     </tr>
@@ -25,6 +26,7 @@
                           echo "<tr>";
                           echo "<td>".$contador."</td>";
                           echo "<td>".date("d-M-Y g:i a", strtotime($fila->fechapago_fechaspagosci))."</td>";
+                          echo "<td>".'$'.number_format($fila->indemnizacion_fechaspagosci,2)."</td>";
                           echo "<td>".'$'.number_format($fila->montopago_fechaspagosci,2)."</td>";
                           echo "<td>";
                           $array = array($fila->id_fechaspagosci, date("Y-m-d\TH:i", strtotime($fila->fechapago_fechaspagosci)),

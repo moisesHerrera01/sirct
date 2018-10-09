@@ -43,3 +43,8 @@ Y en fecha x para entregar renuncia
 
 Solo se le asigna una fecha de cita para audiencia
 
+- si le recibieron los documentos o no
+- fecha de preaviso
+- fecha de renuncia
+- fecha de audiencia
+

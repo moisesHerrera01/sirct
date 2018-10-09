@@ -7,11 +7,14 @@ class Pagos_model extends CI_Model {
 		parent::__construct();
 	}
 
-	public function obtener_pagos($id) {
+	public function obtener_pagos($id,$ordenar=FALSE) {
 
-			$this->db->select('id_expedienteci,id_fechaspagosci,fechapago_fechaspagosci,montopago_fechaspagosci')
+			$this->db->select('id_expedienteci,id_fechaspagosci,fechapago_fechaspagosci,montopago_fechaspagosci,indemnizacion_fechaspagosci')
 						 ->from('sct_fechaspagosci')
 						 ->where('id_expedienteci', $id);
+			if ($ordenar) {
+				$this->db->order_by('id_fechaspagosci DESC');
+			}						 
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {
 					return $query;
@@ -34,7 +37,7 @@ class Pagos_model extends CI_Model {
 				if ($id_delegado) {
 				$this->db->where('em.nr', $id_delegado);
 				}
-		
+
 		$sql[] = '('.$this->db->get_compiled_select().')';
 
 		$this->db->select('p.apellido_personaci nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
@@ -48,11 +51,11 @@ class Pagos_model extends CI_Model {
 		if ($id_delegado) {
 			$this->db->where('em.nr', $id_delegado);
 		}
-		
+
 		$sql[] = '('.$this->db->get_compiled_select().')';
 
 		$sql = implode(' UNION ', $sql);
-			
+
 		$query=$this->db->query($sql);
 		if ($query->num_rows() > 0) {
 				return $query;
@@ -62,15 +65,10 @@ class Pagos_model extends CI_Model {
 		}
 	}
 
-	function insertar_pago($data){
-		if($this->db->insert('sct_fechaspagosci', array(
-			'fechapago_fechaspagosci' => $data['fechapago_fechaspagosci'],
-			'montopago_fechaspagosci' => $data['montopago_fechaspagosci'],
-			'id_expedienteci' => $data['id_expedienteci'],
-			'id_persona' => $data['id_persona']
-		))){
-			return "exito,".$this->db->insert_id();
-		}else{
+	public function insertar_pago($data){
+		if ($this->db->insert('sct_fechaspagosci', $data)) {
+			return $this->db->insert_id();
+		}else {
 			return "fracaso";
 		}
 	}
@@ -94,7 +92,7 @@ class Pagos_model extends CI_Model {
 					 ->from('sct_fechaspagosci')
 					 ->where('id_persona', $id);
 		$query=$this->db->get();
-		
+
 		if ($query->num_rows() > 0) {
 				return $query;
 		} else {

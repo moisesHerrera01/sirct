@@ -10,6 +10,7 @@ class Pagos extends CI_Controller {
 
   public function programar_pagos(){
     $data['expediente'] = $this->expedientes_model->obtener_expediente( $this->input->post('id') );
+		$data['pagos'] = $this->pagos_model->obtener_pagos( $this->input->post('id'),1 );
     $this->load->view('resolucion_conflictos/solicitudes_ajax/programar_pagos', $data);
   }
 
@@ -20,10 +21,19 @@ class Pagos extends CI_Controller {
 
 
 	public function gestionar_pago(){
+		$monto_total = $this->input->post('monto_total');
+		$monto = $this->input->post('monto');
+		if ($monto_total==0) {
+			$restante = 0.0;
+		}else {
+		  $restante = $monto_total - $monto;
+		}
+
 		if($this->input->post('band5') == "save"){
 			$data = array(
 			'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'))),
 			'montopago_fechaspagosci' => $this->input->post('monto'),
+			'indemnizacion_fechaspagosci' => $restante,
 			'id_expedienteci' => $this->input->post('id_expedienteci1'),
 			'id_persona' => null
 			);
@@ -34,6 +44,7 @@ class Pagos extends CI_Controller {
 			$data = array(
 			'fechapago_fechaspagosci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'))),
 			'montopago_fechaspagosci' => $this->input->post('monto'),
+			'indemnizacion_fechaspagosci' => $this->input->post('monto_total'),
 			'id_expedienteci' => $this->input->post('id_expedienteci1'),
 			'id_fechaspagosci' => $this->input->post('id_fechaspagosci')
 			);
