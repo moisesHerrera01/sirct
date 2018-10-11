@@ -5,7 +5,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array('Expediente_cc_model', 'Persona_cc_model', 'Representante_cc_model'));
+		$this->load->model(array('Expediente_cc_model', 'Persona_cc_model', 'Representante_cc_model','solicitudes_model'));
 	}
 
 	public function index(){
@@ -22,12 +22,12 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 		if($this->input->post('band1') == "save"){
 			$data = array(
-                'numerocaso_expedienteci' => 'N/A',
-                'id_empresaci' => $this->input->post('establecimiento'),
-                'id_personal' => $this->input->post('id_personal'),
+        'numerocaso_expedienteci' => 'N/A',
+        'id_empresaci' => $this->input->post('establecimiento'),
+        'id_personal' => $this->input->post('id_personal'),
 				'tiposolicitud_expedienteci' => 'Indemnización y Prestaciones Laborales',
 				'fechacrea_expedienteci' => date("Y-m-d H:i:s"),
-                'id_estadosci' => 1
+        'id_estadosci' => 1
 			);
 			echo $this->Expediente_cc_model->insertar_expediente($data);
 
@@ -122,36 +122,71 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 		if($this->input->post('band4') == "save"){
 			$data = array(
-                'nombre_personaci' => $this->input->post('nombre_solicitante'),
+        'nombre_personaci' => $this->input->post('nombre_solicitante'),
 				'apellido_personaci' => $this->input->post('apellido_solicitante'),
 				'id_expedienteci' => $this->input->post('id_expediente'),
 				'dui_personaci' => $this->input->post('dui'),
-                /*'funciones_personaci' => $this->input->post('cago_persona'),*/
-                'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
-                'telefono_personaci' => $this->input->post('telefono_personaci'),
+        'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
+        'telefono_personaci' => $this->input->post('telefono'),
+				'telefono2_personaci' => $this->input->post('telefono2'),
 				'id_municipio' => $this->input->post('municipio_solicitante'),
 				'direccion_personaci' => $this->input->post('direccion'),
 				'sexo_personaci' => $this->input->post('sexo_solicitante'),
 				'discapacidad_personaci' => $this->input->post('discapacidad_solicitante'),
-				'estado_persona' => 1
+				'estado_persona' => 1,
+				'nacionalidad_personaci' => $this->input->post('nacionalidad'),
+				'discapacidad_personaci' => $this->input->post('discapacidad_solicitante'),
+				'discapacidad' => $this->input->post('discapacidad_desc'),
+				'estudios_personaci' => $this->input->post('estudios'),
+				'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
+				'id_doc_identidad' => $this->input->post('id_doc_identidad')
 			);
+
+			$data2  = array(
+				'numero_partida' =>$this->input->post('numero_partida'),
+				'folio_partida' =>$this->input->post('folio_partida'),
+				'libro_partida' =>$this->input->post('libro_partida'),
+				'asiento_partida' =>$this->input->post('asiento_partida'),
+				'anio_partida' =>$this->input->post('numero_partida')
+			 );
+
+			 $id_partida = $this->solicitudes_model->insertar_partida($data2);
+			 $data['id_partida'] = $id_partida;
 
 			echo $this->Persona_cc_model->insertar_persona_conflicto($data);
 
 		} else if ($this->input->post('band4') == "edit") {
 
-			$data = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
+			$data = array(
+				'id_personaci' => $this->input->post('id_persona'),
+				'nombre_personaci' => $this->input->post('nombre_solicitante'),
+				'apellido_personaci' => $this->input->post('apellido_solicitante'),
+				'dui_personaci' => $this->input->post('dui'),
+				'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
+				'telefono_personaci' => $this->input->post('telefono'),
+				'telefono2_personaci' => $this->input->post('telefono2'),
+				'id_municipio' => $this->input->post('municipio_solicitante'),
+				'direccion_personaci' => $this->input->post('direccion'),
+				'sexo_personaci' => $this->input->post('sexo_solicitante'),
+				'discapacidad_personaci' => $this->input->post('discapacidad_solicitante'),
+				'discapacidad' => $this->input->post('discapacidad_desc'),
+				'estudios_personaci' => $this->input->post('estudios'),
+				'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
+				'id_doc_identidad' => $this->input->post('id_doc_identidad'),
+				'nacionalidad_personaci'=> $this->input->post('nacionalidad'),
+				'id_partida' => $this->input->post('id_partida')
+			);
 
-			$data['nombre_personaci'] = $this->input->post('nombre_solicitante');
-			$data['apellido_personaci'] = $this->input->post('apellido_solicitante');
-			$data['dui_personaci'] = $this->input->post('dui');
-			//$data['funciones_personaci'] = $this->input->post('cago_persona');
-			//$data['fnacimiento_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_nacimiento')));
-			$data['telefono_personaci'] = $this->input->post('telefono_personaci');
-			$data['id_municipio'] = $this->input->post('municipio_solicitante');
-			$data['direccion_personaci'] = $this->input->post('direccion');
-			$data['sexo_personaci'] = $this->input->post('sexo_solicitante');
-			$data['discapacidad_personaci'] = $this->input->post('discapacidad_solicitante');
+			$data2  = array(
+				'id_partida' =>$this->input->post('id_partida'),
+				'numero_partida' =>$this->input->post('numero_partida'),
+				'folio_partida' =>$this->input->post('folio_partida'),
+				'libro_partida' =>$this->input->post('libro_partida'),
+				'asiento_partida' =>$this->input->post('asiento_partida'),
+				'anio_partida' =>$this->input->post('numero_partida')
+			 );
+
+			$this->solicitudes_model->editar_partida($data2);
 
 			if ($this->Persona_cc_model->editar_persona($data) == "exito") {
 				echo $this->input->post('id_persona');
@@ -169,7 +204,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 		if($this->input->post('band5') == "save"){
 			$data = array(
-                'id_personaci' => $this->input->post('id_persona'),
+        'id_personaci' => $this->input->post('id_persona'),
 				'nombre_representantepersonaci' => $this->input->post('nombre_representacion_solicitante'),
 				'apellido_representantepersonaci' => $this->input->post('apellido_representacion_solicitante'),
 				'tipo_representantepersonaci' => $this->input->post('tipo_representacion_solicitante')
@@ -180,11 +215,11 @@ class Solicitud_indemnizacion extends CI_Controller {
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
 			$data2['tipopeticion_personaci'] = $this->input->post('motivo');
-			//$data2['id_catalogociuo'] = $this->input->post('ocupacion');
-			//$data2['funciones_personaci'] = $this->input->post('funciones');
-			//$data2['salario_personaci'] = $this->input->post('salario');
-			//$data2['formapago_personaci'] = $this->input->post('forma_pago');
-			//$data2['horarios_personaci'] = $this->input->post('horario');
+			$data2['funciones_personaci'] = $this->input->post('funciones');
+			$data2['salario_personaci'] = $this->input->post('salario');
+			$data2['formapago_personaci'] = $this->input->post('forma_pago');
+			$data2['horarios_personaci'] = $this->input->post('horario');
+			$data2['ocupacion'] = $this->input->post('ocupacion');
 
 			$this->Persona_cc_model->editar_persona($data2);
 
@@ -201,11 +236,11 @@ class Solicitud_indemnizacion extends CI_Controller {
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
 			$data2['tipopeticion_personaci'] = $this->input->post('motivo');
-			//$data2['id_catalogociuo'] = $this->input->post('ocupacion');
-			//$data2['funciones_personaci'] = $this->input->post('funciones');
-			//$data2['salario_personaci'] = $this->input->post('salario');
-			//$data2['formapago_personaci'] = $this->input->post('forma_pago');
-			//$data2['horarios_personaci'] = $this->input->post('horario');
+			$data2['ocupacion'] = $this->input->post('ocupacion');
+			$data2['funciones_personaci'] = $this->input->post('funciones');
+			$data2['salario_personaci'] = $this->input->post('salario');
+			$data2['formapago_personaci'] = $this->input->post('forma_pago');
+			$data2['horarios_personaci'] = $this->input->post('horario');
 
 			$this->Persona_cc_model->editar_persona($data2);
 

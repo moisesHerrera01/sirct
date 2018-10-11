@@ -283,21 +283,19 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <span class="etiqueta">Motivo de la solicitud</span>
                         <blockquote class="m-t-0">
                             <div class="row">
-                                <div class="form-group col-lg-6" style="height: 83px;">
+                                <div class="form-group col-lg-4" style="height: 83px;">
                                     <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
                                     <div class="controls">
                                         <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
                                             <option value="">[Seleccione]</option>
                                             <option value="1">Indemnización</option>
-                                            <option value="2">Inasistencia Laboral</option>
-                                            <option value="3">Despido Injustificado</option>
-                                            <option value="4">Exige indeminización</option>
-                                            <option value="5">Insubordinación</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group col-lg-6" style="height: 83px;">
-                                    <?= $ocupacion ?>
+                                <div class="form-group col-lg-8" style="height: 83px;">
+                                    <h5>Ocupación: <span class="text-danger">*</span></h5>
+                                    <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI"></textarea>
+                                    <div class="help-block"></div>
                                 </div>
                             </div>
 
@@ -500,6 +498,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
 
     function cambiar_nuevo_solicitante() {
+        open_form(1);
 
         $('#band4').val('save');
         $('#band5').val('save');
@@ -508,8 +507,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#id_persona2').val('');
         $('#id_representante_solicitante').val('');
 
-        combo_doc_identidad();
-        combo_nacionalidades();
         $('#nombre_solicitante').val('');
         $('#apellido_solicitante').val('');
         $('#dui').val('');
@@ -529,6 +526,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#salario').val('');
         $('#forma_pago').val('');
         $('#horario').val('');
+        $("#telefono2").val('');//<----
+        $("#pertenece_lgbt").val('');
+        $("#discapacidad_desc").val('');
+        $("#estudios").val('');
+        combo_doc_identidad();
+        combo_nacionalidades();
+
+        //Inicio Partida de nacimiento
+        $("#id_partida").val('');
+        $("#numero_partida").val('');
+        $("#folio_partida").val('');
+        $("#libro_partida").val('');
+        $("#asiento_partida").val('');
+        $("#anio_partida").val('');
+        //Fin Partida de nacimiento
 
         $("#modal_solicitante").modal("show");
         $("#ocultar_div").hide();
@@ -575,6 +587,27 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $('#salario').val(result.salario_personaci);
             $('#forma_pago').val(result.formapago_personaci);
             $('#horario').val(result.horarios_personaci);
+
+            $("#telefono2").val(result.telefono2);
+            if (result.pertenece_lgbt=='1') {
+              document.getElementById('si_lgbt').checked =true;
+            }else {
+              document.getElementById('no_lgbt').checked =true;
+            }
+            $("#discapacidad_desc").val(result.discapacidad);
+            $("#estudios").val(result.estudios_personaci);
+            $("#conocido_por").val(result.conocido_por);
+            combo_doc_identidad(result.id_doc_identidad);
+            combo_nacionalidades(result.nacionalidad_personaci);
+
+            //Inicio Partida de nacimiento
+            $("#id_partida").val(result.id_partida);
+            $("#numero_partida").val(result.numero_partida);
+            $("#folio_partida").val(result.folio_partida);
+            $("#libro_partida").val(result.libro_partida);
+            $("#asiento_partida").val(result.asiento_partida);
+            $("#anio_partida").val(result.anio_partida);
+            //Fin Partida de nacimiento
 
             $(".modal-header").children("h4").html("Editar Solicitante");
             $("#modal_solicitante").modal("show");
