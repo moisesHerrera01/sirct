@@ -1,0 +1,32 @@
+************************ JURIDICO *********************************
+Solicitante
+	-Razon social
+	-Representate legal y apoderado
+
+Nombre #de DUI
+
+Solicitado
+	-Nombre, apellido, dirección y municipio del trabajador
+
+Abreviatura de la empresa
+Direccion de la empresa
+
+************************ INICIO OBSERVACIONES ACTAS*********************************
+
+Fecha en que finalizó la relación laboral
+Fecha y hora de audiencia
+
+Negrita
+Nombre del trabajador
+Nombre de la sociedad
+Fechas de audiencias
+
+En resultado agregar cual fué el resultado:
+	Conciliado -> monto de pago
+	Sin conciliar -> solo motivo y se archiva
+	Inasistencia -> Del trabajador o ambas partes
+	Desistida -> fecha del desistemiento y la razón
+	Multa -> Se archiva
+	No notificadas -> Motivo
+	Reinstalo -> Fecha de reinstalo, se dejan abiertas las diligencias, se puede archivar si el trabajador no llega
+

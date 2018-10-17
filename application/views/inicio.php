@@ -85,7 +85,7 @@ function redireccionar_retiro_voluntario(tipo){
             <div class="container-fluid">
                 <div class="row page-titles">
                     <div class="col-lg-12 align-self-center">
-                        <h3 class="text-themecolor pull-left">Dashboard</h3>
+                        <h3 class="text-themecolor pull-left">INICIO</h3>
 
                         <div class="pull-right">
                         <div id="btn_indicador" style="display: none;"><button class="btn btn-info" onclick="toogle_Options(500);"><span class="mdi mdi-chart-bar"></span> Indicadores</button></div>
