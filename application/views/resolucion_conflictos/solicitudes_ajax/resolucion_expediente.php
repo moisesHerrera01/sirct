@@ -44,8 +44,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             </div>
 
             <div class="form-group col-lg-12 col-sm-12" style="height: 83px;">
-                <h5>Detalle del resultado:</h5>
-                <textarea type="text" id="detalle_resultado" name="detalle_resultado" class="form-control" placeholder="Detalles del resultado"></textarea>
+                <h5>Detalle del resultado:<span class="text-danger">*</span></h5>
+                <textarea type="text" id="detalle_resultado" name="detalle_resultado" class="form-control" placeholder="Detalles del resultado" required=""></textarea>
                 <div class="help-block"></div>
             </div>
           </div>
@@ -54,7 +54,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div  class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Tipo de conciliación: <span class="text-danger">*</span></h5>
               <div class="controls">
-                <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control" required>
+                <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
                   <option value="">[Seleccione]</option>
                   <option value="Pago en el momento">Pago en el momento</option>
                   <option value="Pago diferido">Pago diferido</option>
@@ -133,6 +133,9 @@ $(function(){
 function mostrar(){
   $("#tipo_pago").hide(0);
   $("#especifique").hide(0);
+  $("#tipo_conciliacion").removeAttr("required");
+  $("#monto_pago").removeAttr("required");
+  $("#inasistencia").removeAttr("required");
   var value = $("#resolucion").val();
   switch (value) {
     case 'Conciliado':

@@ -199,7 +199,7 @@ class Expediente extends CI_Controller {
 					$data['detalle_resultado'] = $this->input->post('detalle_resultado');
 					$data['inasistencia'] = $this->input->post('inasistencia');
 
-					$id_expedienteci = $this->expedientes_model->editar_expediente($data));
+					$id_expedienteci = $this->expedientes_model->editar_expediente($data);
 
 					$data2 = array(
 						'id_expedienteci' => $id_expedienteci,
