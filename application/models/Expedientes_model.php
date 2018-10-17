@@ -24,7 +24,7 @@ class Expedientes_model extends CI_Model {
 												 e.salario_personaci,
 												 e.funciones_personaci,
 												 e.formapago_personaci,
-												 horarios_personaci'
+												 e.horarios_personaci'
 											  )
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
@@ -168,6 +168,36 @@ class Expedientes_model extends CI_Model {
 			return FALSE;
 		}
 
+	}
+
+	public function obtener_delegados_rol() {
+			$this->db->select("
+							e.id_empleado,
+							e.nr,
+							upper(concat_ws(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) as nombre_completo,
+							r.nombre_rol,
+							r.id_rol
+							")
+						 ->from('sir_empleado e')
+						 ->join('org_usuario u', 'e.nr = u.nr')
+						 ->join('org_usuario_rol ur', 'u.id_usuario = ur.id_usuario')
+						 ->join('org_rol r', 'ur.id_rol = r.id_rol')
+						 ->where('e.id_estado', '00001')
+						 ->where('r.nombre_rol', 'FILTRO CCIT')
+						 ->or_where('r.nombre_rol', 'Delegado(a) CCIT')
+						 ->order_by('e.primer_nombre,
+									e.segundo_nombre,
+									e.tercer_nombre,
+									e.primer_apellido,
+									e.segundo_apellido,
+									e.apellido_casada');
+			$query = $this->db->get();
+			if ($query->num_rows() > 0) {
+					return $query;
+			}
+			else {
+					return FALSE;
+			}
 	}
 
 }

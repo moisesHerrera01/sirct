@@ -1155,12 +1155,7 @@ function volver(num) {
                                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                       <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
                                       <div class="controls">
-                                        <!-- <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
-                                          <option value="">[Seleccione]</option>
-                                          <option value="Despido">Despido</option>
-                                          <option value="Diferencia laboral">Diferencia laboral</option>
-                                        </select> -->
-                                        <select id="motivo" name="motivo" class="custom-select" required style="width: 100%">
+                                          <select id="motivo" name="motivo" class="custom-select" required style="width: 100%">
                                             <option value="">[Seleccione el motivo]</option>
                                             <option value="1">Despido de hecho o injustificado</option>
                                             <option value="2">Diferencia laboral</option>
@@ -1178,7 +1173,6 @@ function volver(num) {
                                 </div>
 
                                 <div class="row">
-                                  <!-- <div class="col-lg-8 form-group <//?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_ocupacion"></div> -->
                                   <div class="form-group col-lg-8" style="height: 83px;">
                                       <h5>Ocupación según DUI:<span class="text-danger">*</h5>
                                       <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI" required=""></textarea>
@@ -1651,14 +1645,6 @@ $(function(){
             }else{
               cerrar_mantenimiento();
               audiencias(res,1);
-              /*if($("#band2").val() == "save"){
-                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-              }else if($("#band2").val() == "edit"){
-                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-              }else{
-                  swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-              }*/
-              //tablasolicitudes();
             }
         });
 

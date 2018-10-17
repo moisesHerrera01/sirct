@@ -5,7 +5,7 @@ class Expediente extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("solicitudes_model","representante_persona_model","expedientes_model","empleadores_model"));
+		$this->load->model(array("solicitudes_model","representante_persona_model","expedientes_model","empleadores_model","pagos_model"));
 	}
 
 	public function gestionar_expediente() {
@@ -191,18 +191,23 @@ class Expediente extends CI_Controller {
 				$this->load->view('resolucion_conflictos/solicitudes_ajax/resolucion_expediente', array('id' => $this->input->post('id') ));
 			}
 
-			public function gestionar_resolucion_expediente() {
-				if ($this->input->post('tipo_conciliacion')) {
+				public function gestionar_resolucion_expediente() {
 					$data['tipocociliacion_expedienteci'] = $this->input->post('tipo_conciliacion');
-				}
-				$data['id_expedienteci'] = $this->input->post('id_expedienteci');
-				$data['resultado_expedienteci'] = $this->input->post('resolucion');
+					$data['id_expedienteci'] = $this->input->post('id_expedienteci');
+					$data['resultado_expedienteci'] = $this->input->post('resolucion');
+					$data['fecha_resultado'] = $this->input->post('fecha_resultado');
+					$data['detalle_resultado'] = $this->input->post('detalle_resultado');
+					$data['inasistencia'] = $this->input->post('inasistencia');
 
-				if ("fracaso" == $this->expedientes_model->editar_expediente($data)) {
-					echo "fracaso";
-				} else {
-					echo "exito";
-				}
-			}
+					$id_expedienteci = $this->expedientes_model->editar_expediente($data));
+
+					$data2 = array(
+						'id_expedienteci' => $id_expedienteci,
+						'indemnizacion_fechaspagosci' => $this->input->post('monto_pago')
+				 );
+
+				  $this->pagos_model->insertar_pago($data2);
+
+					}
 }
 ?>

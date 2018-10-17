@@ -22,9 +22,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <div class="row">
             <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Resulato de intervenci&oacute;n conciliator&iacute;a: <span class="text-danger">*</span></h5>
+              <h5>Resulado de intervenci&oacute;n conciliator&iacute;a: <span class="text-danger">*</span></h5>
               <div class="controls">
-                <select id="resolucion" name="resolucion" class="form-control" required>
+                <select onchange="mostrar()" id="resolucion" name="resolucion" class="form-control" required>
                   <option value="">[Seleccione]</option>
                   <option value="Conciliado">Conciliado</option>
                   <option value="Sin conciliar">Sin conciliar</option>
@@ -36,13 +36,48 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </select>
               </div>
             </div>
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+
+            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                <h5>Fecha del resultado: <span class="text-danger">*</span></h5>
+                <input type="text" required="" class="form-control" id="fecha_resultado" name="fecha_resultado" placeholder="dd/mm/yyyy" readonly="">
+                <div class="help-block"></div>
+            </div>
+
+            <div class="form-group col-lg-12 col-sm-12" style="height: 83px;">
+                <h5>Detalle del resultado:</h5>
+                <textarea type="text" id="detalle_resultado" name="detalle_resultado" class="form-control" placeholder="Detalles del resultado"></textarea>
+                <div class="help-block"></div>
+            </div>
+          </div>
+
+          <div class="row" style="display: none;" id='tipo_pago'>
+            <div  class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Tipo de conciliación: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control" required>
                   <option value="">[Seleccione]</option>
                   <option value="Pago en el momento">Pago en el momento</option>
                   <option value="Pago diferido">Pago diferido</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-6" style="height: 83px;">
+                <h5>Monto de pago($):<span class="text-danger">*</h5>
+                <input type="number" id="monto_pago" name="monto_pago" class="form-control" placeholder="Monto de pago total" step="0.01">
+                <div class="help-block"></div>
+            </div>
+          </div>
+
+          <div style="display:none;" id="especifique" class="row">
+            <div  class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <h5>Especifique : <span class="text-danger">*</span></h5>
+              <div class="controls">
+                <select id="inasistencia" name="inasistencia" class="form-control" required>
+                  <option value="">[Seleccione]</option>
+                  <option value="1">Parte solicitada</option>
+                  <option value="2">Parte solictante</option>
+                  <option value="3">Ambas partes</option>
                 </select>
               </div>
             </div>
@@ -94,5 +129,27 @@ $(function(){
       tablasolicitudes();
     });
 });
+
+function mostrar(){
+  $("#tipo_pago").hide(0);
+  $("#especifique").hide(0);
+  var value = $("#resolucion").val();
+  switch (value) {
+    case 'Conciliado':
+      $("#tipo_pago").show(500);
+      break;
+    case 'Inasistencia':
+      $("#especifique").show(500);
+      break;
+    default:
+  }
+}
+
+$(function(){
+    $(document).ready(function(){
+    	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
+        $('#fecha_resultado').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true}).datepicker("setDate", new Date());
+    });
+    });
 
 </script>
