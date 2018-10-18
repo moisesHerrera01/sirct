@@ -64,7 +64,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
             <div class="form-group col-lg-6" style="height: 83px;">
                 <h5>Monto de pago($):<span class="text-danger">*</h5>
-                <input type="number" id="monto_pago" name="monto_pago" class="form-control" placeholder="Monto de pago total" step="0.01">
+                <input type="number" id="monto_pago" name="monto_pago" class="form-control" placeholder="Monto total de pago " step="0.01">
+                <div class="help-block"></div>
+            </div>
+
+            <div class="form-group col-lg-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <h5>Fecha y hora de pago: <span class="text-danger">*</span></h5>
+              <div class="controls">
+                <input type="datetime-local" class="form-control" id="fecha_pago" nombre="fecha_pago">
+              </div>
+            </div>
+
+            <div style="display: none" id="p_pago" class="form-group col-lg-6" style="height: 83px;">
+                <h5>Monto de primer pago:<span class="text-danger">*</h5>
+                <input type="number" id="primer_pago" name="primer_pago" class="form-control" placeholder="Monto de primer pago" step="0.01">
                 <div class="help-block"></div>
             </div>
           </div>
@@ -103,6 +116,7 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax4"));
+        formData.append("fecha_pago", $("#fecha_pago").val());
         $('#modal_resolucion').modal('hide');
 
         $.ajax({
@@ -115,10 +129,8 @@ $(function(){
             processData: false
         })
         .done(function(res){
-            if(res == "exito"){
-                //cerrar_mantenimiento();
+            if(res != "fracaso"){
                 swal({ title: "¡La resolucion se aplicó con exito!", type: "success", showConfirmButton: true });
-                //tablaEstados();
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
@@ -133,16 +145,37 @@ $(function(){
 function mostrar(){
   $("#tipo_pago").hide(0);
   $("#especifique").hide(0);
+  $("#p_pago").hide(0);
+  $("#f_pago").hide(0);
   $("#tipo_conciliacion").removeAttr("required");
   $("#monto_pago").removeAttr("required");
   $("#inasistencia").removeAttr("required");
+  $("#primer_pago").removeAttr("required");
+  $("#fecha_pago").removeAttr("required");
   var value = $("#resolucion").val();
   switch (value) {
     case 'Conciliado':
       $("#tipo_pago").show(500);
+      $("#f_pago").show(500);
+      $("#tipo_conciliacion").attr("required",'required');
+      $("#tipo_conciliacion").change(
+          function(){
+          $("#primer_pago").removeAttr("required");
+          var tipo = $("#tipo_conciliacion").val();
+          if (tipo=='Pago diferido'){
+            $("#primer_pago").attr("required",'required');
+            $("#p_pago").show(500);
+          }else {
+            $("#primer_pago").removeAttr("required");
+            $("#p_pago").hide(0);
+          }
+        });
+      $("#monto_pago").attr("required",'required');
+      $("#fecha_pago").attr("required",'required');
       break;
     case 'Inasistencia':
       $("#especifique").show(500);
+      $("#inasistencia").attr("required",'required');
       break;
     default:
   }
