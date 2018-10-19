@@ -101,6 +101,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <label for="segunda">Segunda</label>
                       <div class="help-block"></div>
                 </div>
+
+                <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_procurador"></div>
                 </div>
 
               <div align="right" id="btnadd6">
@@ -180,7 +182,9 @@ function cambiar_nuevo5(){
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> programar_audiencias");
 }
 
-function cambiar_editar5(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,estado_audiencia,numero_fechasaudienciasci,bandera){
+function cambiar_editar5(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,estado_audiencia,
+                         numero_fechasaudienciasci,id_procuradorci,bandera){
+    combo_procuradores(id_procuradorci);
     $("#id_fechasaudienciasci").val(id_fechasaudienciasci);
     $("#fecha_audiencia").val(fecha_fechasaudienciasci);
     $("#hora_audiencia").val(hora_fechasaudienciasci);
@@ -251,6 +255,7 @@ $(function(){
                             fecha: formData.get('fecha_audiencia'),
                             hora: formData.get('hora_audiencia'),
                             orden: formData.get('orden'),
+                            procurador: formData.get('procurador'),
                             motivo: inputValue
                           }
                         })

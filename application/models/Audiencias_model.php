@@ -15,7 +15,8 @@ class Audiencias_model extends CI_Model {
 												 fecha_fechasaudienciasci,
 												 hora_fechasaudienciasci,
 												 estado_audiencia,
-												 numero_fechasaudienciasci'
+												 numero_fechasaudienciasci,
+												 id_procuradorci'
 											  )
 						 ->from('sct_fechasaudienciasci')
 						 ->where('id_expedienteci', $id)
@@ -84,4 +85,16 @@ class Audiencias_model extends CI_Model {
 	public function eliminar_audiencia($data){
 		$this->db->delete('sct_fechasaudienciasci', array('id_fechasaudienciasci' => $data['id_fechasaudienciasci']));
 	}
+
+	public function obtener_procuradores(){
+		$this->db->select('CONCAT_WS(" ",nombre_procuradorci, apellido_procurador) nombre_procurador, dui_procuradorci, acreditacion_procuradorci, id_procuradorci')
+						 ->from('sct_procuradorci');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
+
 }

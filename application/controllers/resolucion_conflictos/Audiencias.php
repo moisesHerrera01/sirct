@@ -26,7 +26,8 @@ class Audiencias extends CI_Controller {
 		'hora_fechasaudienciasci' => date("H:i:s",strtotime($this->input->post('hora'))),
 		'id_expedienteci' => $this->input->post('id'),
 		'numero_fechasaudienciasci' => 2,
-		'estado_audiencia' => 1
+		'estado_audiencia' => 1,
+		'id_procuradorci' => $this->input->post('procurador')
 		);
 
 		$data2 = array(
@@ -51,7 +52,8 @@ class Audiencias extends CI_Controller {
 			'hora_fechasaudienciasci' => date("H:i:s",strtotime($this->input->post('hora_audiencia'))),
 			'id_expedienteci' => $this->input->post('id_expedienteci1'),
 			'numero_fechasaudienciasci' => $this->input->post('numero_audiencia'),
-			'estado_audiencia' => 1
+			'estado_audiencia' => 1,
+			'id_procuradorci' => $this->input->post('procurador')
 			);
 			$exp = $this->expedientes_model->obtener_expediente($data['id_expedienteci'])->result_array()[0];
 			$resultado = $this->audiencias_model->obtener_audiencias_delegado($exp['nr'],$data['fecha_fechasaudienciasci'],$data['hora_fechasaudienciasci']);
@@ -85,7 +87,8 @@ class Audiencias extends CI_Controller {
 			'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
 			'hora_fechasaudienciasci' => $this->input->post('hora_audiencia'),
 			'id_expedienteci' => $this->input->post('id_expedienteci1'),
-			'id_fechasaudienciasci' => $this->input->post('id_fechasaudienciasci')
+			'id_fechasaudienciasci' => $this->input->post('id_fechasaudienciasci'),
+			'id_procuradorci' => $this->input->post('procurador')
 			);
 			echo $this->audiencias_model->editar_audiencia($data);
 
@@ -95,5 +98,15 @@ class Audiencias extends CI_Controller {
 			);
 			echo $this->audiencias_model->eliminar_audiencia($data);
 		}
+	}
+
+	public function combo_procuradores() {
+		$data = $this->audiencias_model->obtener_procuradores();
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_procuradores',
+			array(
+				'id' => $this->input->post('id'),
+				'procuradores' => $data
+			)
+		);
 	}
 }

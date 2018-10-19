@@ -13,6 +13,19 @@ function nav(value) {
   cerrar_mantenimiento();
 }
 
+function combo_procuradores(seleccion){
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/combo_procuradores",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_procurador').html(res);
+    $(".select2").select2();
+  });
+}
+
 function iniciar(){
   <?php if(isset($tipo_solicitud)){ ?>
       $("#motivo").val('<?=$tipo_solicitud?>');
@@ -1765,6 +1778,7 @@ function audiencias(id_expedienteci,origen) {
     $("#cnt_tabla").hide(0);
     $("#cnt_tabla_solicitudes").hide(0);
     $("#cnt_form_main").hide(0);
+    combo_procuradores();
     if (origen==1) {
         $("#paso4").show(0);
         tabla_audiencias(id_expedienteci);

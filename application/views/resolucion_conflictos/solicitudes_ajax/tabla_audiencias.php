@@ -42,7 +42,8 @@
 
                           echo "<td>";
                           $array = array($fila->id_fechasaudienciasci, $fila->fecha_fechasaudienciasci,
-                          $fila->hora_fechasaudienciasci, $fila->id_expedienteci, $fila->estado_audiencia, $fila->numero_fechasaudienciasci);
+                          $fila->hora_fechasaudienciasci, $fila->id_expedienteci, $fila->estado_audiencia, $fila->numero_fechasaudienciasci,
+                          $fila->id_procuradorci);
 
                           if ($fila->estado_audiencia) {
                             if(tiene_permiso($segmentos=2,$permiso=4)){
