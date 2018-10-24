@@ -149,6 +149,7 @@ class Solicitud_juridica extends CI_Controller {
       		'id_empresaci' => $this->input->post('id_empresaci'),
 			'id_personal' => $this->input->post('id_personal'),
 			'id_personaci' => $this->input->post('id_personaci'),
+			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
 			'descripmotivo_expedienteci' => $this->input->post('descripmotivo_expedienteci')
 			);
@@ -160,6 +161,7 @@ class Solicitud_juridica extends CI_Controller {
 			'id_empresaci' => $this->input->post('id_empresaci'),
 			'id_personal' => $this->input->post('id_personal'),
 			'id_personaci' => $this->input->post('id_personaci'),
+			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
 			'descripmotivo_expedienteci' => $this->input->post('descripmotivo_expedienteci')
 			);
@@ -191,9 +193,9 @@ class Solicitud_juridica extends CI_Controller {
         $titulo = 'FichaSolicitud_PJPN';
 
 		$rows = $this->solicitud_juridica_model->obtener_registros_expedientes( $id_expedienteci );
-        $expediente = $rows->result()[0];
+        $expediente = $rows->row();
         $rows2 = $this->solicitud_juridica_model->obtener_personaci( $expediente->id_personaci );
-        $personaci = $rows2->result()[0];
+        $personaci = $rows2->row();
 
         $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/'.$this->config->item("nombre_base").'/files/templates/actasSolicitud/'.$titulo.'.docx');
         $get = array ('AAAA', 'BBBB', 'CCCC', 'DDDD', 'EEEE', 'FFFF', 'GGGG', 'HHHH', 'IIII', 'JJJJ', 'KKKK');

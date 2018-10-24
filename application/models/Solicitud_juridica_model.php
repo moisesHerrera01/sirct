@@ -60,6 +60,7 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_personal' => $data['id_personal'],
 			'numerocaso_expedienteci' => '11',
 			'id_personaci' => $data['id_personaci'],
+			'id_representanteci' => $data['id_representanteci'],
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
 			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
 			'tiposolicitud_expedienteci' => 'conciliacion juridica',
@@ -78,6 +79,7 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_empresaci' => $data['id_empresaci'],
 			'id_personal' => $data['id_personal'],
 			'id_personaci' => $data['id_personaci'],
+			'id_representanteci' => $data['id_representanteci'],
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
 			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci']
 		))){
@@ -151,11 +153,12 @@ class Solicitud_juridica_model extends CI_Model {
 
 	public function obtener_registros_expedientes($id) {
 
-		$this->db->select('e.id_personaci AS id_personacie, p.*, e.*, ep.*, em.*')
+		$this->db->select('e.id_personaci AS id_personacie, p.*, e.*, ep.*, em.*, r.*')
 			->from('sct_expedienteci e')
 			->join('sge_empresa em','em.id_empresa = e.id_empresaci')
 			->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 			->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
+			->join('sge_representante r ', ' r.id_representante = e.id_representanteci')
 			/*->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo')
 			->join('org_municipio m','m.id_municipio=p.id_municipio')
 			->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
@@ -172,7 +175,7 @@ class Solicitud_juridica_model extends CI_Model {
 	public function obtener_personaci($id) {
 		$this->db->select('')
 			->from('sct_personaci p')
-			->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo')
+			/*->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo')*/
 			->join('org_municipio m','m.id_municipio=p.id_municipio')
 			->where('p.id_personaci', $id);
 		$query=$this->db->get();
