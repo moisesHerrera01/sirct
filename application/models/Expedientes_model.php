@@ -24,7 +24,8 @@ class Expedientes_model extends CI_Model {
 												 e.salario_personaci,
 												 e.funciones_personaci,
 												 e.formapago_personaci,
-												 e.horarios_personaci'
+												 e.horarios_personaci,
+												 e.fechaconflicto_personaci'
 											  )
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')

@@ -1,5 +1,5 @@
-<h5>Procurador: <span class="text-danger">*</span></h5>
-<select id="procurador" name="procurador" required class="select2" onchange=""  style="width: 100%">
+<h5>Procurador: </h5>
+<select id="procurador" name="procurador" class="select2" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php
             if(!empty($procuradores)){

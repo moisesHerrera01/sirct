@@ -164,6 +164,7 @@ class Acta extends CI_Controller {
         //$jefe = $this->reglamento_model->jefe_direccion_trabajo()->result()[0];
 
         $this->load->library("phpword");
+        $this->load->library("CifrasEnLetras");
 
         $PHPWord = new PHPWord();
 
@@ -218,9 +219,10 @@ class Acta extends CI_Controller {
           $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
           $templateWord->setValue('mes_expediente', mb_strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
           $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
-          $templateWord->setValue('edad', calcular_edad(date("Y-m-d", strtotime($expediente->fnacimiento_personaci))));
+          // $templateWord->setValue('edad', calcular_edad(date("Y-m-d", strtotime($expediente->fnacimiento_personaci))));
+          $templateWord->setValue('edad', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($expediente->fnacimiento_personaci))))));
           $templateWord->setValue('dui_persona', convertir_dui($expediente->dui_personaci));
-          $templateWord->setValue('nacionalidad_persona', $expediente->nacionalidad_personaci);
+          $templateWord->setValue('nacionalidad_persona', $expediente->nacionalidad);
           $templateWord->setValue('nombre_empleador', $expediente->nombre_empleador.' '.$expediente->apellido_empleador);
           $templateWord->setValue('funciones_persona', $expediente->funciones_personaci);
           $templateWord->setValue('horario_persona', $expediente->horarios_personaci);
