@@ -107,12 +107,7 @@ function redireccionar_retiro_voluntario(tipo){
                             <h3>Despido de Hecho o injustificado</h3>
                             <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
                             <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2)" class="m-t-10 waves-effect waves-dark btn btn-warning btn-md btn-rounded">Persona jurídica</a>
-                            <div class="d-flex">
-                                <div class="read"></div>
-                                <div class="ml-auto">
-                                    <a href="javascript:void(0)" class="link m-r-10 " data-toggle="tooltip" title="" data-original-title="Like"><i class="mdi mdi-heart-outline"></i></a> <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Share"><i class="mdi mdi-share-variant"></i></a>
-                                </div>
-                            </div>
+                            <br><br>
                         </div>
                     </div>
                 </div>
@@ -123,12 +118,7 @@ function redireccionar_retiro_voluntario(tipo){
                             <h3>Diferencia laboral</h3>
                             <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
                             <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2)" class="m-t-10 waves-effect waves-dark btn btn-warning btn-md btn-rounded">Persona jurídica</a>
-                            <div class="d-flex">
-                                <div class="read"></div>
-                                <div class="ml-auto">
-                                    <a href="javascript:void(0)" class="link m-r-10 " data-toggle="tooltip" title="" data-original-title="Like"><i class="mdi mdi-heart-outline"></i></a> <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Share"><i class="mdi mdi-share-variant"></i></a>
-                                </div>
-                            </div>
+                            <br><br>
                         </div>
                     </div>
                 </div>
@@ -142,12 +132,7 @@ function redireccionar_retiro_voluntario(tipo){
                             <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(3)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
                             <br><br>
                             </div>
-                            <div class="d-flex">
-                                <div class="read"></div>
-                                <div class="ml-auto">
-                                    <a href="javascript:void(0)" class="link m-r-10 " data-toggle="tooltip" title="" data-original-title="Like"><i class="mdi mdi-heart-outline"></i></a> <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Share"><i class="mdi mdi-share-variant"></i></a>
-                                </div>
-                            </div>
+                            <br>
                         </div>
                     </div>
                 </div>
