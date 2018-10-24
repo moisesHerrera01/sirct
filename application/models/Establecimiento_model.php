@@ -20,7 +20,8 @@ class Establecimiento_model extends CI_Model {
                     'direccion_empresa' => $data['direccion_empresa'],
                     'telefono_empresa' => $data['telefono_empresa'],
                     'id_catalogociiu' => $data['id_catalogociiu'],
-                    'id_municipio' => $data['id_municipio']
+                    'id_municipio' => $data['id_municipio'],
+										'tiposolicitud_empresa' => $data['tiposolicitud_empresa']
                 )
             )) {
             return $this->db->insert_id();

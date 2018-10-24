@@ -41,7 +41,8 @@ class Establecimiento extends CI_Controller {
                 'direccion_empresa'  => $this->input->post('dir_establecimiento'),
                 'telefono_empresa' => $this->input->post('telefono_establecimiento'),
                 'id_catalogociiu' => $this->input->post('act_economica'),
-                'id_municipio' => $this->input->post('municipio2')
+                'id_municipio' => $this->input->post('municipio2'),
+								'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
             );
 
 			$id_establecimiento = $this->establecimiento_model->insertar_empresa($data);

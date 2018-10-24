@@ -161,7 +161,6 @@ class Acta extends CI_Controller {
 
     public function generar_acta_tipo($caso,$id_expedienteci) {
         $expediente = $this->expedientes_model->obtener_registros_expedientes($id_expedienteci)->result()[0];
-        //$jefe = $this->reglamento_model->jefe_direccion_trabajo()->result()[0];
 
         $this->load->library("phpword");
         $this->load->library("CifrasEnLetras");
@@ -210,6 +209,16 @@ class Acta extends CI_Controller {
               $templateWord->setValue('representante_persona', mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci));
         }
         if ($caso==5) {
+          $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));
+          $mes_conflicto = mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci))));
+          $anio_conflicto = anio(date('Y', strtotime($expediente->fechaconflicto_personaci)));
+
+          if ($expediente->tiposolicitud_empresa==2) {
+            $tipo_empresa="";
+            $tipo_empresa = " y DICE: Que laboraba para la Sociedad $expediente->nombre_empresa que puede abreviarse $expediente->abreviatura_empresa, ubicada en $expediente->direccion_empresa, DE LA CIUDAD DE $expediente->id_municipio; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
+          }else {
+            $tipo_empresa = "quien laboraba para el señor $expediente->nombre_empresa, que puede ser ubicado en: $expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto, en que fue despedido(a) de su trabajo sin que hasta la fecha se le cancelado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que";
+          }
           $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,1);
           $segunda= $audiencias->result()[1];
           $templateWord->setValue('direccion_empresa', mb_strtoupper($expediente->direccion_empresa));
@@ -219,7 +228,6 @@ class Acta extends CI_Controller {
           $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
           $templateWord->setValue('mes_expediente', mb_strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
           $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
-          // $templateWord->setValue('edad', calcular_edad(date("Y-m-d", strtotime($expediente->fnacimiento_personaci))));
           $templateWord->setValue('edad', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($expediente->fnacimiento_personaci))))));
           $templateWord->setValue('dui_persona', convertir_dui($expediente->dui_personaci));
           $templateWord->setValue('nacionalidad_persona', $expediente->nacionalidad);
@@ -235,6 +243,7 @@ class Acta extends CI_Controller {
           $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
           $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
           $templateWord->setValue('mes_audiencia2', mb_strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
+          $templateWord->setValue('tipo', $tipo_empresa);
         }
         $templateWord->setValue('representante_empresa', mb_strtoupper($expediente->nombres_representante));
         $templateWord->setValue('resolucion', mb_strtoupper($expediente->resultado_expedienteci));

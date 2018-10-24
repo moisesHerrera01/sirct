@@ -81,7 +81,8 @@ class Consultar_fechas extends CI_Controller {
 		if ($eventos==NULL) {
 			echo('No se encontraron resultados');
 		}else {
-			$arrayJson = json_encode($eventos, JSON_UNESCAPED_UNICODE);
+			$arrayJson = json_encode($eventos);
+
 			print_r($arrayJson);
 		}
   }
