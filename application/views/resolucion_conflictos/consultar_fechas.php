@@ -154,7 +154,7 @@ function tabla_calendario(){
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title">Detalles de la audiencia</h4>
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">Cerrar</span></button>
         </div>
         <div id="modalBody" class="modal-body">
           <div class="row">
@@ -207,7 +207,7 @@ function tabla_calendario(){
           </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         </div>
     </div>
 </div>

@@ -14,7 +14,7 @@ class Pagos_model extends CI_Model {
 						 ->where('id_expedienteci', $id);
 			if ($ordenar) {
 				$this->db->order_by('id_fechaspagosci DESC');
-			}						 
+			}
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {
 					return $query;
@@ -31,7 +31,7 @@ class Pagos_model extends CI_Model {
 				->from('sct_fechaspagosci f')
 				->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
 				->join('sir_empleado em','em.id_empleado=e.id_personal')
-				->join('sct_personaci P','p.id_personaci=e.id_personaci','left')
+				->join('sct_personaci p','p.id_personaci=e.id_personaci','left')
 				->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
 				->group_by('f.id_fechaspagosci');
 				if ($id_delegado) {

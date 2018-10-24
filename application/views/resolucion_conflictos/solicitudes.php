@@ -1369,9 +1369,20 @@ function volver(num) {
           <input type="hidden" id="band3" name="band3" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de representantes</h4>
+                <h4 class="modal-title">Gestión de establecimientos</h4>
             </div>
             <div class="modal-body" id="">
+
+              <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                  <h5>Tipo: <span class="text-danger">*</span></h5>
+                  <div class="controls">
+                    <select id="tipo_establecimiento" name="tipo_establecimiento" class="custom-select col-4" onchange="" required>
+                      <option value="">[Seleccione]</option>
+                      <option value="1">Persona natural</option>
+                      <option value="2">Persona jurídica</option>
+                    </select>
+                  </div>
+              </div>
 
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
