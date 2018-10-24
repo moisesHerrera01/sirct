@@ -36,7 +36,6 @@ class Solicitud_juridica extends CI_Controller {
 	public function ver_expediente(){
 		$data['personaci'] = $this->solicitud_juridica_model->obtener_personaci($this->input->post('id_per'));
 		$data['expediente'] = $this->solicitud_juridica_model->obtener_registros_expedientes( $this->input->post('id') );
-		$data['representantes'] = $this->solicitud_juridica_model->obtener_representantes( $this->input->post('id_emp') );
 
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/vista_expediente', $data);
 	}
@@ -82,20 +81,26 @@ class Solicitud_juridica extends CI_Controller {
 	public function gestionar_establecimiento(){
 		if($this->input->post('band') == "save"){
 			$data = array(
+			'tiposolicitud_empresa' => ($this->input->post('tiposolicitud_empresa')),
+			'razon_social' => mb_strtoupper($this->input->post('razon_social')),
+			'abreviatura_empresa' => mb_strtoupper($this->input->post('abreviatura_empresa')),
 			'nombre_empresa' => mb_strtoupper($this->input->post('nombre_empresa')),
 			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
 			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
 			'id_municipio' => $this->input->post('id_municipio'),
-			'direccion_empresa' => $this->input->post('direccion_empresa')
+			'direccion_empresa' => mb_strtoupper($this->input->post('direccion_empresa'))
 			);
       		echo $this->solicitud_juridica_model->insertar_establecimiento($data);
 		}else if($this->input->post('band') == "edit"){
       		$data = array(
+      		'tiposolicitud_empresa' => ($this->input->post('tiposolicitud_empresa')),
+			'razon_social' => mb_strtoupper($this->input->post('razon_social')),
+			'abreviatura_empresa' => mb_strtoupper($this->input->post('abreviatura_empresa')),
 		    'nombre_empresa' => mb_strtoupper($this->input->post('nombre_empresa')),
 			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
 			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
 			'id_municipio' => $this->input->post('id_municipio'),
-			'direccion_empresa' => $this->input->post('direccion_empresa')
+			'direccion_empresa' => mb_strtoupper($this->input->post('direccion_empresa'))
 			);
 			echo $this->solicitud_juridica_model->editar_establecimiento($data);
 		}else if($this->input->post('band') == "delete"){
@@ -110,8 +115,8 @@ class Solicitud_juridica extends CI_Controller {
 	public function gestionar_solicitado(){
 		if($this->input->post('band3') == "save"){
 			$data = array(
-      		'nombre_personaci' => $this->input->post('nombre_personaci'),
-			'apellido_personaci' => $this->input->post('apellido_personaci'),
+      		'nombre_personaci' => mb_strtoupper($this->input->post('nombre_personaci')),
+			'apellido_personaci' => mb_strtoupper($this->input->post('apellido_personaci')),
 			'telefono_personaci' => $this->input->post('telefono_personaci'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion_personaci'),
@@ -124,11 +129,11 @@ class Solicitud_juridica extends CI_Controller {
 		}else if($this->input->post('band3') == "edit"){
 			$data = array(
 			'id_personaci' => $this->input->post('id_personaci'),
-			'nombre_personaci' => $this->input->post('nombre_personaci'),
-			'apellido_personaci' => $this->input->post('apellido_personaci'),
+			'nombre_personaci' => mb_strtoupper($this->input->post('nombre_personaci')),
+			'apellido_personaci' => mb_strtoupper($this->input->post('apellido_personaci')),
 			'telefono_personaci' => $this->input->post('telefono_personaci'),
 			'id_municipio' => $this->input->post('municipio'),
-			'direccion_personaci' => $this->input->post('direccion_personaci'),
+			'direccion_personaci' => mb_strtoupper($this->input->post('direccion_personaci')),
 			'sexo_personaci' => $this->input->post('sexo_personaci'),
 			'discapacidad_personaci' => $this->input->post('discapacidad_personaci')
 			);
@@ -151,7 +156,7 @@ class Solicitud_juridica extends CI_Controller {
 			'id_personaci' => $this->input->post('id_personaci'),
 			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
-			'descripmotivo_expedienteci' => $this->input->post('descripmotivo_expedienteci')
+			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))
 			);
 			echo $this->solicitud_juridica_model->insertar_expediente($data);
 
@@ -163,7 +168,7 @@ class Solicitud_juridica extends CI_Controller {
 			'id_personaci' => $this->input->post('id_personaci'),
 			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
-			'descripmotivo_expedienteci' => $this->input->post('descripmotivo_expedienteci')
+			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))
 			);
 			echo $this->solicitud_juridica_model->editar_expediente($data);
 

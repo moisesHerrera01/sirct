@@ -399,7 +399,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             if(establecimiento == ""){
                 swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
             }else{
-                swal({ title: "No hay representantes", text: "Agregue al menos un representante.", type: "warning", showConfirmButton: true });
+                swal({ title: "Seleccione representante", text: "Agregue o seleccione un representante de la lista.", type: "warning", showConfirmButton: true });
             }
         }else{
             open_form(2);
@@ -558,8 +558,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#cnt_tabla").hide(0);
             //$("#cnt_tabla_solicitudes").hide(0);
             $("#cnt_form_main").hide(0);
+            combo_procuradores();
             tabla_audiencias(id_expedienteci);
         });
+    }
+
+    function combo_procuradores(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/combo_procuradores",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_procurador').html(res);
+        $(".select2").select2();
+      });
     }
 
     function adjuntar_actas(id_expediente) {
@@ -830,10 +844,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <div class="row">
                                 <div class="col-lg-12" align="center">
                                     <div align="right" id="btnadd2" class="pull-right">
-                                        <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                                        <button type="submit" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-check"></i> Finalizar</button>
                                     </div>
                                     <div align="right" id="btnedit2" style="display: none;" class="pull-right">
-                                        <button type="submit" class="btn waves-effect waves-light btn-info">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                                        <button type="submit" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-check"></i> Finalizar</button>
                                     </div>
                                 </div>
                             </div>
@@ -956,6 +970,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                           <option value=''>[Seleccione el tipo]</option>
                           <option class="m-l-50" value="1">Legal</option>
                           <option class="m-l-50" value="2">Designado</option>
+                          <option class="m-l-50" value="3">Apoderado</option>
                       </select>
                   </div>
                 </div>
@@ -998,17 +1013,31 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             </div>
             <div class="modal-body" id="">
                 <div class="row">
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Tipo de inscripción: <span class="text-danger">*</span></h5>
+                        <select id="tiposolicitud_empresa" name="tiposolicitud_empresa" class="form-control custom-select"  style="width: 100%" required="">
+                            <option class="m-l-50" value="1">INSCRIPCIÓN PERSONA NATURAL</option>
+                            <option class="m-l-50" value="2">INSCRIPCIÓN PERSONA JURÍDICA</option>
+                        </select>
+                    </div>
+                  <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Razón social o denominación: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Razón social" id="razon_social" name="razon_social" class="form-control" required="">
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" placeholder="Nombre" id="nombre_empresa" name="nombre_empresa" class="form-control" required="">
                       </div>
                   </div>
-                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Telefono: </h5>
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Abreviatura: <span class="text-danger">*</span></h5>
                       <div class="controls">
-                          <input type="text" placeholder="Telefono" id="telefono_empresa" name="telefono_empresa" class="form-control" data-mask="9999-9999">
-                          
+                          <input type="text" placeholder="Abreviatura" id="abreviatura_empresa" name="abreviatura_empresa" class="form-control" required="">
                       </div>
                   </div>
                 </div>
@@ -1021,8 +1050,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   </div>
                 </div>
                 <div class="row">
-                  
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Telefono: </h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Telefono" id="telefono_empresa" name="telefono_empresa" class="form-control" data-mask="9999-9999">
+                          
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Municipio: <span class="text-danger">*</span></h5>
                         <select id="id_municipio" name="id_municipio" class="select2" style="width: 100%" required>
                             <option value=''>[Seleccione el municipio]</option>

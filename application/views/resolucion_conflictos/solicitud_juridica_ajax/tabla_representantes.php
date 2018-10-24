@@ -43,7 +43,9 @@
                             echo '<td style="cursor: pointer; min-width: 40px; max-width: 40px;" onclick="seleccionar_representante(this,'.$fila->id_representante.');"></td>';
                           }
 
-                          if($fila->tipo_representante == "1"){ $tipo ='Legal'; }else{ $tipo ='designado'; }
+                          if($fila->tipo_representante == "1"){ $tipo ='Legal'; }
+                          else if($fila->tipo_representante == "2"){ $tipo ='designado'; }
+                          else if($fila->tipo_representante == "3"){ $tipo ='apoderado'; }
                           echo "<td style='cursor: pointer;' onclick='seleccionar_representante(this,".$fila->id_representante.");'>"."<h6>".$fila->nombres_representante."</h6><small class='text-muted'>".$tipo."</small>"."</td>";
                           echo "<td style='cursor: pointer;' onclick='seleccionar_representante(this,".$fila->id_representante.");'>".$fila->dui_representante.$id_representanteci."</td>";
                           echo ($fila->estado_representante == "1") ? '<td style="cursor: pointer;" onclick="seleccionar_representante(this,'.$fila->id_representante.');"><span class="label label-success">Activo</span></td>' : '<td style="cursor: pointer;" onclick="seleccionar_representante(this, '.$fila->id_representante.');"><span class="label label-danger">Inactivo</span></td>';

@@ -98,13 +98,7 @@ class Solicitud_juridica_model extends CI_Model {
 	}
 
 	function insertar_establecimiento($data){
-		if($this->db->insert('sge_empresa', array(
-			'nombre_empresa' => $data['nombre_empresa'],
-			'telefono_empresa' => $data['telefono_empresa'],
-			'id_catalogociiu' => $data['id_catalogociiu'],
-			'id_municipio' => $data['id_municipio'],
-			'direccion_empresa' => $data['direccion_empresa'],
-		))){
+		if($this->db->insert('sge_empresa', $data)){
 			return "exito,".$this->db->insert_id();
 		}else{
 			return "fracaso";
