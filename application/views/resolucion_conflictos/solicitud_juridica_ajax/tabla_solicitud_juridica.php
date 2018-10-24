@@ -33,6 +33,7 @@
                                               es.nombre_estadosci AS nombre_estado,
                                               e.resultado_expedienteci AS resultado,
                                               e.fechacrea_expedienteci AS fecha,
+                                              e.id_representanteci,
                                               p.nombre_personaci,
                                               p.apellido_personaci,
                                               p.dui_personaci AS dui,
@@ -82,7 +83,7 @@
                             }
 
                             echo "<td>";
-                            $array = array($fila->id_empresaci, $fila->id_personaci, $fila->nombre_personaci, $fila->apellido_personaci, $fila->sexo_personaci, $fila->direccion_personaci, $fila->discapacidad_personaci, $fila->telefono_personaci, $fila->id_municipio, $fila->ocupacion, $fila->salario_personaci, $fila->horarios_personaci, $fila->id_expedienteci, $fila->motivo_expedienteci, $fila->descripmotivo_expedienteci, $fila->id_personal);
+                            $array = array($fila->id_empresaci, $fila->id_personaci, $fila->nombre_personaci, $fila->apellido_personaci, $fila->sexo_personaci, $fila->direccion_personaci, $fila->discapacidad_personaci, $fila->telefono_personaci, $fila->id_municipio, $fila->ocupacion, $fila->salario_personaci, $fila->horarios_personaci, $fila->id_expedienteci, $fila->motivo_expedienteci, $fila->descripmotivo_expedienteci, $fila->id_personal,$fila->id_representanteci);
                             if(tiene_permiso($segmentos=2,$permiso=4)){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");

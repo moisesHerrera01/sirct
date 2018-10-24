@@ -106,6 +106,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function tabla_representantes(){
         var id_empresa = $("#establecimiento").val();
+        var id_representanteci = $("#id_representanteci").val();
         if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
         }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
         xmlhttpB.onreadystatechange=function(){
@@ -115,7 +116,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $('#myTable2').DataTable();
             }
         }
-        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/tabla_representantes?id_empresa="+id_empresa,true);
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
         xmlhttpB.send();
     }
 
@@ -142,6 +143,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Inicio Solicitante*/
         //combo_establecimiento('');
         $("#id_expedienteci").val('');
+        $("#id_representanteci").val('');
         $("#nr").val($("#nr_search").val()).trigger('change.select2');
         $("#nombres").val('');
         $("#apellidos").val('');
@@ -246,10 +248,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
-    function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal,band){
+    function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal, id_representanteci,band){
         combo_ocupacion(id_catalogociuo, id_empresaci);
         $("#id_catalogociuo").val(id_catalogociuo);
         $("#id_personaci").val(id_personaci);
+        $("#id_representanteci").val(id_representanteci);
         $("#nombre_personaci").val(nombre_personaci);
         $("#apellido_personaci").val(apellido_personaci);
         if(sexo_personaci == 'M'){
@@ -390,9 +393,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function validar_establecimiento(){
         var establecimiento = $("#establecimiento").val();
-        var registros = $("#myTable2 tr:last td");
+        var registros = $("#tabla_representante tbody tr.table-active");
 
-        if(establecimiento == "" || registros.length < 5){
+        if(establecimiento == "" || registros.length == 0){
             if(establecimiento == ""){
                 swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
             }else{
@@ -549,7 +552,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             data: {id : id_expedienteci}
         })
         .done(function(res){
-            console.log(res)
+            //console.log(res)
             $('#cnt_actions').html(res);
             $("#cnt_actions").show(0);
             $("#cnt_tabla").hide(0);
@@ -603,6 +606,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
+    function seleccionar_representante(obj, id_representanteci){
+        $("#id_representanteci").val(id_representanteci)
+        $(obj).parent().addClass('table-active active');
+        $(obj).parent().siblings('tr').removeClass('table-active active');
+        var tds = $(obj).siblings('td');
+
+        var trs = $("#tabla_representante tbody tr");
+        for (var i = 0; i < trs.length; i+=1) {
+            var td = $(trs[i]).children('td');
+            $(td[0]).html('');
+        }
+
+
+        $(tds[0]).html('<span class="round round-primary">R</span>');
+    }
 
 </script>
 
@@ -652,7 +670,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 </div>
                             </blockquote>
 
-                            <span class="etiqueta">Representantes</span>
+                            <span class="etiqueta">Representante</span>
                             <blockquote class="m-t-0">
                                 <div id="cnt_tabla_representantes"></div>
                             </blockquote>
@@ -762,6 +780,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <!-- ============================================================== -->
                         <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                         <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="">
+                        <input type="hidden" id="id_representanteci" name="id_representanteci" value="">
 
                         <div id="cnt_form3" class="cnt_form" style="display: none;">
                             <h3 class="box-title" style="margin: 0px;">
@@ -1146,6 +1165,9 @@ $(function(){
 
     $("#formajax").on("submit", function(e){
         e.preventDefault();
+
+        var act_representante = $("#tabla_representante tbody tr.table-active");
+
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax"));
         formData.append("dato", "valor");
@@ -1175,6 +1197,7 @@ $(function(){
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
         });
+
     });
 
     $("#formajax2").on("submit", function(e){
@@ -1240,7 +1263,7 @@ $(function(){
                     cambiar_nuevo4();
                     $.toast({ heading: 'Registro exitoso', text: 'Registro de información de solicitado exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                 }else if($("#band3").val() == "edit"){
-                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                    $.toast({ heading: 'Modificación exitosa', text: 'Modificación de información de solicitado exitosa', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                     open_form(3);
                 }
             }else{
@@ -1254,6 +1277,7 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax4"));
         formData.append("id_empresaci", $('#establecimiento').val());
+        formData.append("id_representanteci", $('#id_representanteci').val());
         formData.append("id_personaci", $('#id_personaci').val());
         formData.append("band4", $('#band3').val());
 
@@ -1270,9 +1294,9 @@ $(function(){
           console.log(res)
             if(res == "exito"){
                 if($("#band3").val() == "save"){
-                    $.toast({ heading: 'Registro exitoso', text: 'Registro de información de solicitado exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
                 }else if($("#band3").val() == "edit"){
-                    $.toast({ heading: 'Modificación exitosa', text: 'Modificación de información de solicitado exitosa', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
                 }else{
                     if($("#estado_empresa").val() == '1'){
                         swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
