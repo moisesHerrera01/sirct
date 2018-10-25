@@ -25,7 +25,9 @@ class Expedientes_model extends CI_Model {
 												 e.funciones_personaci,
 												 e.formapago_personaci,
 												 e.horarios_personaci,
-												 e.fechaconflicto_personaci'
+												 e.fechaconflicto_personaci,
+												 m.municipio,
+												 mu.municipio municipio_empresa'
 											  )
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
@@ -35,6 +37,7 @@ class Expedientes_model extends CI_Model {
 						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')
 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
+						 ->join('org_municipio mu','mu.id_municipio=em.id_municipio')
 						 ->join('sge_catalogociiu c','c.id_catalogociiu=em.id_catalogociiu')
 						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
 						 ->join('sge_empleador emp','emp.id_empleador=e.id_empleador', 'left')

@@ -215,7 +215,7 @@ class Acta extends CI_Controller {
 
           if ($expediente->tiposolicitud_empresa==2) {
             $tipo_empresa="";
-            $tipo_empresa = " y DICE: Que laboraba para la Sociedad $expediente->nombre_empresa que puede abreviarse $expediente->abreviatura_empresa, ubicada en $expediente->direccion_empresa, DE LA CIUDAD DE $expediente->id_municipio; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
+            $tipo_empresa = " y DICE: Que laboraba para la Sociedad $expediente->nombre_empresa que puede abreviarse $expediente->abreviatura_empresa, ubicada en $expediente->direccion_empresa, DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
           }else {
             $tipo_empresa = "quien laboraba para el señor $expediente->nombre_empresa, que puede ser ubicado en: $expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto, en que fue despedido(a) de su trabajo sin que hasta la fecha se le cancelado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que";
           }
@@ -276,7 +276,7 @@ class Acta extends CI_Controller {
             header("Content-Disposition: attachment; filename='CONCILIADA_PAGO_DIFERIDO_SIN_DEFENSOR_".date('dmy_His').".docx'");
             break;
           case '5':
-            header("Content-Disposition: attachment; filename='SOLICITUD_PN_PJ_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename='ACTA_SOLICITUD_".date('dmy_His').".docx'");
             break;
           case '6':
             header("Content-Disposition: attachment; filename='SEGUNDA_CITA_PN_PJ_CON_DEFENSOR_".date('dmy_His').".docx'");
