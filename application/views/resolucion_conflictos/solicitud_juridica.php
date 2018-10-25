@@ -162,7 +162,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Fin Solicitante*/
 
         /*Inicio Solicitado*/
-        
+
         //
         /*Fin Solicitado*/
 
@@ -188,7 +188,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Fin Solicitante*/
 
         /*Inicio Solicitado*/
-        
+
         //
         /*Fin Solicitado*/
         open_form(3);
@@ -229,7 +229,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#direccion_personaci").val(result.direccion_personaci);
             $("#discapacidad_personaci").val(result.discapacidad_personaci);
             $("#telefono_personaci").val(result.telefono_personaci);
-            $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');      
+            $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
             $("#salario_personaci").val(result.salario_personaci);
             $("#horarios_personaci").val(result.horarios_personaci);
             $("#id_expedienteci").val(result.id_expedienteci);
@@ -272,7 +272,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#direccion_personaci").val(direccion_personaci);
         $("#discapacidad_personaci").val(discapacidad_personaci);
         $("#telefono_personaci").val(telefono_personaci);
-        $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');      
+        $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');
         $("#salario_personaci").val(salario_personaci);
         $("#horarios_personaci").val(horarios_personaci);
         $("#id_expedienteci").val(id_expedienteci);
@@ -335,7 +335,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#band2").val('save');
             $("#modal_representante").modal('show');
         }
-      
+
     }
 
     function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante, tipo_representante, estado_representante, band){
@@ -361,14 +361,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         }else{
             var text = "Desea activar el registro";
             var title = "¿Activar?";
-        }       
-        swal({   
-            title: title,   
-            text: text,   
-            type: "warning",   
-            showCancelButton: true,   
-            confirmButtonColor: "#fc4b6c",   
-            confirmButtonText: "Sí, continuar" 
+        }
+        swal({
+            title: title,
+            text: text,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#fc4b6c",
+            confirmButtonText: "Sí, continuar"
         }, function(){
             if(estado == 1){
                 $.when( $("#estado_representante").val('0') ).then( $("#submit2").click() );
@@ -838,7 +838,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             }
                                         ?>
                                         </select>
-                                    </div> 
+                                    </div>
                                 </div>
                             </blockquote>
                             <div class="row">
@@ -1054,17 +1054,17 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <h5>Telefono: </h5>
                       <div class="controls">
                           <input type="text" placeholder="Telefono" id="telefono_empresa" name="telefono_empresa" class="form-control" data-mask="9999-9999">
-                          
+
                       </div>
                   </div>
                   <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Municipio: <span class="text-danger">*</span></h5>
                         <select id="id_municipio" name="id_municipio" class="select2" style="width: 100%" required>
                             <option value=''>[Seleccione el municipio]</option>
-                            <?php 
+                            <?php
                                 $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
                                 if($municipio->num_rows() > 0){
-                                    foreach ($municipio->result() as $fila2) {              
+                                    foreach ($municipio->result() as $fila2) {
                                        echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
                                     }
                                 }
@@ -1077,10 +1077,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <h5>Actividad económica: <span class="text-danger">*</span></h5>
                         <select id="id_catalogociiu" name="id_catalogociiu" class="select2" style="width: 100%" required>
                             <option value=''>[Seleccione la actividad]</option>
-                            <?php 
+                            <?php
                                 $catalogociiu = $this->db->query("SELECT * FROM sge_catalogociiu ORDER BY actividad_catalogociiu");
                                 if($catalogociiu->num_rows() > 0){
-                                    foreach ($catalogociiu->result() as $fila2) {              
+                                    foreach ($catalogociiu->result() as $fila2) {
                                        echo '<option class="m-l-50" value="'.$fila2->id_catalogociiu.'">'.$fila2->actividad_catalogociiu.'</option>';
                                     }
                                 }
@@ -1240,7 +1240,7 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax2"));
         formData.append("id_empresa", $('#establecimiento').val());
-        
+
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/gestionar_representante",
             type: "post",

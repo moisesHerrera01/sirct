@@ -13,6 +13,21 @@ function nav(value) {
   cerrar_mantenimiento();
 }
 
+function validar_establecimiento(){
+    var establecimiento = $("#establecimiento").val();
+    var registros = $("#tabla_representante tbody tr.table-active");
+
+    if(establecimiento == "" || registros.length == 0){
+        if(establecimiento == ""){
+            swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
+        }else{
+            swal({ title: "Seleccione representante", text: "Agregue o seleccione un representante de la lista.", type: "warning", showConfirmButton: true });
+        }
+    }else{
+        open_form(2);
+    }
+}
+
 function combo_procuradores(seleccion){
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/combo_procuradores",
@@ -45,6 +60,22 @@ function iniciar(){
     <?php }else{ ?>
         $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
+}
+
+function seleccionar_representante(obj, id_representanteci){
+    $("#id_representanteci").val(id_representanteci)
+    $(obj).parent().addClass('table-active active');
+    $(obj).parent().siblings('tr').removeClass('table-active active');
+    var tds = $(obj).siblings('td');
+
+    var trs = $("#tabla_representante tbody tr");
+    for (var i = 0; i < trs.length; i+=1) {
+        var td = $(trs[i]).children('td');
+        $(td[0]).html('');
+    }
+
+
+    $(tds[0]).html('<span class="round round-primary">R</span>');
 }
 
 function cambiar_update_post(id_personaci,bandera){
@@ -365,7 +396,31 @@ function cambiar_pestana(tipo){
     tablasolicitudes();
 }
 
-function combo_establecimiento(seleccion){
+function cambiar_eliminar3(estado){
+    if(estado == 1){
+        var text = "Desea desactivar el registro";
+        var title = "¿Dar de baja?";
+    }else{
+        var text = "Desea activar el registro";
+        var title = "¿Activar?";
+    }
+    swal({
+        title: title,
+        text: text,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#fc4b6c",
+        confirmButtonText: "Sí, continuar"
+    }, function(){
+        if(estado == 1){
+            $.when( $("#estado_representante").val('0') ).then( $("#submit3").click() );
+        }else{
+            $.when( $("#estado_representante").val('1') ).then( $("#submit3").click() );
+        }
+    });
+}
+
+/*function combo_establecimiento(seleccion){
 
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
@@ -388,6 +443,29 @@ function combo_establecimiento(seleccion){
     });
   });
 
+}*/
+
+function combo_establecimiento(seleccion){
+    $.ajax({
+      async: true,
+      url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_establecimiento",
+      type: "post",
+      dataType: "html",
+      data: {id : seleccion}
+    })
+    .done(function(res){
+        $.when($('#div_combo_establecimiento').html(res) ).then(function( data, textStatus, jqXHR ) {
+            $("#establecimiento").select2({
+                'minimumInputLength': 3,
+                'language': {
+                    noResults: function () {
+                        return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
+                    }
+                }, 'escapeMarkup': function (markup) { return markup; }
+            });
+            tabla_representantes()
+        });
+    });
 }
 
 
@@ -570,6 +648,22 @@ function tabla_audiencias(id_expedienteci){
     xmlhttpB.send();
 }
 
+function tabla_representantes(){
+    var id_empresa = $("#establecimiento").val();
+    var id_representanteci = $("#id_representanteci").val();
+    if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
+    }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
+    xmlhttpB.onreadystatechange=function(){
+        if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+            document.getElementById("cnt_tabla_representantes").innerHTML=xmlhttpB.responseText;
+            $('[data-toggle="tooltip"]').tooltip();
+            $('#myTable2').DataTable();
+        }
+    }
+    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
+    xmlhttpB.send();
+}
+
 function tabla_pagos(id_expedienteci){
   //alert(id_expedienteci);
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -651,6 +745,7 @@ function cambiar_nuevo(){
     $("#forma_pago").val('');
     $("#horario").val('');
     $("#fecha_conflicto").val('');
+    $("#id_representanteci").val('');
     /*Fin expediente*/
 
     $("#band").val("save");
@@ -670,6 +765,22 @@ function cambiar_nuevo(){
 
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
     combo_establecimiento('');
+}
+
+function cambiar_nuevo2(){
+    if($("#establecimiento").val() == ''){
+        swal({ title: "Seleccione un establecimiento", type: "warning", showConfirmButton: true });
+    }else{
+        $("#id_representante").val('');
+        $("#nombres_representante").val('');
+        $("#dui_representante").val('');
+        $("#acreditacion_representante").val('');
+        $("#tipo_representante").val('');
+        $("#estado_representante").val('1');
+        $("#band4").val('save');
+        $("#modal_representante").modal('show');
+    }
+
 }
 
 
@@ -782,6 +893,7 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#horario").val(result.horarios_personaci);
       $("#fecha_conflicto").val(result.fechaconflicto_personaci);
       $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
+      $("#id_representanteci").val(result.id_representanteci);
       combo_establecimiento(result.id_empresaci);
       /*Fin expediente*/
 
@@ -806,6 +918,22 @@ function cambiar_editar(id_expedienteci,bandera){
     $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
   }
+}
+
+function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante, tipo_representante, estado_representante, band){
+  $("#id_representante").val(id_representante);
+  $("#dui_representante").val(dui_representante);
+  $("#nombres_representante").val(nombres_representante);
+  $("#acreditacion_representante").val(acreditacion_representante);
+  $("#tipo_representante").val(tipo_representante);
+  $("#estado_representante").val(estado_representante);
+  $("#band4").val(band);
+
+  if(band == "edit"){
+        $("#modal_representante").modal('show');
+    }else{
+        cambiar_eliminar3(estado_representante);
+    }
 }
 
 function volver(num) {
@@ -1136,6 +1264,42 @@ function volver(num) {
                           <!-- FIN del FORMULARIO REPRESENTANTE DEL SOLICITANTE -->
                           <!-- ============================================================== -->
 
+                          <!-- ============================================================== -->
+                          <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITADO -->
+                          <!-- ============================================================== -->
+                                      <div id="cnt_form4" class="cnt_form">
+                                        <h3 class="box-title" style="margin: 0px;">
+                                            <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
+                                            Información del solicitado
+                                          </h3><hr class="m-t-0 m-b-30">
+                                          <input type="hidden" id="id_representanteci" name="id_representanteci" value="">
+                                          <span class="etiqueta">Datos del establecimiento solicitado</span>
+                                          <blockquote class="m-t-0">
+                                              <div class="row">
+                                              	<div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento">
+                                              	</div>
+                                              </div>
+                                          </blockquote>
+
+                                          <span class="etiqueta">Representante</span>
+                                          <blockquote class="m-t-0">
+                                              <div id="cnt_tabla_representantes"></div>
+                                          </blockquote>
+                                          <div class="row">
+                                              <div class="col-lg-12" align="center">
+                                                  <div align="right" id="btnadd1" class="pull-right">
+                                                      <button type="submit" onclick="validar_establecimiento();" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                                                  </div>
+                                                  <div align="right" id="btnedit1" style="display: none;" class="pull-right">
+                                                      <button type="submit" onclick="validar_establecimiento();" class="btn waves-effect waves-light btn-info">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                          <!-- ============================================================== -->
+                          <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITADO -->
+                          <!-- ============================================================== -->
+
 
                         <!-- ============================================================== -->
                         <!-- Inicio del FORMULARIO INFORMACIÓN DE LA SOLICITUD -->
@@ -1155,8 +1319,6 @@ function volver(num) {
                               <blockquote class="m-t-0">
 
                                 <div class="row">
-                                  <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
-
                                   <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                       <h5>Fecha del conflicto/despido: <span class="text-danger">*</span></h5>
                                       <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy" readonly="">
@@ -1363,11 +1525,12 @@ function volver(num) {
 
     <!--INICIA MODAL DE ESTABLECIMIENTOS -->
 <div class="modal fade" id="modal_establecimiento" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog-lg" role="document">
     <div class="modal-content">
     <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
           <input type="hidden" id="band3" name="band3" value="save">
-          <input type="hidden" id="id_representante" name="id_representante" value="">
+          <input type="hidden" id="id_empresaci" name="id_empresaci" value="">
+          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de establecimientos</h4>
             </div>
@@ -1437,15 +1600,6 @@ function volver(num) {
                 <div class="row">
                   <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
                 </div>
-
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del representante: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="nombre_representante" name="nombre_representante" class="form-control" required>
-                      </div>
-                  </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
@@ -1456,6 +1610,71 @@ function volver(num) {
   </div>
 </div>
     <!--FIN MODAL DE ESTABLECIMIENTOS -->
+
+  <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
+    <div id="modal_representante" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+              <input type="hidden" id="band4" name="band4" value="save">
+              <input type="hidden" id="id_representante" name="id_representante" value="">
+                <div class="modal-header">
+                    <h4 class="modal-title">Gestión de representantes</h4>
+                </div>
+                <div class="modal-body" id="">
+                    <div class="row">
+                      <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Nombre del representante: <span class="text-danger">*</span></h5>
+                          <div class="controls">
+                              <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>DUI: <span class="text-danger">*</span></h5>
+                          <div class="controls">
+                              <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
+                          </div>
+                      </div>
+                      <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Tipo: <span class="text-danger">*</span></h5>
+                          <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
+                              <option value=''>[Seleccione el tipo]</option>
+                              <option class="m-l-50" value="1">Legal</option>
+                              <option class="m-l-50" value="2">Designado</option>
+                              <option class="m-l-50" value="3">Apoderado</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Acreditación: <span class="text-danger">*</span></h5>
+                          <div class="controls">
+                              <textarea id="acreditacion_representante" name="acreditacion_representante" class="form-control"></textarea>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Estado: <span class="text-danger">*</span></h5>
+                        <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%" required="">
+                            <option class="m-l-50" value="1">Activo</option>
+                            <option class="m-l-50" value="0">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Aceptar</button>
+                </div>
+              <?php echo form_close(); ?>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+  <!--FIN MODAL REPRESENTANTE EMPRESA -->
 
     <!--INICIO MODAL DE DELEGADO -->
     <div class="modal fade" id="modal_delegado" role="dialog">
@@ -1582,6 +1801,43 @@ function volver(num) {
     <!--FIN MODAL DE ESTADO -->
 <script>
 
+$("#formajax5").on("submit", function(e){
+    e.preventDefault();
+    var f = $(this);
+    var formData = new FormData(document.getElementById("formajax5"));
+    formData.append("id_empresa", $('#establecimiento').val());
+
+    $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_representante",
+        type: "post",
+        dataType: "html",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false
+    })
+    .done(function(res){
+      console.log(res)
+        if(res == "exito"){
+            if($("#band4").val() == "save"){
+                swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+            }else if($("#band4").val() == "edit"){
+                swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+            }else{
+                if($("#estado_representante").val() == '1'){
+                    swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
+                }else{
+                    swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
+                }
+            }
+            $("#modal_representante").modal('hide');
+            tabla_representantes();
+        }else{
+            swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+        }
+    });
+});
+
 $(function(){
     $("#formajax").on("submit", function(e){
         e.preventDefault();
@@ -1605,7 +1861,7 @@ $(function(){
               if (formData.get('posee_representante') == 1) {
                 open_form(3);
               }else {
-                open_form(2);
+                open_form(4);
               }
               $("#id_personaci").val(res);
               $("#id_persona").val(res);
@@ -1640,7 +1896,7 @@ $(function(){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
               $("#id_representante_persona").val(res);
-              open_form(2);
+              open_form(4);
             }
         });
 
@@ -1653,6 +1909,9 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax2"));
         formData.append("id_personaci", $('#id_personaci').val());
+        formData.append("id_empresaci", $('#establecimiento').val());
+        formData.append("id_representante", $('#id_representante').val());
+        formData.append("id_representanteci", $('#id_representanteci').val());
         formData.append("id_representante_persona", $('#id_representante_persona').val());
         $.ajax({
           url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_expediente",
@@ -1675,40 +1934,78 @@ $(function(){
     });
 });
 
-$(function(){
-    $("#formajax3").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax3"));
+// $(function(){
+//     $("#formajax3").on("submit", function(e){
+//         e.preventDefault();
+//         var act_representante = $("#tabla_representante tbody tr.table-active");
+//         var f = $(this);
+//         var formData = new FormData(document.getElementById("formajax3"));
+//
+//         $.ajax({
+//           url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/gestionar_establecimiento",
+//           type: "post",
+//           dataType: "html",
+//           data: formData,
+//           cache: false,
+//           contentType: false,
+//           processData: false
+//         })
+//         .done(function(res){
+//             if(res == "fracaso"){
+//               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+//             }else{
+//               swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+//
+//               var data = {
+//                   id: res,
+//                   text: $("#nombre_establecimiento").val()
+//               };
+//
+//               var newOption = new Option(data.text, data.id, false, false);
+//               $('#establecimiento').append(newOption).trigger('change');
+//               $('#establecimiento').val(data.id).trigger("change");
+//               $('#modal_establecimiento').modal('toggle');
+//             }
+//         });
+//
+//     });
+// });
 
-        $.ajax({
-          url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/gestionar_establecimiento",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+$("#formajax3").on("submit", function(e){
+    e.preventDefault();
 
-              var data = {
-                  id: res,
-                  text: $("#nombre_establecimiento").val()
-              };
+    var act_representante = $("#tabla_representante tbody tr.table-active");
 
-              var newOption = new Option(data.text, data.id, false, false);
-              $('#establecimiento').append(newOption).trigger('change');
-              $('#establecimiento').val(data.id).trigger("change");
-              $('#modal_establecimiento').modal('toggle');
+    var f = $(this);
+    var formData = new FormData(document.getElementById("formajax"));
+    formData.append("dato", "valor");
+    $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/gestionar_establecimiento",
+        type: "post",
+        dataType: "html",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false
+    })
+    .done(function(res){
+      console.log(res)
+      res = res.split(",");
+        if(res[0] == "exito"){
+            if($("#band").val() == "save"){
+                //$("#id_empresa").val(res[1])
+                $("#modal_establecimiento").modal('hide');
+                $.toast({ heading: 'Registro exitoso', text: 'Registro de establecimiento exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                combo_establecimiento(res[1]);
+            }else if($("#band").val() == "edit"){
+                swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                tabla_representantes();
             }
-        });
-
+        }else{
+            swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+        }
     });
+
 });
 
 function inhabilitar(id_expedienteci) {
