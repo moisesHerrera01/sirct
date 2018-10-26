@@ -67,7 +67,7 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_estadosci' => '1',
 			'fechacrea_expedienteci' => date("Y-m-d H:i:s")
 		))){
-			return "exito";
+			return "exito,".$this->db->insert_id();
 		}else{
 			return "fracaso";
 		}
@@ -83,7 +83,7 @@ class Solicitud_juridica_model extends CI_Model {
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
 			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci']
 		))){
-			return "exito";
+			return "exito,".$data["id_expedienteci"];
 		}else{
 			return "fracaso";
 		}
