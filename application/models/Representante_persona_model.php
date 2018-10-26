@@ -23,4 +23,15 @@ class Representante_persona_model extends CI_Model {
       return "fracaso";
     }
   }
+
+	public function obtener_defensores(){
+		$this->db->select("id_representantepersonaci, CONCAT_WS(' ',nombre_representantepersonaci,apellido_representantepersonaci) nombre_completo")
+						 ->from('sct_representantepersonaci');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
 }

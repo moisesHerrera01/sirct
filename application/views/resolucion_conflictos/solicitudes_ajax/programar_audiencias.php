@@ -102,7 +102,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <div class="help-block"></div>
                 </div>
 
-                <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_procurador"></div>
+                <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_defensores"></div>
                 </div>
 
               <div align="right" id="btnadd6">
@@ -184,7 +184,7 @@ function cambiar_nuevo5(){
 
 function cambiar_editar5(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,estado_audiencia,
                          numero_fechasaudienciasci,id_procuradorci,bandera){
-    combo_procuradores(id_procuradorci);
+    // combo_procuradores(id_procuradorci);
     $("#id_fechasaudienciasci").val(id_fechasaudienciasci);
     $("#fecha_audiencia").val(fecha_fechasaudienciasci);
     $("#hora_audiencia").val(hora_fechasaudienciasci);

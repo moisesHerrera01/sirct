@@ -7,30 +7,27 @@ class Establecimiento_model extends CI_Model {
 		parent::__construct();
     }
 
-    public function insertar_empresa($data) {
+		function insertar_establecimiento($data){
+			if($this->db->insert('sge_empresa', $data)){
+				return "exito,".$this->db->insert_id();
+			}else{
+				return "fracaso";
+			}
+		}
 
-        if(
-            $this->db->insert(
-                'sge_empresa',
-                array(
-                    'numinscripcion_empresa' => $data['numinscripcion_empresa'],
-                    'nombre_empresa' => $data['nombre_empresa'],
-										'razon_social' => $data['razon_social'],
-                    'abreviatura_empresa' => $data['abreviatura_empresa'],
-                    'direccion_empresa' => $data['direccion_empresa'],
-                    'telefono_empresa' => $data['telefono_empresa'],
-                    'id_catalogociiu' => $data['id_catalogociiu'],
-                    'id_municipio' => $data['id_municipio'],
-										'tiposolicitud_empresa' => $data['tiposolicitud_empresa']
-                )
-            )) {
-            return $this->db->insert_id();
-        } else{
-            return "fracaso";
-        }
 
-    }
-
+		public function obtener_representantes($id) {
+			$this->db->select('')
+				->from('sge_representante r')
+				->where('r.id_empresa', $id);
+			$query=$this->db->get();
+			if ($query->num_rows() > 0) {
+				return  $query;
+			}else{
+				return FALSE;
+			}
+		}
+		
 }
 
 ?>

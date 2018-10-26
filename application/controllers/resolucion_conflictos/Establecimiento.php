@@ -44,19 +44,18 @@ class Establecimiento extends CI_Controller {
                 'id_municipio' => $this->input->post('municipio2'),
 								'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
             );
-
-			$id_establecimiento = $this->establecimiento_model->insertar_empresa($data);
-
-			$data = array(
-				'nombres_representante' => $this->input->post('nombre_representante'),
-				'id_empresa' => $id_establecimiento
-			);
-
-			$this->representante_model->insertar_representante($data);
-
-			echo $id_establecimiento;
-
+			echo $this->establecimiento_model->insertar_establecimiento($data);
 		}
+	}
+
+	public function combo_representante_empresa() {
+		$data = $this->establecimiento_model->obtener_representantes($this->input->post('id_empresaci'));
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_representante_empresa',
+			array(
+				'id' => $this->input->post('id'),
+				'rep_empresa' => $data
+			)
+		);
 	}
 }
 ?>
