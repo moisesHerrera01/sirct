@@ -76,7 +76,7 @@ class Audiencias extends CI_Controller {
 						}else {
 						echo $this->audiencias_model->insertar_audiencia($data);
 					}
-				}elseif($exp['tiposolicitud_expedienteci'] == 'Conciliación') {
+				}elseif($exp['tiposolicitud_expedienteci'] == 'Conciliación' || $exp['tiposolicitud_expedienteci'] == 'conciliacion juridica') {
 						if ($numero>=2) {
 						echo 'reprogramar';
 						}else {
