@@ -124,6 +124,28 @@ class Expediente extends CI_Controller {
 
 		}
 
+		public function combo_estados_civiles() {
+			$estados = $this->expedientes_model->obtener_estados_civiles();
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_estados_civiles',
+				array(
+					'id' => $this->input->post('id'),
+					'estados' => $estados
+				)
+			);
+
+		}
+
+		public function combo_profesiones() {
+			$profesiones = $this->expedientes_model->obtener_profesiones();
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_profesiones',
+				array(
+					'id' => $this->input->post('id'),
+					'profesiones' => $profesiones
+				)
+			);
+
+		}
+
 		public function registros_expedientes() {
 
 			print json_encode(

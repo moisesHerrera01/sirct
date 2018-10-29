@@ -105,34 +105,51 @@ class Solicitud_juridica_model extends CI_Model {
 		}
 	}
 
+	// function insertar_representante($data){
+	// 	if($this->db->insert('sge_representante', array(
+	// 		'id_empresa' => $data['id_empresa'],
+	// 		'nombres_representante' => $data['nombres_representante'],
+	// 		'dui_representante' => $data['dui_representante'],
+	// 		'acreditacion_representante' => $data['acreditacion_representante'],
+	// 		'tipo_representante' => $data['tipo_representante']
+	// 	))){
+	// 		return "exito";
+	// 	}else{
+	// 		return "fracaso";
+	// 	}
+	// }
+
 	function insertar_representante($data){
-		if($this->db->insert('sge_representante', array(
-			'id_empresa' => $data['id_empresa'], 
-			'nombres_representante' => $data['nombres_representante'],
-			'dui_representante' => $data['dui_representante'],
-			'acreditacion_representante' => $data['acreditacion_representante'],
-			'tipo_representante' => $data['tipo_representante']
-		))){
-			return "exito";
+		if ($this->db->insert('sge_representante',$data)) {
+			return "exito";//return $this->db->insert_id();
 		}else{
 			return "fracaso";
 		}
 	}
 
-	function editar_representante($data){
+	public function editar_representante($data){
 		$this->db->where("id_representante",$data["id_representante"]);
-		if($this->db->update('sge_representante', array(
-			'id_empresa' => $data['id_empresa'], 
-			'nombres_representante' => $data['nombres_representante'],
-			'dui_representante' => $data['dui_representante'],
-			'acreditacion_representante' => $data['acreditacion_representante'],
-			'tipo_representante' => $data['tipo_representante']
-		))){
-			return "exito";
-		}else{
+		if ($this->db->update('sge_representante', $data)) {
+			return "exito";//return $data['id_partida'];
+		}else {
 			return "fracaso";
 		}
 	}
+
+	// function editar_representante($data){
+	// 	$this->db->where("id_representante",$data["id_representante"]);
+	// 	if($this->db->update('sge_representante', array(
+	// 		'id_empresa' => $data['id_empresa'],
+	// 		'nombres_representante' => $data['nombres_representante'],
+	// 		'dui_representante' => $data['dui_representante'],
+	// 		'acreditacion_representante' => $data['acreditacion_representante'],
+	// 		'tipo_representante' => $data['tipo_representante']
+	// 	))){
+	// 		return "exito";
+	// 	}else{
+	// 		return "fracaso";
+	// 	}
+	// }
 
 	function eliminar_representante($data){
   		$this->db->where("id_representante",$data["id_representante"]);

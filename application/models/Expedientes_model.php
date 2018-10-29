@@ -204,4 +204,24 @@ class Expedientes_model extends CI_Model {
 			}
 	}
 
+	public function obtener_estados_civiles(){
+		$this->db->select('*')->from('sir_estado_civil');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
+
+	public function obtener_profesiones(){
+		$this->db->select('*')->from('sir_titulo_academico');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
+
 }

@@ -41,6 +41,32 @@ function combo_procuradores(seleccion){
   });
 }
 
+function combo_estados_civiles(seleccion){
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_estados_civiles",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_estados_civiles').html(res);
+    $("#estado_civil").select2();
+  });
+}
+
+function combo_profesiones(seleccion){
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_profesiones",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_profesiones').html(res);
+    $("#profesion").select2();
+  });
+}
+
 function iniciar(){
   <?php if(isset($tipo_solicitud)){ ?>
       $("#motivo").val('<?=$tipo_solicitud?>');
@@ -600,6 +626,20 @@ function combo_municipio(){
 
 }
 
+function combo_municipio2(){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_municipio2",
+    type: "post",
+    dataType: "html"
+  })
+  .done(function(res){
+    $('#div_combo_municipio2').html(res);
+    $("#municipio_representante").select2();
+  });
+
+}
+
 function combo_delegado(seleccion){
 
   $.ajax({
@@ -720,7 +760,7 @@ function tabla_representantes(){
             $('#myTable2').DataTable();
         }
     }
-    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
+    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
     xmlhttpB.send();
 }
 
@@ -837,6 +877,10 @@ function cambiar_nuevo2(){
         $("#acreditacion_representante").val('');
         $("#tipo_representante").val('');
         $("#estado_representante").val('1');
+        $("#f_nacimiento_representante").val('');
+        combo_estados_civiles('');
+        combo_profesiones('');
+        combo_municipio2('');
         $("#band4").val('save');
         $("#modal_representante").modal('show');
     }
@@ -980,13 +1024,19 @@ function cambiar_editar(id_expedienteci,bandera){
   }
 }
 
-function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante, tipo_representante, estado_representante, band){
+function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
+  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante, band){
   $("#id_representante").val(id_representante);
   $("#dui_representante").val(dui_representante);
   $("#nombres_representante").val(nombres_representante);
   $("#acreditacion_representante").val(acreditacion_representante);
   $("#tipo_representante").val(tipo_representante);
   $("#estado_representante").val(estado_representante);
+  $("#f_nacimiento_representante").val(f_nacimiento_representante);
+  combo_estados_civiles(id_estado_civil);
+  combo_profesiones(id_titulo_academico);
+  combo_municipio2(id_municipio);
+  alert(f_nacimiento_representante)
   $("#band4").val(band);
 
   if(band == "edit"){
@@ -1692,9 +1742,10 @@ function volver(num) {
     <!--FIN MODAL DE PROCURADOR -->
 
   <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
-    <div id="modal_representante" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
+
               <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
               <input type="hidden" id="band4" name="band4" value="save">
               <input type="hidden" id="id_representante" name="id_representante" value="">
@@ -1703,21 +1754,29 @@ function volver(num) {
                 </div>
                 <div class="modal-body" id="">
                     <div class="row">
-                      <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Nombre del representante: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
                           </div>
                       </div>
+
+                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy" readonly="">
+                        <div class="help-block"></div>
+                    </div>
+
                     </div>
                     <div class="row">
-                      <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>DUI: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
                           </div>
                       </div>
-                      <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+
+                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Tipo: <span class="text-danger">*</span></h5>
                           <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
                               <option value=''>[Seleccione el tipo]</option>
@@ -1726,14 +1785,24 @@ function volver(num) {
                               <option class="m-l-50" value="3">Apoderado</option>
                           </select>
                       </div>
+
+                      <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
                     </div>
                     <div class="row">
+
+
                       <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Acreditación: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <textarea id="acreditacion_representante" name="acreditacion_representante" class="form-control"></textarea>
                           </div>
                       </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
+
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
                     </div>
 
                     <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -2285,6 +2354,7 @@ $(function(){
 
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
+        $('#f_nacimiento_representante').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
         $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
     });
     });

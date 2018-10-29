@@ -110,17 +110,25 @@ class Solicitudes extends CI_Controller {
 			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
 			'dui_representante' => ($this->input->post('dui_representante')),
 			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
-			'tipo_representante' => $this->input->post('tipo_representante')
+			'tipo_representante' => $this->input->post('tipo_representante'),
+			'id_municipio' => $this->input->post('municipio_representante'),
+			'id_estado_civil' => $this->input->post('estado_civil'),
+			'id_titulo_academico' => $this->input->post('profesion'),
+			'f_nacimiento_representante' => date("Y-m-d",strtotime($this->input->post('f_nacimiento_representante'))),
 			);
       		echo $this->solicitud_juridica_model->insertar_representante($data);
 		}else if($this->input->post('band4') == "edit"){
       		$data = array(
-		    'id_representante' => $this->input->post('id_representante'),
-		    'id_empresa' => $this->input->post('id_empresa'),
+	    'id_representante' => $this->input->post('id_representante'),
+	    'id_empresa' => $this->input->post('id_empresa'),
 			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
 			'dui_representante' => ($this->input->post('dui_representante')),
 			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
-			'tipo_representante' => $this->input->post('tipo_representante')
+			'tipo_representante' => $this->input->post('tipo_representante'),
+			'id_municipio' => $this->input->post('municipio_representante'),
+			'id_estado_civil' => $this->input->post('estado_civil'),
+			'id_titulo_academico' => $this->input->post('profesion'),
+			'f_nacimiento_representante' => date("Y-m-d",strtotime($this->input->post('f_nacimiento_representante'))),
 			);
 			echo $this->solicitud_juridica_model->editar_representante($data);
 		}else if($this->input->post('band4') == "delete"){

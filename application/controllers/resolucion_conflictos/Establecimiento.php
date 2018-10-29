@@ -30,6 +30,17 @@ class Establecimiento extends CI_Controller {
 
 	}
 
+	public function combo_municipio2() {
+
+	$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_municipio2',
+		array(
+			'id' => $this->input->post('id'),
+			'municipio' => $this->db->get('org_municipio')
+		)
+	);
+
+}
+
 	public function gestionar_establecimiento() {
 		if($this->input->post('band3') == "save"){
 
