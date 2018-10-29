@@ -18,7 +18,7 @@ class Representante_persona_model extends CI_Model {
 
   public function insertar_representante($data){
     if ($this->db->insert('sct_representantepersonaci', $data)) {
-      return $this->db->insert_id();
+      return "exito,".$this->db->insert_id();
     }else {
       return "fracaso";
     }

@@ -102,22 +102,23 @@ class Expediente extends CI_Controller {
     }
 
 		public function combo_delegado() {
-
+			$delegados = $this->expedientes_model->obtener_delegados_rol();
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado',
 				array(
 					'id' => $this->input->post('id'),
-					'colaborador' => $this->db->get('lista_empleados_estado')
+					'colaborador' => $delegados
 				)
 			);
 
 		}
 
-		public function combo_delegado2() {
+		public function combo_delega2() {
 
-			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado2',
+			$delegados = $this->expedientes_model->obtener_delegados_rol();
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delega2',
 				array(
 					'id' => $this->input->post('id'),
-					'colaborador' => $this->db->get('lista_empleados_estado')
+					'colaborador' => $delegados
 				)
 			);
 

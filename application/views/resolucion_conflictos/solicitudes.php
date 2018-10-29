@@ -610,9 +610,24 @@ function combo_delegado(seleccion){
   })
   .done(function(res){
     $('#div_combo_delegado').html(res);
-    $(".select2").select2();
+    $("#id_personal").select2();
   });
 }
+
+function combo_delega2(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delega2",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_delegado2').html(res);
+    $("#delegado").select2();
+  });
+}
+
 
 function open_form(num){
     $(".cnt_form").hide(0);
@@ -1233,7 +1248,7 @@ function volver(num) {
                         <!-- ============================================================== -->
                         <!-- Inicio del FORMULARIO REPRESENTANTE DEL SOLICITANTE -->
                         <!-- ============================================================== -->
-                        <?php echo form_open('', array('id' => 'formajax8', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+                        <?php echo form_open('', array('id' => 'formajax10', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                             <div id="cnt_form3" class="cnt_form" style="display: block;">
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
@@ -1614,7 +1629,7 @@ function volver(num) {
   <div class="modal fade" id="modal_defensores" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <?php echo form_open('', array('id' => 'formajax6', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+        <?php echo form_open('', array('id' => 'formajax8', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
           <input type="hidden" id="band6" name="band6" value="save">
           <input type="hidden" id="id_procuradorci" name="id_procuradorci" value="">
           <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
@@ -1941,32 +1956,32 @@ $(function(){
     });
 });
 
-$(function(){
-    $("#formajax8").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax8"));
-        formData.append("id_personaci", $('#id_personaci').val());
-        $.ajax({
-          url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/gestionar_representantes",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              $("#id_representante_persona").val(res);
-              open_form(4);
-            }
-        });
-
-    });
-});
+// $(function(){
+//     $("#formajax8").on("submit", function(e){
+//         e.preventDefault();
+//         var f = $(this);
+//         var formData = new FormData(document.getElementById("formajax8"));
+//         formData.append("id_personaci", $('#id_personaci').val());
+//         $.ajax({
+//           url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/gestionar_representantes",
+//           type: "post",
+//           dataType: "html",
+//           data: formData,
+//           cache: false,
+//           contentType: false,
+//           processData: false
+//         })
+//         .done(function(res){
+//             if(res == "fracaso"){
+//               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+//             }else{
+//               $("#id_representante_persona").val(res);
+//               open_form(4);
+//             }
+//         });
+//
+//     });
+// });
 
 $(function(){
     $("#formajax2").on("submit", function(e){
@@ -1992,7 +2007,7 @@ $(function(){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
               cerrar_mantenimiento();
-              audiencias(res,1);
+              audiencias($('#establecimiento').val(),res,1);
             }
         });
 
@@ -2073,13 +2088,13 @@ $("#formajax3").on("submit", function(e){
 
 });
 
-$("#formajax6").on("submit", function(e){
+$("#formajax8").on("submit", function(e){
     e.preventDefault();
 
     //var act_representante = $("#tabla_representante tbody tr.table-active");
 
     var f = $(this);
-    var formData = new FormData(document.getElementById("formajax6"));
+    var formData = new FormData(document.getElementById("formajax8"));
     formData.append("dato", "valor");
     $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/gestionar_representantes",
@@ -2097,7 +2112,7 @@ $("#formajax6").on("submit", function(e){
             if($("#band6").val() == "save"){
                 //$("#id_empresa").val(res[1])
                 $("#modal_defensores").modal('hide');
-                $.toast({ heading: 'Registro exitoso', text: 'Registro de establecimiento exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                $.toast({ heading: 'Registro exitoso', text: 'Registro de defensor exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                 combo_defensores(res[1]);
             }else if($("#band6").val() == "edit"){
                 swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
@@ -2174,7 +2189,8 @@ function habilitar(id_expedienteci) {
     });
 }
 
-function audiencias(id_expedienteci,origen) {
+function audiencias(id_empresaci, id_expedienteci, origen) {
+  $("#id_empresaci").val(id_empresaci);
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
     type: "post",
@@ -2189,6 +2205,8 @@ function audiencias(id_expedienteci,origen) {
     $("#cnt_tabla_solicitudes").hide(0);
     $("#cnt_form_main").hide(0);
     combo_defensores();
+    combo_representante_empresa();
+    combo_delega2();
     if (origen==1) {
         $("#paso4").show(0);
         tabla_audiencias(id_expedienteci);

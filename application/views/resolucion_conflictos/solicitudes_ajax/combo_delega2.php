@@ -1,5 +1,5 @@
 <h5>Asignar delegado: <span class="text-danger">*</span></h5>
-<select id="id_personal" name="id_personal" class="select2" onchange="" style="width: 100%">
+<select id="delegado" name="delegado" class="select2" onchange="" style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php
             if(!empty($colaborador)){

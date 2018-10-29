@@ -49,7 +49,7 @@ class Establecimiento extends CI_Controller {
 	}
 
 	public function combo_representante_empresa() {
-		$data = $this->establecimiento_model->obtener_representantes($this->input->post('id_empresaci'));
+		$data = $this->establecimiento_model->obtener_representantes($this->input->get('id_empresaci'));
 		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_representante_empresa',
 			array(
 				'id' => $this->input->post('id'),

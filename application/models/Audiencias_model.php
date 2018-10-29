@@ -16,7 +16,9 @@ class Audiencias_model extends CI_Model {
 												 hora_fechasaudienciasci,
 												 estado_audiencia,
 												 numero_fechasaudienciasci,
-												 id_procuradorci'
+												 id_representaci,
+												 id_defensorlegal,
+												 id_delegado'
 											  )
 						 ->from('sct_fechasaudienciasci')
 						 ->where('id_expedienteci', $id)

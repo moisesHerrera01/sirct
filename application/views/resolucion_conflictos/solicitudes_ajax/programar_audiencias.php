@@ -36,37 +36,28 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <table class="table no-border">
                     <tbody>
                       <div class="row">
-                        <div class="form-group col-lg-5" style="height: 20px;">
-                          N&uacute;mero de caso:
+                        <div class="form-group col-lg-2" style="height: 20px;">
+                        <small class="text-muted db">N&uacute;mero de caso</small>
+                        <h5><?=$expediente->numerocaso_expedienteci?></h5>
                         </div>
+
                         <div class="form-group col-lg-5" style="height: 20px;">
-                              <h5><?= $expediente->numerocaso_expedienteci ?></h5>
+                        <small class="text-muted db"> Nombre delegado(a) actual</small>
+                        <h5><?=$expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.
+                        $expediente->primer_apellido.' '.$expediente->segundo_apellido.' '.
+                        (($expediente->apellido_casada) ? $expediente->apellido_casada : ' ')?>
+                        </h5>
                         </div>
-                      </div>
-                      <div class="row">
+
                         <div class="form-group col-lg-5" style="height: 20px;">
-                          Nombre delegado(a) actual:
-                        </div>
-                        <div class="form-group col-lg-5" style="height: 20px;">
-                              <h5><?= $expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.
-                              $expediente->primer_apellido.' '.$expediente->segundo_apellido.' '.
-                              (($expediente->apellido_casada) ? $expediente->apellido_casada : ' ') ?></h5>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-lg-5" style="height: 20px;">
-                          Nombre de solicitante:
-                        </div>
-                        <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5>
-                          <?php if($expediente->tiposolicitud_expedienteci == "conciliacion juridica"){
-                              echo $expediente->nombre_empresa;
-                          }if ($expediente->tiposolicitud_expedienteci == "Conciliación" || $expediente->tiposolicitud_expedienteci == "Renuncia Voluntaria" ) {
-                              echo $expediente->nombre_personaci.' '.$expediente->apellido_personaci;
-                          }if ($expediente->tiposolicitud_expedienteci == "Diferencia Laboral") {
-                              echo $expediente->nombre_sindicato;
-                          }?>
-                          </h5>
+                        <small class="text-muted db">Nombre de solicitante</small>
+                        <h5><?php if($expediente->tiposolicitud_expedienteci == "conciliacion juridica"){
+                            echo MB_STRTOUPPER($expediente->nombre_empresa);
+                        }if ($expediente->tiposolicitud_expedienteci == "Conciliación" || $expediente->tiposolicitud_expedienteci == "Renuncia Voluntaria" ) {
+                            echo MB_STRTOUPPER($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
+                        }if ($expediente->tiposolicitud_expedienteci == "Diferencia Laboral") {
+                            echo MB_STRTOUPPER($expediente->nombre_sindicato);
+                        }?></h5>
                         </div>
                       </div>
                     </tbody>
@@ -101,8 +92,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <label for="segunda">Segunda</label>
                       <div class="help-block"></div>
                 </div>
+                </div>
 
-                <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_defensores"></div>
+                <div class="row">
+                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_defensores"></div>
+
+                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_representante_empresa"></div>
+
+                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div>
                 </div>
 
               <div align="right" id="btnadd6">
@@ -166,7 +163,11 @@ function eliminar_audiencia(){
    $("#ttl_form").removeClass("bg-info");
    $("#btnadd6").show(0);
    $("#btnedit6").hide(0);
-   $("#band4").val("save")
+   $("#band4").val("save");
+   combo_defensores('');
+   combo_representante_empresa('');
+   combo_delega2('');
+
  }
 
 function cambiar_nuevo5(){
@@ -183,13 +184,16 @@ function cambiar_nuevo5(){
 }
 
 function cambiar_editar5(id_fechasaudienciasci,fecha_fechasaudienciasci,hora_fechasaudienciasci,id_expedienteci,estado_audiencia,
-                         numero_fechasaudienciasci,id_procuradorci,bandera){
+                         numero_fechasaudienciasci,id_defensorlegal,id_representaci,id_delegado,bandera){
     // combo_procuradores(id_procuradorci);
     $("#id_fechasaudienciasci").val(id_fechasaudienciasci);
     $("#fecha_audiencia").val(fecha_fechasaudienciasci);
     $("#hora_audiencia").val(hora_fechasaudienciasci);
     $("#id_expedienteci1").val(id_expedienteci);
     $("#estado_audiencia").val(estado_audiencia);
+    combo_defensores(id_defensorlegal);
+    combo_representante_empresa(id_representaci);
+    combo_delega2(id_delegado);
     if (numero_fechasaudienciasci=='1') {
         document.getElementById('primera').checked = true;
     }else {
