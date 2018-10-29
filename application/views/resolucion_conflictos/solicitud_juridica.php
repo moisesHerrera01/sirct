@@ -604,26 +604,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $(tds[0]).html('<span class="round round-primary">R</span>');
     }
 
-    /*function audiencias(id_expedienteci) {
-        $.ajax({
-            url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
-            type: "post",
-            dataType: "html",
-            data: {id : id_expedienteci}
-        })
-        .done(function(res){
-            //console.log(res)
-            $('#cnt_actions').html(res);
-            $("#cnt_actions").show(0);
-            $("#cnt_tabla").hide(0);
-            //$("#cnt_tabla_solicitudes").hide(0);
-            $("#cnt_form_main").hide(0);
-            combo_procuradores();
-            tabla_audiencias(id_expedienteci);
-        });
-    }*/
-
-
     function audiencias(id_empresaci, id_expedienteci, origen) {
       $("#id_empresaci").val(id_empresaci);
       $.ajax({
@@ -691,7 +671,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function combo_representante_empresa(seleccion){
       var id_emp = $("#id_empresaci").val();
-      alert(id_emp)
       $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_representante_empresa?id_empresaci="+id_emp,
         type: "post",
@@ -736,7 +715,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       });
     }
 
-
+    function resolucion(id_expedienteci) {
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/resolucion_expediente",
+        type: "post",
+        dataType: "html",
+        data: {id : id_expedienteci}
+      })
+      .done(function(res){
+        $('#cnt_modal_acciones').html(res);
+        $('#modal_resolucion').modal('show');
+      });
+    }
 
 </script>
 <input type="hidden" id="id_empresaci" name="id_empresaci">
@@ -1040,6 +1030,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <!-- Fin de DIV de inicio (ENVOLTURA) -->
 <!-- ============================================================== -->
 
+
+<div id="cnt_modal_acciones"></div>
 
 <div id="modal_representante" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
