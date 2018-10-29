@@ -470,16 +470,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
-    function modal_delegado(id_expedienteci, id_personal) {
-        $("#id_expedienteci_copia").val(id_expedienteci);
-        $("#id_personal_copia").val(id_personal).trigger('change.select2');
-        $("#modal_delegado").modal("show");
-    }
-
     function modal_estado(id_expedienteci, id_estadosci) {
         $("#id_expedienteci_copia").val(id_expedienteci);
         $("#id_estado_copia").val(id_estadosci).trigger('change.select2');
         $("#modal_estado").modal("show");
+    }
+
+    function modal_delegado(id_expedienteci, id_personal) {
+        $("#id_expedienteci_copia").val(id_expedienteci);
+        $("#id_personal_copia").val(id_personal).trigger('change.select2');
+        $("#modal_delegado").modal("show");
     }
 
     function cambiar_delegado() {
@@ -544,38 +544,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         xmlhttpB.send();
     }
 
-    function audiencias(id_expedienteci) {
-        $.ajax({
-            url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
-            type: "post",
-            dataType: "html",
-            data: {id : id_expedienteci}
-        })
-        .done(function(res){
-            //console.log(res)
-            $('#cnt_actions').html(res);
-            $("#cnt_actions").show(0);
-            $("#cnt_tabla").hide(0);
-            //$("#cnt_tabla_solicitudes").hide(0);
-            $("#cnt_form_main").hide(0);
-            combo_procuradores();
-            tabla_audiencias(id_expedienteci);
-        });
-    }
-
-    function combo_procuradores(seleccion){
-      $.ajax({
-        url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/combo_procuradores",
-        type: "post",
-        dataType: "html",
-        data: {id : seleccion}
-      })
-      .done(function(res){
-        $('#div_combo_procurador').html(res);
-        $(".select2").select2();
-      });
-    }
-
     function adjuntar_actas(id_expediente) {
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/acta",
@@ -636,8 +604,142 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $(tds[0]).html('<span class="round round-primary">R</span>');
     }
 
-</script>
+    /*function audiencias(id_expedienteci) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
+            type: "post",
+            dataType: "html",
+            data: {id : id_expedienteci}
+        })
+        .done(function(res){
+            //console.log(res)
+            $('#cnt_actions').html(res);
+            $("#cnt_actions").show(0);
+            $("#cnt_tabla").hide(0);
+            //$("#cnt_tabla_solicitudes").hide(0);
+            $("#cnt_form_main").hide(0);
+            combo_procuradores();
+            tabla_audiencias(id_expedienteci);
+        });
+    }*/
 
+
+    function audiencias(id_empresaci, id_expedienteci, origen) {
+      $("#id_empresaci").val(id_empresaci);
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
+        type: "post",
+        dataType: "html",
+        data: {id : id_expedienteci}
+      })
+      .done(function(res){
+        //console.log(res)
+        $('#cnt_actions').html(res);
+        $("#cnt_actions").show(0);
+        $("#cnt_tabla").hide(0);
+        //$("#cnt_tabla_solicitudes").hide(0);
+        $("#cnt_form_main").hide(0);
+        combo_defensores();
+        combo_representante_empresa();
+        combo_delega2();
+        if (origen==1) {
+            //$("#paso4").show(0);
+            tabla_audiencias(id_expedienteci);
+            $("#div_finalizar").show(0);
+        }else {
+          tabla_audiencias(id_expedienteci);
+        }
+
+      });
+    }
+
+    function combo_procuradores(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/combo_procuradores",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_procurador').html(res);
+        $(".select2").select2();
+      });
+    }
+
+    function combo_defensores(seleccion){
+        $.ajax({
+          async: true,
+          url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/combo_defensores",
+          type: "post",
+          dataType: "html",
+          data: {id : seleccion}
+        })
+        .done(function(res){
+            $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
+                $("#defensor").select2({
+                    'minimumInputLength': 3,
+                    'language': {
+                        noResults: function () {
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
+                        }
+                    }, 'escapeMarkup': function (markup) { return markup; }
+                });
+                //tabla_representantes()
+            });
+        });
+    }
+
+    function combo_representante_empresa(seleccion){
+      var id_emp = $("#id_empresaci").val();
+      alert(id_emp)
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_representante_empresa?id_empresaci="+id_emp,
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_representante_empresa').html(res);
+        $("#representante_empresa").select2();
+      });
+    }
+
+    function combo_delega2(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delega2",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_delegado2').html(res);
+        $("#delegado").select2();
+      });
+    }
+
+    function cerrar_combo_defensores() {
+        $("#defensor").select2('close');
+        combo_tipo_representante();
+    }
+
+    function combo_tipo_representante(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_tipo_representante",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_tipo_representante').html(res);
+        $("#tipo_representante_persona").select2();
+      });
+    }
+
+
+
+</script>
+<input type="hidden" id="id_empresaci" name="id_empresaci">
 <input type="hidden" id="address" name="">
 <div class="page-wrapper">
     <div class="container-fluid">
@@ -1174,6 +1276,73 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
     <!--FIN MODAL DE ESTADO -->
 
+
+<!--INICIA MODAL DE PROCURADOR -->
+  <div class="modal fade" id="modal_defensores" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <?php echo form_open('', array('id' => 'formajax8', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band6" name="band6" value="save">
+          <input type="hidden" id="id_procuradorci" name="id_procuradorci" value="">
+          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
+            <div class="modal-header">
+                <h4 class="modal-title">Defensores legales</h4>
+            </div>
+            <div class="modal-body" id="">
+              <div class="row">
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Nombres del representante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres del representante" required>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos del representante" required>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>DUI de representante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_representante"></div>
+
+                <div class="form-group col-lg-8 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Acreditaci&oacute;n: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <textarea type="text" id="acreditacion_representante_persona" name="acreditacion_representante_persona" class="form-control" required></textarea>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="submit" id="submit4" class="btn btn-info waves-effect text-white">Aceptar</button>
+            </div>
+          <?php echo form_close(); ?>
+    </div>
+  </div>
+</div>
+    <!--FIN MODAL DE PROCURADOR -->
+
 <script>
 $(function(){
 
@@ -1331,10 +1500,10 @@ $(function(){
             if(res[0] == "exito"){
                 if($("#band3").val() == "save"){
                     $.toast({ heading: 'Registro exitoso', text: 'Registro de expediente exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
-                    audiencias(res[1]);
+                    audiencias($('#establecimiento').val(), res[1], 1);
                 }else if($("#band3").val() == "edit"){
                     $.toast({ heading: 'Modificación exitosa', text: 'Modificación de expediente exitosa', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
-                    audiencias(res[1])
+                    audiencias($('#establecimiento').val(), res[1], 1)
                 }else{
                     if($("#estado_empresa").val() == '1'){
                         swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
@@ -1348,6 +1517,44 @@ $(function(){
             }
         });
     });
+
+    $("#formajax8").on("submit", function(e){
+        e.preventDefault();
+
+        //var act_representante = $("#tabla_representante tbody tr.table-active");
+
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax8"));
+        formData.append("dato", "valor");
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/gestionar_representantes",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+        .done(function(res){
+          console.log(res)
+          res = res.split(",");
+            if(res[0] == "exito"){
+                if($("#band6").val() == "save"){
+                    //$("#id_empresa").val(res[1])
+                    $("#modal_defensores").modal('hide');
+                    $.toast({ heading: 'Registro exitoso', text: 'Registro de defensor exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                    combo_defensores(res[1]);
+                }else if($("#band6").val() == "edit"){
+                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                    // tabla_representantes();
+                }
+            }else{
+                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }
+        });
+
+    });
+
 
 });
 </script>
