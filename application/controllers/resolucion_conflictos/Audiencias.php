@@ -115,4 +115,38 @@ class Audiencias extends CI_Controller {
 			)
 		);
 	}
+
+	public function gestionar_resolucion_audiencia() {
+		$data['id_fechasaudienciasci'] = $this->input->post('id_fechasaudienciasci');
+		$data['tipo_pago'] = $this->input->post('tipo_conciliacion');
+		$data['id_expedienteci'] = $this->input->post('id_expedienteci');
+		$data['resultado'] = $this->input->post('resolucion');
+		$data['fecha_resultado'] = date("Y-m-d",strtotime($this->input->post('fecha_resultado')));
+		$data['detalle_resultado'] = $this->input->post('detalle_resultado');
+		$data['inasistencia'] = $this->input->post('inasistencia');
+
+		echo $this->audiencias_model->editar_audiencia($data);
+		$data2 = array(
+						'id_expedienteci' => $data['id_expedienteci'],
+						'fechapago_fechaspagosci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago')))
+					);
+
+			if ($this->input->post('resolucion')=="Conciliado") {
+				if ($this->input->post('tipo_conciliacion') == "Pago en el momento") {
+					$data2['montopago_fechaspagosci'] = $this->input->post('monto_pago');
+				}else {
+					$data2['indemnizacion_fechaspagosci'] = ($this->input->post('monto_pago')-$this->input->post('primer_pago'));
+					$data2['montopago_fechaspagosci'] = $this->input->post('primer_pago');
+				}
+				$this->pagos_model->insertar_pago($data2);
+			}
+		}
+
+		public function resolucion_audiencia() {
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/resolucion_expediente',
+			array(
+				'id' => $this->input->post('id'),
+				'id_audiencia' => $this->input->post('id_audiencia')
+			));
+		}
 }

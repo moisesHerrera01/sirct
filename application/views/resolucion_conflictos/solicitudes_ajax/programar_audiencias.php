@@ -7,6 +7,23 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $navegatorless = true;
 }
 ?>
+<script>
+
+function resolucion(id_expedienteci,id_fechasaudienciasci) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/resolucion_audiencia",
+    type: "post",
+    dataType: "html",
+    data: {id : id_expedienteci, id_audiencia:id_fechasaudienciasci}
+  })
+  .done(function(res){
+    $('#cnt_modal_actions').html(res);
+    $('#modal_resolucion').modal('show');
+  });
+}
+
+</script>
+
 <div class="page-wrapper">
   <div class="container-fluid">
     <div class="row">
@@ -133,6 +150,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       </div>
     </div>
   </div>
+  <div id="cnt_modal_actions"></div>
 </div>
 
 <script>

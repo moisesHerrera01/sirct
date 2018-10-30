@@ -19,6 +19,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
 
           <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="<?= $id?>">
+          <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value="<?= $id_audiencia?>">
 
           <div class="row">
             <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
@@ -26,13 +27,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <div class="controls">
                 <select onchange="mostrar()" id="resolucion" name="resolucion" class="form-control" required>
                   <option value="">[Seleccione]</option>
-                  <option value="Conciliado">Conciliado</option>
-                  <option value="Sin conciliar">Sin conciliar</option>
-                  <option value="Inasistencia">Inasistencia</option>
-                  <option value="Desistida">Desistida</option>
-                  <option value="A multas">A multas</option>
-                  <option value="No notificada">No notificada</option>
-                  <option value="Reinstalo">Reinstalo</option>
+                  <option value="1">Conciliado</option>
+                  <option value="2">Sin conciliar</option>
+                  <option value="3">Inasistencia</option>
+                  <option value="4">Desistida</option>
+                  <option value="5">A multas</option>
+                  <option value="6">No notificada</option>
+                  <option value="7">Reinstalo</option>
                 </select>
               </div>
             </div>
@@ -56,8 +57,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <div class="controls">
                 <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
                   <option value="">[Seleccione]</option>
-                  <option value="Pago en el momento">Pago en el momento</option>
-                  <option value="Pago diferido">Pago diferido</option>
+                  <option value="1">Pago en el momento</option>
+                  <option value="2">Pago diferido</option>
                 </select>
               </div>
             </div>
@@ -120,7 +121,7 @@ $(function(){
         $('#modal_resolucion').modal('hide');
 
         $.ajax({
-            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_resolucion_expediente",
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/gestionar_resolucion_audiencia",
             type: "post",
             dataType: "html",
             data: formData,
@@ -138,7 +139,7 @@ $(function(){
       $('#modal_resolucion').remove();
       $('.modal-backdrop').remove();
       $('body').removeClass('modal-open');
-      tablasolicitudes();
+      // tablasolicitudes();
     });
 });
 
@@ -154,7 +155,7 @@ function mostrar(){
   $("#fecha_pago").removeAttr("required");
   var value = $("#resolucion").val();
   switch (value) {
-    case 'Conciliado':
+    case '1':
       $("#tipo_pago").show(500);
       $("#f_pago").show(500);
       $("#tipo_conciliacion").attr("required",'required');
@@ -162,7 +163,7 @@ function mostrar(){
           function(){
           $("#primer_pago").removeAttr("required");
           var tipo = $("#tipo_conciliacion").val();
-          if (tipo=='Pago diferido'){
+          if (tipo=='2'){
             $("#primer_pago").attr("required",'required');
             $("#p_pago").show(500);
           }else {
@@ -173,7 +174,7 @@ function mostrar(){
       $("#monto_pago").attr("required",'required');
       $("#fecha_pago").attr("required",'required');
       break;
-    case 'Inasistencia':
+    case '3':
       $("#especifique").show(500);
       $("#inasistencia").attr("required",'required');
       break;

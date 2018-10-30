@@ -15,7 +15,7 @@
                         <th>Hora de audiencia</th>
                         <th>Orden</th>
                         <th>Estado Actual</th>
-                        <th style="min-width: 85px;">(*)</th>
+                        <th style="min-width: 150px;">(*)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,7 +57,18 @@
                                 echo generar_boton($array,"cambiar_editar5","btn-danger","fa fa-times","Eliminar");
                             }
                           }
-
+                          ?>
+                          <div class="btn-group">
+                              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                  aria-expanded="false">
+                                  <i class="ti-settings"></i>
+                              </button>
+                              <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                  <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_actas_tipo(<?=$fila->id_expedienteci.','.$fila->cuenta.',\''.$fila->tipo_conciliacion.'\','.$fila->posee_representante.','.$fila->estado?>)">Generar acta por tipo</a> -->
+                                  <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci.','.$fila->id_fechasaudienciasci?>)">Registrar resolución</a>
+                              </div>
+                          </div>
+                          <?php
                           echo "</td>";
                           echo "</tr>";
                         }

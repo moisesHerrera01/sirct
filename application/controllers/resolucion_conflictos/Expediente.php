@@ -212,9 +212,9 @@ class Expediente extends CI_Controller {
 				echo $this->expedientes_model->editar_expediente($data);
 			}
 
-			public function resolucion_expediente() {
-				$this->load->view('resolucion_conflictos/solicitudes_ajax/resolucion_expediente', array('id' => $this->input->post('id') ));
-			}
+			// public function resolucion_expediente() {
+			// 	$this->load->view('resolucion_conflictos/solicitudes_ajax/resolucion_expediente', array('id' => $this->input->post('id') ));
+			// }
 
 	public function gestionar_resolucion_expediente() {
 		$data['tipocociliacion_expedienteci'] = $this->input->post('tipo_conciliacion');

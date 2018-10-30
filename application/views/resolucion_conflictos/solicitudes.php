@@ -403,18 +403,18 @@ function cambiar_estado() {
     });
 }
 
-function resolucion(id_expedienteci) {
-  $.ajax({
-    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/resolucion_expediente",
-    type: "post",
-    dataType: "html",
-    data: {id : id_expedienteci}
-  })
-  .done(function(res){
-    $('#cnt_modal_acciones').html(res);
-    $('#modal_resolucion').modal('show');
-  });
-}
+// function resolucion(id_expedienteci) {
+//   $.ajax({
+//     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/resolucion_expediente",
+//     type: "post",
+//     dataType: "html",
+//     data: {id : id_expedienteci}
+//   })
+//   .done(function(res){
+//     $('#cnt_modal_acciones').html(res);
+//     $('#modal_resolucion').modal('show');
+//   });
+// }
 
 var estado_pestana = "";
 function cambiar_pestana(tipo){
@@ -598,12 +598,13 @@ function visualizar(id_expedienteci,id_empresaci) {
   });
 }
 
-function combo_actividad_economica(){
+function combo_actividad_economica(seleccion){
 
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_actividad_economica",
     type: "post",
-    dataType: "html"
+    dataType: "html",
+    data: {id : seleccion}
   })
   .done(function(res){
     $('#div_combo_actividad_economica').html(res);
@@ -612,12 +613,13 @@ function combo_actividad_economica(){
 
 }
 
-function combo_municipio(){
+function combo_municipio(seleccion){
 
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_municipio",
     type: "post",
-    dataType: "html"
+    dataType: "html",
+    data: {id : seleccion}
   })
   .done(function(res){
     $('#div_combo_municipio').html(res);
@@ -626,12 +628,13 @@ function combo_municipio(){
 
 }
 
-function combo_municipio2(){
+function combo_municipio2(seleccion){
 
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_municipio2",
     type: "post",
-    dataType: "html"
+    dataType: "html",
+    data: {id : seleccion}
   })
   .done(function(res){
     $('#div_combo_municipio2').html(res);
@@ -1036,7 +1039,7 @@ function cambiar_editar2(id_representante, dui_representante, nombres_representa
   combo_estados_civiles(id_estado_civil);
   combo_profesiones(id_titulo_academico);
   combo_municipio2(id_municipio);
-  alert(f_nacimiento_representante)
+  // alert(id_municipio)
   $("#band4").val(band);
 
   if(band == "edit"){
