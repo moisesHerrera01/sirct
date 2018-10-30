@@ -169,7 +169,7 @@ class Acta extends CI_Controller {
 
         switch ($caso) {
           case '1':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_EN_EL_ACTO_CON_DEFENSOR.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/AUDIENCIA_PF_D_ST.docx');
             break;
           case '2':
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_EN_EL_ACTO_SIN_DEFENSOR.docx');
@@ -207,6 +207,11 @@ class Acta extends CI_Controller {
         $templateWord->setValue('nombre_empresa', mb_strtoupper($expediente->nombre_empresa));
         if ($caso== 1 || $caso==3 || $caso==6) {
               $templateWord->setValue('representante_persona', mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci));
+              $templateWord->setValue('dui_defensor', mb_strtoupper(convertir_dui($expediente->dui_representantepersonaci)));
+              $templateWord->setValue('tipo_representante', mb_strtoupper($expediente->tipo_representante_empresa));
+              $templateWord->setValue('edad_representante', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($expediente->f_nacimiento_representante))))));
+              $templateWord->setValue('municipio_representante', mb_strtoupper($expediente->municipio_representante));
+              $templateWord->setValue('estado_civil_representante', mb_strtoupper($expediente->estado_civil_representante));
         }
         if ($caso==5) {
           $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));
@@ -264,7 +269,7 @@ class Acta extends CI_Controller {
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         switch ($caso) {
           case '1':
-            header("Content-Disposition: attachment; filename='CONCILIADA_EN_EL_ACTO_CON_DEFENSOR_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename='AUDIENCIA_PF_D_ST".date('dmy_His').".docx'");
             break;
           case '2':
             header("Content-Disposition: attachment; filename='CONCILIADA_EN_EL_ACTO_SIN_DEFENSOR_".date('dmy_His').".docx'");

@@ -313,6 +313,7 @@ function cambiar_delegado() {
 }
 
 function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_representante,estado) {
+      alert(posee_representante)
       $("#solicitud_pn_pj").show();
       $("#diferido_con").hide();
       $("#diferido_sin").hide();
@@ -331,7 +332,7 @@ function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,p
 
     if (estado=="2") {
       $("#separador1").show();
-      if (tipo_conciliacion=='Pago Diferido') {
+      if (tipo_conciliacion=='2') {
         if (posee_representante) {
           $("#diferido_con").show();
         }else {

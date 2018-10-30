@@ -10,23 +10,26 @@ class Audiencias_model extends CI_Model {
 	public function obtener_audiencias($id, $orden=FALSE, $estado=FALSE) {
 
 			$this->db->select(
-												'id_expedienteci,
-												 id_fechasaudienciasci,
-												 fecha_fechasaudienciasci,
-												 hora_fechasaudienciasci,
-												 estado_audiencia,
-												 numero_fechasaudienciasci,
-												 id_representaci,
-												 id_defensorlegal,
-												 id_delegado'
+												'f.id_expedienteci,
+												 f.id_fechasaudienciasci,
+												 f.fecha_fechasaudienciasci,
+												 f.hora_fechasaudienciasci,
+												 f.estado_audiencia,
+												 f.numero_fechasaudienciasci,
+												 f.id_representaci,
+												 f.id_defensorlegal,
+												 f.id_delegado,
+												 f.tipo_pago,
+												 (select count(*) from sct_fechasaudienciasci fe where fe.id_expedienteci=f.id_expedienteci) AS cuenta,
+												 (select e.id_estadosci from sct_expedienteci e where e.id_expedienteci=f.id_expedienteci) AS estado'
 											  )
-						 ->from('sct_fechasaudienciasci')
-						 ->where('id_expedienteci', $id)
-						 ->order_by('estado_audiencia','desc')
-						 ->order_by('id_fechasaudienciasci','asc');
+						 ->from('sct_fechasaudienciasci f')
+						 ->where('f.id_expedienteci', $id)
+						 ->order_by('f.estado_audiencia','desc')
+						 ->order_by('f.id_fechasaudienciasci','asc');
 			if ($orden && $estado) {
-				$this->db->where('estado_audiencia',$estado)
-								 ->where('numero_fechasaudienciasci',$orden);
+				$this->db->where('f.estado_audiencia',$estado)
+								 ->where('f.numero_fechasaudienciasci',$orden);
 			}
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {

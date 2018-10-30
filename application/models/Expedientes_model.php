@@ -27,19 +27,25 @@ class Expedientes_model extends CI_Model {
 												 e.horarios_personaci,
 												 e.fechaconflicto_personaci,
 												 m.municipio,
-												 mu.municipio municipio_empresa'
+												 mu.municipio municipio_empresa,
+												 mur.municipio municipio_representante,
+												 tr.tipo_representante tipo_representante_empresa,
+												 ec.estado_civil estado_civil_representante'
 											  )
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 						 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
-						 ->join('sct_representantepersonaci rp','rp.id_expedienteci=e.id_expedienteci','left')
 						 ->join('sct_partida pa','pa.id_partida=p.id_partida','left')
 						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')
+						 ->join('sct_representantepersonaci rp','rp.id_representantepersonaci=f.id_defensorlegal','left')
 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
 						 ->join('org_municipio mu','mu.id_municipio=em.id_municipio')
 						 ->join('sge_catalogociiu c','c.id_catalogociiu=em.id_catalogociiu')
 						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
+						 ->join('org_municipio mur','mur.id_municipio = r.id_municipio')
+						 ->join('sir_estado_civil ec','ec.id_estado_civil=r.id_estado_civil')
+						 ->join('sct_tipo_representante tr','tr.id_tipo_representante=r.tipo_representante','left')
 						 ->join('sge_empleador emp','emp.id_empleador=e.id_empleador', 'left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 						 ->where('e.id_expedienteci', $id_expedienteci)
