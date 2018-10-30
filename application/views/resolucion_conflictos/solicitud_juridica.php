@@ -592,7 +592,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#id_representanteci").val(id_representanteci)
         $(obj).parent().addClass('table-active active');
         $(obj).parent().siblings('tr').removeClass('table-active active');
-        var tds = $(obj).siblings('td');
+        var tds = $(obj).parent().children('td');
 
         var trs = $("#tabla_representante tbody tr");
         for (var i = 0; i < trs.length; i+=1) {

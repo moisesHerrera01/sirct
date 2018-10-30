@@ -44,31 +44,27 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         tablasolicitudes();
     }
 
-    function combo_establecimiento(seleccion) {
-
+    function combo_establecimiento(seleccion){
         $.ajax({
-                url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
-                type: "post",
-                dataType: "html",
-                data: {
-                    id: seleccion
-                }
-            })
-            .done(function (res) {
-                $('#div_combo_establecimiento').html(res);
-                $(".est").select2({
+            async: true,
+          url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_establecimiento",
+          type: "post",
+          dataType: "html",
+          data: {id : seleccion}
+        })
+        .done(function(res){
+            $.when($('#div_combo_establecimiento').html(res) ).then(function( data, textStatus, jqXHR ) {
+                $("#establecimiento").select2({
                     'minimumInputLength': 3,
                     'language': {
                         noResults: function () {
-                            return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" onClick="cerrar_combo_establecimiento()">Agregar uno nuevo</a>';
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
                         }
-                    },
-                    'escapeMarkup': function (markup) {
-                        return markup;
-                    }
+                    }, 'escapeMarkup': function (markup) { return markup; }
                 });
+                tabla_representantes()
             });
-
+        });
     }
 
     function combo_actividad_economica() {
@@ -80,7 +76,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             })
             .done(function (res) {
                 $('#div_combo_actividad_economica').html(res);
-                $(".select2").select2();
+                //$(".select2").select2();
             });
 
     }
@@ -94,7 +90,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             })
             .done(function (res) {
                 $('#div_combo_municipio').html(res);
-                $(".select2").select2();
+                $("#municipio").select2();
             });
 
     }
@@ -128,7 +124,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         })
         .done(function (res) {
             $('#div_combo_nacionalidad').html(res);
-            $(".select2").select2();
+            $("#nacionalidad").select2();
         });
     }
 
@@ -143,6 +139,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#btnadd" + num).hide(0);
             $("#btnedit" + num).show(0);
         }
+    }
+
+    function seleccionar_representante(obj, id_representanteci){
+        $("#id_representanteci").val(id_representanteci)
+        $(obj).parent().addClass('table-active active');
+        $(obj).parent().siblings('tr').removeClass('table-active active');
+        var tds = $(obj).parent().children('td');
+
+        var trs = $("#tabla_representante tbody tr");
+        for (var i = 0; i < trs.length; i+=1) {
+            var td = $(trs[i]).children('td');
+            $(td[0]).html('');
+        }
+
+
+        $(tds[0]).html('<span class="round round-primary">R</span>');
     }
 
     function cerrar_mantenimiento() {
@@ -377,7 +389,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
-    function audiencias(id_expedienteci,origen) {
+    function audiencias(id_empresaci, id_expedienteci, origen) {
+      $("#id_empresaci").val(id_empresaci);
       $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
         type: "post",
@@ -389,8 +402,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#cnt_actions').html(res);
         $("#cnt_actions").show(0);
         $("#cnt_tabla").hide(0);
-        $("#cnt_tabla_solicitudes").hide(0);
+        //$("#cnt_tabla_solicitudes").hide(0);
         $("#cnt_form_main").hide(0);
+        combo_defensores();
+        combo_representante_empresa();
+        combo_delega2();
         if (origen==1) {
             $("#paso3").show(0);
             tabla_audiencias(id_expedienteci);
@@ -562,6 +578,215 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
+    function combo_procuradores(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/combo_procuradores",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_procurador').html(res);
+        $(".select2").select2();
+      });
+    }
+
+    function combo_defensores(seleccion){
+        $.ajax({
+          async: true,
+          url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/combo_defensores",
+          type: "post",
+          dataType: "html",
+          data: {id : seleccion}
+        })
+        .done(function(res){
+            $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
+                $("#defensor").select2({
+                    'minimumInputLength': 3,
+                    'language': {
+                        noResults: function () {
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
+                        }
+                    }, 'escapeMarkup': function (markup) { return markup; }
+                });
+                //tabla_representantes()
+            });
+        });
+    }
+
+    function combo_representante_empresa(seleccion){
+      var id_emp = $("#id_empresaci").val();
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_representante_empresa?id_empresaci="+id_emp,
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_representante_empresa').html(res);
+        $("#representante_empresa").select2();
+      });
+    }
+
+    function combo_delega2(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delega2",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_delegado2').html(res);
+        $("#delegado").select2();
+      });
+    }
+
+    function cerrar_combo_defensores() {
+        $("#defensor").select2('close');
+        combo_tipo_representante();
+    }
+
+    function combo_tipo_representante(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_tipo_representante",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_tipo_representante').html(res);
+        $("#tipo_representante_persona").select2();
+      });
+    }
+
+    function resolucion(id_expedienteci) {
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/resolucion_expediente",
+        type: "post",
+        dataType: "html",
+        data: {id : id_expedienteci}
+      })
+      .done(function(res){
+        $('#cnt_modal_acciones').html(res);
+        $('#modal_resolucion').modal('show');
+      });
+    }
+
+    function tabla_representantes(){
+        var id_empresa = $("#establecimiento").val();
+        var id_representanteci = $("#id_representanteci").val();
+        if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
+        }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla_representantes").innerHTML=xmlhttpB.responseText;
+                $('[data-toggle="tooltip"]').tooltip();
+                $('#myTable2').DataTable();
+            }
+        }
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
+        xmlhttpB.send();
+    }
+
+    function validar_establecimiento(){
+        var establecimiento = $("#establecimiento").val();
+        var registros = $("#tabla_representante tbody tr.table-active");
+
+        if(establecimiento == "" || registros.length == 0){
+            if(establecimiento == ""){
+                swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
+            }else{
+                swal({ title: "Seleccione representante", text: "Agregue o seleccione un representante de la lista.", type: "warning", showConfirmButton: true });
+            }
+        }else{
+            open_form(3);
+        }
+    }
+
+    function cambiar_nuevo2(){
+        if($("#establecimiento").val() == ''){
+            swal({ title: "Seleccione un establecimiento", type: "warning", showConfirmButton: true });
+        }else{
+            $("#id_representante").val('');
+            $("#nombres_representante").val('');
+            $("#dui_representante").val('');
+            $("#acreditacion_representante").val('');
+            $("#tipo_representante").val('');
+            $("#estado_representante").val('1');
+            $("#f_nacimiento_representante").val('');
+            combo_estados_civiles('');
+            combo_profesiones('');
+            combo_municipio2('');
+            $("#band4").val('save');
+            $("#modal_representante").modal('show');
+        }
+    }
+
+    function combo_estados_civiles(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_estados_civiles",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_estados_civiles').html(res);
+        $("#estado_civil").select2();
+      });
+    }
+
+    function combo_profesiones(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_profesiones",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_profesiones').html(res);
+        $("#profesion").select2();
+      });
+    }
+
+    function combo_municipio2(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_municipio2",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_municipio2').html(res);
+        $("#municipio_representante").select2();
+      });
+
+    }
+
+    function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
+  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante, band){
+      $("#id_representante").val(id_representante);
+      $("#dui_representante").val(dui_representante);
+      $("#nombres_representante").val(nombres_representante);
+      $("#acreditacion_representante").val(acreditacion_representante);
+      $("#tipo_representante").val(tipo_representante);
+      $("#estado_representante").val(estado_representante);
+      $("#f_nacimiento_representante").val(f_nacimiento_representante);
+      combo_estados_civiles(id_estado_civil);
+      combo_profesiones(id_titulo_academico);
+      combo_municipio2(id_municipio);
+      // alert(id_municipio)
+      $("#band4").val(band);
+
+      if(band == "edit"){
+            $("#modal_representante").modal('show');
+        }else{
+            cambiar_eliminar3(estado_representante);
+        }
+    }
+
+
 </script>
 
 <div class="page-wrapper">
@@ -731,18 +956,48 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <!-- ============================================================== -->
                         <!-- Fin del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
                         <!-- ============================================================== -->
+
+                        <div id="cnt_form2" class="cnt_form" style="display: none;">
+                          <h3 class="box-title" style="margin: 0px;">
+                              <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
+                              Información del solicitante
+                            </h3><hr class="m-t-0 m-b-30">
+                            <span class="etiqueta">Datos del solicitado</span>
+                            <blockquote class="m-t-0">
+                                <div class="row">
+                                    <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
+                                        id="div_combo_establecimiento"></div>
+                                </div>
+                            </blockquote>
+
+                            <span class="etiqueta">Representante</span>
+                            <blockquote class="m-t-0">
+                                <div id="cnt_tabla_representantes"></div>
+                            </blockquote>
+                            <div class="row">
+                                <div class="col-lg-12" align="center">
+                                    <div align="right" id="btnadd1" class="pull-right">
+                                        <button type="submit" onclick="validar_establecimiento();" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                                    </div>
+                                    <div align="right" id="btnedit1" style="display: none;" class="pull-right">
+                                        <button type="submit" onclick="validar_establecimiento();" class="btn waves-effect waves-light btn-info">Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- ============================================================== -->
                         <!-- Inicio del FORMULARIO INFORMACIÓN DE LA SOLICITUD -->
                         <!-- ============================================================== -->
                         <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-                        <div id="cnt_form2" class="cnt_form" style="display: none;">
+                        <div id="cnt_form3" class="cnt_form" style="display: none;">
                             <h3 class="box-title" style="margin: 0px;">
-                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso
-                                    2</button>&emsp;
+                                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
                                 Información de la solicitud
                                 <input type="hidden" id="band2" name="band2" value="save">
                                 <input type="hidden" id="id_persona" name="id_persona" value="">
                                 <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="">
+                                <input type="hidden" id="id_representanteci" name="id_representanteci" value="">
 
                             </h3>
                             <hr class="m-t-0 m-b-30">
@@ -750,31 +1005,26 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <blockquote class="m-t-0">
 
                                 <div class="row">
-                                    <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
-                                        id="div_combo_establecimiento"></div>
-                                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <div class="form-group col-lg-3 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Fecha de preaviso: <span class="text-danger">*</span></h5>
                                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
                                             id="fecha_preaviso" name="fecha_preaviso" placeholder="dd/mm/yyyy"
                                             readonly="">
                                         <div class="help-block"></div>
                                     </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
-                                        id="div_combo_delegado"></div>
-                                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <div class="form-group col-lg-3 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Fecha de renuncia: <span class="text-danger">*</span></h5>
                                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
                                             id="fecha_renuncia" name="fecha_renuncia" placeholder="dd/mm/yyyy"
                                             readonly="">
                                         <div class="help-block"></div>
                                     </div>
+                                    <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
+                                        id="div_combo_delegado"></div>
                                 </div>
 
                                 <div class="row">
-                                  <div class="form-group col-lg-8" style="height: 83px;">
+                                  <div class="form-group col-lg-12" style="height: 83px;">
                                       <h5>Descripción del motivo:<span class="text-danger">*</h5>
                                       <textarea type="text" id="descripcion_motivo" name="descripcion_motivo" class="form-control" placeholder="Descipción del motivo"></textarea>
                                       <div class="help-block"></div>
@@ -797,6 +1047,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             </div>
                         </div>
                         <?php echo form_close(); ?>
+
                         <!-- ============================================================== -->
                         <!-- Fin del FORMULARIO INFORMACIÓN DE LA SOLICITUD -->
                         <!-- ============================================================== -->
@@ -890,6 +1141,89 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <button id="submit_ubi" name="submit_ubi" type="button">clicks</button>
 </div>
 
+<!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
+    <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+              <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+              <input type="hidden" id="band4" name="band4" value="save">
+              <input type="hidden" id="id_representante" name="id_representante" value="">
+                <div class="modal-header">
+                    <h4 class="modal-title">Gestión de representantes</h4>
+                </div>
+                <div class="modal-body" id="">
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Nombre del representante: <span class="text-danger">*</span></h5>
+                          <div class="controls">
+                              <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
+                          </div>
+                      </div>
+
+                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy" readonly="">
+                        <div class="help-block"></div>
+                    </div>
+
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>DUI: <span class="text-danger">*</span></h5>
+                          <div class="controls">
+                              <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
+                          </div>
+                      </div>
+
+                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Tipo: <span class="text-danger">*</span></h5>
+                          <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
+                              <option value=''>[Seleccione el tipo]</option>
+                              <option class="m-l-50" value="1">Legal</option>
+                              <option class="m-l-50" value="2">Designado</option>
+                              <option class="m-l-50" value="3">Apoderado</option>
+                          </select>
+                      </div>
+
+                      <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
+                    </div>
+                    <div class="row">
+
+
+                      <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Acreditación: <span class="text-danger">*</span></h5>
+                          <div class="controls">
+                              <textarea id="acreditacion_representante" name="acreditacion_representante" class="form-control"></textarea>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
+
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
+                    </div>
+
+                    <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Estado: <span class="text-danger">*</span></h5>
+                        <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%" required="">
+                            <option class="m-l-50" value="1">Activo</option>
+                            <option class="m-l-50" value="0">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Aceptar</button>
+                </div>
+              <?php echo form_close(); ?>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+  <!--FIN MODAL REPRESENTANTE EMPRESA -->
 
 <!--INICIA MODAL DE ESTABLECIMIENTOS -->
 <div class="modal fade" id="modal_establecimiento" role="dialog">
@@ -897,7 +1231,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <div class="modal-content">
             <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
             <input type="hidden" id="band3" name="band3" value="save">
-            <input type="hidden" id="id_representante" name="id_representante" value="">
+            <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de representantes</h4>
             </div>
@@ -1099,6 +1433,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             e.preventDefault();
             var f = $(this);
             var formData = new FormData(document.getElementById("formajax2"));
+            formData.append("id_representanteci", $('#id_representanteci').val());
+            formData.append("establecimiento", $('#establecimiento').val());
+
+            alert($('#id_representanteci').val())
 
             $.ajax({
                     url: "<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/gestionar_expediente",
@@ -1118,8 +1456,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             showConfirmButton: true
                         });
                     } else {
+                        //
                         cerrar_mantenimiento();
-                        audiencias(res,1);
+                        open_form(3);
                         /*if ($("#band2").val() == "save") {
                             swal({
                                 title: "¡Registro exitoso!",
@@ -1191,6 +1530,43 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     });
 
+    $("#formajax5").on("submit", function(e){
+    e.preventDefault();
+    var f = $(this);
+    var formData = new FormData(document.getElementById("formajax5"));
+    formData.append("id_empresa", $('#establecimiento').val());
+
+    $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_representante",
+        type: "post",
+        dataType: "html",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false
+    })
+    .done(function(res){
+      console.log(res)
+        if(res == "exito"){
+            if($("#band4").val() == "save"){
+                swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+            }else if($("#band4").val() == "edit"){
+                swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+            }else{
+                if($("#estado_representante").val() == '1'){
+                    swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
+                }else{
+                    swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
+                }
+            }
+            $("#modal_representante").modal('hide');
+            tabla_representantes();
+        }else{
+            swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+        }
+    });
+});
+
     $(function () {
         $(document).ready(function () {
             var date = new Date();
@@ -1210,6 +1586,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 todayHighlight: true,
                 endDate: moment().format("DD-MM-YYYY")
             }).datepicker("setDate", new Date());
+
+            $('#f_nacimiento_representante').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
 
             $('#fecha_renuncia').datepicker({
                 format: 'dd-mm-yyyy',
