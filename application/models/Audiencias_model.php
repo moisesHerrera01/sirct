@@ -20,6 +20,7 @@ class Audiencias_model extends CI_Model {
 												 f.id_defensorlegal,
 												 f.id_delegado,
 												 f.tipo_pago,
+												 f.asistieron,
 												 (select count(*) from sct_fechasaudienciasci fe where fe.id_expedienteci=f.id_expedienteci) AS cuenta,
 												 (select e.id_estadosci from sct_expedienteci e where e.id_expedienteci=f.id_expedienteci) AS estado'
 											  )

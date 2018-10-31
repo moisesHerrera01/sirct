@@ -22,8 +22,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value="<?= $id_audiencia?>">
 
           <div class="row">
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Resulado de intervenci&oacute;n conciliator&iacute;a: <span class="text-danger">*</span></h5>
+            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <h5>Resulado de audiencia: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select onchange="mostrar()" id="resolucion" name="resolucion" class="form-control" required>
                   <option value="">[Seleccione]</option>
@@ -38,11 +38,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </div>
             </div>
 
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                 <h5>Fecha del resultado: <span class="text-danger">*</span></h5>
                 <input type="text" required="" class="form-control" id="fecha_resultado" name="fecha_resultado" placeholder="dd/mm/yyyy" readonly="">
                 <div class="help-block"></div>
             </div>
+
+              <div  class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                <h5>Parte solicitante : <span class="text-danger">*</span></h5>
+                <div class="controls">
+                  <select id="asistieron" name="asistieron" class="form-control" required>
+                    <option value="">[Seleccione]</option>
+                    <option value="1">Defensor público</option>
+                    <option value="2">Defensor público y trabajador</option>
+                  </select>
+                </div>
+              </div>
 
             <div class="form-group col-lg-12 col-sm-12" style="height: 83px;">
                 <h5>Detalle del resultado:<span class="text-danger">*</span></h5>
@@ -51,9 +62,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             </div>
           </div>
 
-          <div class="row" style="display: none;" id='tipo_pago'>
-            <div  class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Tipo de conciliación: <span class="text-danger">*</span></h5>
+          <div class="row" id='tipo_pago'>
+
+          <div class="form-group col-lg-4" style="height: 83px;">
+              <h5>Número folios:<span class="text-danger">*</h5>
+              <input type="number" id="numero_folios" name="numero_folios" class="form-control" placeholder="Número folios" step="1">
+              <div class="help-block"></div>
+          </div>
+
+            <div  class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <h5>Tipo de pago: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
                   <option value="">[Seleccione]</option>
@@ -63,28 +81,26 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </div>
             </div>
 
-            <div class="form-group col-lg-6" style="height: 83px;">
+            <div class="form-group col-lg-4" style="height: 83px;">
                 <h5>Monto de pago($):<span class="text-danger">*</h5>
                 <input type="number" id="monto_pago" name="monto_pago" class="form-control" placeholder="Monto total de pago " step="0.01">
                 <div class="help-block"></div>
             </div>
 
-            <div class="form-group col-lg-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+            <div id="fhpago" class="form-group col-lg-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Fecha y hora de pago: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <input type="datetime-local" class="form-control" id="fecha_pago" nombre="fecha_pago">
               </div>
             </div>
 
-            <div style="display: none" id="p_pago" class="form-group col-lg-6" style="height: 83px;">
+            <div id="p_pago" class="form-group col-lg-6" style="height: 83px;">
                 <h5>Monto de primer pago:<span class="text-danger">*</h5>
                 <input type="number" id="primer_pago" name="primer_pago" class="form-control" placeholder="Monto de primer pago" step="0.01">
                 <div class="help-block"></div>
             </div>
-          </div>
 
-          <div style="display:none;" id="especifique" class="row">
-            <div  class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+            <div  id="especifique" class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Especifique : <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select id="inasistencia" name="inasistencia" class="form-control" required>
@@ -96,6 +112,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </div>
             </div>
           </div>
+
 
           <div align="right" id="btnadd1">
             <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
@@ -144,20 +161,27 @@ $(function(){
 });
 
 function mostrar(){
-  $("#tipo_pago").hide(0);
+
+  var divs = $("#tipo_pago").children(".form-group");
+  $(divs[0]).show(0); $(divs[1]).hide(0); $(divs[2]).hide(0);
   $("#especifique").hide(0);
   $("#p_pago").hide(0);
   $("#f_pago").hide(0);
+  $("#fhpago").hide(0);
   $("#tipo_conciliacion").removeAttr("required");
   $("#monto_pago").removeAttr("required");
   $("#inasistencia").removeAttr("required");
   $("#primer_pago").removeAttr("required");
   $("#fecha_pago").removeAttr("required");
   var value = $("#resolucion").val();
+
+  if(value == ""){ $("#tipo_pago").hide(0); }else{ $("#tipo_pago").show(0); }
+
   switch (value) {
     case '1':
-      $("#tipo_pago").show(500);
+    $(divs[1]).show(0); $(divs[2]).show(0);
       $("#f_pago").show(500);
+      $("#fhpago").show(0);
       $("#tipo_conciliacion").attr("required",'required');
       $("#tipo_conciliacion").change(
           function(){
@@ -184,6 +208,7 @@ function mostrar(){
 
 $(function(){
     $(document).ready(function(){
+      $("#tipo_pago").hide(0);
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_resultado').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true}).datepicker("setDate", new Date());
     });

@@ -9,7 +9,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <script type="text/javascript">
 function nav(value) {
   var id_expedienteci = $("#id_expedienteci_copia2").val();
-  if (value != "") { location.href = value+id_expedienteci; }
+  var id_audiencia = $("#id_audiencia").val();
+  if (value != "") { location.href = value+id_expedienteci+'/'+id_audiencia; }
   cerrar_mantenimiento();
 }
 
@@ -312,19 +313,19 @@ function cambiar_delegado() {
     });
 }
 
-function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_representante,estado) {
-      alert(posee_representante)
+function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia) {
+      alert(posee_trabajador)
       $("#solicitud_pn_pj").show();
       $("#diferido_con").hide();
       $("#diferido_sin").hide();
-      $("#acto_con").hide();
-      $("#acto_sin").hide();
+      $("#pf_st").hide();
+      $("#pf_st").hide();
       $("#segunda_con").hide();
       $("#segunda_sin").hide();
 
     if (cuenta_audiencias<2) {
       $("#solicitud_pn_pj").hide();
-    }if (posee_representante) {
+    }if (posee_trabajador) {
       $("#segunda_con").show();
     }else {
       $("#segunda_sin").show();
@@ -333,27 +334,28 @@ function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,p
     if (estado=="2") {
       $("#separador1").show();
       if (tipo_conciliacion=='2') {
-        if (posee_representante) {
+        if (posee_trabajador) {
           $("#diferido_con").show();
         }else {
           $("#diferido_sin").show();
         }
       }else {
-        if (posee_representante) {
-          $("#acto_con").show();
+        if (posee_trabajador) {
+          $("#pf_st").show();
         }else {
-          $("#acto_sin").show();
+          $("#pf_st").show();
         }
       }
     }
     $("#id_expedienteci_copia2").val(id_expedienteci);
+    $("#id_audiencia").val(id_audiencia);
     $("#tipo_acta").val('').trigger('');
     $("#modal_actas_tipo").modal("show");
-
 }
 
 function generar_actas_tipo() {
     var id_expedienteci = $("#id_expedienteci_copia2").val();
+    var id_audiencia = $("#id_audiencia").val();
     var tipo_acta = $("#tipo_acta").val();
     $.ajax({
       url: "<?php echo site_url(); ?>/resolucion_conflictos/acta/generar_acta_tipo",
@@ -362,6 +364,7 @@ function generar_actas_tipo() {
       data: {
         id_expedienteci: id_expedienteci,
         tipo_acta: tipo_acta,
+        id_audiencia: id_audiencia
       }
     })
     .done(function (res) {
@@ -1883,15 +1886,17 @@ function volver(num) {
 
           <div class="modal-body" id="">
               <input type="hidden" id="id_expedienteci_copia2" name="id_expedienteci_copia2" value="">
+              <input type="hidden" id="id_audiencia" name="id_audiencia" value="">
               <input type="hidden" id="cuenta_audiencias" name="cuenta_audiencias" value="">
               <div class="row">
                 <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Seleccione el tipo de acta: <span class="text-danger">*</span></h5>
                     <div class="controls">
+                      <!-- Tipo 1: Engloba 4 posibilidades primera y segunda fecha, con presencia del trabajador y sin el trabajador -->
                       <select id="tipo_acta" name="tipo_acta" class="custom-select col-4" onchange="nav(this.value)" required>
                         <option value="">[Seleccione]</option>
-                        <option id="acto_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Conciliada en el acto con defensor público</option>
-                        <option id="acto_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Conciliada en el acto sin defensor público</option>
+                        <option id="pf_st" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Acta de audiencia</option>
+                        <option id="pf_st" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Conciliada en el acto sin defensor público</option>
                         <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor público</option>
                         <option id="diferido_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Conciliada pago diferido sin defensor público</option>
                         <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
