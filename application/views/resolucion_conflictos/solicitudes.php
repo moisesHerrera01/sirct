@@ -126,7 +126,7 @@ function cambiar_update_post(id_personaci,bandera){
       $("#telefono2").val(result.telefono2_personaci);
       $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
-      $("#fecha_nacimiento").val(result.fnacimiento_personaci);
+      $("#fecha_nacimiento").datepicker("setDate", result.fnacimiento_personaci);
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
       $("#discapacidad_desc").val(result.discapacidad);

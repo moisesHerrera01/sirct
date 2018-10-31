@@ -47,7 +47,7 @@ class Retiro_voluntario extends CI_Controller {
 			'telefono_personaci' => $this->input->post('telefono'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion'),
-			'fnacimiento_personaci' => $this->input->post('fecha_nacimiento'),
+			'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
 			'sexo_personaci' => $this->input->post('sexo'),
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),

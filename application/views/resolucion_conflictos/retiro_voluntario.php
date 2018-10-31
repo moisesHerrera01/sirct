@@ -240,6 +240,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Fin expediente*/
 
         $("#band").val("save");
+        $("#bandx").val("save");
         $("#band1").val("save");
         $("#band2").val("save");
 
@@ -270,7 +271,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 })
                 .done(function (res) {
                     result = JSON.parse(res)[0];
-
                     $("#id_personaci").val(result.id_personaci);
                     $("#id_persona").val(result.id_persona);
                     $("#id_expedienteci").val(result.id_expedienteci);
@@ -299,6 +299,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                     /*Fin expediente*/
                     $("#band").val("edit");
+                    $("#bandx").val("edit");
                     $("#band1").val("edit");
                     $("#band2").val("edit");
                 });
@@ -791,6 +792,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 </script>
 <input type="hidden" id="id_empresaci" name="id_empresaci">
+<input type="hidden" id="bandx" name="bandx">
 <div class="page-wrapper">
     <div class="container-fluid">
         <!-- ============================================================== -->
@@ -938,7 +940,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     </div>
                                 </div>
                             </blockquote>
-
+                            <div class="pull-left">
+                                <button type="button" class="btn waves-effect waves-light btn-default" onclick="cerrar_mantenimiento();"><i class="mdi mdi-chevron-left"></i> Salir</button>
+                            </div>
                             <div align="right" id="btnadd1">
                                 <button type="reset" class="btn waves-effect waves-light btn-success">
                                     <i class="mdi mdi-recycle"></i> Limpiar</button>
@@ -976,6 +980,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <blockquote class="m-t-0">
                                 <div id="cnt_tabla_representantes"></div>
                             </blockquote>
+                            <div class="pull-left">
+                                <button type="button" class="btn waves-effect waves-light btn-default" onclick="open_form(1)"><i class="mdi mdi-chevron-left"></i> Volver</button>
+                            </div>
                             <div class="row">
                                 <div class="col-lg-12" align="center">
                                     <div align="right" id="btnadd1" class="pull-right">
@@ -1034,6 +1041,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 </div>
 
                             </blockquote>
+                            <div class="pull-left">
+                                <button type="button" class="btn waves-effect waves-light btn-default" onclick="open_form(2)"><i class="mdi mdi-chevron-left"></i> Volver</button>
+                            </div>
                             <div align="right" id="btnadd2">
                                 <button type="reset" class="btn waves-effect waves-light btn-success">
                                     <i class="mdi mdi-recycle"></i> Limpiar
@@ -1423,8 +1433,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     open_form(2);
                     $("#id_personaci").val(res);
                     $("#id_persona").val(res);
-                    $("#band1").val($("#band").val());
-                    $("#band2").val($("#band").val());
+                    $("#band1").val('edit');
+                    $("#band2").val($("#bandx").val());
                 }
             });
         });
