@@ -116,7 +116,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $('#myTable2').DataTable();
             }
         }
-        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
         xmlhttpB.send();
     }
 
@@ -332,27 +332,36 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#acreditacion_representante").val('');
             $("#tipo_representante").val('');
             $("#estado_representante").val('1');
+            combo_estados_civiles('');
+            combo_profesiones('');
+            combo_municipio2('');
             $("#band2").val('save');
             $("#modal_representante").modal('show');
         }
       
     }
 
-    function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante, tipo_representante, estado_representante, band){
-      $("#id_representante").val(id_representante);
-      $("#dui_representante").val(dui_representante);
-      $("#nombres_representante").val(nombres_representante);
-      $("#acreditacion_representante").val(acreditacion_representante);
-      $("#tipo_representante").val(tipo_representante);
-      $("#estado_representante").val(estado_representante);
-      $("#band2").val(band);
+    function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
+  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante, band){
+  $("#id_representante").val(id_representante);
+  $("#dui_representante").val(dui_representante);
+  $("#nombres_representante").val(nombres_representante);
+  $("#acreditacion_representante").val(acreditacion_representante);
+  $("#tipo_representante").val(tipo_representante);
+  $("#estado_representante").val(estado_representante);
+  $("#f_nacimiento_representante").val(f_nacimiento_representante);
+  combo_estados_civiles(id_estado_civil);
+  combo_profesiones(id_titulo_academico);
+  combo_municipio2(id_municipio);
+  // alert(id_municipio)
+  $("#band4").val(band);
 
-      if(band == "edit"){
-            $("#modal_representante").modal('show');
-        }else{
-            cambiar_eliminar3(estado_representante);
-        }
+  if(band == "edit"){
+        $("#modal_representante").modal('show');
+    }else{
+        cambiar_eliminar3(estado_representante);
     }
+}
 
     function cambiar_eliminar3(estado){
         if(estado == 1){
@@ -728,6 +737,47 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       });
     }
 
+    function combo_estados_civiles(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_estados_civiles",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_estados_civiles').html(res);
+        $("#estado_civil").select2();
+      });
+    }
+
+    function combo_profesiones(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_profesiones",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_profesiones').html(res);
+        $("#profesion").select2();
+      });
+    }
+
+    function combo_municipio2(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_municipio2",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_municipio2').html(res);
+        $("#municipio_representante").select2();
+      });
+
+    }
+
 </script>
 <input type="hidden" id="id_empresaci" name="id_empresaci">
 <input type="hidden" id="address" name="">
@@ -1033,32 +1083,42 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <div id="cnt_modal_acciones"></div>
 
-<div id="modal_representante" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
+<div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-          <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-          <input type="hidden" id="band2" name="band2" value="save">
+
+          <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band4" name="band4" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de representantes</h4>
             </div>
             <div class="modal-body" id="">
                 <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Nombre del representante: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
                       </div>
                   </div>
+
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                    <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy" readonly="">
+                    <div class="help-block"></div>
+                </div>
+
                 </div>
                 <div class="row">
-                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>DUI: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
                       </div>
                   </div>
-                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Tipo: <span class="text-danger">*</span></h5>
                       <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
                           <option value=''>[Seleccione el tipo]</option>
@@ -1067,14 +1127,24 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                           <option class="m-l-50" value="3">Apoderado</option>
                       </select>
                   </div>
+
+                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
                 </div>
                 <div class="row">
+
+
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Acreditación: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <textarea id="acreditacion_representante" name="acreditacion_representante" class="form-control"></textarea>
                       </div>
                   </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
+
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
                 </div>
 
                 <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -1087,7 +1157,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
-                <button type="submit" id="submit2" class="btn btn-info waves-effect text-white">Aceptar</button>
+                <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Aceptar</button>
             </div>
           <?php echo form_close(); ?>
         </div>
@@ -1095,6 +1165,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
     <!-- /.modal-dialog -->
 </div>
+<!--FIN MODAL REPRESENTANTE EMPRESA -->
 
 <div class="modal fade" id="modal_establecimiento" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
@@ -1396,42 +1467,42 @@ $(function(){
 
     });
 
-    $("#formajax2").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax2"));
-        formData.append("id_empresa", $('#establecimiento').val());
-        
-        $.ajax({
-            url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/gestionar_representante",
-            type: "post",
-            dataType: "html",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false
-        })
-        .done(function(res){
-          console.log(res)
-            if(res == "exito"){
-                if($("#band2").val() == "save"){
-                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                }else if($("#band2").val() == "edit"){
-                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                }else{
-                    if($("#estado_representante").val() == '1'){
-                        swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
-                    }else{
-                        swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
-                    }
-                }
-                $("#modal_representante").modal('hide');
-                tabla_representantes();
+    $("#formajax5").on("submit", function(e){
+    e.preventDefault();
+    var f = $(this);
+    var formData = new FormData(document.getElementById("formajax5"));
+    formData.append("id_empresa", $('#establecimiento').val());
+
+    $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_representante",
+        type: "post",
+        dataType: "html",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false
+    })
+    .done(function(res){
+      console.log(res)
+        if(res == "exito"){
+            if($("#band4").val() == "save"){
+                swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+            }else if($("#band4").val() == "edit"){
+                swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
             }else{
-                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+                if($("#estado_representante").val() == '1'){
+                    swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
+                }else{
+                    swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
+                }
             }
-        });
+            $("#modal_representante").modal('hide');
+            tabla_representantes();
+        }else{
+            swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+        }
     });
+});
 
     $("#formajax3").on("submit", function(e){
         e.preventDefault();
