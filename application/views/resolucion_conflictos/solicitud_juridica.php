@@ -167,6 +167,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Fin Solicitado*/
 
         $("#band3").val('save');
+        $("#bandx").val('save');
 
         $("#ttl_form").addClass("bg-success");
         $("#ttl_form").removeClass("bg-info");
@@ -192,7 +193,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         //
         /*Fin Solicitado*/
         open_form(3);
-
+        $("#band3").val("edit");
         $("#band4").val('save');
     }
 
@@ -237,6 +238,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#descripmotivo_expedienteci").val(result.descripmotivo_expedienteci);
             $("#id_personal").val(result.id_personal).trigger('change.select2');
             $("#band3").val("edit");
+            $("#bandx").val('edit');
 
             open_form(1)
 
@@ -280,6 +282,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#descripmotivo_expedienteci").val(descripmotivo_expedienteci);
         $("#id_personal").val(id_personal).trigger('change.select2');
         $("#band3").val(band);
+        $("#bandx").val('edit');
 
         open_form(1)
 
@@ -781,6 +784,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </script>
 <input type="hidden" id="id_empresaci" name="id_empresaci">
 <input type="hidden" id="address" name="">
+<input type="hidden" id="bandx" name="bandx">
 <div class="page-wrapper">
     <div class="container-fluid">
         <!-- ============================================================== -->
@@ -830,6 +834,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <blockquote class="m-t-0">
                                 <div id="cnt_tabla_representantes"></div>
                             </blockquote>
+                            <div class="pull-left">
+                                <button type="button" class="btn waves-effect waves-light btn-default" onclick="cerrar_mantenimiento();"><i class="mdi mdi-chevron-left"></i> Salir</button>
+                            </div>
                             <div class="row">
                                 <div class="col-lg-12" align="center">
                                     <div align="right" id="btnadd1" class="pull-right">
@@ -915,6 +922,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 </div>
                             </div>
                             </blockquote>
+                            <div class="pull-left">
+                                <button type="button" class="btn waves-effect waves-light btn-default" onclick="open_form(1)"><i class="mdi mdi-chevron-left"></i> Volver</button>
+                            </div>
                             <div class="row">
                                 <div class="col-lg-12" align="center">
                                     <div align="right" id="btnadd2" class="pull-right">
@@ -983,6 +993,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     </div> 
                                 </div>
                             </blockquote>
+                            <div class="pull-left">
+                                <button type="button" class="btn waves-effect waves-light btn-default" onclick="open_form(2)"><i class="mdi mdi-chevron-left"></i> Volver</button>
+                            </div>
                             <div class="row">
                                 <div class="col-lg-12" align="center">
                                     <div align="right" id="btnadd2" class="pull-right">
@@ -1546,7 +1559,7 @@ $(function(){
         formData.append("id_empresaci", $('#establecimiento').val());
         formData.append("id_representanteci", $('#id_representanteci').val());
         formData.append("id_personaci", $('#id_personaci').val());
-        formData.append("band4", $('#band3').val());
+        formData.append("band4", $('#bandx').val());
 
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/gestionar_expediente",
@@ -1561,10 +1574,10 @@ $(function(){
           console.log(res)
           res = res.split(",");
             if(res[0] == "exito"){
-                if($("#band3").val() == "save"){
+                if($("#bandx").val() == "save"){
                     $.toast({ heading: 'Registro exitoso', text: 'Registro de expediente exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                     audiencias($('#establecimiento').val(), res[1], 1);
-                }else if($("#band3").val() == "edit"){
+                }else if($("#bandx").val() == "edit"){
                     $.toast({ heading: 'Modificación exitosa', text: 'Modificación de expediente exitosa', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                     audiencias($('#establecimiento').val(), res[1], 1)
                 }else{
