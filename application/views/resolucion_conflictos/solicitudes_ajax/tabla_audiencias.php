@@ -64,7 +64,7 @@
                                   <i class="ti-settings"></i>
                               </button>
                               <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                  <a class="dropdown-item" href="javascript:;" onClick="modal_actas_tipo(<?=$fila->id_expedienteci.','.$fila->cuenta.',\''.$fila->tipo_pago.'\','.$fila->id_defensorlegal.','.$fila->estado?>)">Generar acta por tipo</a>
+                                  <a class="dropdown-item" href="javascript:;" onClick="modal_actas_tipo(<?=$fila->id_expedienteci.','.$fila->cuenta.',\''.$fila->tipo_pago.'\','.$fila->asistieron.','.$fila->estado.','.$fila->id_fechasaudienciasci?>)">Generar acta por tipo</a>
                                   <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci.','.$fila->id_fechasaudienciasci?>)">Registrar resolución</a>
                               </div>
                           </div>

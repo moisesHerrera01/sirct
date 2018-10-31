@@ -159,8 +159,12 @@ class Acta extends CI_Controller {
 
     }
 
-    public function generar_acta_tipo($caso,$id_expedienteci) {
-        $expediente = $this->expedientes_model->obtener_registros_expedientes($id_expedienteci)->result()[0];
+    public function generar_acta_tipo($caso,$id_expedienteci,$id_audiencia=FALSE) {
+        if ($id_audiencia) {
+          $expediente = $this->expedientes_model->obtener_registros_expedientes($id_expedienteci,$id_audiencia)->result()[0];
+        }else {
+          $expediente = $this->expedientes_model->obtener_registros_expedientes($id_expedienteci)->result()[0];
+        }
 
         $this->load->library("phpword");
         $this->load->library("CifrasEnLetras");
@@ -169,7 +173,7 @@ class Acta extends CI_Controller {
 
         switch ($caso) {
           case '1':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/AUDIENCIA_PF_D_ST.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/AUDIENCIA_PF.docx');
             break;
           case '2':
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_EN_EL_ACTO_SIN_DEFENSOR.docx');
@@ -212,6 +216,26 @@ class Acta extends CI_Controller {
               $templateWord->setValue('edad_representante', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($expediente->f_nacimiento_representante))))));
               $templateWord->setValue('municipio_representante', mb_strtoupper($expediente->municipio_representante));
               $templateWord->setValue('estado_civil_representante', mb_strtoupper($expediente->estado_civil_representante));
+              $templateWord->setValue('profesion_representante', mb_strtoupper($expediente->profesion_representante));
+              $templateWord->setValue('dui_representante', mb_strtoupper(convertir_dui($expediente->dui_representante)));
+              $templateWord->setValue('credencial_representante', mb_strtoupper($expediente->acreditacion_representante));
+              $templateWord->setValue('credencial_defensor', mb_strtoupper($expediente->acreditacion_representantepersonaci));
+              $templateWord->setValue('numero_folios', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras($expediente->numero_folios)));
+              $templateWord->setValue('resultado_audiencia', mb_strtoupper($expediente->detalle_resultado));
+              $templateWord->setValue('posee', ($expediente->asistieron=="2") ? "quien se hace acompañar de " : "");
+              $templateWord->setValue('delegado_audiencia', mb_strtoupper($expediente->delegado_audiencia));
+              switch ($expediente->tipo_pago) {
+                case '2':
+                  $resultado = "hace del conocimiento de las partes que la certificación de la presente acta tiene fuerza ejecutiva, por lo que el incumplimiento de cualquiera de los pagos, faculta a el(la) trabajador(a) para hacerlo valer en la vía judicial competente, y RESUELVE: DEJAR PENDIENTE DE PAGO LAS PRESENTES DILIGENCIAS. Y no habiendo nada más que hacer constar se cierra la presente acta y leída que les fue a los(las) comparecientes, la ratifican y para constancia firmamos.";
+                  break;
+                case '1':
+                  $resultado = "RESUELVE: ARCHIVAR LAS PRESENTES DILIGENCIAS. Y no habiendo nada más que hacer constar se cierra la presente acta y leída que les fue a los(las) comparecientes, la ratifican y para constancia firmamos.";
+                  break;
+                default:
+                  $resultado="RESUELVE: ARCHIVAR LAS PRESENTES DILIGENCIAS. Y no habiendo nada más que hacer constar se cierra la presente acta y leída que les fue a los(las) comparecientes, la ratifican y para constancia firmamos.";;
+                  break;
+              }
+              $templateWord->setValue('resuelve',$resultado);
         }
         if ($caso==5) {
           $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));
@@ -269,7 +293,7 @@ class Acta extends CI_Controller {
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         switch ($caso) {
           case '1':
-            header("Content-Disposition: attachment; filename='AUDIENCIA_PF_D_ST".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename='ACTA_AUDIENCIA_".date('dmy_His').".docx'");
             break;
           case '2':
             header("Content-Disposition: attachment; filename='CONCILIADA_EN_EL_ACTO_SIN_DEFENSOR_".date('dmy_His').".docx'");

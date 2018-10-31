@@ -124,6 +124,8 @@ class Audiencias extends CI_Controller {
 		$data['fecha_resultado'] = date("Y-m-d",strtotime($this->input->post('fecha_resultado')));
 		$data['detalle_resultado'] = $this->input->post('detalle_resultado');
 		$data['inasistencia'] = $this->input->post('inasistencia');
+		$data['numero_folios'] = $this->input->post('numero_folios');
+		$data['asistieron'] = $this->input->post('asistieron');
 
 		echo $this->audiencias_model->editar_audiencia($data);
 		$data2 = array(

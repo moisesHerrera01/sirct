@@ -15,7 +15,7 @@ class Expedientes_model extends CI_Model {
 		}
 	}
 
-	public function obtener_registros_expedientes($id_expedienteci) {
+	public function obtener_registros_expedientes($id_expedienteci,$id_audiencia=FALSE) {
 
 			$this->db->select('pa.*,n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,emp.*,ep.*,p.*,
 												 p.discapacidad,
@@ -30,7 +30,9 @@ class Expedientes_model extends CI_Model {
 												 mu.municipio municipio_empresa,
 												 mur.municipio municipio_representante,
 												 tr.tipo_representante tipo_representante_empresa,
-												 ec.estado_civil estado_civil_representante'
+												 ec.estado_civil estado_civil_representante,
+												 ta.titulo_academico profesion_representante,
+												 CONCAT_WS(" ",ea.primer_nombre,ea.segundo_nombre,ea.tercer_nombre,ea.primer_apellido,ea.segundo_apellido,ea.apellido_casada) delegado_audiencia'
 											  )
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
@@ -45,11 +47,16 @@ class Expedientes_model extends CI_Model {
 						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
 						 ->join('org_municipio mur','mur.id_municipio = r.id_municipio')
 						 ->join('sir_estado_civil ec','ec.id_estado_civil=r.id_estado_civil')
+						 ->join('sir_titulo_academico ta','ta.id_titulo_academico=r.id_titulo_academico')
 						 ->join('sct_tipo_representante tr','tr.id_tipo_representante=r.tipo_representante','left')
 						 ->join('sge_empleador emp','emp.id_empleador=e.id_empleador', 'left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
-						 ->where('e.id_expedienteci', $id_expedienteci)
-						 ->group_by('e.id_expedienteci')
+						 ->join('sir_empleado ea','ea.id_empleado=f.id_delegado')
+						 ->where('e.id_expedienteci', $id_expedienteci);
+		 	if ($id_audiencia) {
+		 		$this->db->where('f.id_fechasaudienciasci',$id_audiencia);
+		 	}
+			$this->db->group_by('e.id_expedienteci')
 						 ->where('f.estado_audiencia',1);
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {
