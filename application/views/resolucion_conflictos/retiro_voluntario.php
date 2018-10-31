@@ -227,6 +227,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#fecha_preaviso").val('');
         $("#fecha_conflicto").val('');
         $("#descripcion_motivo").val('');
+        $("#id_representanteci").val('');
         /*Fin Solicitante*/
 
         /*Inicio Expediente*/
@@ -287,6 +288,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     $("#fecha_preaviso").val(result.fechaconflicto_personaci);
                     $("#fecha_renuncia").val(result.fecha_renuncia);
                     $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
+                    $("#id_representanteci").val(result.id_representanteci);
 
                     /*Inicio Expediente*/
                     combo_delegado(result.id_personal);
@@ -788,7 +790,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 
 </script>
-
+<input type="hidden" id="id_empresaci" name="id_empresaci">
 <div class="page-wrapper">
     <div class="container-fluid">
         <!-- ============================================================== -->
@@ -1054,7 +1056,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     </div>
                 </div>
             </div>
-            <div class="col-lg-10" id="cnt_actions" style="display:none;"></div>
+            <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
                 <div class="card">
@@ -1436,8 +1438,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             formData.append("id_representanteci", $('#id_representanteci').val());
             formData.append("establecimiento", $('#establecimiento').val());
 
-            alert($('#id_representanteci').val())
-
             $.ajax({
                     url: "<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/gestionar_expediente",
                     type: "post",
@@ -1448,6 +1448,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     processData: false
                 })
                 .done(function (res) {
+                    console.log(res)
                     if (res == "fracaso") {
                         swal({
                             title: "¡Ups! Error",
@@ -1458,7 +1459,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     } else {
                         //
                         cerrar_mantenimiento();
-                        open_form(3);
+                        audiencias($('#establecimiento').val(), res, 1);
                         /*if ($("#band2").val() == "save") {
                             swal({
                                 title: "¡Registro exitoso!",
