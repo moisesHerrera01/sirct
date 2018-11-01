@@ -96,8 +96,8 @@
                                         <a class="dropdown-item" href="javascript:;" onClick="pagos(<?=$fila->id_expedienteci?>)">Gestionar pagos</a>
                                       <?php } ?>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar delegado</a>
-                                      <a class="dropdown-item" href="javascript:;" onClick="modal_actas_tipo(<?=$fila->id_expedienteci.','.$fila->cuenta.',\''.$fila->tipo_conciliacion.'\','.$fila->posee_representante.','.$fila->estado?>)">Generar acta por tipo</a>
-                                      <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci?>)">Registrar resolución</a>
+                                      <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/'.$fila->id_expedienteci)?>">Acta de solicitud</a>
+                                      <!-- <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci?>)">Registrar resolución</a> -->
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas(<?=$fila->id_expedienteci?>)">Gestionar actas</a>
                                       <?php
@@ -105,7 +105,7 @@
                                       ?>
                                           <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>
                                       <?php
-                                          } else {
+                                    } elseif($fila->id_estadosci == "4"){
                                       ?>
                                           <a class="dropdown-item" href="javascript:;" onClick="habilitar(<?=$fila->id_expedienteci?>)">Habilitar Expediente</a>
                                       <?php

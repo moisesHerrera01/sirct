@@ -101,7 +101,7 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
                       <div class="help-block"></div>
                   </div>
 
-                  <div id="div_orden" class="form-group col-lg-4" style="height: 83px;">
+                   <div id="div_orden" class="form-group col-lg-4" style="height: 83px;">
                       <h5>Orden:</h5>
                       <input name="numero_audiencia" type="radio" id="primera" checked="" value="1">
                       <label for="primera">Primera</label>
@@ -185,7 +185,6 @@ function eliminar_audiencia(){
    combo_defensores('');
    combo_representante_empresa('');
    combo_delega2('');
-
  }
 
 function cambiar_nuevo5(){
@@ -276,8 +275,9 @@ $(function(){
                             orden: formData.get('numero_audiencia'),
                             fecha: formData.get('fecha_audiencia'),
                             hora: formData.get('hora_audiencia'),
-                            orden: formData.get('orden'),
-                            procurador: formData.get('procurador'),
+                            defensor: formData.get('defensor'),
+                            representante_empresa: formData.get('representante_persona'),
+                            delegado: formData.get('delegado'),
                             motivo: inputValue
                           }
                         })
@@ -291,6 +291,7 @@ $(function(){
                   }else {
                     cambiar_nuevo5();
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                    cambiar();
                   }
                 }else if($("#band4").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });

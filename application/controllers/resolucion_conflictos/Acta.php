@@ -165,6 +165,9 @@ class Acta extends CI_Controller {
         }else {
           $expediente = $this->expedientes_model->obtener_registros_expedientes($id_expedienteci)->result()[0];
         }
+        $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,1);
+        $primera= $audiencias->result()[0];
+        $segunda= $audiencias->result()[1];
 
         $this->load->library("phpword");
         $this->load->library("CifrasEnLetras");
@@ -176,10 +179,10 @@ class Acta extends CI_Controller {
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/AUDIENCIA_PF.docx');
             break;
           case '2':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_EN_EL_ACTO_SIN_DEFENSOR.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/MULTA.docx');
             break;
           case '3':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_PAGO_DIFERIDO_CON_DEFENSOR.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SEGUNDA_CITA.docx');
             break;
           case '4':
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_PAGO_DIFERIDO_SIN_DEFENSOR.docx');
@@ -209,7 +212,13 @@ class Acta extends CI_Controller {
         $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($expediente->fecha_fechasaudienciasci))));
         $templateWord->setValue('nombre_solicitante', mb_strtoupper($expediente->nombre_personaci.' '.$expediente->apellido_personaci));
         $templateWord->setValue('nombre_empresa', mb_strtoupper($expediente->nombre_empresa));
-        if ($caso== 1 || $caso==3 || $caso==6) {
+
+        $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
+        $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
+        $templateWord->setValue('mes_audiencia2', mb_strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
+        $templateWord->setValue('anio_audiencia2', anio(date('Y', strtotime($segunda->fecha_fechasaudienciasci))));
+
+        if ($caso== 1 || $caso==2 || $caso==3) {
               $templateWord->setValue('representante_persona', mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci));
               $templateWord->setValue('dui_defensor', mb_strtoupper(convertir_dui($expediente->dui_representantepersonaci)));
               $templateWord->setValue('tipo_representante', mb_strtoupper($expediente->tipo_representante_empresa));
@@ -228,12 +237,28 @@ class Acta extends CI_Controller {
               $representante_persona = mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci);
               $dui_defensor = mb_strtoupper(convertir_dui($expediente->dui_representantepersonaci));
               $credencial_defensor =  mb_strtoupper($expediente->acreditacion_representantepersonaci);
+            $inasistencia ="";
+            if ($expediente->inasistencia==1) {
+              $inasistencia = "Parte patronal";
+            }elseif ($expediente->inasistencia==2) {
+              $inasistencia = "Parte trabajadora";
+            }elseif ($expediente->inasistencia==3) {
+              $inasistencia = "Parte patronal y trabajadora";
+            }
             switch ($expediente->asistieron) {
               case '1'://defensor
                 $solicitante="en representación de el(la) trabajador(a) $nombre_solicitante ambos(as) de generales conocidas en estas diligencias, el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, quien se identifica con su documento único de identidad $dui_defensor, y acredita su personería por medio de $credencial_defensor, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
                 break;
               case '2'://defensor y trabajador
-                $solicitante="el(la) trabajador(a) $nombre_solicitante de generales conocidas en estas diligencias, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, quien se identifica con su documento único de identidad $dui_defensor, y acredita su personería por medio de $credencial_defensor, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
+                if ($expediente->id_fechasaudienciasci==$primera->id_fechasaudienciasci) {
+                  $solicitante="el(la) trabajador(a) $nombre_solicitante de generales conocidas en estas diligencias, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, quien se identifica con su documento único de identidad $dui_defensor, y acredita su personería por medio de $credencial_defensor, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
+                }else {
+                  if ($segunda->id_defensorlegal==$primera->id_defensorlegal) {
+                    $solicitante="el(la) trabajador(a) $nombre_solicitante, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, ambos(as) de generales conocidas en estas diligencias. Y ";
+                  }else {
+                    $solicitante="el(la) trabajador(a) $nombre_solicitante de generales conocidas en estas diligencias, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, quien se identifica con su documento único de identidad $dui_defensor, y acredita su personería por medio de $credencial_defensor, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
+                  }
+                }
                 break;
               case '3'://trabajador
                 $solicitante="el(la) trabajador(a) $nombre_solicitante de generales conocidas en estas diligencias,  y";
@@ -254,6 +279,8 @@ class Acta extends CI_Controller {
               }
               $templateWord->setValue('resuelve',$resultado);
               $templateWord->setValue('solicitante',$solicitante);
+              $templateWord->setValue('ausente',$inasistencia);
+
         }
         if ($caso==5) {
           $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));
@@ -266,8 +293,6 @@ class Acta extends CI_Controller {
           }else {
             $tipo_empresa = "quien laboraba para el señor $expediente->nombre_empresa, que puede ser ubicado en: $expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto, en que fue despedido(a) de su trabajo sin que hasta la fecha se le cancelado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que";
           }
-          $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,1);
-          $segunda= $audiencias->result()[1];
           $templateWord->setValue('direccion_empresa', mb_strtoupper($expediente->direccion_empresa));
           $templateWord->setValue('direccion_solicitante', mb_strtoupper($expediente->direccion_personaci));
           $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
@@ -287,9 +312,6 @@ class Acta extends CI_Controller {
           $templateWord->setValue('mes_conflicto', mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
           $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
           $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
-          $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
-          $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
-          $templateWord->setValue('mes_audiencia2', mb_strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
           $templateWord->setValue('tipo', $tipo_empresa);
         }
         $templateWord->setValue('representante_empresa', mb_strtoupper($expediente->nombres_representante));
@@ -314,10 +336,10 @@ class Acta extends CI_Controller {
             header("Content-Disposition: attachment; filename='ACTA_AUDIENCIA_".date('dmy_His').".docx'");
             break;
           case '2':
-            header("Content-Disposition: attachment; filename='CONCILIADA_EN_EL_ACTO_SIN_DEFENSOR_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename='MULTA_".date('dmy_His').".docx'");
             break;
           case '3':
-            header("Content-Disposition: attachment; filename='CONCILIADA_PAGO_DIFERIDO_CON_DEFENSOR_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename='SEGUNDA_CITA_".date('dmy_His').".docx'");
             break;
           case '4':
             header("Content-Disposition: attachment; filename='CONCILIADA_PAGO_DIFERIDO_SIN_DEFENSOR_".date('dmy_His').".docx'");

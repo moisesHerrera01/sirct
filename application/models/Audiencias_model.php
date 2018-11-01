@@ -7,7 +7,7 @@ class Audiencias_model extends CI_Model {
 		parent::__construct();
 	}
 
-	public function obtener_audiencias($id, $orden=FALSE, $estado=FALSE) {
+		public function obtener_audiencias($id, $orden=FALSE, $estado=FALSE) {
 
 			$this->db->select(
 												'f.id_expedienteci,
@@ -21,6 +21,7 @@ class Audiencias_model extends CI_Model {
 												 f.id_delegado,
 												 f.tipo_pago,
 												 f.asistieron,
+												 f.resultado,
 												 (select count(*) from sct_fechasaudienciasci fe where fe.id_expedienteci=f.id_expedienteci) AS cuenta,
 												 (select e.id_estadosci from sct_expedienteci e where e.id_expedienteci=f.id_expedienteci) AS estado'
 											  )

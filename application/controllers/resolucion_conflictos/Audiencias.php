@@ -127,7 +127,14 @@ class Audiencias extends CI_Controller {
 		$data['numero_folios'] = $this->input->post('numero_folios');
 		$data['asistieron'] = $this->input->post('asistieron');
 
-		echo $this->audiencias_model->editar_audiencia($data);
+		$resultado = $this->audiencias_model->editar_audiencia($data);
+		echo $resultado;
+		if ($resultado == "exito") {
+			$this->expedientes_model->editar_expediente(array(
+			'id_expedienteci' => $this->input->post('id_expedienteci'),
+			'id_estadosci' => "2"
+		));
+		}
 		$data2 = array(
 						'id_expedienteci' => $data['id_expedienteci'],
 						'fechapago_fechaspagosci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago')))

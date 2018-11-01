@@ -30,10 +30,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <option value="1">Conciliado</option>
                   <option value="2">Sin conciliar</option>
                   <option value="3">Inasistencia</option>
-                  <option value="4">Desistida</option>
+                  <!-- <option value="4">Desistida</option> -->
                   <option value="5">A multas</option>
-                  <option value="6">No notificada</option>
-                  <option value="7">Reinstalo</option>
+                  <!-- <option value="6">No notificada</option>
+                  <option value="7">Reinstalo</option> -->
                 </select>
               </div>
             </div>
@@ -56,7 +56,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
               </div>
 
-            <div class="form-group col-lg-12 col-sm-12" style="height: 83px;">
+            <div id="det_resultado" class="form-group col-lg-12 col-sm-12" style="height: 83px;">
                 <h5>Detalle del resultado:<span class="text-danger">*</span></h5>
                 <textarea type="text" id="detalle_resultado" name="detalle_resultado" class="form-control" placeholder="Detalles del resultado" required=""></textarea>
                 <div class="help-block"></div>
@@ -106,14 +106,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <div class="controls">
                 <select id="inasistencia" name="inasistencia" class="form-control" required>
                   <option value="">[Seleccione]</option>
-                  <option value="1">Parte solicitada</option>
-                  <option value="2">Parte solictante</option>
-                  <option value="3">Ambas partes</option>
+                  <option value="1">Parte patronal</option>
+                  <option value="2">Parte trabajadora</option>
+                  <option value="3">Parte patronal y trabajadora</option>
                 </select>
               </div>
             </div>
           </div>
-
 
           <div align="right" id="btnadd1">
             <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
@@ -169,11 +168,13 @@ function mostrar(){
   $("#p_pago").hide(0);
   $("#f_pago").hide(0);
   $("#fhpago").hide(0);
+  $("#det_resultado").show(0);
   $("#tipo_conciliacion").removeAttr("required");
   $("#monto_pago").removeAttr("required");
   $("#inasistencia").removeAttr("required");
   $("#primer_pago").removeAttr("required");
   $("#fecha_pago").removeAttr("required");
+  $("#detalle_resultado").attr("required","required");
   var value = $("#resolucion").val();
 
   if(value == ""){ $("#tipo_pago").hide(0); }else{ $("#tipo_pago").show(0); }
@@ -200,8 +201,14 @@ function mostrar(){
       $("#fecha_pago").attr("required",'required');
       break;
     case '3':
+      $("#det_resultado").hide(0);
+      $("#detalle_resultado").removeAttr("required");
       $("#especifique").show(500);
       $("#inasistencia").attr("required",'required');
+      break;
+    case '5':
+      $("#det_resultado").hide(0);
+      $("#detalle_resultado").removeAttr("required");
       break;
     default:
   }
