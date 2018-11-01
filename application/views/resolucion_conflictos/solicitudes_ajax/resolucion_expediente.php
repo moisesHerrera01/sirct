@@ -51,6 +51,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <option value="">[Seleccione]</option>
                     <option value="1">Defensor público</option>
                     <option value="2">Defensor público y trabajador</option>
+                    <option value="3">Trabajador</option>
                   </select>
                 </div>
               </div>

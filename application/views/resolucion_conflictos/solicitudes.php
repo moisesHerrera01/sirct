@@ -335,9 +335,9 @@ function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,p
       $("#separador1").show();
       if (tipo_conciliacion=='2') {
         if (posee_trabajador) {
-          $("#diferido_con").show();
+          $("#pf_st").show();
         }else {
-          $("#diferido_sin").show();
+          $("#pf_st").show();
         }
       }else {
         if (posee_trabajador) {
@@ -368,9 +368,10 @@ function generar_actas_tipo() {
       }
     })
     .done(function (res) {
-      if(res == "exito"){
+      if(res !="fracaso"){
         cerrar_mantenimiento()
         tablasolicitudes();
+        //tabla_audiencias(id_expedienteci);
         swal({ title: "¡Acta generada exitosamente!", type: "success", showConfirmButton: true });
       }else{
           swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });

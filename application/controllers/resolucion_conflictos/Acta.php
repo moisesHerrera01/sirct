@@ -224,11 +224,28 @@ class Acta extends CI_Controller {
               $templateWord->setValue('resultado_audiencia', mb_strtoupper($expediente->detalle_resultado));
               $templateWord->setValue('posee', ($expediente->asistieron=="2") ? "quien se hace acompañar de " : "");
               $templateWord->setValue('delegado_audiencia', mb_strtoupper($expediente->delegado_audiencia));
+              $nombre_solicitante = mb_strtoupper($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
+              $representante_persona = mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci);
+              $dui_defensor = mb_strtoupper(convertir_dui($expediente->dui_representantepersonaci));
+              $credencial_defensor =  mb_strtoupper($expediente->acreditacion_representantepersonaci);
+            switch ($expediente->asistieron) {
+              case '1'://defensor
+                $solicitante="en representación de el(la) trabajador(a) $nombre_solicitante ambos(as) de generales conocidas en estas diligencias, el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, quien se identifica con su documento único de identidad $dui_defensor, y acredita su personería por medio de $credencial_defensor, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
+                break;
+              case '2'://defensor y trabajador
+                $solicitante="el(la) trabajador(a) $nombre_solicitante de generales conocidas en estas diligencias, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, quien se identifica con su documento único de identidad $dui_defensor, y acredita su personería por medio de $credencial_defensor, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
+                break;
+              case '3'://trabajador
+                $solicitante="el(la) trabajador(a) $nombre_solicitante de generales conocidas en estas diligencias,  y";
+                break;
+              default:
+                break;
+            }
               switch ($expediente->tipo_pago) {
-                case '2':
+                case '2'://Pago diferido
                   $resultado = "hace del conocimiento de las partes que la certificación de la presente acta tiene fuerza ejecutiva, por lo que el incumplimiento de cualquiera de los pagos, faculta a el(la) trabajador(a) para hacerlo valer en la vía judicial competente, y RESUELVE: DEJAR PENDIENTE DE PAGO LAS PRESENTES DILIGENCIAS. Y no habiendo nada más que hacer constar se cierra la presente acta y leída que les fue a los(las) comparecientes, la ratifican y para constancia firmamos.";
                   break;
-                case '1':
+                case '1'://Pago en el momento
                   $resultado = "RESUELVE: ARCHIVAR LAS PRESENTES DILIGENCIAS. Y no habiendo nada más que hacer constar se cierra la presente acta y leída que les fue a los(las) comparecientes, la ratifican y para constancia firmamos.";
                   break;
                 default:
@@ -236,6 +253,7 @@ class Acta extends CI_Controller {
                   break;
               }
               $templateWord->setValue('resuelve',$resultado);
+              $templateWord->setValue('solicitante',$solicitante);
         }
         if ($caso==5) {
           $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));

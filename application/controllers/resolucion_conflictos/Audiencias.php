@@ -5,7 +5,7 @@ class Audiencias extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("expedientes_model","audiencias_model"));
+		$this->load->model(array("expedientes_model","audiencias_model","pagos_model"));
 	}
 
   public function programar_audiencias(){
@@ -133,8 +133,8 @@ class Audiencias extends CI_Controller {
 						'fechapago_fechaspagosci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago')))
 					);
 
-			if ($this->input->post('resolucion')=="Conciliado") {
-				if ($this->input->post('tipo_conciliacion') == "Pago en el momento") {
+			if ($this->input->post('resolucion')=="1") {
+				if ($this->input->post('tipo_conciliacion') == "1") {
 					$data2['montopago_fechaspagosci'] = $this->input->post('monto_pago');
 				}else {
 					$data2['indemnizacion_fechaspagosci'] = ($this->input->post('monto_pago')-$this->input->post('primer_pago'));
