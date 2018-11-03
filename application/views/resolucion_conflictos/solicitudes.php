@@ -314,7 +314,7 @@ function cambiar_delegado() {
 }
 
 function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado) {
-      alert(posee_trabajador)
+      // alert(posee_trabajador)
       $("#solicitud_pn_pj").hide();
       $("#pf_st").hide();
       $("#multa").hide();
@@ -842,8 +842,10 @@ function cambiar_nuevo(){
     /*Fin expediente*/
 
     $("#band").val("save");
+    $("#bandx").val("save");
     $("#band1").val("save");
     $("#band2").val("save");
+
     // $("#band6").val('save');
 
     $("#ttl_form").addClass("bg-success");
@@ -995,6 +997,7 @@ function cambiar_editar(id_expedienteci,bandera){
       /*Fin expediente*/
 
       $("#band").val("edit");
+      $("#bandx").val("edit");
       $("#band1").val("edit");
       $("#band2").val("edit");
       // $("#band6").val('edit');
@@ -1049,6 +1052,7 @@ function volver(num) {
 </script>
 
 <input type="hidden" id="address" name="">
+<input type="hidden" id="bandx" name="bandx">
 <div class="page-wrapper">
     <div class="container-fluid">
         <!-- ============================================================== -->
@@ -1269,6 +1273,10 @@ function volver(num) {
                         </div>
                             </blockquote>
 
+                          <div class="pull-left">
+                              <button type="button" class="btn waves-effect waves-light btn-default" onclick="cerrar_mantenimiento();"><i class="mdi mdi-chevron-left"></i> Salir</button>
+                          </div>
+
                           <div align="right" id="btnadd1">
                             <button type="reset" class="btn waves-effect waves-light btn-success">
                               <i class="mdi mdi-recycle"></i> Limpiar</button>
@@ -1346,6 +1354,10 @@ function volver(num) {
                                           <blockquote class="m-t-0">
                                               <div id="cnt_tabla_representantes"></div>
                                           </blockquote>
+
+                                          <div class="pull-left">
+                                              <button type="button" class="btn waves-effect waves-light btn-default" onclick="open_form(1)"><i class="mdi mdi-chevron-left"></i> Volver</button>
+                                          </div>
                                           <div class="row">
                                               <div class="col-lg-12" align="center">
                                                   <div align="right" id="btnadd1" class="pull-right">
@@ -1474,6 +1486,10 @@ function volver(num) {
                                     </div>
                               </div>
                             </blockquote>
+
+                            <div class="pull-left">
+                                <button type="button" class="btn waves-effect waves-light btn-default" onclick="open_form(4)"><i class="mdi mdi-chevron-left"></i> Volver</button>
+                            </div>
                             <div align="right" id="btnadd2">
                               <button type="reset" class="btn waves-effect waves-light btn-success">
                                 <i class="mdi mdi-recycle"></i> Limpiar
@@ -2010,8 +2026,10 @@ $(function(){
               }
               $("#id_personaci").val(res);
               $("#id_persona").val(res);
-              $("#band1").val( $("#band").val() );
-              $("#band2").val( $("#band").val() );
+              // $("#band1").val( $("#band").val() );
+              $("#band1").val('edit');
+              // $("#band2").val( $("#band").val() );
+              $("#band2").val($("#bandx").val());
               if($("#band").val() == "delete"){
                 swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
