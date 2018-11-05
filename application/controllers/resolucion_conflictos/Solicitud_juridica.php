@@ -21,7 +21,7 @@ class Solicitud_juridica extends CI_Controller {
 
   	public function obtener_expediente_juridico() {
         print json_encode(
-            $this->solicitud_juridica_model->obtener_registros_expedientes(61)->result()
+            $this->solicitud_juridica_model->obtener_registros_expedientes($this->input->post('id'))->result()
         );
     }
 
