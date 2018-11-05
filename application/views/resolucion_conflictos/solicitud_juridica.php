@@ -211,6 +211,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             combo_ocupacion(result.id_catalogociuo, result.id_empresaci);
             $("#id_catalogociuo").val(result.id_catalogociuo);
             $("#id_personaci").val(result.id_personaci);
+            $("#id_representanteci").val(result.id_representanteci);
             $("#nombre_personaci").val(result.nombre_personaci);
             $("#apellido_personaci").val(result.apellido_personaci);
             if(result.sexo_personaci == 'M'){

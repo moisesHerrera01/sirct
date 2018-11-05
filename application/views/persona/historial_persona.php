@@ -293,7 +293,7 @@ function alertFunc() {
 }
 
 function cambiar_nuevo(){
-    open_form(1);
+      open_form(1);
     /*Inicio Solicitante*/
     $("#id_personaci").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
@@ -309,42 +309,44 @@ function cambiar_nuevo(){
     $("#sexo").val('');
     $("#estudios").val('');
     $("#nacionalidad").val('');
+    $("#discapacidad_desc").val('');
     $("#discapacidad").val('');
     $("#posee_representante").val('');
     $("#pertenece_lgbt").val('');
+    //Partida de nacimiento
+    $("#id_partida").val('');
+    $("#numero_partida").val('');
+    $("#folio_partida").val('');
+    $("#libro_partida").val('');
+    $("#asiento_partida").val('');
+    $("#anio_partida").val('');
     /*Fin Solicitante*/
+
+
 
     /*Inicio Expediente*/
     combo_nacionalidades('');
     combo_doc_identidad('');
-    combo_ocupacion('');
+    //combo_ocupacion('');
     combo_delegado('');
     combo_actividad_economica();
     combo_municipio();
-    $("#id_empleador").val($("#id_empleador").val()).trigger('change.select2');
-    $("#nombres_jefe").val('');
-    $("#apellidos_jefe").val('');
-    $("#cargo_jefe").val('');
-    $("#motivo").val("").trigger('change.select2');
-    $("#id_personal").val('');
-    $("#establecimiento").val('');
-    $("#salario").val('');
-    $("#funciones").val('');
-    $("#forma_pago").val('');
-    $("#horario").val('');
-    $("#fecha_conflicto").val('');
+   
     /*Fin expediente*/
 
     $("#band").val("save");
+    $("#bandx").val("save");
     $("#band1").val("save");
     $("#band2").val("save");
-    $("#band6").val('save');
+
+    // $("#band6").val('save');
 
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
 
     $("#btnadd").show(0);
     $("#btnedit").hide(0);
+    $("#ocultar_div").hide();
 
     $("#cnt_tabla").hide(0);
     $("#cnt_form_main").show(0);
@@ -388,19 +390,18 @@ function cambiar_nuevo2(){
 
 
 
-function cambiar_editar(id_personaci,bandera){
+function cambiar_editar(id_expedienteci,bandera){
   open_form(1);
   if(bandera == "edit"){
-
     $.ajax({
       url: "<?php echo site_url(); ?>/persona/historial_persona/registros_expedientes",
       type: "POST",
-      data: {id : id_personaci}
+      data: {id : id_expedienteci}
     })
     .done(function(res){
       result = JSON.parse(res)[0];
 
-      $("#id_personaci").val(id_personaci);
+      $("#id_personaci").val(result.id_personaci);
       $("#id_expedienteci").val(result.id_expedienteci);
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
       $("#nombres").val(result.nombre_personaci);
@@ -414,6 +415,38 @@ function cambiar_editar(id_personaci,bandera){
       $("#fecha_nacimiento").val(result.fnacimiento_personaci);
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
+      $("#discapacidad_desc").val(result.discapacidad);
+      /*Inicio partida nacimiento*/
+      if(result.discapacidad_personaci==0){
+          $("#ocultar_div").hide();
+      }else{
+          $("#ocultar_div").show();
+      }
+      if (result.id_doc_identidad!=1) {
+        $('#dui').mask('', {reverse: true});
+        $('#dui').unmask();
+        if (result.id_doc_identidad==4) {
+          $('#partida_div').show();
+          $('#div_numero_doc_identidad').hide();
+          $("#dui").removeAttr("required");
+        }else {
+          $('#partida_div').hide();
+          $('#div_numero_doc_identidad').show();
+          $("#dui").attr("required",'required');
+        }
+      }else {
+         $('#dui').mask('99999999-9', {reverse: true});
+         $('#partida_div').hide();
+         $('#div_numero_doc_identidad').show();
+         $("#dui").attr("required",'required');
+      }
+      $("#id_partida").val(result.id_partida);
+      $("#numero_partida").val(result.numero_partida);
+      $("#folio_partida").val(result.folio_partida);
+      $("#libro_partida").val(result.libro_partida);
+      $("#asiento_partida").val(result.asiento_partida);
+      $("#anio_partida").val(result.anio_partida);
+      /*Fin partida de nacimiento*/
       if (result.discapacidad_personaci=='1') {
           document.getElementById('si').checked = true;
       }else {
@@ -435,19 +468,24 @@ function cambiar_editar(id_personaci,bandera){
         document.getElementById('no_lgbt').checked =true;
       }
 
-      combo_doc_identidad(result.id_doc_identidad);
 
       /*Inicio Expediente*/
-      // combo_doc_identidad(result.id_doc_identidad);
-      // combo_nacionalidades(result.nacionalidad_personaci);
-      // combo_ocupacion(result.id_catalogociuo);
-      // combo_delegado(result.id_personal);
-      // combo_actividad_economica(result.id_catalogociiu);
-      // combo_municipio(result.id_municipio1);
-      /*Fin expediente*/
+      combo_doc_identidad(result.id_doc_identidad);
+      combo_nacionalidades(result.nacionalidad_personaci);
+      //combo_ocupacion(result.id_catalogociuo);
+      combo_delegado(result.id_personal);
+      combo_actividad_economica(result.id_catalogociiu);
+      combo_municipio(result.id_municipio1);
+    
 
       $("#band").val("edit");
+      $("#bandx").val("edit");
+      $("#band1").val("edit");
+      $("#band2").val("edit");
+      // $("#band6").val('edit');
     });
+
+
 
     $("#ttl_form").removeClass("bg-success");
     $("#ttl_form").addClass("bg-info");
@@ -457,10 +495,32 @@ function cambiar_editar(id_personaci,bandera){
     $("#btnedit2").show(0);
     $("#btnadd3").hide(0);
     $("#btnedit3").show(0);
-    $("#cnt_tabla_persona_natural").hide(0);
+    $("#cnt_tabla_solicitudes").hide(0);
     $("#cnt_tabla").hide(0);
     $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
+  }
+}
+
+function ocultar(){
+  var value = $("#id_doc_identidad").val();
+  if (value!=1) {
+    $('#dui').mask('', {reverse: true});
+    $('#dui').unmask();
+    if (value==4) {
+      $('#partida_div').show(500);
+      $('#div_numero_doc_identidad').hide(500);
+      $("#dui").removeAttr("required");
+    }else {
+      $('#partida_div').hide(500);
+      $('#div_numero_doc_identidad').show(500);
+      $("#dui").attr("required",'required');
+    }
+  }else {
+     $('#dui').mask('99999999-9', {reverse: true});
+     $('#partida_div').hide(500);
+     $('#div_numero_doc_identidad').show(500);
+     $("#dui").attr("required",'required');
   }
 }
 
@@ -595,138 +655,214 @@ function volver(num) {
                         <div class="card-body b-t">
 
                             <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-                            <div id="cnt_form1" class="cnt_form">
-                                <h3 class="box-title" style="margin: 0px;">
-                                  <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
-                                  Información del solicitante
-                                </h3><hr class="m-t-0 m-b-30">
-                                <input type="hidden" id="band" name="band" value="save">
-                                <input type="hidden" id="band1" name="band1" value="save">
-                                <input type="hidden" id="estado" name="estado" value="1">
-                                <input type="hidden" id="id_personaci" name="id_personaci" value="">
-                                <input type="hidden" id="id_empleador" name="id_empleador" value="">
+                        <div id="cnt_form1" class="cnt_form">
+                          <h3 class="box-title" style="margin: 0px;">
+                              <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
+                              Información del solicitante
+                            </h3><hr class="m-t-0 m-b-30">
+                            <input type="hidden" id="band" name="band" value="save">
+                            <input type="hidden" id="band1" name="band1" value="save">
+                            <input type="hidden" id="estado" name="estado" value="1">
+                            <input type="hidden" id="id_personaci" name="id_personaci" value="">
+                            <input type="hidden" id="id_empleador" name="id_empleador" value="">
+                            <input type="hidden" id="id_partida" name="id_partida" value="">
 
+                            <span class="etiqueta">Expediente</span>
+                            <blockquote class="m-t-0">
 
-                                <span class="etiqueta">Expediente</span>
-                                <blockquote class="m-t-0">
-
-                                <div class="row">
-                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Nombres: <span class="text-danger">*</span></h5>
-                                        <input type="text" id="nombres" name="nombres" class="form-control" placeholder="Nombres de la persona" required="">
-                                    </div>
-                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Apellidos: <span class="text-danger">*</span></h5>
-                                        <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos de la persona" required="">
-                                    </div>
-                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Conocido por: </h5>
-                                        <input type="text" id="conocido_por" name="conocido_por" class="form-control" placeholder="Conocido por">
-                                    </div>
+                            <div class="row">
+                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Nombres: <span class="text-danger">*</span></h5>
+                                    <input type="text" id="nombres" name="nombres" class="form-control" placeholder="Nombres de la persona" required="">
+                                    <div class="help-block"></div>
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
-                                    <div class="form-group col-lg-4">
-                                        <h5>Número de documento identidad: <span class="text-danger">*</span></h5>
-                                        <input data-mask="99999999-9" data-mask-reverse="true" type="text" id="dui" name="dui" class="form-control" placeholder="Documento Unico de Identidad" required="">
-                                    </div>
-                                    <div class="form-group col-lg-4">
-                                        <h5>Teléfono 1: </h5>
-                                        <input data-mask="9999-9999" type="text" id="telefono" name="telefono" class="form-control" placeholder="Número de Telefóno">
-                                    </div>
+                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Apellidos: <span class="text-danger">*</span></h5>
+                                    <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos de la persona" required="">
+                                    <div class="help-block"></div>
                                 </div>
-
-                                <div class="row">
-                                    <div class="form-group col-lg-4">
-                                        <h5>Teléfono 2: </h5>
-                                        <input data-mask="9999-9999" type="text" id="telefono2" name="telefono2" class="form-control" placeholder="Número de Telefóno casa">
-                                    </div>
-
-                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Municipio: <span class="text-danger">*</span></h5>
-                                        <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
-                                            <option value=''>[Seleccione el municipio]</option>
-                                            <?php
-                                                $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
-                                                if($municipio->num_rows() > 0){
-                                                    foreach ($municipio->result() as $fila2) {
-                                                        echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
-                                                    }
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy" readonly="">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-lg-2">
-                                        <h5>Sexo:</h5>
-                                        <input name="sexo" type="radio" id="masculino" checked="" value="M">
-                                        <label for="masculino">Masculino</label>
-                                        <input name="sexo" type="radio" id="femenino" value="F">
-                                        <label for="femenino">Femenino</label>
-                                    </div>
-                                    <div class="form-group col-lg-2">
-                                       <h5>Pertenece LGTBI:</h5>
-                                       <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
-                                       <label for="si_lgbt">Si </label><Br>
-                                       <input name="pertenece_lgbt" type="radio" id="no_lgbt" checked="" value='0'>
-                                       <label for="no_lgbt">No</label>
-                                    </div>
-                                    <div class="form-group col-lg-8">
-                                        <h5>Dirección:</h5>
-                                        <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-lg-2">
-                                        <h5>Representante:</h5>
-                                        <input name="posee_representante" type="radio" id="si_posee" value='1'>
-                                        <label for="si_posee">Si </label><Br>
-                                        <input name="posee_representante" type="radio" id="no_posee" checked="" value='0' required>
-                                        <label for="no_posee">No</label>
-                                    </div>
-                                    <div class="form-group col-lg-4">
-                                        <h5>Estudios realizados:</h5>
-                                        <input type="text" id="estudios" name="estudios" class="form-control" placeholder="Estudios realizados">
-                                    </div>
-                                    <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-lg-2">
-                                        <h5>Discapacidad:</h5>
-                                        <input name="discapacidad" type="radio" id="si" value='1'>
-                                        <label for="si">Si </label><Br>
-                                        <input name="discapacidad" type="radio" id="no" checked="" value='0'>
-                                        <label for="no">No</label>
-                                    </div>
-                                    <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Describa el tipo de discapacidad: <span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <textarea type="text" id="tipo_discapacidad" name="tipo_discapacidad" class="form-control"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                </blockquote>
-
-                                <div align="right" id="btnadd1">
-                                    <button type="reset" class="btn waves-effect waves-light btn-success">
-                                        <i class="mdi mdi-recycle"></i> Limpiar</button>
-                                    <button type="submit" class="btn waves-effect waves-light btn-success2">
-                                      Siguiente <i class="mdi mdi-chevron-right"></i></button>
-                                </div>
-                                <div align="right" id="btnedit1" style="display: none;">
-                                    <button type="reset" class="btn waves-effect waves-light btn-success">
-                                        <i class="mdi mdi-recycle"></i> Limpiar</button>
-                                    <button type="submit" class="btn waves-effect waves-light btn-info">
-                                        Siguiente <i class="mdi mdi-chevron-right"></i></button>
+                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Conocido por: </h5>
+                                    <input type="text" id="conocido_por" name="conocido_por" class="form-control" placeholder="Conocido por">
+                                    <div class="help-block"></div>
                                 </div>
                             </div>
-                            <?php echo form_close(); ?>
+
+                            <div class="row">
+                              <div class="form-group col-lg-4" style="height: 83px;">
+                                  <h5>Teléfono 1: </h5>
+                                  <input data-mask="9999-9999" type="text" id="telefono" name="telefono" class="form-control" placeholder="Número de Telefóno">
+                                  <div class="help-block"></div>
+                              </div>
+
+                              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
+
+                                <div id="div_numero_doc_identidad" class="form-group col-lg-4" style="height: 83px;">
+                                    <h5>Número de documento identidad: <span class="text-danger">*</span></h5>
+                                    <input data-mask="99999999-9" data-mask-reverse="true" type="text" id="dui" name="dui" class="form-control" placeholder="Documento Unico de Identidad" required="">
+                                    <div class="help-block"></div>
+                                </div>
+
+                            </div>
+
+                            <div id="partida_div" style="display: none;">
+                              <div class="row">
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Número:</h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Folio:</h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Folio partida nacimiento" id="folio_partida" name="folio_partida" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Libro: <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Libro partida nacimiento" id="libro_partida" name="libro_partida" class="form-control">
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Asiento: <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Asiento partida nacimiento" id="asiento_partida" name="asiento_partida" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <h5>Año: </h5>
+                                    <div class="controls">
+                                        <input type="text" placeholder="Año partida nacimiento" id="anio_partida" name="anio_partida" class="form-control">
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="form-group col-lg-4" style="height: 83px;">
+                                  <h5>Teléfono 2: </h5>
+                                  <input data-mask="9999-9999" type="text" id="telefono2" name="telefono2" class="form-control" placeholder="Número de Telefóno casa">
+                                  <div class="help-block"></div>
+                              </div>
+
+                              <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Municipio: <span class="text-danger">*</span></h5>
+                                  <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
+                                      <option value=''>[Seleccione el municipio]</option>
+                                      <?php
+                                          $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
+                                          if($municipio->num_rows() > 0){
+                                              foreach ($municipio->result() as $fila2) {
+                                                 echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
+                                              }
+                                          }
+                                      ?>
+                                  </select>
+                              </div>
+                              <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy" readonly="">
+                                  <div class="help-block"></div>
+                              </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-lg-12" style="height: 83px;">
+                              <h5>Dirección:</h5>
+                              <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
+                              <div class="help-block"></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-2" style="height: 83px; display: none;">
+                                <h5>Representante:</h5>
+                                <input name="posee_representante" type="radio" id="si_posee" value='1'>
+                                <label for="si_posee">Si </label><Br>
+                                <input name="posee_representante" type="radio" id="no_posee" checked="" value='0' required>
+                                <label for="no_posee">No</label>
+                           <div class="help-block"></div>
+                         </div>
+
+                         <div class="form-group col-lg-2" style="height: 83px;">
+                             <h5>Sexo:</h5>
+                             <input name="sexo" type="radio" id="masculino" checked="" value="M">
+                             <label for="masculino">Masculino</label>
+                             <input name="sexo" type="radio" id="femenino" value="F">
+                             <label for="femenino">Femenino</label>
+                             <div class="help-block"></div>
+                       </div>
+
+                      <div class="form-group col-lg-2" style="height: 83px;">
+                          <h5>Pertenece LGTBI:</h5>
+                          <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
+                          <label for="si_lgbt">Si </label><Br>
+                          <input name="pertenece_lgbt" type="radio" id="no_lgbt" checked="" value='0'>
+                          <label for="no_lgbt">No</label>
+                     <div class="help-block"></div>
+                   </div>
+
+                         <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                             <h5>Estudios realizados: <span class="text-danger">*</span></h5>
+                             <div class="controls">
+                               <select id="estudios" name="estudios" class="custom-select col-4" onchange="" required>
+                                 <option value="">[Seleccione]</option>
+                                 <option value="Sin estudio">Sin estudio</option>
+                                 <option value="Educacion Básica">Educacion Básica</option>
+                                 <option value="Bachillerato">Bachillerato</option>
+                                 <option value="Universidad">Universidad</option>
+                               </select>
+                             </div>
+                         </div>
+
+                         <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-lg-2" style="height: 83px;">
+                              <h5>Posee discapacidad:</h5>
+                              <input name="discapacidad" type="radio" id="si" value='1'>
+                              <label for="si">Si </label><Br>
+                              <input name="discapacidad" type="radio" id="no" checked="" value='0'>
+                              <label for="no">No</label>
+                         <div class="help-block"></div>
+                       </div>
+
+                       <div id="ocultar_div" class="form-group col-lg-8" style="height: 83px;">
+                           <h5>Discapacidad:</h5>
+                           <textarea type="text" id="discapacidad_desc" name="discapacidad_desc" class="form-control" placeholder="Ingrese la discapacidad"></textarea>
+                           <div class="help-block"></div>
+                       </div>
+
+                        </div>
+                            </blockquote>
+
+                          <div class="pull-left">
+                              <button type="button" class="btn waves-effect waves-light btn-default" onclick="cerrar_mantenimiento();"><i class="mdi mdi-chevron-left"></i> Salir</button>
+                          </div>
+
+                          <div align="right" id="btnadd1">
+                            <button type="reset" class="btn waves-effect waves-light btn-success">
+                              <i class="mdi mdi-recycle"></i> Limpiar</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-success2">
+                              Siguiente <i class="mdi mdi-chevron-right"></i>
+                            </button>
+                          </div>
+                          <div align="right" id="btnedit1" style="display: none;">
+                            <button type="reset" class="btn waves-effect waves-light btn-success">
+                              <i class="mdi mdi-recycle"></i> Limpiar</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-info">
+                              Siguiente <i class="mdi mdi-chevron-right"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <?php echo form_close(); ?>
                             <!-- ============================================================== -->
                             <!-- Fin del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
                             <!-- ============================================================== -->
@@ -1063,16 +1199,23 @@ $(function(){
             processData: false
         })
         .done(function(res){
-            if($("#band").val() == "save"){
-                swal({ title: "Registro exitoso!", type: "success", showConfirmButton: true });
-            }else if($("#band").val() == "edit"){
+            if(res == "fracaso"){
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }else{
+              if($("#band").val() == "save"){
+                swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+              }else if($("#band").val() == "edit"){
                 swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+              }else if($("#band").val() == "delete"){
+                swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+              }
+              cerrar_mantenimiento()
+              tablasolicitudes(1)
             }
         });
 
     });
 });
-
 $("#formajax2").on("submit", function(e){
     e.preventDefault();
     var f = $(this);
@@ -1103,18 +1246,18 @@ $("#formajax2").on("submit", function(e){
     });
 });
 
-function ocultar(){
-  var value = $("#id_doc_identidad").val();
-  if (value!=1) {
-    $('#dui').mask('', {reverse: true});
-    $('#dui').unmask();
-  }else {
-     $('#dui').mask('99999999-9', {reverse: true});
-  }
-}
-
 $(function(){
     $(document).ready(function(){
+
+      $("input[name=discapacidad]").click(function(evento){
+            var valor = $(this).val();
+            if(valor == 0){
+                $("#ocultar_div").hide(500);
+            }else{
+                $("#ocultar_div").show(500);
+            }
+    });
+
         var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
         $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
