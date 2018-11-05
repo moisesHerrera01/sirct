@@ -2174,8 +2174,6 @@ $("#formajax3").on("submit", function(e){
 $("#formajax8").on("submit", function(e){
     e.preventDefault();
 
-    //var act_representante = $("#tabla_representante tbody tr.table-active");
-
     var f = $(this);
     var formData = new FormData(document.getElementById("formajax8"));
     formData.append("dato", "valor");

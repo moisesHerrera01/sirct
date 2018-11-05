@@ -30,6 +30,7 @@ class Diferencias_laborales extends CI_Controller {
 									'id_sindicato' => $this->input->post('id_sindicato')
 								);
 							$this->sindicatos_model->editar_sindicato($data);
+							echo $id_expedienteci;
             } else {
                 echo "fracaso";
             }
@@ -45,11 +46,7 @@ class Diferencias_laborales extends CI_Controller {
 					'fechacrea_expedienteci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_creacion_exp')))
 			);
 
-			if ("fracaso" != $this->expediente_cc_model->editar_expediente($data2)) {
-				echo "exito";
-			} else {
-				echo "fracaso";
-			}
+		 echo $this->expediente_cc_model->editar_expediente($data2);
 		}
 
     }

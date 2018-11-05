@@ -18,7 +18,7 @@ class Expediente_cc_model extends CI_Model {
     public function editar_expediente($data){
       $this->db->where("id_expedienteci", $data["id_expedienteci"]);
       if ($this->db->update('sct_expedienteci', $data)) {
-        return "exito";
+        return $data["id_expedienteci"];
       }else {
         return "fracaso";
       }
@@ -100,7 +100,7 @@ class Expediente_cc_model extends CI_Model {
                   c.numinscripcion_empresa,
                   c.direccion_empresa,
                   c.telefono_empresa,
-                  c.direccion_empresa, 
+                  c.direccion_empresa,
                   d.municipio,
                   e.actividad_catalogociiu,
                   e.grupo_catalogociiu,
@@ -135,7 +135,7 @@ class Expediente_cc_model extends CI_Model {
 					return FALSE;
 			}
     }
-  
+
 }
 
 ?>
