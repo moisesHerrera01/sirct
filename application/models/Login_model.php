@@ -102,4 +102,21 @@ class Login_model extends CI_Model {
             return FALSE;
         }
 	}
+
+	public function obtener_rol_usuario($id_usuario){
+		$this->db->select('r.nombre_rol')
+						 ->from('org_usuario u')
+						 ->join('org_usuario_rol ur','ur.id_usuario=u.id_usuario')
+						 ->join('org_rol r','r.id_rol=ur.id_rol')
+						 ->join('org_rol_modulo_permiso rmp','rmp.id_rol=r.id_rol')
+						 ->join('org_modulo m','m.id_modulo=rmp.id_modulo')
+						 ->where('u.id_usuario',$id_usuario)
+						 ->where('m.id_sistema',$this->config->item('id_sistema'));
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->row();
+		}else {
+			return FALSE;
+		}
+	}
 }

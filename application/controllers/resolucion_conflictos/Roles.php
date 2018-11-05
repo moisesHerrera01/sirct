@@ -32,7 +32,6 @@ class Roles extends CI_Controller {
 		}
 
 	}
-
 }
 
 ?>

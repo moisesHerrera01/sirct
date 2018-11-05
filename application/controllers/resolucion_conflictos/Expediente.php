@@ -5,7 +5,7 @@ class Expediente extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("solicitudes_model","representante_persona_model","expedientes_model","empleadores_model","pagos_model"));
+		$this->load->model(array("solicitudes_model","representante_persona_model","expedientes_model","empleadores_model","pagos_model","login_model"));
 	}
 
 	public function gestionar_expediente() {
@@ -102,7 +102,16 @@ class Expediente extends CI_Controller {
     }
 
 		public function combo_delegado() {
-			$delegados = $this->expedientes_model->obtener_delegados_rol();
+			$nombre_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->nombre_rol;
+
+			if ($nombre_rol == 'Delegado(a) CCIT' || $nombre_rol == 'FILTRO CCIT' || $nombre_rol == 'JEFE CCIT') {
+				$tipo = 1;
+			}else {
+				$tipo = 2;
+			}
+			// VAR_DUMP($nombre_rol);
+			// VAR_DUMP($tipo);
+			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo);
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado',
 				array(
 					'id' => $this->input->post('id'),
@@ -113,8 +122,13 @@ class Expediente extends CI_Controller {
 		}
 
 		public function combo_delega2() {
-
-			$delegados = $this->expedientes_model->obtener_delegados_rol();
+			$nombre_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->nombre_rol;
+			if ($nombre_rol == 'Delegado(a) CCIT' || $nombre_rol == 'FILTRO CCIT' || $nombre_rol == 'JEFE CCIT') {
+				$tipo = 1;
+			}else {
+				$tipo = 2;
+			}
+			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo);
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delega2',
 				array(
 					'id' => $this->input->post('id'),

@@ -186,8 +186,8 @@ class Expedientes_model extends CI_Model {
 		}
 
 	}
-
-	public function obtener_delegados_rol() {
+//Tipo 1: Individuales, Tipo 2: Colectivos
+	public function obtener_delegados_rol($tipo) {
 			$this->db->select("
 							e.id_empleado,
 							e.nr,
@@ -199,10 +199,15 @@ class Expedientes_model extends CI_Model {
 						 ->join('org_usuario u', 'e.nr = u.nr')
 						 ->join('org_usuario_rol ur', 'u.id_usuario = ur.id_usuario')
 						 ->join('org_rol r', 'ur.id_rol = r.id_rol')
-						 ->where('e.id_estado', '00001')
-						 ->where('r.nombre_rol', 'FILTRO CCIT')
-						 ->or_where('r.nombre_rol', 'Delegado(a) CCIT')
-						 ->order_by('e.primer_nombre,
+						 ->where('e.id_estado', '00001');
+			if ($tipo==1) {
+				$this->db->where('r.nombre_rol', 'FILTRO CCIT')
+								 ->or_where('r.nombre_rol', 'Delegado(a) CCIT');
+			}else {
+				$this->db->where('r.nombre_rol', 'FILTRO CCCT')
+								 ->or_where('r.nombre_rol', 'Delegado(a) CCCT');
+			}
+			$this->db->order_by('e.primer_nombre,
 									e.segundo_nombre,
 									e.tercer_nombre,
 									e.primer_apellido,
