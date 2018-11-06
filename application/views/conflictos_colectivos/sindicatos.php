@@ -937,6 +937,7 @@ function volver(num) {
     <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
           <input type="hidden" id="band3" name="band3" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
+          <input type="hidden" id="id_empresaci" name="id_empresaci" value="">
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de representantes</h4>
             </div>
@@ -1344,6 +1345,7 @@ $(function(){
         var formData = new FormData(document.getElementById("formajax3"));
         formData.append("id_sindicato", $('#id_sindicato').val());
         formData.append("id_exp", $('#id_exp').val());
+        formData.append("id_empresaci", $('#establecimiento').val());
         $.ajax({
           url: "<?php echo site_url(); ?>/conflictos_colectivos/Diferencias_laborales/gestionar_expediente",
           type: "post",
