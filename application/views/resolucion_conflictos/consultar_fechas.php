@@ -10,7 +10,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <script>
 function iniciar(){
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-    //tabla_calendario();
+    tabla_calendario();
     <?php }else{ ?>
         $("#cnt_calendario").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
@@ -18,6 +18,7 @@ function iniciar(){
 
 function tabla_calendario(){
   var id_delegado = $("#nr_search").val();
+  // alert(id_delegado)
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttpB=new XMLHttpRequest();
     }else{// code for IE6, IE5
@@ -89,6 +90,7 @@ function tabla_calendario(){
             <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
+              <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title m-b-0 ">Filtrar por delegado</h4>
@@ -114,10 +116,13 @@ function tabla_calendario(){
                                 </select>
                             </div>
                         </div>
-                    </div>
                     <div class="row" style="width: 100%"></div>
                     </div>
                 </div>
+              <?php }else{ ?>
+                <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
+              <?php } ?>
+            </div>
                 <div id="cnt_calendario">
                 <div class="row">
                   <div class="col-md-2"></div>

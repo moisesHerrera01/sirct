@@ -24,7 +24,7 @@ class Pagos_model extends CI_Model {
 			}
 	}
 
-	public function obtener_pagos_delegado($id_delegado) {
+	public function obtener_pagos_delegado($id_delegado,$tipo=FALSE) {
 	  	$this->db->select('s.nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
 			e.tiposolicitud_expedienteci,CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
 			CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
@@ -36,6 +36,11 @@ class Pagos_model extends CI_Model {
 				->group_by('f.id_fechaspagosci');
 				if ($id_delegado) {
 				$this->db->where('em.nr', $id_delegado);
+				}
+				if ($tipo==1) {
+					$this->db->where('e.id_personaci<>0');
+				}else {
+					$this->db->where('e.id_personaci=0');
 				}
 
 		$sql[] = '('.$this->db->get_compiled_select().')';

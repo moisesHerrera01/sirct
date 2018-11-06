@@ -42,7 +42,7 @@ class Audiencias_model extends CI_Model {
 			}
 	}
 
-	public function obtener_audiencias_delegado($id_delegado,$fecha=FALSE,$hora=FALSE) {
+	public function obtener_audiencias_delegado($id_delegado,$fecha=FALSE,$hora=FALSE,$tipo=FALSE) {
 		$this->db->select('s.nombre_sindicato,e.motivo_expedienteci,e.numerocaso_expedienteci,f.id_expedienteci,f.id_fechasaudienciasci,
 												f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci,e.tiposolicitud_expedienteci,
 												CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) delegado,
@@ -55,7 +55,13 @@ class Audiencias_model extends CI_Model {
 					->group_by('f.id_fechasaudienciasci');
 		if ($id_delegado) {
 			$this->db->where('em.nr', $id_delegado);
-		}if ($fecha && $hora) {
+		}
+		if ($tipo==1) {
+			$this->db->where('e.id_personaci<>0');
+		}else {
+			$this->db->where('e.id_personaci=0');
+		}
+		if ($fecha && $hora) {
 			$hora_fin = date('H:i:s',strtotime($hora.'+ 1 hours'));
 			$this->db->where('f.fecha_fechasaudienciasci',$fecha)
 							 ->where("f.hora_fechasaudienciasci>=",$hora)

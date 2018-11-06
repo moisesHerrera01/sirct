@@ -5,7 +5,7 @@ class Consultar_fechas extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("expedientes_model", "audiencias_model","pagos_model"));
+		$this->load->model(array("expedientes_model", "audiencias_model","pagos_model","login_model"));
 	}
 
   public function index(){
@@ -16,9 +16,15 @@ class Consultar_fechas extends CI_Controller {
 
   public function calendario(){
 		$eventos= array();
+		$nombre_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->nombre_rol;
 
-    	$data = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('nr') );
-		$data2= $this->pagos_model->obtener_pagos_delegado($this->input->get('nr'));
+		if ($nombre_rol == 'Delegado(a) CCIT' || $nombre_rol == 'FILTRO CCIT' || $nombre_rol == 'JEFE CCIT') {
+			$tipo = 1;
+		}else {
+			$tipo = 2;
+		}
+    $data = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('nr'),FALSE,FALSE,$tipo );
+		$data2= $this->pagos_model->obtener_pagos_delegado($this->input->get('nr'),$tipo);
 
 		if ($data!=FALSE && $data!=NULL) {
 			foreach ($data->result() as $au) {

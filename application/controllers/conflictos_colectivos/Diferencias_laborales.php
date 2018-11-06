@@ -22,7 +22,7 @@ class Diferencias_laborales extends CI_Controller {
 								'tiposolicitud_expedienteci' =>"Diferencia Laboral",
             );
 
-						$id_expedienteci=$this->expediente_cc_model->insertar_expediente($data2);
+						$id_expedienteci = $this->expediente_cc_model->insertar_expediente($data2);
 
             if ("fracaso" != $id_expedienteci) {
 								$data = array(
