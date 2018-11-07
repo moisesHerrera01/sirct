@@ -59,6 +59,11 @@ function redireccionar_despido_hecho(tipo){
     }
 }
 
+function redireccionar_colectivo(tipo){
+        var param = { 'band_mantto' : 'save' };
+        OpenWindowWithPost("<?php echo site_url(); ?>/conflictos_colectivos/"+tipo, param);  
+}
+
 function redireccionar_diferencia_laboral(tipo){
     if(tipo == "1"){
         var param = { 'tipo_solicitud' : '2', 'band_mantto' : 'save' };
@@ -127,7 +132,7 @@ function redireccionar_retiro_voluntario(tipo){
                 <div class="col-lg-4 col-xlg-3 col-md-5">
                     <div class="card blog-widget">
                         <div class="card-body text-center">
-                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/renuncia_voluntaria.jpg'?>" alt="img" class="img-responsive"></div>
+                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/renuncia_voluntaria.png'?>" alt="img" class="img-responsive"></div>
                             <h3>Retiro voluntario</h3>
                             <div>
                             <br>
@@ -147,7 +152,7 @@ function redireccionar_retiro_voluntario(tipo){
                             <h3>Diferencia Laboral</h3>
                             <div>
                             <br>
-                            <a href="<?=site_url()?>/conflictos_colectivos/sindicato" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Nueva solicitud</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_colectivo('sindicato')" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Nueva solicitud</a>
                             <br><br>
                             </div>
                             <br>
@@ -161,7 +166,7 @@ function redireccionar_retiro_voluntario(tipo){
                             <h3>Indenmización y Prestaciones Laborales</h3>
                             <div>
                             
-                            <a href="<?=site_url()?>/conflictos_colectivos/solicitud_indemnizacion" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Nueva solicitud</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_colectivo('solicitud_indemnizacion')" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Nueva solicitud</a>
                             <br><br>
                             </div>
                             <br>

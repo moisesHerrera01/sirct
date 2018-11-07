@@ -10,6 +10,7 @@ class Sindicato extends CI_Controller {
 
 	public function index(){
 		$data['municipio'] = $this->sindicatos_model->obtener_municipios();
+		$data['band_mantto'] = $this->input->post('band_mantto');
 		$this->load->view('templates/header');
 		$this->load->view('conflictos_colectivos/sindicatos',$data);
 		$this->load->view('templates/footer');

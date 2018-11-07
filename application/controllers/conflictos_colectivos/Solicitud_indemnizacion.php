@@ -9,8 +9,9 @@ class Solicitud_indemnizacion extends CI_Controller {
 	}
 
 	public function index(){
+		$data['band_mantto'] = $this->input->post('band_mantto');
 		$this->load->view('templates/header');
-		$this->load->view('conflictos_colectivos/solicitud_indemnizacion');
+		$this->load->view('conflictos_colectivos/solicitud_indemnizacion',$data);
 		$this->load->view('templates/footer');
 	}
 
