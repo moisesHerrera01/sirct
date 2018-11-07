@@ -318,7 +318,7 @@ function combo_municipio(){
   })
   .done(function(res){
     $('#div_combo_municipio').html(res);
-    $(".select2").select2();
+    $("#municipio2").select2();
   });
 }
 
@@ -331,7 +331,7 @@ function combo_actividad_economica(){
   })
   .done(function(res){
     $('#div_combo_actividad_economica').html(res);
-    $(".select2").select2();
+    $("#act_economica").select2();
   });
 
 }
@@ -346,12 +346,17 @@ function combo_delegado(seleccion){
   })
   .done(function(res){
     $('#div_combo_delegado').html(res);
-    $(".select2").select2();
+    $("#id_personal").select2();
   });
+}
+
+function cerrar_combo_establecimiento() {
+    $("#establecimiento").select2('close');
 }
 
 function combo_establecimiento(seleccion){
   $.ajax({
+    async: true,
     url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
     type: "post",
     dataType: "html",
@@ -359,11 +364,11 @@ function combo_establecimiento(seleccion){
   })
   .done(function(res){
     $('#div_combo_establecimiento').html(res);
-    $(".est").select2({
+    $("#establecimiento").select2({
       'minimumInputLength': 3,
       'language': {
         noResults: function () {
-          return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" onClick="cerrar_combo_establecimiento()">Agregar uno nuevo</a>';
+          return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
         }
       },
       'escapeMarkup': function (markup) {
@@ -550,6 +555,8 @@ function cambiar_editar(id_expedienteci,bandera){
       /*Fin sindicato*/
 
       /*Inicio Expediente*/
+      combo_actividad_economica(result.id_catalogociiu);
+      combo_municipio(result.municipio_empresa);
       combo_delegado(result.id_personal);
       $("#fecha_creacion_exp").val(result.fechacrea_expedienteci);
       $("#motivo").val(result.motivo_expedienteci);
@@ -833,13 +840,13 @@ function volver(num) {
                               <button type="reset" class="btn waves-effect waves-light btn-success">
                                 <i class="mdi mdi-recycle"></i> Limpiar
                               </button>
-                              <button type="submit" class="btn waves-effect waves-light btn-success2">Finalizar
+                              <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente
                                 <i class="mdi mdi-chevron-right"></i></button>
                             </div>
                             <div align="right" id="btnedit3" style="display: none;">
                               <button type="reset" class="btn waves-effect waves-light btn-success">
                                 <i class="mdi mdi-recycle"></i> Limpiar</button>
-                              <button type="submit" class="btn waves-effect waves-light btn-info">Finalizar
+                              <button type="submit" class="btn waves-effect waves-light btn-info">Siguiente
                                 <i class="mdi mdi-chevron-right"></i></button>
                             </div>
                           </div>
@@ -859,6 +866,7 @@ function volver(num) {
                     </div>
                     <div class="card-body b-t" style="padding-top: 7px;">
                     <div>
+                      <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                         <div class="pull-left">
                             <div class="form-group" style="width: 400px;">
                                 <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablasindicatos();">
@@ -878,6 +886,9 @@ function volver(num) {
                                 </select>
                             </div>
                         </div>
+                      <?php }else{ ?>
+                        <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
+                      <?php } ?>
                         <div class="pull-right">
                             <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
                             <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2" data-toggle="tooltip" ><span class="mdi mdi-plus"></span> Nuevo registro</button>
@@ -931,32 +942,50 @@ function volver(num) {
 
 <div id="cnt_modal_acciones"></div>
     <!--INICIA MODAL DE ESTABLECIMIENTOS -->
-<div class="modal fade" id="modal_establecimiento" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-    <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+  <div class="modal fade" id="modal_establecimiento" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
           <input type="hidden" id="band3" name="band3" value="save">
-          <input type="hidden" id="id_representante" name="id_representante" value="">
+          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
           <input type="hidden" id="id_empresaci" name="id_empresaci" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de representantes</h4>
+                <h4 class="modal-title">Gestión de establecimiento</h4>
             </div>
             <div class="modal-body" id="">
 
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required="">
-                      </div>
-                  </div>
+              <div class="row">
+                <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Tipo: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="tipo_establecimiento" name="tipo_establecimiento" class="custom-select col-4" onchange="ocultar_pn()" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="1">Persona natural</option>
+                        <option value="2">Persona jurídica</option>
+                      </select>
+                    </div>
                 </div>
 
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Nombre del establecimiento:</h5>
+                    <div class="controls">
+                        <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control">
+                    </div>
+                </div>
+              </div>
+
+                <div class="row" id="ocultar_pn">
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Razon social del establecimiento:</h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control" required="">
+                      </div>
+                  </div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Abreviatura del establecimiento: <span class="text-danger">*</span></h5>
                       <div class="controls">
-                          <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control" required="">
+                          <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control" required>
                       </div>
                   </div>
                 </div>
@@ -971,10 +1000,12 @@ function volver(num) {
                 </div>
 
                 <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
                       <h5>Telefono: </h5>
                       <div class="controls">
-                          <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento" class="form-control" data-mask="9999-9999">
+                          <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento" class="form-control" data-mask="9999-9999" required>
                           <div class="help-block"></div>
                       </div>
                   </div>
@@ -982,19 +1013,6 @@ function volver(num) {
 
                 <div class="row">
                   <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_actividad_economica"></div>
-                </div>
-
-                <div class="row">
-                  <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
-                </div>
-
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del representante: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="nombre_representante" name="nombre_representante" class="form-control" required>
-                      </div>
-                  </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1231,6 +1249,19 @@ function volver(num) {
 
 <script>
 /*AJAX SINDICATO*/
+function ocultar_pn(){
+  var value = $("#tipo_establecimiento").val();
+  if (value==1) {
+    $("#razon_social").removeAttr("required");
+    $("#abre_establecimiento").removeAttr("required");
+    $('#ocultar_pn').hide(500);
+  }else {
+     $('#ocultar_pn').show(500);
+     $("#razon_social").attr("required",'required');
+     $("#abre_establecimiento").attr("required",'required');
+  }
+}
+
 $(function(){
     $("#formajax").on("submit", function(e){
         e.preventDefault();
@@ -1318,20 +1349,20 @@ $(function(){
           processData: false
         })
         .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+          console.log(res)
+          res = res.split(",");
+            if(res[0] == "exito"){
+                if($("#band3").val() == "save"){
+                    //$("#id_empresa").val(res[1])
+                    $("#modal_establecimiento").modal('hide');
+                    $.toast({ heading: 'Registro exitoso', text: 'Registro de establecimiento exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                    combo_establecimiento(res[1]);
+                }else if($("#band3").val() == "edit"){
+                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                    tabla_representantes();
+                }
             }else{
-              swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-
-              var data = {
-                  id: res,
-                  text: $("#nombre_establecimiento").val()
-              };
-
-              var newOption = new Option(data.text, data.id, false, false);
-              $('#establecimiento').append(newOption).trigger('change');
-              $('#establecimiento').val(data.id).trigger("change");
-              $('#modal_establecimiento').modal('toggle');
+                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
         });
 
@@ -1373,7 +1404,7 @@ $(function(){
             }else{
               cerrar_mantenimiento();
               audiencias($('#establecimiento').val(),res,1);
-              alert(res)
+              //alert(res)
             }
         });
 

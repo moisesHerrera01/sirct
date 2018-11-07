@@ -19,12 +19,18 @@ class Acta_colectivos extends CI_Controller {
         $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/FichaSolicitud_DifL.docx');
         $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
         $templateWord->setValue('fecha_actual', date('d/m/Y'));
+
+        $templateWord->setValue('dia', dia(date('d')));
+        $templateWord->setValue('mes', mb_strtoupper(mes(date('m'))));
+        $templateWord->setValue('anio', anio(date('Y')));
+
         $templateWord->setValue('direccion_empresa', $empresa->direccion_empresa);
         $templateWord->setValue('representante_legal', $empresa->nombres_representante);
         $templateWord->setValue('especificacion', $empresa->actividad_catalogociiu);
         $templateWord->setValue('actividad', $empresa->grupo_catalogociiu);
         $templateWord->setValue('nombre_sindicato', $expediente->nombre_sindicato);
-        $templateWord->setValue('telefono_sindicato', $expediente->telefono_sindicato);
+        $templateWord->setValue('telefono_sindicato', mb_strtoupper(convertir_dui($expediente->telefono_sindicato)));
+
         $templateWord->setValue('direccion_sindicato', $expediente->direccion_sindicato);
         $templateWord->setValue('nombre_delegado',$expediente->delegado);
 

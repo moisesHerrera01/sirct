@@ -72,9 +72,14 @@ class Expediente_cc_model extends CI_Model {
                          s.telefono_sindicato,
                          s.totalafiliados_sindicato,
                          m.municipio,
-                         CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido,em.apellido_casada) delegado'
+                         CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido,em.apellido_casada) delegado,
+                         mu.id_municipio municipio_empresa,
+                         cat.id_catalogociiu'
                        )
                ->from('sct_expedienteci e')
+               ->join('sge_empresa es','es.id_empresa=e.id_empresaci')
+               ->join('sge_catalogociiu cat','cat.id_catalogociiu=es.id_catalogociiu')
+               ->join('org_municipio mu','mu.id_municipio=es.id_municipio')
                ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci')
                ->join('org_municipio m','m.id_municipio=s.id_municipio')
                ->join('sir_empleado em','em.id_empleado=e.id_personal')
