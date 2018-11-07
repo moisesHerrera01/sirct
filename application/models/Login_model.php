@@ -104,7 +104,7 @@ class Login_model extends CI_Model {
 	}
 
 	public function obtener_rol_usuario($id_usuario){
-		$this->db->select('r.nombre_rol')
+		$this->db->select('r.nombre_rol,r.id_rol')
 						 ->from('org_usuario u')
 						 ->join('org_usuario_rol ur','ur.id_usuario=u.id_usuario')
 						 ->join('org_rol r','r.id_rol=ur.id_rol')
