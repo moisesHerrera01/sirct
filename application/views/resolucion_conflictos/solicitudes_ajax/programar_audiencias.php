@@ -285,6 +285,7 @@ $(function(){
                             swal({ title: "¡Audiencia reprogramada!", type: "success", showConfirmButton: true });
                             tabla_audiencias(formData.get('id_expedienteci1'));
                             $('#formajax6').trigger("reset");
+                            cambiar();
                         });
                     });
                     /*FIN Validar si pedir motivo*/
@@ -301,7 +302,7 @@ $(function(){
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
               tabla_audiencias(formData.get('id_expedienteci1'));
-              $('#formajax6').trigger("reset");
+              // $('#formajax6').trigger("reset");
             }
         });
 

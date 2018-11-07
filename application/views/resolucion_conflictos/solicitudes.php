@@ -18,12 +18,12 @@ function validar_establecimiento(){
     var establecimiento = $("#establecimiento").val();
     var registros = $("#tabla_representante tbody tr.table-active");
 
-    if(establecimiento == "" || registros.length == 0){
+    if(establecimiento == "" /*|| registros.length == 0*/){
         if(establecimiento == ""){
             swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
-        }else{
+        /*}else{
             swal({ title: "Seleccione representante", text: "Agregue o seleccione un representante de la lista.", type: "warning", showConfirmButton: true });
-        }
+        */}
     }else{
         open_form(2);
     }
@@ -83,27 +83,27 @@ function iniciar(){
   <?php } ?>
 
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-    tablasolicitudes();
+    combo_delegado_tabla();
     <?php }else{ ?>
         $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
 }
 
-function seleccionar_representante(obj, id_representanteci){
-    $("#id_representanteci").val(id_representanteci)
-    $(obj).parent().addClass('table-active active');
-    $(obj).parent().siblings('tr').removeClass('table-active active');
-    var tds = $(obj).siblings('td');
-
-    var trs = $("#tabla_representante tbody tr");
-    for (var i = 0; i < trs.length; i+=1) {
-        var td = $(trs[i]).children('td');
-        $(td[0]).html('');
-    }
-
-
-    $(tds[0]).html('<span class="round round-primary">R</span>');
-}
+// function seleccionar_representante(obj, id_representanteci){
+//     $("#id_representanteci").val(id_representanteci)
+//     $(obj).parent().addClass('table-active active');
+//     $(obj).parent().siblings('tr').removeClass('table-active active');
+//     var tds = $(obj).siblings('td');
+//
+//     var trs = $("#tabla_representante tbody tr");
+//     for (var i = 0; i < trs.length; i+=1) {
+//         var td = $(trs[i]).children('td');
+//         $(td[0]).html('');
+//     }
+//
+//
+//     $(tds[0]).html('<span class="round round-primary">R</span>');
+// }
 
 function cambiar_update_post(id_personaci,bandera){
   open_form(1);
@@ -555,6 +555,7 @@ function combo_representante_empresa(seleccion){
   .done(function(res){
     $('#div_combo_representante_empresa').html(res);
     $("#representante_empresa").select2();
+    $('#representante_empresa').trigger('change.select2');
   });
 }
 
@@ -661,6 +662,20 @@ function combo_delega2(seleccion){
   });
 }
 
+function combo_delegado_tabla(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado_tabla",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_delegado_tabla').html(res);
+    $("#nr_search").select2();
+    tablasolicitudes();
+  });
+}
 
 function open_form(num){
     $(".cnt_form").hide(0);
@@ -1522,23 +1537,7 @@ function volver(num) {
                     <div>
                       <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                         <div class="pull-left">
-                            <div class="form-group" style="width: 400px;">
-                                <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablasolicitudes();">
-                                    <option value="">[Todos los empleados]</option>
-                                <?php
-                                    $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
-                                    if($otro_empleado->num_rows() > 0){
-                                        foreach ($otro_empleado->result() as $fila) {
-                                            if($nr_usuario == $fila->nr){
-                                               echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }else{
-                                                echo '<option class="m-l-50" value="'.$fila->nr.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }
-                                        }
-                                    }
-                                ?>
-                                </select>
-                            </div>
+                          <div class="form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado_tabla" style="width: 400px;"></div>
                         </div>
                       <?php }else{ ?>
                         <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
@@ -2354,7 +2353,6 @@ function ocultar_pn(){
 
 $(function(){
     $(document).ready(function(){
-
       $("input[name=discapacidad]").click(function(evento){
             var valor = $(this).val();
             if(valor == 0){

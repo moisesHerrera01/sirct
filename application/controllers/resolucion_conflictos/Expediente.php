@@ -109,8 +109,6 @@ class Expediente extends CI_Controller {
 			}else {
 				$tipo = 2;
 			}
-			// VAR_DUMP($nombre_rol);
-			// VAR_DUMP($tipo);
 			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo);
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado',
 				array(
@@ -130,6 +128,23 @@ class Expediente extends CI_Controller {
 			}
 			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo);
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delega2',
+				array(
+					'id' => $this->input->post('id'),
+					'colaborador' => $delegados
+				)
+			);
+
+		}
+
+		public function combo_delegado_tabla() {
+			$nombre_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->nombre_rol;
+			if ($nombre_rol == 'Delegado(a) CCIT' || $nombre_rol == 'FILTRO CCIT' || $nombre_rol == 'JEFE CCIT') {
+				$tipo = 1;
+			}else {
+				$tipo = 2;
+			}
+			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo);
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado_tabla',
 				array(
 					'id' => $this->input->post('id'),
 					'colaborador' => $delegados

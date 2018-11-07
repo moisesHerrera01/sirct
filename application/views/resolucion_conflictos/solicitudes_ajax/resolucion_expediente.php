@@ -44,7 +44,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="help-block"></div>
             </div>
 
-              <div  class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <div id="asist" class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                 <h5>Parte solicitante : <span class="text-danger">*</span></h5>
                 <div class="controls">
                   <select id="asistieron" name="asistieron" class="form-control" required>
@@ -169,12 +169,14 @@ function mostrar(){
   $("#f_pago").hide(0);
   $("#fhpago").hide(0);
   $("#det_resultado").show(0);
+  $("#asist").show(0);
   $("#tipo_conciliacion").removeAttr("required");
   $("#monto_pago").removeAttr("required");
   $("#inasistencia").removeAttr("required");
   $("#primer_pago").removeAttr("required");
   $("#fecha_pago").removeAttr("required");
   $("#detalle_resultado").attr("required","required");
+  $("#asistieron").attr("required","required");
   var value = $("#resolucion").val();
 
   if(value == ""){ $("#tipo_pago").hide(0); }else{ $("#tipo_pago").show(0); }
@@ -205,6 +207,18 @@ function mostrar(){
       $("#detalle_resultado").removeAttr("required");
       $("#especifique").show(500);
       $("#inasistencia").attr("required",'required');
+      $("#inasistencia").change(
+          function(){
+            var esp = $("#inasistencia").val();
+            alert(esp)
+            if (esp==2 || esp==3) {
+              $("#asist").hide(500);
+              $("#asistieron").removeAttr("required");
+            }else {
+              $("#asist").show(500);
+              $("#asistieron").attr("required","required");
+            }
+        });
       break;
     case '5':
       $("#det_resultado").hide(0);

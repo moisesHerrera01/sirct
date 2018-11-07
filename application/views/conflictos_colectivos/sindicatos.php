@@ -16,10 +16,25 @@ function nav(value) {
 function iniciar(){
 
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-    tablasindicatos();
+    combo_delegado_tabla();
     <?php }else{ ?>
         $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
+}
+
+function combo_delegado_tabla(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado_tabla",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_delegado_tabla').html(res);
+    $("#nr_search").select2();
+    tablasolicitudes();
+  });
 }
 
 function cerrar_combo_defensores() {
@@ -114,7 +129,7 @@ function cambiar_delegado() {
     .done(function (res) {
       if(res == "exito"){
         cerrar_mantenimiento()
-        tablasindicatos();
+        tablasolicitudes();
         swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
       }else{
           swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
@@ -147,7 +162,7 @@ function inhabilitar(id_expedienteci) {
       })
       .done(function (res) {
         if(res == "exito"){
-          tablasindicatos();
+          tablasolicitudes();
           swal({ title: "¡Expediente inhabilitado exitosamente!", type: "success", showConfirmButton: true });
         }else{
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
@@ -177,7 +192,7 @@ function habilitar(id_expedienteci) {
         })
         .done(function (res) {
           if(res == "exito"){
-            tablasindicatos();
+            tablasolicitudes();
             swal({ title: "¡Expediente habilitado exitosamente!", type: "success", showConfirmButton: true });
           }else{
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
@@ -201,7 +216,7 @@ function cambiar_estado() {
     .done(function (res) {
       if(res == "exito"){
         cerrar_mantenimiento()
-        tablasindicatos();
+        tablasolicitudes();
         swal({ title: "¡Estado modificado exitosamente!", type: "success", showConfirmButton: true });
       }else{
           swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
@@ -307,7 +322,7 @@ function visualizar(id_expedienteci,id_empresa) {
 var estado_pestana = "";
 function cambiar_pestana(tipo){
     estado_pestana = tipo;
-    tablasindicatos();
+    tablasolicitudes();
 }
 
 function combo_municipio(){
@@ -405,7 +420,7 @@ function cerrar_mantenimiento(){
     $("#modal_estado").modal('hide');
     $("#cnt_actions").remove('.card');
     open_form(1);
-    tablasindicatos();
+    tablasolicitudes();
 }
 
 function objetoAjax(){
@@ -416,7 +431,7 @@ function objetoAjax(){
     return xmlhttp;
 }
 
-function tablasindicatos(){
+function tablasolicitudes(){
   var nr_empleado = $("#nr_search").val();
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttpB=new XMLHttpRequest();
@@ -868,23 +883,7 @@ function volver(num) {
                     <div>
                       <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                         <div class="pull-left">
-                            <div class="form-group" style="width: 400px;">
-                                <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablasindicatos();">
-                                    <option value="">[Todos los empleados]</option>
-                                <?php
-                                    $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
-                                    if($otro_empleado->num_rows() > 0){
-                                        foreach ($otro_empleado->result() as $fila) {
-                                            if($nr_usuario == $fila->nr){
-                                               echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }else{
-                                                echo '<option class="m-l-50" value="'.$fila->nr.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }
-                                        }
-                                    }
-                                ?>
-                                </select>
-                            </div>
+                            <div class="form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado_tabla" style="width: 400px;"></div>
                         </div>
                       <?php }else{ ?>
                         <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
@@ -1398,7 +1397,7 @@ $(function(){
             //   }else{
             //       swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
             //   }
-            //   tablasindicatos();
+            //   tablasolicitudes();
             if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{

@@ -80,7 +80,7 @@ $(function(){
         });
       $('#modal_resolucion').remove();
       $('.modal-backdrop').remove();
-      tablasindicatos();
+      tablasolicitudes();
     });
 });
 
