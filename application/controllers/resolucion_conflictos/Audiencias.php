@@ -5,7 +5,7 @@ class Audiencias extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("expedientes_model","audiencias_model","pagos_model"));
+		$this->load->model(array("expedientes_model","audiencias_model","pagos_model","login_model"));
 	}
 
   public function programar_audiencias(){
@@ -42,7 +42,14 @@ class Audiencias extends CI_Controller {
 	}
 
   public function tabla_audiencias(){
+		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+		if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) {
+			$tipo = 1;
+		}else {
+			$tipo = 2;
+		}
     $data['audiencia'] = $this->audiencias_model->obtener_audiencias( $this->input->get('id_expedienteci') );
+		$data['tipo'] = $tipo;
     $this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_audiencias',$data);
   }
 

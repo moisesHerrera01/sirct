@@ -20,7 +20,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <i class="mdi mdi-window-close"></i>
               </a>
             </div>
-            <h4 class="card-title m-b-0 text-white">Programar audiencias</h4>
+            <h4 class="card-title m-b-0 text-white">Programar pagos</h4>
           </div>
           <div class="card-body b-t">
             <blockquote class="m-t-0">

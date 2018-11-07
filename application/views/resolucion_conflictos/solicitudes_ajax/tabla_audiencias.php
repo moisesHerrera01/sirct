@@ -45,6 +45,8 @@
                           $fila->hora_fechasaudienciasci, $fila->id_expedienteci, $fila->estado_audiencia, $fila->numero_fechasaudienciasci,
                           $fila->id_defensorlegal,$fila->id_representaci,$fila->id_delegado);
 
+                          $resultado = array($fila->id_expedienteci, $fila->id_fechasaudienciasci);
+
                           if ($fila->estado_audiencia) {
                             if(tiene_permiso($segmentos=2,$permiso=4)){
                               array_push($array, "edit");
@@ -57,6 +59,7 @@
                                 echo generar_boton($array,"cambiar_editar5","btn-danger","fa fa-times","Eliminar");
                             }
                           }
+                          if ($tipo==1) {
                           ?>
                           <div class="btn-group">
                               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -69,10 +72,18 @@
                               </div>
                           </div>
                           <?php
+                        }else {
+                          if ($fila->estado_audiencia) {
+                            if(tiene_permiso($segmentos=2,$permiso=4)){
+                              array_push($resultado,"");
+                              echo generar_boton($resultado,"resolucion","btn-success2","fa fa-check","Resultado");
+                            }
+                        }
                           echo "</td>";
                           echo "</tr>";
                         }
                     }
+                  }
                 ?>
                 </tbody>
             </table>
