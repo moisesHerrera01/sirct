@@ -343,58 +343,80 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </div>
 
 <div class="modal fade" id="modal_resolucion" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Registrar Resultado del Expediente</h4>
-      </div>
-
-      <div class="modal-body" id="">
-        <div id="cnt_form6" class="cnt_form">
-          <?php echo form_open('', array('id' => 'formajax6', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-
-          <input type="hidden" id="id_persona3" name="id_persona" value="">
-
-          <div class="row">
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Resoluci&oacute;n de intervenci&oacute;n: <span class="text-danger">*</span></h5>
-              <div class="controls">
-                <select id="resolucion" name="resolucion" class="form-control" required>
-                  <option value="">[Seleccione]</option>
-                  <option value="">[Seleccione]</option>
-                  <option value="Conciliado">Conciliado</option>
-                  <option value="Sin conciliar">Sin conciliar</option>
-                  <option value="Inasistencia">Inasistencia</option>
-                  <option value="Desistida">Desistida</option>
-                  <option value="A multas">A multas</option>
-                  <option value="No notificada">No notificada</option>
-                  <option value="Reinstalo">Reinstalo</option>
-                </select>
-              </div>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Registrar Resultado del Expediente</h4>
             </div>
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Tipo de Conciliaci&oacute;n: </h5>
-              <div class="controls">
-                <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
-                  <option value="">[Seleccione]</option>
-                  <option value="Pago en el momento">Pago en el momento</option>
-                  <option value="Pago diferido">Pago diferido</option>
-                </select>
-              </div>
-            </div>
-          </div>
 
-          <div align="right" id="btnadd1">
-            <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn waves-effect waves-light btn-success2">
-              Guardar <i class="mdi mdi-chevron-right"></i>
-            </button>
-          </div>
-          <?php echo form_close(); ?>
+            <div class="modal-body" id="">
+                <div id="cnt_form6" class="cnt_form">
+                    <?php echo form_open('', array('id' => 'formajax6', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+
+                    <input type="hidden" id="id_persona3" name="id_persona" value="">
+
+                    <div class="row">
+                        <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                            <h5>Resoluci&oacute;n de intervenci&oacute;n: <span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                <select onchange="mostrar()" id="resolucion" name="resolucion" class="form-control"
+                                    required>
+                                    <option value="">[Seleccione]</option>
+                                    <option value="1">Conciliado</option>
+                                    <option value="2">Sin conciliar</option>
+                                    <option value="3">Inasistencia</option>
+                                    <option value="4">Desistida</option>
+                                    <option value="5">A multas</option>
+                                    <option value="6">No notificada</option>
+                                    <option value="7">Reinstalo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="tipo_conciliacion_div" style="display:none;" class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "
+                            pull-left"; } ?>">
+                            <h5>Tipo de Conciliaci&oacute;n: </h5>
+                            <div class="controls">
+                                <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
+                                    <option value="">[Seleccione]</option>
+                                    <option value="1">Pago en el momento</option>
+                                    <option value="2">Pago diferido</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id='tipo_pago' style="display:none;">
+                        <div id="mpago" class="form-group col-lg-4" style="height: 83px;">
+                            <h5>Monto de pago($):<span class="text-danger">*</h5>
+                            <input type="number" id="monto_pago" name="monto_pago" class="form-control" placeholder="Monto total de pago"
+                                step="0.01">
+                        </div>
+
+                        <div id="fhpago" class="form-group col-lg-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                            <h5>Fecha y hora de pago: <span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                <input type="datetime-local" class="form-control" id="fecha_pago" nombre="fecha_pago">
+                            </div>
+                        </div>
+
+                        <div id="p_pago" class="form-group col-lg-6" style="height: 83px;">
+                            <h5>Monto de primer pago:<span class="text-danger">*</h5>
+                            <input type="number" id="primer_pago" name="primer_pago" class="form-control" placeholder="Monto de primer pago"
+                                step="0.01">
+                        </div>
+                    </div>
+                    <div align="right" id="btnadd1">
+                        <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn waves-effect waves-light btn-success2">
+                            Guardar <i class="mdi mdi-chevron-right"></i>
+                        </button>
+                    </div>
+                    <?php echo form_close(); ?>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <script>
@@ -618,13 +640,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     $(function () {
         $(document).ready(function () {
-              $("input[name=discapacidad_solicitante]").click(function(evento){
-                    var valor = $(this).val();
-                    if(valor == 0){
-                        $("#ocultar_div").hide(500);
-                    }else{
-                        $("#ocultar_div").show(500);
-                    }
+            $("input[name=discapacidad_solicitante]").click(function(evento){
+                var valor = $(this).val();
+                if(valor == 0){
+                    $("#ocultar_div").hide(500);
+                }else{
+                    $("#ocultar_div").show(500);
+                }
             });
 
             $('#fecha_nacimiento').datepicker({
@@ -745,5 +767,61 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
          $('#div_numero_doc_identidad').show(500);
          $("#dui").attr("required",'required');
       }
+    }
+
+    function mostrar() {
+        // $("#especifique").hide(0);
+        $("#p_pago").hide(0);
+        $("#fhpago").hide(0);
+        $("#mpago").hide(0);
+        $("#tipo_pago").hide(0);
+        // $("#det_resultado").show(0);
+        $("#tipo_conciliacion").removeAttr("required");
+        $("#monto_pago").removeAttr("required");
+        // $("#inasistencia").removeAttr("required");
+        $("#primer_pago").removeAttr("required");
+        $("#fecha_pago").removeAttr("required");
+        // $("#detalle_resultado").attr("required", "required");
+        var value = $("#resolucion").val();
+
+        if (value == "") {
+            $("#tipo_pago").hide(0);
+        } else {
+            $("#tipo_pago").show(1000);
+        }
+
+        switch (value) {
+            case '1':
+                $("#fhpago").show(0);
+                $("#mpago").show(0);
+                $("#tipo_conciliacion_div").show(500);
+                $("#tipo_conciliacion").attr("required", 'required');
+                $("#tipo_conciliacion").change(
+                    function () {
+                        $("#primer_pago").removeAttr("required");
+                        var tipo = $("#tipo_conciliacion").val();
+                        if (tipo == '2') {
+                            $("#primer_pago").attr("required", 'required');
+                            $("#p_pago").show(500);
+                        } else {
+                            $("#primer_pago").removeAttr("required");
+                            $("#p_pago").hide(0);
+                        }
+                    });
+                $("#monto_pago").attr("required", 'required');
+                $("#fecha_pago").attr("required", 'required');
+                break;
+            // case '3':
+            //     $("#det_resultado").hide(0);
+            //     $("#detalle_resultado").removeAttr("required");
+            //     $("#especifique").show(500);
+            //     $("#inasistencia").attr("required", 'required');
+            //     break;
+            // case '5':
+            //     $("#det_resultado").hide(0);
+            //     $("#detalle_resultado").removeAttr("required");
+            //     break;
+            default:
+        }
     }
 </script>

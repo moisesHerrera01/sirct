@@ -2,7 +2,7 @@
     <div class="card-header">
         <div class="card-actions">
         </div>
-        <h4 class="card-title m-b-0">Listado de audiencias</h4>
+        <h4 class="card-title m-b-0">Listado de pagos</h4>
     </div>
     <div class="card-body b-t"  style="padding-top: 7px;">
 
@@ -31,13 +31,13 @@
                             $fila->montopago_fechaspagosci, $fila->id_persona);
 
                             if(tiene_permiso($segmentos=2,$permiso=4)){
-                            array_push($array, "edit");
-                            echo generar_boton($array,"cambiar_editar6","btn-info","fa fa-wrench","Editar");
+                                array_push($array, "edit");
+                                echo generar_boton($array,"cambiar_editar6","btn-info","fa fa-wrench","Editar");
                             }
 
-                            if(tiene_permiso($segmentos=2,$permiso=1)){
-                            unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
-                            array_push($array, "delete");
+                            if(tiene_permiso($segmentos=2,$permiso=3)){
+                                unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
+                                array_push($array, "delete");
                                 echo generar_boton($array,"cambiar_editar6","btn-danger","fa fa-times","Eliminar");
                             }
                             echo "</td>";
