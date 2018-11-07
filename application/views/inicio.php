@@ -85,7 +85,7 @@ function redireccionar_retiro_voluntario(tipo){
             <div class="container-fluid">
                 <div class="row page-titles">
                     <div class="col-lg-12 align-self-center">
-                        <h3 class="text-themecolor pull-left">INICIO</h3>
+                        <h3 class="text-themecolor pull-left">INICIO </h3>
 
                         <div class="pull-right">
                         <div id="btn_indicador" style="display: none;"><button class="btn btn-info" onclick="toogle_Options(500);"><span class="mdi mdi-chart-bar"></span> Indicadores</button></div>
@@ -100,6 +100,8 @@ function redireccionar_retiro_voluntario(tipo){
                 <!-- ============================================================== -->
         <div id="cnt_options">
             <div class="row">
+                <?php if($tipo_rol == 1){ //MEDIACIÓN INDIVIDUAL ?>
+
                 <div class="col-lg-4 col-xlg-3 col-md-5">
                     <div class="card blog-widget">
                         <div class="card-body text-center">
@@ -125,7 +127,7 @@ function redireccionar_retiro_voluntario(tipo){
                 <div class="col-lg-4 col-xlg-3 col-md-5">
                     <div class="card blog-widget">
                         <div class="card-body text-center">
-                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/renuncia_voluntaria.png'?>" alt="img" class="img-responsive"></div>
+                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/renuncia_voluntaria.jpg'?>" alt="img" class="img-responsive"></div>
                             <h3>Retiro voluntario</h3>
                             <div>
                             <br>
@@ -136,6 +138,38 @@ function redireccionar_retiro_voluntario(tipo){
                         </div>
                     </div>
                 </div>
+                <?php }else{ //MEDIACIÓN COLECTIVA ?>
+                <div class="col-lg-2 col-md-1"></div>
+                <div class="col-lg-4 col-xlg-3 col-md-5">
+                    <div class="card blog-widget">
+                        <div class="card-body text-center">
+                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/sindicato_cc.jpg'?>" alt="img" class="img-responsive"></div>
+                            <h3>Diferencia Laboral</h3>
+                            <div>
+                            <br>
+                            <a href="<?=site_url()?>/conflictos_colectivos/sindicato" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Nueva solicitud</a>
+                            <br><br>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-xlg-3 col-md-5">
+                    <div class="card blog-widget">
+                        <div class="card-body text-center">
+                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/diferencia_laboral_cc.jpg'?>" alt="img" class="img-responsive"></div>
+                            <h3>Indenmización y Prestaciones Laborales</h3>
+                            <div>
+                            
+                            <a href="<?=site_url()?>/conflictos_colectivos/solicitud_indemnizacion" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Nueva solicitud</a>
+                            <br><br>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-1"></div>
+                <?php } ?>
             </div>
         </div>
 
