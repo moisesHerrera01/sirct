@@ -546,6 +546,7 @@ function combo_tipo_representante(seleccion){
 
 function combo_representante_empresa(seleccion){
   var id_emp = $("#id_empresaci").val();
+  $("#establecimiento").val(id_emp);
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_representante_empresa?id_empresaci="+id_emp,
     type: "post",
@@ -554,9 +555,33 @@ function combo_representante_empresa(seleccion){
   })
   .done(function(res){
     $('#div_combo_representante_empresa').html(res);
-    $("#representante_empresa").select2();
+    $("#representante_empresa").select2({
+        'minimumInputLength': 3,
+        'language': {
+            noResults: function () {
+                return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo representante" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo representante</a></div>';
+            }
+        }, 'escapeMarkup': function (markup) { return markup; }
+    });
     $('#representante_empresa').trigger('change.select2');
   });
+}
+
+function cerrar_combo_representante() {
+
+    $.ajax({
+        url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_representante",
+        type: "post",
+        dataType: "html"
+    }) .done(function(res){
+        $('#cnt_modal_acciones').html(res);
+        combo_profesiones();
+        combo_municipio2();
+        combo_estados_civiles();
+        $('#modal_representante').modal('show');
+    });
+
+    $("#representante_empresa").select2('close');
 }
 
 function combo_doc_identidad(seleccion){

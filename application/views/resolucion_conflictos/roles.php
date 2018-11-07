@@ -56,7 +56,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <div class="switch">
                               <label>
                                 Delegado(a)
-                                <input type="checkbox" <?= ($fila->nombre_rol == 'FILTRO CCIT') ? "class='checked pred'" : "class='check'" ?> name="<?= $fila->id_empleado?>" value="1">
+                                <input type="checkbox" <?= ($fila->nombre_rol == 'FILTRO CCIT' || $fila->nombre_rol == 'FILTRO CCCT') ? "class='checked pred'" : "class='check'" ?> name="<?= $fila->id_empleado?>" value="1">
                                 <span class="lever switch-col-blue"></span>Filtro
                               </label>
                             </div>
@@ -82,7 +82,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   </div>
 </div>
 
-<script>  
+<script>
 
   $(function(){
     $("#formajax").on("submit", function(e){

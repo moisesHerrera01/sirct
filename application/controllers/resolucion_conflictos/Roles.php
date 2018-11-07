@@ -9,8 +9,8 @@ class Roles extends CI_Controller {
     }
 
     public function index(){
-      $nombre_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->nombre_rol;
-      if ($nombre_rol == 'Delegado(a) CCIT' || $nombre_rol == 'FILTRO CCIT' || $nombre_rol == 'JEFE CCIT') {
+      $id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+      if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) {
         $tipo = 1;
       }else {
         $tipo = 2;
@@ -22,8 +22,8 @@ class Roles extends CI_Controller {
     }
 
 	public function gestionar_roles() {
-    $nombre_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->nombre_rol;
-    if ($nombre_rol == 'Delegado(a) CCIT' || $nombre_rol == 'FILTRO CCIT' || $nombre_rol == 'JEFE CCIT') {
+    $id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+    if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) {
       $tipo = 1;
     }else {
       $tipo = 2;
@@ -33,9 +33,18 @@ class Roles extends CI_Controller {
 		if ($colaboradores) {
 			foreach ($colaboradores->result() as $delegado) {
 				if ( $this->input->post($delegado->id_empleado) ) {
-					$this->login_model->cambiar_rol($delegado->id_empleado, FILTRO);
+          if ($tipo==1) {
+            $this->login_model->cambiar_rol($delegado->id_empleado, FILTRO);
+          }else {
+            $this->login_model->cambiar_rol($delegado->id_empleado, FILTRO_C);
+          }
 				} else {
-					$this->login_model->cambiar_rol($delegado->id_empleado, DELEGADO);
+          if ($tipo==1) {
+            $this->login_model->cambiar_rol($delegado->id_empleado, DELEGADO);
+          }else {
+            $this->login_model->cambiar_rol($delegado->id_empleado, DELEGADO_C);
+          }
+
 				}
 			}
 		} else {

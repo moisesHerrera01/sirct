@@ -16,9 +16,8 @@ class Consultar_fechas extends CI_Controller {
 
   public function calendario(){
 		$eventos= array();
-		$nombre_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->nombre_rol;
-
-		if ($nombre_rol == 'Delegado(a) CCIT' || $nombre_rol == 'FILTRO CCIT' || $nombre_rol == 'JEFE CCIT') {
+		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+		if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) {
 			$tipo = 1;
 		}else {
 			$tipo = 2;
