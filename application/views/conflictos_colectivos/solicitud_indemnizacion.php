@@ -369,20 +369,27 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
-    function audiencias(id_expedienteci) {
+    function audiencias(id_expedienteci,id_empresa,codigo) {
+
+        var codigo = codigo || false;
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
             type: "post",
             dataType: "html",
             data: {id : id_expedienteci}
-        })
-        .done(function(res){
-            console.log(res)
+        }).done(function(res){
             $('#cnt_actions').html(res);
             $("#cnt_actions").show(0);
             $("#cnt_tabla").hide(0);
             $("#cnt_tabla_solicitudes").hide(0);
             $("#cnt_form_main").hide(0);
+            combo_defensores();
+            combo_representante_empresa(null, id_empresa);
+            combo_establecimiento(id_empresa);
+            combo_delega2();
+            if (codigo) {
+                $("#paso4").show();
+            }
             tabla_audiencias(id_expedienteci);
         });
     }
@@ -402,6 +409,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         }
         xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/audiencias/tabla_audiencias?id_expedienteci="+id_expedienteci,true);
         xmlhttpB.send();
+    }
+
+    function abrir_audiencia_paso() {
+        audiencias( $("#id_expediente").val(), $("#establecimiento").val(), true );
     }
 
     function modal_delegado(id_expedienteci, id_personal) {
@@ -613,6 +624,86 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
+    function combo_representante_empresa(seleccion,id_emp){
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_representante_empresa?id_empresaci="+id_emp,
+            type: "post",
+            dataType: "html",
+            data: {id : seleccion}
+        })
+        .done(function(res){
+            $.when($('#div_combo_representante_empresa').html(res)).then(function( data, textStatus, jqXHR ) {
+                $("#representante_empresa").select2({
+                    'minimumInputLength': 3,
+                    'language': {
+                        noResults: function () {
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo representante" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo representante</a></div>';
+                        }
+                    }, 'escapeMarkup': function (markup) { return markup; }
+                });
+            });
+        });
+    }
+
+    function combo_defensores(seleccion){
+        $.ajax({
+            async: true,
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/combo_defensores",
+            type: "post",
+            dataType: "html",
+            data: {id : seleccion}
+        })
+        .done(function(res){
+            $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
+                $("#defensor").select2({
+                    'minimumInputLength': 3,
+                    'language': {
+                        noResults: function () {
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
+                        }
+                    }, 'escapeMarkup': function (markup) { return markup; }
+                });
+            });
+        });
+    }
+
+    function combo_delega2(seleccion){
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delega2",
+            type: "post",
+            dataType: "html",
+            data: {id : seleccion}
+        }) .done(function(res){
+            $('#div_combo_delegado2').html(res);
+            $("#delegado").select2();
+            // $('#dui_representante').inputmask('99999999-9');
+        });
+    }
+
+    function cerrar_combo_defensores() {
+        $("#defensor").select2('close');
+    }
+
+    function cerrar_combo_representante() {
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_representante",
+            type: "post",
+            dataType: "html"
+        }) .done(function(res){
+            $('#cnt_modal_acciones').html(res);
+            combo_profesiones();
+            combo_municipio2();
+            combo_estados_civiles();
+            $('#modal_representante').modal('show');
+        });
+
+        $("#representante_empresa").select2('close');
+    }
+
+
+
 </script>
 
 <div class="page-wrapper">
@@ -723,7 +814,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Fecha del Conflicto: <span class="text-danger">*</span></h5>
                                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
-                                            id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy">
+                                            id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <div class="help-block"></div>
                                     </div>
 
@@ -791,10 +882,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <button id="btn_volver" type="button" class="btn waves-effect waves-light btn-default" onclick="volver(2)"><i class="mdi mdi-chevron-left"></i> Volver</button>
                             </div>
                             <div align="right" id="btnadd2" class="pull-right">
-                                <button type="button" onclick="cerrar_mantenimiento();" class="btn waves-effect waves-light btn-success2">Finalizar <i class="mdi mdi-chevron-right"></i></button>
+                                <button type="button" onclick="abrir_audiencia_paso();" class="btn waves-effect waves-light btn-success2">Finalizar <i class="mdi mdi-chevron-right"></i></button>
                             </div>
                             <div align="right" id="btnedit2" style="display: none;" class="pull-right">
-                                <button type="button" onclick="cerrar_mantenimiento();" class="btn waves-effect waves-light btn-info">Finalizar <i class="mdi mdi-chevron-right"></i></button>
+                                <button type="button" onclick="abrir_audiencia_paso();" class="btn waves-effect waves-light btn-info">Finalizar <i class="mdi mdi-chevron-right"></i></button>
                             </div>
 
                         </div>
@@ -806,7 +897,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
             </div>
 
-            <div class="col-lg-10" id="cnt_actions" style="display:none;"></div>
+            <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
                 <div class="card">
@@ -1060,6 +1151,72 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
 </div>
 <!--FIN MODAL DE ESTADO -->
+
+<!--INICIA MODAL DE PROCURADOR -->
+<div class="modal fade" id="modal_defensores" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <?php echo form_open('', array('id' => 'formajax8', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band6" name="band6" value="save">
+          <input type="hidden" id="id_procuradorci" name="id_procuradorci" value="">
+          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
+            <div class="modal-header">
+                <h4 class="modal-title">Defensores legales</h4>
+            </div>
+            <div class="modal-body" id="">
+              <div class="row">
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Nombres del representante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres del representante" required>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos del representante" required>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>DUI de representante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_representante"></div>
+
+                <div class="form-group col-lg-8 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Acreditaci&oacute;n: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <textarea type="text" id="acreditacion_representante_persona" name="acreditacion_representante_persona" class="form-control" required></textarea>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="submit" id="submit4" class="btn btn-info waves-effect text-white">Aceptar</button>
+            </div>
+          <?php echo form_close(); ?>
+    </div>
+  </div>
+</div>
+<!--FIN MODAL DE PROCURADOR -->
 
 <div id="cnt_modal_acciones"></div>
 
