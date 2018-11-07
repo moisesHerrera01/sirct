@@ -5,7 +5,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array('Expediente_cc_model', 'Persona_cc_model', 'Representante_cc_model','solicitudes_model'));
+		$this->load->model(array('Expediente_cc_model', 'Persona_cc_model', 'Representante_cc_model', 'solicitudes_model', 'establecimiento_model'));
 	}
 
 	public function index(){
@@ -259,6 +259,14 @@ class Solicitud_indemnizacion extends CI_Controller {
 	public function gestionar_inhabilitar_expediente()
 	{
 		# code...
+	}
+
+	public function modal_representante() {
+		echo $this->load->view('conflictos_colectivos/solicitud_indemnizacion_ajax/modal_representante', array(), true);
+	}
+
+	public function obtener_respresentante_mayor() {
+		echo json_encode($this->establecimiento_model->obtener_respresentante_mayor( $this->input->post('id') )->row_array());
 	}
 
 }

@@ -27,6 +27,20 @@ class Establecimiento_model extends CI_Model {
 				return FALSE;
 			}
 		}
+
+		public function obtener_respresentante_mayor($id) {
+			$this->db->select('a.id_representante, nombres_representante')
+				->from('sge_representante a')
+				->where("id_representante = ( 
+						SELECT max(b.id_representante) FROM sge_representante b WHERE b.id_empresa = $id
+					)");
+			$query=$this->db->get();
+			if ($query->num_rows() > 0) {
+				return  $query;
+			}else{
+				return FALSE;
+			}
+		}
 		
 }
 

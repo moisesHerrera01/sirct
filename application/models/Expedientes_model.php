@@ -131,7 +131,6 @@ class Expedientes_model extends CI_Model {
 						 ->group_by('e.id_expedienteci')
 						 ->where('e.id_expedienteci', $id);
 	  $query=$this->db->get();
-	  //print $this->db->get_compiled_select();
       if ($query->num_rows() > 0) {
           return $query;
       }

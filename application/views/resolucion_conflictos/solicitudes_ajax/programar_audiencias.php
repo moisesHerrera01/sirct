@@ -74,6 +74,8 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
                             echo MB_STRTOUPPER($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
                         }if ($expediente->tiposolicitud_expedienteci == "Diferencia Laboral") {
                             echo MB_STRTOUPPER($expediente->nombre_sindicato);
+                        }else {
+                            echo MB_STRTOUPPER($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
                         }?></h5>
                         </div>
                       </div>
