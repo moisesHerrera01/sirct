@@ -8,6 +8,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 <script type="text/javascript">
     function iniciar() {
+        <?php if(isset($band_mantto)){ ?>
+          cambiar_nuevo();
+        <?php } ?>
         <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
         tablasolicitudes();
         <?php }else{ ?>

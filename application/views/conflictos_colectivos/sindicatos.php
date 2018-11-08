@@ -15,6 +15,10 @@ function nav(value) {
 
 function iniciar(){
 
+    <?php if(isset($band_mantto)){ ?>
+      cambiar_nuevo();
+    <?php } ?>
+
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
     combo_delegado_tabla();
     <?php }else{ ?>
