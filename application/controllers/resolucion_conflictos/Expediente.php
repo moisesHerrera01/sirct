@@ -37,11 +37,13 @@ class Expediente extends CI_Controller {
 								'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
 								'ocupacion' => $this->input->post('ocupacion')
             );
-						$id_empleador = $this->empleadores_model->insertar_empleador($data3);
+						if ($this->input->post('nombres_jefe')!='') {
+							$id_empleador = $this->empleadores_model->insertar_empleador($data3);
+							if ("fracaso" != $id_empleador) {
+									$data2['id_empleador'] = $id_empleador;
+							}
+						}
 
-            if ("fracaso" != $id_empleador) {
-								$data2['id_empleador'] = $id_empleador;
-            }
 						$data = array(
 							'id_representantepersonaci'=>$this->input->post('id_representante_persona')
 						 );

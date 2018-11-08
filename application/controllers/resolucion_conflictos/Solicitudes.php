@@ -58,9 +58,11 @@ class Solicitudes extends CI_Controller {
 				'asiento_partida' =>$this->input->post('asiento_partida'),
 				'anio_partida' =>$this->input->post('numero_partida')
 			 );
+			if ($this->input->post('numero_partida')!='') {
+				$id_partida = $this->solicitudes_model->insertar_partida($data2);
+				$data['id_partida'] = $id_partida;
+			}
 
-			$id_partida = $this->solicitudes_model->insertar_partida($data2);
-			$data['id_partida'] = $id_partida;
 
 			echo $this->solicitudes_model->insertar_solicitud($data);
 

@@ -17,7 +17,7 @@ class Expedientes_model extends CI_Model {
 
 	public function obtener_registros_expedientes($id_expedienteci,$id_audiencia=FALSE) {
 
-			$this->db->select('pa.*,n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,emp.*,ep.*,p.*,
+			$this->db->select('pa.*,n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,ep.*,p.*,
 												 p.discapacidad,
 												 e.id_expedienteci,
 												 e.ocupacion,
@@ -32,7 +32,11 @@ class Expedientes_model extends CI_Model {
 												 tr.tipo_representante tipo_representante_empresa,
 												 ec.estado_civil estado_civil_representante,
 												 ta.titulo_academico profesion_representante,
-												 CONCAT_WS(" ",ea.primer_nombre,ea.segundo_nombre,ea.tercer_nombre,ea.primer_apellido,ea.segundo_apellido,ea.apellido_casada) delegado_audiencia'
+												 CONCAT_WS(" ",ea.primer_nombre,ea.segundo_nombre,ea.tercer_nombre,ea.primer_apellido,ea.segundo_apellido,ea.apellido_casada) delegado_audiencia,
+												 emp.id_empleador,
+												 emp.nombre_empleador,
+												 emp.apellido_empleador,
+												 emp.cargo_empleador'
 											  )
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
@@ -57,7 +61,7 @@ class Expedientes_model extends CI_Model {
 		 		$this->db->where('f.id_fechasaudienciasci',$id_audiencia);
 		 	}
 			$this->db->group_by('e.id_expedienteci')
-						 ->where('f.estado_audiencia',1);
+						 ->where('f.estado_audiencia>0');
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {
 					return  $query;

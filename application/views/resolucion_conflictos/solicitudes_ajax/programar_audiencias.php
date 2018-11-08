@@ -70,9 +70,9 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
                         <small class="text-muted db">Nombre de solicitante</small>
                         <h5><?php if($expediente->tiposolicitud_expedienteci == "conciliacion juridica"){
                             echo MB_STRTOUPPER($expediente->nombre_empresa);
-                        }if ($expediente->tiposolicitud_expedienteci == "Conciliación" || $expediente->tiposolicitud_expedienteci == "Renuncia Voluntaria" ) {
+                        }elseif ($expediente->tiposolicitud_expedienteci == "Conciliación" || $expediente->tiposolicitud_expedienteci == "Renuncia Voluntaria" ) {
                             echo MB_STRTOUPPER($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
-                        }if ($expediente->tiposolicitud_expedienteci == "Diferencia Laboral") {
+                        }elseif ($expediente->tiposolicitud_expedienteci == "Diferencia Laboral") {
                             echo MB_STRTOUPPER($expediente->nombre_sindicato);
                         }else {
                             echo MB_STRTOUPPER($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
@@ -174,8 +174,12 @@ function eliminar_audiencia(){
  }
 
  function finalizar(){
-   cerrar_mantenimiento();
-   swal({ title: "¡Programación de horarios exitosa!", type: "success", showConfirmButton: true });
+   if ($("#myTable2 tbody tr").length>=2) {
+     cerrar_mantenimiento();
+     swal({ title: "¡Programación de horarios exitosa!", type: "success", showConfirmButton: true });
+   }else {
+     swal({ title: "¡Se deben programar dos audiencias!", type: "warning", showConfirmButton: true });
+   }
  }
 
  function cambiar(){
@@ -294,6 +298,7 @@ $(function(){
                   }else {
                     cambiar_nuevo5();
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                    $('#formajax6').trigger("reset");
                     cambiar();
                   }
                 }else if($("#band4").val() == "edit"){

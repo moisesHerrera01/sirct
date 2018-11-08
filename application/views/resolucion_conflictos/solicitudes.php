@@ -200,7 +200,7 @@ function cambiar_update_post(id_personaci,bandera){
       combo_delegado('');
       combo_actividad_economica();
       combo_municipio();
-      $("#id_empleador").val($("#id_empleador").val()).trigger('change.select2');
+      $("#id_empleador").val('');
       $("#nombres_jefe").val('');
       $("#ocupacion").val('');
       $("#apellidos_jefe").val('');
@@ -868,7 +868,7 @@ function cambiar_nuevo(){
     combo_delegado('');
     combo_actividad_economica();
     combo_municipio();
-    $("#id_empleador").val($("#id_empleador").val()).trigger('change.select2');
+    $("#id_empleador").val('');
     $("#nombres_jefe").val('');
     $("#ocupacion").val('');
     $("#apellidos_jefe").val('');
@@ -1136,7 +1136,6 @@ function volver(num) {
                             <input type="hidden" id="band1" name="band1" value="save">
                             <input type="hidden" id="estado" name="estado" value="1">
                             <input type="hidden" id="id_personaci" name="id_personaci" value="">
-                            <input type="hidden" id="id_empleador" name="id_empleador" value="">
                             <input type="hidden" id="id_partida" name="id_partida" value="">
 
                             <span class="etiqueta">Expediente</span>
@@ -1428,6 +1427,7 @@ function volver(num) {
                                 <input type="hidden" id="id_emplea" name="id_emplea" value="">
                                 <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="">
                                 <input type="hidden" id="fecha_creacion_exp" name="fecha_creacion_exp" value="">
+                                <input type="hidden" id="id_empleador" name="id_empleador" value="">
 
                               </h3><hr class="m-t-0 m-b-30">
                               <span class="etiqueta">Expediente</span>
