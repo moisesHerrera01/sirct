@@ -36,7 +36,10 @@
                           }
                           if($fila->estado_audiencia == 0){
                               echo '<td><span class="label label-danger">Inactiva</span></td>';
-                          }else{
+                          }elseif ($fila->estado_audiencia == 2) {
+                              echo '<td><span class="label label-success">Con resultado</span></td>';
+                          }
+                          else{
                               echo '<td><span class="label label-success">Activa</span></td>';
                           }
 
@@ -47,41 +50,35 @@
 
                           $resultado = array($fila->id_expedienteci, $fila->id_fechasaudienciasci);
 
-                          if ($fila->estado_audiencia) {
-                            if(tiene_permiso($segmentos=2,$permiso=4)){
-                              array_push($array, "edit");
-                              echo generar_boton($array,"cambiar_editar5","btn-info","fa fa-wrench","Editar");
-                            }
+                          $actas = array($fila->id_expedienteci,$fila->cuenta,$fila->tipo_pago,$fila->asistieron,$fila->estado,$fila->id_fechasaudienciasci,$fila->resultado);
 
-                            if(tiene_permiso($segmentos=2,$permiso=1)){
-                              unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
-                              array_push($array, "delete");
-                                echo generar_boton($array,"cambiar_editar5","btn-danger","fa fa-times","Eliminar");
-                            }
+                          switch ($fila->estado_audiencia) {
+                            case '1':
+                              if(tiene_permiso($segmentos=2,$permiso=4)){
+                                array_push($array, "edit");
+                                echo generar_boton($array,"cambiar_editar5","btn-info","fa fa-wrench","Editar");
+                              }
+                              if(tiene_permiso($segmentos=2,$permiso=1)){
+                                unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
+                                array_push($array, "delete");
+                                  echo generar_boton($array,"cambiar_editar5","btn-danger","fa fa-times","Eliminar");
+                              }
+                              if(tiene_permiso($segmentos=2,$permiso=4)){
+                                array_push($resultado,"");
+                                echo generar_boton($resultado,"resolucion","btn-success2","fa fa-check","Resultado");
+                              }
+                            break;
+                            case '2':
+                              if ($tipo==1) {
+                                if(tiene_permiso($segmentos=2,$permiso=4)){
+                                  array_push($actas,"");
+                                  echo generar_boton($actas,"modal_actas_tipo","btn-success2","fa fa-file","Generar actas");
+                                }
+                              }
+                              break;
+                            default:
+                              break;
                           }
-                          if ($tipo==1) {
-                          ?>
-                          <div class="btn-group">
-                              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                                  aria-expanded="false">
-                                  <i class="ti-settings"></i>
-                              </button>
-                              <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                  <a class="dropdown-item" href="javascript:;" onClick="modal_actas_tipo(<?=$fila->id_expedienteci.','.$fila->cuenta.',\''.$fila->tipo_pago.'\','.$fila->asistieron.','.$fila->estado.','.$fila->id_fechasaudienciasci.','.$fila->resultado?>)">Generar acta por tipo</a>
-                                  <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci.','.$fila->id_fechasaudienciasci?>)">Registrar resolución</a>
-                              </div>
-                          </div>
-                          <?php
-                        }else {
-                          if ($fila->estado_audiencia) {
-                            if(tiene_permiso($segmentos=2,$permiso=4)){
-                              array_push($resultado,"");
-                              echo generar_boton($resultado,"resolucion","btn-success2","fa fa-check","Resultado");
-                            }
-                        }
-                          echo "</td>";
-                          echo "</tr>";
-                        }
                     }
                   }
                 ?>

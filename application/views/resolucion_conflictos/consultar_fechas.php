@@ -10,7 +10,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <script>
 function iniciar(){
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-    tabla_calendario();
+    // tabla_calendario();
+    combo_delegado_tabla();
     <?php }else{ ?>
         $("#cnt_calendario").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
@@ -56,6 +57,27 @@ function tabla_calendario(){
         editable:true
     })
 }
+
+function combo_delegado_tabla(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado_tabla",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_delegado_tabla').html(res);
+    <?php if(obtener_rango($segmentos=2, $permiso=1)>1){?>
+            $("#nr_search").select2();
+      <?php } ?>
+    tablasolicitudes();
+  });
+}
+
+function tablasolicitudes(){
+  tabla_calendario();
+}
 </script>
 
 <input type="hidden" id="address" name="">
@@ -98,23 +120,7 @@ function tabla_calendario(){
                     <div class="card-body b-t" style="padding-top: 7px;">
                     <div>
                         <div class="pull-left">
-                            <div class="form-group" style="width: 400px;">
-                                <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tabla_calendario();">
-                                    <option value="">[Todos los empleados]</option>
-                                <?php
-                                    $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
-                                    if($otro_empleado->num_rows() > 0){
-                                        foreach ($otro_empleado->result() as $fila) {
-                                            if($nr_usuario == $fila->nr){
-                                               echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }else{
-                                                echo '<option class="m-l-50" value="'.$fila->nr.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }
-                                        }
-                                    }
-                                ?>
-                                </select>
-                            </div>
+                            <div class="form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado_tabla" style="width: 400px;"></div>
                         </div>
                     <div class="row" style="width: 100%"></div>
                     </div>

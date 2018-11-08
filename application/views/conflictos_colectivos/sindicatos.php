@@ -36,7 +36,9 @@ function combo_delegado_tabla(seleccion){
   })
   .done(function(res){
     $('#div_combo_delegado_tabla').html(res);
-    $("#nr_search").select2();
+    <?php if(obtener_rango($segmentos=2, $permiso=1)>1){?>
+            $("#nr_search").select2();
+      <?php } ?>
     tablasolicitudes();
   });
 }

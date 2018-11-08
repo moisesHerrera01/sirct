@@ -133,7 +133,7 @@ class Audiencias extends CI_Controller {
 		$data['inasistencia'] = $this->input->post('inasistencia');
 		$data['numero_folios'] = $this->input->post('numero_folios');
 		$data['asistieron'] = $this->input->post('asistieron');
-
+		$data['estado_audiencia'] = '2';
 		$resultado = $this->audiencias_model->editar_audiencia($data);
 		echo $resultado;
 		if ($resultado == "exito") {
