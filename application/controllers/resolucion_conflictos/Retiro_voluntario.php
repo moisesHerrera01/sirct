@@ -70,7 +70,7 @@ class Retiro_voluntario extends CI_Controller {
                 'id_representanteci' => $this->input->post('id_representanteci'),
                 'id_estadosci' => 1,
                 'fechacrea_expedienteci' => $fecha_actual,
-                'tiposolicitud_expedienteci' => "Renuncia Voluntaria",
+                'tiposolicitud_expedienteci' => "2",
                 'numerocaso_expedienteci' =>10,
                 'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_preaviso'))),
                 'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),
@@ -90,7 +90,7 @@ class Retiro_voluntario extends CI_Controller {
                 'id_empresaci' => $this->input->post('establecimiento'),
                 'id_representanteci' => $this->input->post('id_representanteci'),
                 'fechacrea_expedienteci' => $fecha_actual,
-                'tiposolicitud_expedienteci' =>"Renuncia Voluntaria",
+                'tiposolicitud_expedienteci' =>"2",
                 'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_preaviso'))),
                 'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),   
                 'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo')

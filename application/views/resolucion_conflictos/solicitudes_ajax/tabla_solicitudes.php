@@ -31,7 +31,9 @@
                                               e.numerocaso_expedienteci AS numero,
                                               ep.nombre_empresa,
                                               e.id_empresaci,
-                                              e.tiposolicitud_expedienteci AS tipo,
+                                              CASE
+                                                WHEN e.tiposolicitud_expedienteci=1 THEN 'Persona natural'
+                                                ELSE e.tiposolicitud_expedienteci END AS tipo,
                                               e.resultado_expedienteci AS resultado,
                                               e.fechacrea_expedienteci AS fecha,
                                               e.tipocociliacion_expedienteci AS tipo_conciliacion,
@@ -48,8 +50,7 @@
                                               LEFT JOIN sge_empleador em ON em.id_empleador=e.id_empleador
                                               JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
                                               JOIN sir_empleado l on l.id_empleado=e.id_personal
-                                              ".$add." ORDER BY e.id_expedienteci DESC");
-
+                                              ".$add." WHERE tiposolicitud_expedienteci=1 ORDER BY e.id_expedienteci DESC");
                     if($solicitudes->num_rows() > 0){
                         foreach ($solicitudes->result() as $fila) {
                           echo "<tr>";

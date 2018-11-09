@@ -63,7 +63,7 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_representanteci' => $data['id_representanteci'],
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
 			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
-			'tiposolicitud_expedienteci' => 'conciliacion juridica',
+			'tiposolicitud_expedienteci' => '3',
 			'id_estadosci' => '1',
 			'fechacrea_expedienteci' => date("Y-m-d H:i:s")
 		))){

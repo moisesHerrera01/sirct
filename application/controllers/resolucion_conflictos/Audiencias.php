@@ -15,9 +15,9 @@ class Audiencias extends CI_Controller {
 
 	public function reprogramar_audiencia(){
 		$exp = $this->expedientes_model->obtener_expediente($this->input->post('id'))->result_array()[0];
-		if ($exp['tiposolicitud_expedienteci'] == 'Renuncia Voluntaria') {
+		if ($exp['tiposolicitud_expedienteci'] == '2') {
 			$audiencia = $this->audiencias_model->obtener_audiencias($this->input->post('id'),1,1)->result_array()[0];
-		}elseif ($exp['tiposolicitud_expedienteci'] == 'Conciliación') {
+		}elseif ($exp['tiposolicitud_expedienteci'] == '1') {
 			$audiencia = $this->audiencias_model->obtener_audiencias($this->input->post('id'),2,1)->result_array()[0];
 		}
 
@@ -77,13 +77,13 @@ class Audiencias extends CI_Controller {
 				}else {
 					$numero = 0;
 				}
-				if ($exp['tiposolicitud_expedienteci'] == 'Renuncia Voluntaria') {
+				if ($exp['tiposolicitud_expedienteci'] == '2') {
 						if ($numero>=1) {
 						echo 'reprogramar';
 						}else {
 						echo $this->audiencias_model->insertar_audiencia($data);
 					}
-				}elseif($exp['tiposolicitud_expedienteci'] == 'Conciliación' || $exp['tiposolicitud_expedienteci'] == 'conciliacion juridica' || $exp['tiposolicitud_expedienteci'] == 'Diferencia Laboral') {
+				}elseif($exp['tiposolicitud_expedienteci'] == '1' || $exp['tiposolicitud_expedienteci'] == '3' || $exp['tiposolicitud_expedienteci'] == '4') {
 						if ($numero>=2) {
 						echo 'reprogramar';
 						}else {

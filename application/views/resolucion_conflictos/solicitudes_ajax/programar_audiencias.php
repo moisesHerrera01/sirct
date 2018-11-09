@@ -68,11 +68,11 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
 
                         <div class="form-group col-lg-5" style="height: 20px;">
                         <small class="text-muted db">Nombre de solicitante</small>
-                        <h5><?php if($expediente->tiposolicitud_expedienteci == "conciliacion juridica"){
+                        <h5><?php if($expediente->tiposolicitud_expedienteci == "3"){
                             echo MB_STRTOUPPER($expediente->nombre_empresa);
-                        }elseif ($expediente->tiposolicitud_expedienteci == "Conciliación" || $expediente->tiposolicitud_expedienteci == "Renuncia Voluntaria" ) {
+                        }elseif ($expediente->tiposolicitud_expedienteci == "1" || $expediente->tiposolicitud_expedienteci == "2" ) {
                             echo MB_STRTOUPPER($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
-                        }elseif ($expediente->tiposolicitud_expedienteci == "Diferencia Laboral") {
+                        }elseif ($expediente->tiposolicitud_expedienteci == "4") {
                             echo MB_STRTOUPPER($expediente->nombre_sindicato);
                         }else {
                             echo MB_STRTOUPPER($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
@@ -88,6 +88,7 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
                 <hr class="m-t-0 m-b-30">
 
                 <input type="hidden" id="id_expedienteci1" name="id_expedienteci1" value="<?=$expediente->id_expedienteci?>">
+                <input type="hidden" id="tipo_solicitud" name="tipo_solicitud" value="<?=$expediente->tiposolicitud_expedienteci?>">
                 <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value= "">
                 <input type="hidden" id="band4" name="band4" value="save">
 
@@ -174,11 +175,22 @@ function eliminar_audiencia(){
  }
 
  function finalizar(){
-   if ($("#myTable2 tbody tr").length>=2) {
-     cerrar_mantenimiento();
-     swal({ title: "¡Programación de horarios exitosa!", type: "success", showConfirmButton: true });
+   if ($("#tipo_solicitud").val()==2) {
+     if ($("#myTable2 tbody tr td").length>=6) {
+       // alert($("#myTable2 tbody tr td").length)
+       cerrar_mantenimiento();
+       swal({ title: "¡Programación de horarios exitosa!", type: "success", showConfirmButton: true });
+     }else {
+       swal({ title: "¡Se deben programar una audiencia!", type: "warning", showConfirmButton: true });
+     }
    }else {
-     swal({ title: "¡Se deben programar dos audiencias!", type: "warning", showConfirmButton: true });
+     if ($("#myTable2 tbody tr td").length>=12) {
+      // alert($("#myTable2 tbody tr td").length)
+       cerrar_mantenimiento();
+       swal({ title: "¡Programación de horarios exitosa!", type: "success", showConfirmButton: true });
+     }else {
+       swal({ title: "¡Se deben programar dos audiencias!", type: "warning", showConfirmButton: true });
+     }
    }
  }
 

@@ -44,7 +44,13 @@ class Audiencias_model extends CI_Model {
 
 	public function obtener_audiencias_delegado($id_delegado,$fecha=FALSE,$hora=FALSE,$tipo=FALSE) {
 		$this->db->select('s.nombre_sindicato,e.motivo_expedienteci,e.numerocaso_expedienteci,f.id_expedienteci,f.id_fechasaudienciasci,
-												f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci,e.tiposolicitud_expedienteci,
+												f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci,tiposolicitud_expedienteci,
+												(CASE WHEN e.tiposolicitud_expedienteci=1 THEN "Persona natural"
+													WHEN e.tiposolicitud_expedienteci=2 THEN "Retiro voluntario"
+													WHEN e.tiposolicitud_expedienteci=3 THEN "Persona jurídica"
+													WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
+													WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
+													ELSE e.tiposolicitud_expedienteci END) AS tipo,
 												CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) delegado,
 												CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
 					->from('sct_fechasaudienciasci f')

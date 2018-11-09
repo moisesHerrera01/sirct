@@ -31,7 +31,9 @@
                                               e.numerocaso_expedienteci AS numero,
                                               ep.nombre_empresa,
                                               e.id_empresaci,
-                                              e.tiposolicitud_expedienteci AS tipo,
+                                              CASE
+                                                WHEN e.tiposolicitud_expedienteci=2 THEN 'Renuncia Voluntaria'
+                                                ELSE e.tiposolicitud_expedienteci END AS tipo,
                                               e.resultado_expedienteci AS resultado,
                                               e.fechacrea_expedienteci AS fecha,
                                               p.nombre_personaci,
@@ -44,7 +46,7 @@
                                               JOIN sct_personaci p ON p.id_personaci=e.id_personaci
                                               JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
                                               JOIN sir_empleado l ON l.id_empleado=e.id_personal
-                                              ".$add." AND e.tiposolicitud_expedienteci = 'Renuncia Voluntaria' ORDER BY e.id_expedienteci DESC");
+                                              ".$add." AND e.tiposolicitud_expedienteci = '2' ORDER BY e.id_expedienteci DESC");
 
                     if($solicitudes->num_rows() > 0){
                         foreach ($solicitudes->result() as $fila) {

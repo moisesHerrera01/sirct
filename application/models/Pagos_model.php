@@ -26,7 +26,14 @@ class Pagos_model extends CI_Model {
 
 	public function obtener_pagos_delegado($id_delegado,$tipo=FALSE) {
 	  	$this->db->select('s.nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
-			e.tiposolicitud_expedienteci,CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
+			e.tiposolicitud_expedienteci,
+			(CASE WHEN e.tiposolicitud_expedienteci=1 THEN "Persona natural"
+				WHEN e.tiposolicitud_expedienteci=2 THEN "Retiro voluntario"
+				WHEN e.tiposolicitud_expedienteci=3 THEN "Persona jurídica"
+				WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
+				WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
+				ELSE e.tiposolicitud_expedienteci END) AS tipo,
+			CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
 			CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
 				->from('sct_fechaspagosci f')
 				->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
@@ -46,7 +53,14 @@ class Pagos_model extends CI_Model {
 		$sql[] = '('.$this->db->get_compiled_select().')';
 
 		$this->db->select('p.apellido_personaci nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
-			e.tiposolicitud_expedienteci,CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
+			e.tiposolicitud_expedienteci,
+			(CASE WHEN e.tiposolicitud_expedienteci=1 THEN "Persona natural"
+				WHEN e.tiposolicitud_expedienteci=2 THEN "Retiro voluntario"
+				WHEN e.tiposolicitud_expedienteci=3 THEN "Persona jurídica"
+				WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
+				WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
+				ELSE e.tiposolicitud_expedienteci END) AS tipo,
+			CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
 			CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
 				->from('sct_fechaspagosci f')
 				->join('sct_personaci p', 'p.id_personaci = f.id_persona')

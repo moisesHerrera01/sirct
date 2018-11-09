@@ -19,7 +19,7 @@ class Diferencias_laborales extends CI_Controller {
 								'id_empresaci' => $this->input->post('establecimiento'),
 								'id_estadosci' => 1,
 								'fechacrea_expedienteci' => $fecha_actual,
-								'tiposolicitud_expedienteci' =>"Diferencia Laboral",
+								'tiposolicitud_expedienteci' =>"4",
             );
 
 						$id_expedienteci = $this->expediente_cc_model->insertar_expediente($data2);
