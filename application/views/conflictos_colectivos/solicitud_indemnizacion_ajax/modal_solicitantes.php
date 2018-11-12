@@ -520,7 +520,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
 
     function cambiar_nuevo_solicitante() {
-        open_form(1);
 
         $('#band4').val('save');
         $('#band5').val('save');

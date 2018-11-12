@@ -57,14 +57,14 @@ class Audiencias extends CI_Controller {
 	public function gestionar_audiencia(){
 		if($this->input->post('band4') == "save"){
 			$data = array(
-			'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
-			'hora_fechasaudienciasci' => date("H:i:s",strtotime($this->input->post('hora_audiencia'))),
-			'id_expedienteci' => $this->input->post('id_expedienteci1'),
-			'numero_fechasaudienciasci' => $this->input->post('numero_audiencia'),
-			'estado_audiencia' => 1,
-			'id_defensorlegal' => $this->input->post('defensor'),
-			'id_representaci' => $this->input->post('representante_empresa'),
-			'id_delegado' => $this->input->post('delegado')
+				'fecha_fechasaudienciasci' => date("Y-m-d",strtotime($this->input->post('fecha_audiencia'))),
+				'hora_fechasaudienciasci' => date("H:i:s",strtotime($this->input->post('hora_audiencia'))),
+				'id_expedienteci' => $this->input->post('id_expedienteci1'),
+				'numero_fechasaudienciasci' => $this->input->post('numero_audiencia'),
+				'estado_audiencia' => 1,
+				'id_defensorlegal' => $this->input->post('defensor'),
+				'id_representaci' => $this->input->post('representante_empresa'),
+				'id_delegado' => $this->input->post('delegado')
 			);
 			$exp = $this->expedientes_model->obtener_expediente($data['id_expedienteci'])->result_array()[0];
 			$resultado = $this->audiencias_model->obtener_audiencias_delegado($exp['nr'],$data['fecha_fechasaudienciasci'],$data['hora_fechasaudienciasci']);
@@ -85,9 +85,9 @@ class Audiencias extends CI_Controller {
 					}
 				}elseif($exp['tiposolicitud_expedienteci'] == '1' || $exp['tiposolicitud_expedienteci'] == '3' || $exp['tiposolicitud_expedienteci'] == '4') {
 						if ($numero>=2) {
-						echo 'reprogramar';
+							echo 'reprogramar';
 						}else {
-						echo $this->audiencias_model->insertar_audiencia($data);
+							echo $this->audiencias_model->insertar_audiencia($data);
 					}
 				}
 			}

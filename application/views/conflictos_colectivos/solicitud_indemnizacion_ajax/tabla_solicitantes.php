@@ -51,9 +51,9 @@
 
                                 array_pop($array);
 
-                                echo generar_boton($array,"resultado","btn-info","mdi mdi-checkbox-marked","Registrar Resultado");
+                                echo ($fila->estado_audiencia == 2) ? generar_boton($array,"resultado","btn-info","mdi mdi-checkbox-marked","Registrar Resultado") : '' ;
 
-                                echo generar_boton($array,"pagos","btn-info","mdi mdi-square-inc-cash","Gestionar Pagos");
+                                echo ($fila->estado_audiencia == 2) ? generar_boton($array,"pagos","btn-info","mdi mdi-square-inc-cash","Gestionar Pagos") : '';
 
                                 if($fila->estado_persona == "1"){
                                     echo generar_boton($array,"desactivar","btn-danger","fa fa-chevron-down","Dar de baja");
