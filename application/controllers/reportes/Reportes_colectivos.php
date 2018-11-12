@@ -302,12 +302,12 @@ class Reportes_colectivos extends CI_Controller {
 					fecha_ESP($rows->fechacrea_expedienteci),
 					$rows->resultado_expedienteci,
 					implode(" ", array($rows->primer_nombre, $rows->segundo_nombre, $rows->tercer_nombre, $rows->primer_apellido, $rows->segundo_apellido, $rows->apellido_casada)),
-					$rows->anios16,
-					$rows->anios30,
-					$rows->anios50,
-					$rows->numerocaso_expedienteci,
-					$rows->numerocaso_expedienteci,
-					$rows->numerocaso_expedienteci
+					$rows->aniosm16,
+					$rows->aniosm30,
+					$rows->aniosm50,
+					$rows->aniosf16,
+					$rows->aniosf30,
+					$rows->aniosf50
 				);
 
 				$cuerpo .= table_row($cell_row);
@@ -379,12 +379,12 @@ class Reportes_colectivos extends CI_Controller {
 					fecha_ESP($rows->fechacrea_expedienteci),
 					$rows->resultado_expedienteci,
 					implode(" ", array($rows->primer_nombre, $rows->segundo_nombre, $rows->tercer_nombre, $rows->primer_apellido, $rows->segundo_apellido, $rows->apellido_casada)),
-					$rows->anios16,
-					$rows->numerocaso_expedienteci,
-					$rows->numerocaso_expedienteci,
-					$rows->numerocaso_expedienteci,
-					$rows->numerocaso_expedienteci,
-					$rows->numerocaso_expedienteci
+					$rows->aniosm16,
+					$rows->aniosm30,
+					$rows->aniosm50,
+					$rows->aniosf16,
+					$rows->aniosf30,
+					$rows->aniosf50
 				);
 
 				$f = PhpExcelAddRowTable($this->objPHPExcel, $cell_row, $letradesde, $letrahasta, $f, $estilo);
