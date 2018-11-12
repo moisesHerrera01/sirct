@@ -169,4 +169,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	 	return $cabecera_vista;
 	}
 
+	function no_rows($cant){
+		$cabecera_vista = '<tr>';
+		$cabecera_vista .= '<td colspan="'.$cant.'" align="center">NO HAY REGISTROS DISPONIBLES...</td>';
+		$cabecera_vista .= '</tr>';
+
+	 	return $cabecera_vista;
+	}
+
 ?>

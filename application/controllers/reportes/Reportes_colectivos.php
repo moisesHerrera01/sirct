@@ -123,7 +123,11 @@ class Reportes_colectivos extends CI_Controller {
 					"$ ".number_format($rows->monto_masc+$rows->monto_feme,2,'.',','),
 					$rows->numerocaso_expedienteci,
 				);
+
+				$cuerpo .= table_row($cell_row);
 			}
+		}else{
+			$cuerpo .= no_rows(count($titles_head));
 		}
 		$cuerpo .= table_footer();
 
@@ -308,6 +312,8 @@ class Reportes_colectivos extends CI_Controller {
 
 				$cuerpo .= table_row($cell_row);
 			}
+		}else{
+			$cuerpo .= no_rows(count($titles_head));
 		}
 
 		$cuerpo .= table_footer();
