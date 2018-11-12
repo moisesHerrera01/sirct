@@ -89,13 +89,17 @@ class Reportes_colectivos_model extends CI_Model {
 												 d.departamento,
 												 ecc.numerocaso_expedienteci,
 												 ecc.fechaconflicto_personaci,
-												 (select max(fea.id_fechasaudienciasci) from sct_fechasaudienciasci fea where fea.id_expedienteci=ecc.id_expedienteci AND estado_audiencia=1) fecha_fin,
+												 (SELECT MAX(fea.id_fechasaudienciasci) FROM sct_fechasaudienciasci fea WHERE fea.id_expedienteci=ecc.id_expedienteci AND estado_audiencia=1) fecha_fin,
 												 CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) solicitante,
-												 (select count(pe.id_personaci) from sct_personaci pe where pe.id_expedienteci=ecc.id_expedienteci AND pe.sexo="M") masculino,
-												 (select count(pe.id_personaci) from sct_personaci pe where pe.id_expedienteci=ecc.id_expedienteci AND pe.sexo="F") femenino,
+												 (SELECT COUNT(pe.id_personaci) FROM sct_personaci pe WHERE pe.id_expedienteci=ecc.id_expedienteci AND pe.sexo="M") masculino,
+												 (SELECT COUNT(pe.id_personaci) FROM sct_personaci pe WHERE pe.id_expedienteci=ecc.id_expedienteci AND pe.sexo="F") femenino,
 												 CASE
-													 WHEN e.tiposolicitud_expedienteci=5 THEN Indemnización y Prestaciones Laborales
+													 WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
+													 WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
+													 WHEN e.tiposolicitud_expedienteci=6 THEN "Renuncia Volutaria Multiple"
 													 ELSE e.tiposolicitud_expedienteci END AS tipo,
+												 ciiu.actividad_catalogociiu actividad_economica,
+												 e.resultado_expedienteci resultado,
 
 											  ')
 						   ->from('sct_expedienteci ecc')

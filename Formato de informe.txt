@@ -1,0 +1,15 @@
+/************************ REQUERIMIENTOS *******************/
+
+-Denominacion del sistema
+-Objetivo
+-Acciones que se tomaron como equipo
+-Resultado a la fecha
+-Beneficios obtenidos (como # de personas)
+-Limitaciones	 (Debe llevar conlución y recomendación)
+	Ej: 
+		- Falta de dominio
+		- Dote de un servidor
+		- Respuesta tardía de los usuarios
+		- Inasistencia de usuarios (establecimientos)
+		- Requerimientos solicitados incorrectamente
+

@@ -4,6 +4,7 @@
 		var value = "";
 		var value2 = "";
        	anio = $("#anio_actual").val();
+        tipo_pago = $("#tipo_pago").val();
 	    if(document.getElementById('radio_mensual').checked==true){
 	    	value = $("#mes").val();
 	    	type = "mensual";
@@ -23,7 +24,7 @@
        		type = "periodo";
        	}
 
-        if(anio!="" &&  (($("#mes").val()!="0" && document.getElementById('radio_mensual').checked==true)
+        if(anio!="" && tipo_pago!="" &&  (($("#mes").val()!="0" && document.getElementById('radio_mensual').checked==true)
         	|| ($("#trimestre").val()!="0" && document.getElementById('radio_trimestral').checked==true)
         	|| ($("#semestre").val()!="0" && document.getElementById('radio_semestral').checked==true)
         	|| document.getElementById('radio_anual').checked==true
@@ -33,13 +34,13 @@
           	var url = "<?php echo site_url()?>"+"/reportes/reportes_colectivos/relaciones_colectivas_report";
 
           	if(document.getElementById('radio_pdf').checked==true && tipo==""){
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2 , 'report_type' : 'pdf' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'tipo_pago' : tipo_pago , 'report_type' : 'pdf' };
         		OpenWindowWithPost(url, param, "_blank");
           	}else if(document.getElementById('radio_excel').checked==true && tipo==""){
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'report_type' : 'excel' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'tipo_pago' : tipo_pago , 'report_type' : 'excel' };
         		OpenWindowWithPost(url, param, "_blank");
           	}else{
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'report_type' : 'html' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'tipo_pago' : tipo_pago , 'report_type' : 'html' };
         		embed_html(url, param);
           	}
         }else{
