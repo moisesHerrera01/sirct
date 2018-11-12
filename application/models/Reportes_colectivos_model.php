@@ -33,7 +33,7 @@ class Reportes_colectivos_model extends CI_Model {
  			$smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
  			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
 					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-	 	}else if($data["periodo"] == "semestral"){
+	 	}else if($data["tipo"] == "semestral"){
  			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
@@ -48,8 +48,8 @@ class Reportes_colectivos_model extends CI_Model {
 		$anios30 = (intval(date("Y"))-30).date("-m-d");
 		$anios50 = (intval(date("Y"))-50).date("-m-d");
 
-		$this->db->select("(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios16."' AND '".$anios30."') AS anios16,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios50."') AS anios30,
+		$this->db->select("(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."') AS anios16,
+			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."') AS anios30,
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci < '".$anios50."') AS anios50,
 			ecc.*, p.*, emp.*, est.*, ciiu.*")
 			->from('sct_expedienteci AS ecc')
@@ -70,7 +70,7 @@ class Reportes_colectivos_model extends CI_Model {
  			$smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
  			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
 					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-	 	}else if($data["periodo"] == "semestral"){
+	 	}else if($data["tipo"] == "semestral"){
  			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
