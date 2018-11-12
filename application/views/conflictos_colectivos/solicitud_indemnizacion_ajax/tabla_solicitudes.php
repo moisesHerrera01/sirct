@@ -30,7 +30,10 @@
                                         e.numerocaso_expedienteci AS numero,
                                         ep.nombre_empresa,
                                         e.id_empresaci,
-                                        e.tiposolicitud_expedienteci AS tipo,
+                                        -- e.tiposolicitud_expedienteci AS tipo,
+                                        CASE
+                                          WHEN e.tiposolicitud_expedienteci=5 THEN 'Indemnización y Prestaciones Laborales'
+                                          ELSE e.tiposolicitud_expedienteci END AS tipo,
                                         e.resultado_expedienteci AS resultado,
                                         e.fechacrea_expedienteci AS fecha,
                                         e.id_expedienteci,

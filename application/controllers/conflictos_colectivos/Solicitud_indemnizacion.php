@@ -39,7 +39,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 			$data['id_empresaci'] = $this->input->post('establecimiento');
 			$data['id_personal'] = $this->input->post('id_personal');
 
-			if ($this->Expediente_cc_model->editar_expediente($data) == "exito") {
+			if ($this->Expediente_cc_model->editar_expediente($data) != "fracaso") {
 				echo $this->input->post('id_expediente');
 			} else {
 				echo "fracaso";
