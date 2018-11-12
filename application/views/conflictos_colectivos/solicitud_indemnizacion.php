@@ -217,7 +217,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         combo_municipio();
         $("#id_expediente").val('');
         /*Fin establecimiento*/
-        
+
         $("#band").val("save");
         $("#band1").val("save");
         $("#band2").val("save");
@@ -257,7 +257,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     result = JSON.parse(res)[0];
 
                     var fecha = new Date(result.fechaconflicto_personaci);
-                    
+
                     /*Inicio Expediente*/
                     $("#fecha_conflicto").val( `${fecha.getDate()}-${fecha.getMonth() + 1}-${fecha.getFullYear()}` );
                     $("#nombre_persona").val(result.nombre_personaci);
@@ -366,7 +366,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         type: "success",
                         showConfirmButton: true
                     });
-                    tabla_acta(id_expediente);                    
+                    tabla_acta(id_expediente);
                 }
             });
         });
@@ -392,6 +392,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             combo_delega2();
             if (codigo) {
                 $("#paso4").show();
+                $("#div_finalizar").show(0);
             }
             tabla_audiencias(id_expedienteci);
         });
@@ -618,7 +619,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 return false
             }
             location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci + "/" + inputValue;
-            
+
             swal({
                 title: "¡Acta generada exitosmente!",
                 type: "success",
@@ -800,20 +801,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso
                                     2</button>&emsp;
-                                Detalle del Expediente    
+                                Detalle del Expediente
                             </h3>
 
                             <input type="hidden" id="band2" name="band2" value="save">
                             <input type="hidden" id="id_persona" name="id_persona" value="">
                             <input type="hidden" id="id_expediente2" name="id_expediente" value="">
-                            
+
                             <hr class="m-t-0 m-b-30">
-                            
+
                             <span class="etiqueta">Expediente</span>
                             <blockquote class="m-t-0">
 
                                 <div class="row">
-                                   
+
                                     <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Fecha del Conflicto: <span class="text-danger">*</span></h5>
                                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
@@ -877,7 +878,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" id="title_paso3" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
                                 Gestionar Solicitantes:
-                            </h3><hr class="m-t-0 m-b-30">                            
+                            </h3><hr class="m-t-0 m-b-30">
 
                             <div id="cnt_tabla_solicitantes"></div>
 
@@ -885,10 +886,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <button id="btn_volver" type="button" class="btn waves-effect waves-light btn-default" onclick="volver(2)"><i class="mdi mdi-chevron-left"></i> Volver</button>
                             </div>
                             <div align="right" id="btnadd2" class="pull-right">
-                                <button type="button" onclick="abrir_audiencia_paso();" class="btn waves-effect waves-light btn-success2">Finalizar <i class="mdi mdi-chevron-right"></i></button>
+                                <button type="button" onclick="abrir_audiencia_paso();" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
                             </div>
                             <div align="right" id="btnedit2" style="display: none;" class="pull-right">
-                                <button type="button" onclick="abrir_audiencia_paso();" class="btn waves-effect waves-light btn-info">Finalizar <i class="mdi mdi-chevron-right"></i></button>
+                                <button type="button" onclick="abrir_audiencia_paso();" class="btn waves-effect waves-light btn-info">Siguiente <i class="mdi mdi-chevron-right"></i></button>
                             </div>
 
                         </div>

@@ -19,8 +19,8 @@
                     <tr>
                         <th>Id</th>
                         <th>Nombre del Solicitante</th>
-                        <th>Tipo Representante</th>
-                        <th>Nombre Representante</th>
+                        <th>Sexo</th>
+                        <th>Estudios</th>
                         <th>Estado</th>
                         <th style="min-width: 150px;">(*)</th>
                     </tr>
@@ -34,8 +34,8 @@
                                 echo "<tr>";
                                 echo "<td>".$contador."</td>";
                                 echo "<td>".$fila->nombre_personaci. " " .$fila->apellido_personaci. "</td>";
-                                echo ($fila->tipo_representantepersonaci == "1") ? '<td>Legal</td>' : '<td>designado</td>';
-                                echo "<td>".$fila->nombre_representantepersonaci. " " .$fila->apellido_representantepersonaci. "</td>";
+                                echo "<td>".$fila->sexo_personaci. "</td>";
+                                echo "<td>".$fila->estudios_personaci. "</td>";
                                 if ($fila->estado_persona == 1) {
                                     echo "<td>Activo</td>";
                                 } else {
@@ -51,7 +51,7 @@
 
                                 array_pop($array);
 
-                                echo ($fila->estado_audiencia == 2) ? generar_boton($array,"resultado","btn-info","mdi mdi-checkbox-marked","Registrar Resultado") : '' ;
+                                echo ($fila->estado_audiencia == 1) ? generar_boton($array,"resultado","btn-info","mdi mdi-checkbox-marked","Registrar Resultado") : '' ;
 
                                 echo ($fila->estado_audiencia == 2) ? generar_boton($array,"pagos","btn-info","mdi mdi-square-inc-cash","Gestionar Pagos") : '';
 

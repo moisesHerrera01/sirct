@@ -83,7 +83,7 @@ class Audiencias extends CI_Controller {
 						}else {
 						echo $this->audiencias_model->insertar_audiencia($data);
 					}
-				}elseif($exp['tiposolicitud_expedienteci'] == '1' || $exp['tiposolicitud_expedienteci'] == '3' || $exp['tiposolicitud_expedienteci'] == '4') {
+				}elseif($exp['tiposolicitud_expedienteci'] == '1' || $exp['tiposolicitud_expedienteci'] == '3' || $exp['tiposolicitud_expedienteci'] == '4' || $exp['tiposolicitud_expedienteci'] == '5') {
 						if ($numero>=2) {
 							echo 'reprogramar';
 						}else {

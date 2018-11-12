@@ -254,7 +254,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <input type="hidden" name="id_persona" id="id_persona2">
                         <input type="hidden" name="id_representante" id="id_representante_solicitante">
 
-                        <span class="etiqueta">Informaci&oacute;n del Solicitante</span>
+                        <!-- <span class="etiqueta">Informaci&oacute;n del Solicitante</span>
                         <blockquote class="m-t-0">
                             <div class="row">
                                 <div class="form-group col-lg-6" style="height: 83px;">
@@ -278,7 +278,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <div class="help-block"></div>
                                 </div>
                             </div>
-                        </blockquote>
+                        </blockquote> -->
 
                         <span class="etiqueta">Motivo de la solicitud</span>
                         <blockquote class="m-t-0">
@@ -476,11 +476,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         type: "error",
                         showConfirmButton: true
                     });
-                } else {
-                    swal({ title: "¡El solicitante se ingreso con exito!", type: "success", showConfirmButton: true });
+                } else if($("#band5").val() == "save") {
+                    swal({ title: "¡El solicitante se ingresó con éxito!", type: "success", showConfirmButton: true });
                     tabla_solicitantes();
                     $('#modal_representante_motivo').modal('hide');
                     $('.modal-backdrop').remove();
+                }else {
+                  swal({ title: "¡El solicitante editó con éxito!", type: "success", showConfirmButton: true });
+                  tabla_solicitantes();
+                  $('#modal_representante_motivo').modal('hide');
+                  $('.modal-backdrop').remove();
                 }
             });
         });
@@ -542,7 +547,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#apellido_representacion_solicitante').val('');
         $('#tipo_representacion_solicitante').val('');
         $('#motivo').val('').trigger('change.select2');
-        $('#ocupacion').val('').trigger('change.select2');
+        $('#ocupacion').val('');
         $('#funciones').val('');
         $('#salario').val('');
         $('#forma_pago').val('');
@@ -603,7 +608,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $('#apellido_representacion_solicitante').val(result.apellido_representantepersonaci);
             $('#tipo_representacion_solicitante').val(result.tipo_representantepersonaci);
             $('#motivo').val(result.tipopeticion_personaci).trigger('change.select2');
-            $('#ocupacion').val(result.id_catalogociuo).trigger('change.select2');
+            $('#ocupacion').val(result.ocupacion);
             $('#funciones').val(result.funciones_personaci);
             $('#salario').val(result.salario_personaci);
             $('#forma_pago').val(result.formapago_personaci);

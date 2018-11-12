@@ -204,14 +204,14 @@ class Solicitud_indemnizacion extends CI_Controller {
 	public function gestionar_representante() {
 
 		if($this->input->post('band5') == "save"){
-			$data = array(
-        'id_personaci' => $this->input->post('id_persona'),
-				'nombre_representantepersonaci' => $this->input->post('nombre_representacion_solicitante'),
-				'apellido_representantepersonaci' => $this->input->post('apellido_representacion_solicitante'),
-				'tipo_representantepersonaci' => $this->input->post('tipo_representacion_solicitante')
-			);
-
-			$repre = $this->Representante_cc_model->insertar_representante($data);
+		// 	$data = array(
+    //     'id_personaci' => $this->input->post('id_persona'),
+		// 		'nombre_representantepersonaci' => $this->input->post('nombre_representacion_solicitante'),
+		// 		'apellido_representantepersonaci' => $this->input->post('apellido_representacion_solicitante'),
+		// 		'tipo_representantepersonaci' => $this->input->post('tipo_representacion_solicitante')
+		// 	);
+		//
+		// 	$repre = $this->Representante_cc_model->insertar_representante($data);
 
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
@@ -226,13 +226,13 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 		} else if ($this->input->post('band5') == "edit") {
 			echo $this->input->post('id_representante');
-			$data = $this->Representante_cc_model->obtener_representante($this->input->post('id_representante'))->result_array()[0];
-
-			$data['nombre_representantepersonaci'] = $this->input->post('nombre_representacion_solicitante');
-			$data['apellido_representantepersonaci'] = $this->input->post('apellido_representacion_solicitante');
-			$data['tipo_representantepersonaci'] = $this->input->post('tipo_representacion_solicitante');
-
-			$this->Representante_cc_model->editar_representante($data);
+			// $data = $this->Representante_cc_model->obtener_representante($this->input->post('id_representante'))->result_array()[0];
+			//
+			// $data['nombre_representantepersonaci'] = $this->input->post('nombre_representacion_solicitante');
+			// $data['apellido_representantepersonaci'] = $this->input->post('apellido_representacion_solicitante');
+			// $data['tipo_representantepersonaci'] = $this->input->post('tipo_representacion_solicitante');
+			//
+			// $this->Representante_cc_model->editar_representante($data);
 
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 

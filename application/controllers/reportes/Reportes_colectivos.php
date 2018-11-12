@@ -27,6 +27,12 @@ class Reportes_colectivos extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
+	public function tipo_pago(){
+		$this->load->view('templates/header');
+		$this->load->view('reportes/lista_reportes_colectivos/tipo_pago');
+		$this->load->view('templates/footer');
+	}
+
 	function relaciones_colectivas_report(){
 		$data = array(
 			'anio' => $this->input->post('anio'),
@@ -36,8 +42,8 @@ class Reportes_colectivos extends CI_Controller {
 		);
 
 		$titles = array(
-				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
-				'DIRECCIÓN GENERAL DE TRABAJO', 
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',
+				'DIRECCIÓN GENERAL DE TRABAJO',
 				'INFORME DE RELACIONES COLECTIVAS',
 				periodo($data));
 
@@ -53,7 +59,7 @@ class Reportes_colectivos extends CI_Controller {
 		 	$header = head_table_html($titles, 'pdf');
 
 		 	$this->mpdf->SetHTMLHeader($header);
-		 	
+
 		 	$body .= $this->relaciones_colectivas_html($data);
 
 		 	$pie = piePagina($this->session->userdata('usuario_centro'));
@@ -137,7 +143,7 @@ class Reportes_colectivos extends CI_Controller {
 	function relaciones_colectivas_excel($data, $titulos){
 
 		$this->load->library('phpe');
-		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE); 
+		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE);
 		$estilo = array( 'borders' => array( 'outline' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) ) );
 
 		if (PHP_SAPI == 'cli') die('Este reporte solo se ejecuta en un navegador web');
@@ -156,14 +162,14 @@ class Reportes_colectivos extends CI_Controller {
 
 		//MODIFICANDO ANCHO DE LAS COLUMNAS
 		PhpExcelSetColumnWidth($this->objPHPExcel,
-			$width = array(10,20,40,15,15,40,5,5,10,5,12,40,20,60,60,20,20,20,20,20), 
+			$width = array(10,20,40,15,15,40,5,5,10,5,12,40,20,60,60,20,20,20,20,20),
 			$letradesde, $letrahasta);
 
 		//AGREGAMOS LOS TITULOS DEL REPORTE
 		$f = PhpExcelSetTitles($this->objPHPExcel,
 			$title = $titulos,
 		$letradesde, $letrahasta, $f);
-		
+
 
 		/*********************************** 	  INICIO ENCABEZADOS DE LA TABLAS	****************************************/
 		$tableTitles = array('N° Exp.','Depto.','Delegado','Fecha inicio','Fecha fin','Persona Solicitante','M','F','Patronos','Edad','Personas con discapacidad','Persona solicitada','Causas','Rama económica','Actividad económica','Resolución','Cantidad pagada Hombres','Cantidad pagada Mujeres','Cantidad pagada Total','Observaciones');
@@ -206,8 +212,8 @@ class Reportes_colectivos extends CI_Controller {
 		}
 
 		/******************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	***********************************/
-		
-		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true); 
+
+		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
 
 		$f+=3;
 
@@ -241,8 +247,8 @@ class Reportes_colectivos extends CI_Controller {
 		);
 
 		$titles = array(
-				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
-				'DIRECCIÓN GENERAL DE TRABAJO', 
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',
+				'DIRECCIÓN GENERAL DE TRABAJO',
 				'INFORME DE REGISTRO DE EDADES',
 				periodo($data));
 
@@ -258,7 +264,7 @@ class Reportes_colectivos extends CI_Controller {
 		 	$header = head_table_html($titles, 'pdf');
 
 		 	$this->mpdf->SetHTMLHeader($header);
-		 	
+
 		 	$body .= $this->relaciones_colectivas_html($data);
 
 		 	$pie = piePagina($this->session->userdata('usuario_centro'));
@@ -323,7 +329,7 @@ class Reportes_colectivos extends CI_Controller {
 	function registro_edades_excel($data, $titulos){
 
 		$this->load->library('phpe');
-		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE); 
+		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE);
 		$estilo = array( 'borders' => array( 'outline' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) ) );
 
 		if (PHP_SAPI == 'cli') die('Este reporte solo se ejecuta en un navegador web');
@@ -342,14 +348,14 @@ class Reportes_colectivos extends CI_Controller {
 
 		//MODIFICANDO ANCHO DE LAS COLUMNAS
 		PhpExcelSetColumnWidth($this->objPHPExcel,
-			$width = array(10,12,25,40,10,10,10,9,9,9), 
+			$width = array(10,12,25,40,10,10,10,9,9,9),
 			$letradesde, $letrahasta);
 
 		//AGREGAMOS LOS TITULOS DEL REPORTE
 		$f = PhpExcelSetTitles($this->objPHPExcel,
 			$title = $titulos,
 		$letradesde, $letrahasta, $f);
-		
+
 
 		/*********************************** 	  INICIO ENCABEZADOS DE LA TABLAS	****************************************/
 		$titles_head = array(
@@ -392,8 +398,8 @@ class Reportes_colectivos extends CI_Controller {
 		}
 
 		/******************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	***********************************/
-		
-		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true); 
+
+		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
 
 		$f+=3;
 

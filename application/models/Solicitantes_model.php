@@ -11,16 +11,14 @@ class Solicitantes_model extends CI_Model {
 
         $this->db->select('
                     a.id_personaci,
-                    b.tipo_representantepersonaci,
                     a.nombre_personaci,
                     a.apellido_personaci,
                     a.estado_persona,
-                    b.nombre_representantepersonaci,
-                    b.apellido_representantepersonaci,
-                    c.estado_audiencia'
+                    c.estado_audiencia,
+										a.sexo_personaci,
+										a.estudios_personaci'
                 )
                 ->from('sct_personaci a')
-                ->join('sct_representantepersonaci b', 'a.id_personaci = b.id_personaci', 'left')
                 ->join('sct_fechasaudienciasci c', 'c.id_expedienteci = a.id_expedienteci', 'left')
                 ->where('a.id_expedienteci', $expediente)
                 ->group_by('a.id_personaci');
@@ -63,10 +61,9 @@ class Solicitantes_model extends CI_Model {
 
     public function obtener_solicitante($id) {
 
-        $this->db->select('')
+        $this->db->select('a.*, c.*, a.ocupacion, a.formapago_personaci, a.funciones_personaci, a.salario_personaci, a.horarios_personaci')
                 ->from('sct_personaci a')
-                ->join('sct_representantepersonaci b', 'a.id_personaci = b.id_personaci', 'left')
-                ->join('sct_expedienteci c', 'a.id_expedienteci = c.id_expedienteci', 'left')
+                ->join('sct_expedienteci c', 'a.id_expedienteci = c.id_expedienteci')
                 ->where('a.id_personaci', $id);
         $query=$this->db->get();
 

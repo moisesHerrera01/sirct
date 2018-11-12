@@ -2,14 +2,14 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reportes_colectivos_model extends CI_Model {
-	
+
 	function __construct(){
 		parent::__construct();
 	}
 
 	function registros_relaciones_colectivas($data){
 		$this->db->select("
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.sexo_personaci = 'M') AS cant_masc, 
+			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.sexo_personaci = 'M') AS cant_masc,
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci  AND p2.sexo_personaci = 'F') AS cant_feme,
 			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp JOIN sct_personaci AS p3 WHERE p3.id_personaci = fp.id_persona AND p3.sexo_personaci = 'M') AS monto_masc,
 			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp JOIN sct_personaci AS p3 WHERE p3.id_personaci = fp.id_persona AND p3.sexo_personaci = 'F') AS monto_feme,
@@ -38,7 +38,7 @@ class Reportes_colectivos_model extends CI_Model {
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
 	 	}
-        
+
         return $query=$this->db->get();
     }
 
@@ -56,7 +56,7 @@ class Reportes_colectivos_model extends CI_Model {
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p2.sexo_personaci = 'F') AS aniosf30,
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci < '".$anios50."' AND p2.sexo_personaci = 'F') AS aniosf50,
 			ecc.*, p.*, emp.*, est.*, ciiu.*")
-			->from('sct_expedienteci AS ecc')
+			->from('sct_expedienteci ecc')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
@@ -79,8 +79,33 @@ class Reportes_colectivos_model extends CI_Model {
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
 	 	}
-        
+
         return $query=$this->db->get();
     }
+
+		public function reporte_tipo_pago(){
+			$this->db->select('
+												 CONCAT_WS(" ",emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) delegado,
+												 d.departamento,
+												 ecc.numerocaso_expedienteci,
+												 ecc.fechaconflicto_personaci,
+												 (select max(fea.id_fechasaudienciasci) from sct_fechasaudienciasci fea where fea.id_expedienteci=ecc.id_expedienteci AND estado_audiencia=1) fecha_fin,
+												 CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) solicitante,
+												 (select count(pe.id_personaci) from sct_personaci pe where pe.id_expedienteci=ecc.id_expedienteci AND pe.sexo="M") masculino,
+												 (select count(pe.id_personaci) from sct_personaci pe where pe.id_expedienteci=ecc.id_expedienteci AND pe.sexo="F") femenino,
+												 CASE
+													 WHEN e.tiposolicitud_expedienteci=5 THEN Indemnización y Prestaciones Laborales
+													 ELSE e.tiposolicitud_expedienteci END AS tipo,
+
+											  ')
+						   ->from('sct_expedienteci ecc')
+							 ->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+							 ->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+							 ->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
+							 ->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
+							 ->join('org_municipio m','m.id_municipio=emp.id_municipio')
+							 ->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
+							 ->group_by('ecc.id_expedienteci');
+		}
 
 }

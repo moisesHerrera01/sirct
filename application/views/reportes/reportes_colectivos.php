@@ -41,8 +41,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                         <a href="<?=site_url()?>/reportes/reportes_colectivos/registro_edades">
                                             <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status online pull-right"></span> </div>
                                             <div class="mail-contnet">
-                                                <h5>Reporte de registro de edades</h5> 
+                                                <h5>Reporte de registro de edades</h5>
                                                 <span class="mail-desc">Muestra los expedientes con el conteo de edades segregados por sexo</span></div>
+                                        </a>
+                                        <a href="<?=site_url()?>/reportes/reportes_colectivos/tipo_pago">
+                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status online pull-right"></span> </div>
+                                            <div class="mail-contnet">
+                                                <h5>Reporte por tipo de pago</h5>
+                                                <span class="mail-desc">Reporte por tipo de pago</span></div>
                                         </a>
                                         <!-- Message -->
                                         <a href="#">
