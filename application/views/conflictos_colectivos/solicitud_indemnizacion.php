@@ -71,6 +71,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     }
 
+    function combo_motivos(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/combo_motivo_solicitud",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_motivos').html(res);
+        $("#motivo").select2();
+      });
+    }
+
     function combo_municipio() {
 
         $.ajax({
@@ -215,6 +229,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Inicio establecimiento*/
         combo_actividad_economica();
         combo_municipio();
+        combo_motivos();
         $("#id_expediente").val('');
         /*Fin establecimiento*/
 
@@ -270,6 +285,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     /*Inicio establecimiento*/
                     combo_actividad_economica();
                     combo_municipio();
+                    combo_motivos(result.motivo_expedienteci);
                     $("#id_expediente").val(id_expediente);
                     /*Fin establecimiento*/
 
@@ -845,6 +861,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             placeholder="Cargo de la Persona"></textarea>
                                         <div class="help-block"></div>
                                     </div>
+                                    <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_motivos"></div>
                                 </div>
                             </blockquote>
 
