@@ -39,7 +39,7 @@ class Expediente_cc_model extends CI_Model {
     }
 
     public function obtener_expediente_persona($id) {
-      $this->db->select('')
+      $this->db->select('a.*,b.*,a.fechaconflicto_personaci')
                ->from('sct_expedienteci a')
                ->join('sct_personaci b', 'a.id_personaci = b.id_personaci', 'left')
                ->where("a.id_expedienteci", $id);
@@ -139,6 +139,19 @@ class Expediente_cc_model extends CI_Model {
 			else {
 					return FALSE;
 			}
+    }
+
+    public function obtener_motivos(){
+      $this->db->select('id_motivo_solicitud,nombre_motivo,id_tipo_solicitud,estado_motivo')
+               ->from('sct_motivo_solicitud')
+               ->where('id_tipo_solicitud>3')
+               ->where('estado_motivo',1);
+      $query = $this->db->get();
+      if ($query->num_rows() > 0) {
+        return $query;
+      }else {
+        FALSE;
+      }
     }
 
 }

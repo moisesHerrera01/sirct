@@ -43,7 +43,6 @@ class Reportes_colectivos_model extends CI_Model {
     }
 
     function registros_edades($data){
-
     	$anios16 = (intval(date("Y"))-16).date("-m-d");
 		$anios30 = (intval(date("Y"))-30).date("-m-d");
 		$anios50 = (intval(date("Y"))-50).date("-m-d");
