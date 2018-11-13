@@ -16,7 +16,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
    <div class="container-fluid">
        <div class="row page-titles">
            <div class="align-self-center" align="center">
-               <h3 class="text-themecolor m-b-0 m-t-0">Reportes conciliación indivial</h3>
+               <h3 class="text-themecolor m-b-0 m-t-0">Reportes de conciliación individual</h3>
            </div>
        </div>
        <div class="row">
@@ -31,11 +31,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <h2 class="add-ct-btn"><button type="button" class="btn btn-circle btn-lg btn-secondary waves-effect waves-dark"><i class="mdi mdi-file-document"></i></button></h2>
                                     <div class="message-widget contact-widget">
                                         <!-- Message -->
-                                        <a href="<?=site_url()?>/reportes/reportes_individuales/relaciones_colectivas">
+                                        <a href="<?=site_url()?>/reportes/reportes_individuales/relaciones_individuales">
                                             <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status online pull-right"></span> </div>
                                             <div class="mail-contnet">
-                                                <h5>Reporte de relaciones colectivas</h5>
-                                                <span class="mail-desc">info@wrappixel.com</span></div>
+                                                <h5>Reporte de relaciones individuales</h5>
+                                                <span class="mail-desc">Presenta el resumen de expedientes</span></div>
                                         </a>
                                         <!-- Message -->
                                         <a href="#">

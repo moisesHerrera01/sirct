@@ -5,7 +5,7 @@ class Reportes_individuales extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('reportes_colectivos_model');
+		$this->load->model('reportes_individuales_model');
 	}
 
 	public function index(){
@@ -15,13 +15,13 @@ class Reportes_individuales extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
-	public function relaciones_colectivas(){
+	public function relaciones_individuales(){
 		$this->load->view('templates/header');
-		$this->load->view('reportes/lista_reportes_colectivos/relaciones_colectivas');
+		$this->load->view('reportes/lista_reportes_individuales/relaciones_individuales');
 		$this->load->view('templates/footer');
 	}
 
-	function relaciones_colectivas_report(){
+	function relaciones_individuales_report(){
 		$data = array(
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
@@ -32,7 +32,7 @@ class Reportes_individuales extends CI_Controller {
 		$titles = array(
 				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
 				'DIRECCIÓN GENERAL DE TRABAJO', 
-				'INFORME DE RELACIONES COLECTIVAS');
+				'INFORME DE RELACIONES INDIVIDUALES');
 
 		$body = '';
 		if($this->input->post('report_type') == "html"){
@@ -41,7 +41,7 @@ class Reportes_individuales extends CI_Controller {
 			echo $body;
 		}else{
 			$this->load->library('mpdf');
-			$this->mpdf=new mPDF('c','A4','10','Arial',10,10,35,17,3,9);
+			$this->mpdf=new mPDF('c','letter','10','Arial',10,10,35,17,3,9);
 
 		 	$header = head_table_html($titles, $data, 'pdf');
 
@@ -92,7 +92,7 @@ class Reportes_individuales extends CI_Controller {
 				</thead>
 				<tbody>';
 
-				$registros = $this->reportes_colectivos_model->registros_relaciones_colectivas($data);
+				$registros = $this->reportes_individuales_model->registros_relaciones_individuales($data);
 				if($registros->num_rows()>0){
 					foreach ($registros->result() as $rows) {
 						$cuerpo .= '

@@ -326,8 +326,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 		/* Ej: calcular_edad("1945-11-22")*/
 		function calcular_edad( $fecha ) {
-	    list($Y,$m,$d) = explode("-",$fecha);
-	    return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
+			$fecha = explode("-",$fecha);
+			if(count($fecha) == 3){
+				list($Y,$m,$d) = $fecha;
+				return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
+			}else{
+				return "N/A";
+			}
+	    
 		}
 
 		function convertir_dui($dui_numeros){

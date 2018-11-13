@@ -54,7 +54,7 @@ class Reportes_colectivos extends CI_Controller {
 			echo $body;
 		}else if($this->input->post('report_type') == "pdf"){
 			$this->load->library('mpdf');
-			$this->mpdf=new mPDF('c','A4','10','Arial',10,10,35,17,3,9);
+			$this->mpdf=new mPDF('c','letter','10','Arial',10,10,35,17,3,9);
 
 		 	$header = head_table_html($titles, 'pdf');
 
@@ -259,7 +259,7 @@ class Reportes_colectivos extends CI_Controller {
 			echo $body;
 		}else if($this->input->post('report_type') == "pdf"){
 			$this->load->library('mpdf');
-			$this->mpdf=new mPDF('c','A4','10','Arial',10,10,35,17,3,9);
+			$this->mpdf=new mPDF('c','letter','10','Arial',10,10,35,17,3,9);
 
 		 	$header = head_table_html($titles, 'pdf');
 
