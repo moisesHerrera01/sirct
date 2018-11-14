@@ -149,6 +149,7 @@ $(function(){
         .done(function(res){
             if(res != "fracaso"){
                 swal({ title: "¡La resolucion se aplicó con exito!", type: "success", showConfirmButton: true });
+                tabla_audiencias(formData.get('id_expedienteci'));
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }

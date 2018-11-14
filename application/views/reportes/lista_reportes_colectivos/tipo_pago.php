@@ -31,7 +31,7 @@
         	|| ($("#fecha_inicio").val()!="" && $("#fecha_fin").val()!="" && document.getElementById('radio_periodo').checked==true)
         )){
 
-          	var url = "<?php echo site_url()?>"+"/reportes/reportes_colectivos/relaciones_colectivas_report";
+          	var url = "<?php echo site_url()?>"+"/reportes/reportes_colectivos/tipo_pago_report";
 
           	if(document.getElementById('radio_pdf').checked==true && tipo==""){
           		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'tipo_pago' : tipo_pago , 'report_type' : 'pdf' };
@@ -137,7 +137,7 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Reporte de relaciones colectivas</h3>
+                <h3 class="text-themecolor m-b-0 m-t-0">Reporte por tipo de pago</h3>
             </div>
         </div>
         <div class="row">

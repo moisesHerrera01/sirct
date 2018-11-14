@@ -68,7 +68,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'id_expedienteci' => $this->input->post('id_expediente'),
 				'id_personaci' => $id_persona,
 				'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
-				'motivo_expedienteci' => $this->input->post('motivo')
+				'causa_expedienteci' => $this->input->post('motivo')
 			));
 
 			if ($res == 'exito') {
@@ -87,12 +87,12 @@ class Solicitud_indemnizacion extends CI_Controller {
 			//$data['funciones_personaci'] = $this->input->post('cago_persona');
 
 			$data2['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
-			$data2['motivo_expedienteci'] = $this->input->post('motivo');
+			$data2['causa_expedienteci'] = $this->input->post('motivo');
 
 			$this->expediente_cc_model->editar_expediente(array(
 				'id_expedienteci' => $this->input->post('id_expediente'),
 				'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
-				'motivo_expedienteci' => $this->input->post('motivo')
+				'causa_expedienteci' => $this->input->post('motivo')
 			));
 
 			if ($this->Persona_cc_model->editar_persona($data) == "exito") {
