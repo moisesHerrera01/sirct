@@ -228,6 +228,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#fecha_conflicto").val('');
         $("#descripcion_motivo").val('');
         $("#id_representanteci").val('');
+        $("#causa_expedienteci").val('').trigger('change.select2');
         /*Fin Solicitante*/
 
         /*Inicio Expediente*/
@@ -289,6 +290,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     $("#fecha_renuncia").val(result.fecha_renuncia);
                     $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
                     $("#id_representanteci").val(result.id_representanteci);
+                    $("#causa_expedienteci").val(result.causa_expedienteci).trigger('change.select2');
 
                     /*Inicio Expediente*/
                     combo_delegado(result.id_personal);
@@ -1028,8 +1030,25 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             readonly="">
                                         <div class="help-block"></div>
                                     </div>
+                                </div>
+
+                                <div class="row">
                                     <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
                                         id="div_combo_delegado"></div>
+                                    <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                        <h5>Causa: <span class="text-danger">*</span></h5>
+                                        <select id="causa_expedienteci" name="causa_expedienteci" class="select2" style="width: 100%" required>
+                                            <option value=''>[Seleccione la causa]</option>
+                                            <?php
+                                                $causa = $this->db->query("SELECT * FROM sct_motivo_solicitud WHERE id_tipo_solicitud < 4");
+                                                if($causa->num_rows() > 0){
+                                                    foreach ($causa->result() as $fila2) {
+                                                       echo '<option class="m-l-50" value="'.$fila2->id_motivo_solicitud.'">'.$fila2->nombre_motivo.'</option>';
+                                                    }
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="row">
