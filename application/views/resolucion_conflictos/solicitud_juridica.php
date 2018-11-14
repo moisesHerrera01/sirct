@@ -150,6 +150,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#dui").val('');
         $("#telefono").val('');
         $("#municipio").val('').trigger('change.select2');
+        $("#causa_expedienteci").val('').trigger('change.select2');
         $("#direccion").val('');
         $("#fecha_nacimiento").val('');
         document.getElementById('masculino').checked = 1;
@@ -231,7 +232,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#direccion_personaci").val(result.direccion_personaci);
             $("#discapacidad_personaci").val(result.discapacidad_personaci);
             $("#telefono_personaci").val(result.telefono_personaci);
-            $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');      
+            $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
+            $("#causa_expedienteci").val(result.causa_expedienteci).trigger('change.select2');    
             $("#salario_personaci").val(result.salario_personaci);
             $("#horarios_personaci").val(result.horarios_personaci);
             $("#id_expedienteci").val(result.id_expedienteci);
@@ -251,7 +253,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
-    function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal, id_representanteci,band){
+    function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal, id_representanteci, causa_expedienteci,band){
         combo_ocupacion(id_catalogociuo, id_empresaci);
         $("#id_catalogociuo").val(id_catalogociuo);
         $("#id_personaci").val(id_personaci);
@@ -275,7 +277,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#direccion_personaci").val(direccion_personaci);
         $("#discapacidad_personaci").val(discapacidad_personaci);
         $("#telefono_personaci").val(telefono_personaci);
-        $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');      
+        $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');
+        $("#causa_expedienteci").val(causa_expedienteci).trigger('change.select2');     
         $("#salario_personaci").val(salario_personaci);
         $("#horarios_personaci").val(horarios_personaci);
         $("#id_expedienteci").val(id_expedienteci);
@@ -966,6 +969,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                                 <option value="2">Diferencia laboral</option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                        <h5>Causa: <span class="text-danger">*</span></h5>
+                                        <select id="causa_expedienteci" name="causa_expedienteci" class="select2" style="width: 100%" required>
+                                            <option value=''>[Seleccione la causa]</option>
+                                            <?php
+                                                $causa = $this->db->query("SELECT * FROM sct_motivo_solicitud WHERE id_tipo_solicitud < 4");
+                                                if($causa->num_rows() > 0){
+                                                    foreach ($causa->result() as $fila2) {
+                                                       echo '<option class="m-l-50" value="'.$fila2->id_motivo_solicitud.'">'.$fila2->nombre_motivo.'</option>';
+                                                    }
+                                                }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row">

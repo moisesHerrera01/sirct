@@ -874,6 +874,7 @@ function cambiar_nuevo(){
     $("#apellidos_jefe").val('');
     $("#cargo_jefe").val('');
     $("#id_personal").val('');
+    $("#causa_expedienteci").val('').trigger('change.select2');
     $("#establecimiento").val('');
     $("#salario").val('');
     $("#funciones").val('');
@@ -1024,6 +1025,7 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#fecha_creacion_exp").val(result.fechacrea_expedienteci);
       $("#id_empleador").val(result.id_empleador);
       $("#id_emplea").val(result.id_empleador);
+      $("#causa_expedienteci").val(result.causa_expedienteci).trigger('change.select2');
       $("#nombres_jefe").val(result.nombre_empleador);
       $("#apellidos_jefe").val(result.apellido_empleador);
       $("#cargo_jefe").val(result.cargo_empleador);
@@ -1439,6 +1441,20 @@ function volver(num) {
                                       <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy" readonly="">
                                       <div class="help-block"></div>
                                   </div>
+                                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                        <h5>Causa: <span class="text-danger">*</span></h5>
+                                        <select id="causa_expedienteci" name="causa_expedienteci" class="select2" style="width: 100%" required>
+                                            <option value=''>[Seleccione la causa]</option>
+                                            <?php
+                                                $causa = $this->db->query("SELECT * FROM sct_motivo_solicitud WHERE id_tipo_solicitud < 4");
+                                                if($causa->num_rows() > 0){
+                                                    foreach ($causa->result() as $fila2) {
+                                                       echo '<option class="m-l-50" value="'.$fila2->id_motivo_solicitud.'">'.$fila2->nombre_motivo.'</option>';
+                                                    }
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="row">

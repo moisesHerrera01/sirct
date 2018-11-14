@@ -154,6 +154,7 @@ class Solicitud_juridica extends CI_Controller {
       		'id_empresaci' => $this->input->post('id_empresaci'),
 			'id_personal' => $this->input->post('id_personal'),
 			'id_personaci' => $this->input->post('id_personaci'),
+			'causa_expedienteci' => $this->input->post('causa_expedienteci'),
 			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
 			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))
@@ -166,6 +167,7 @@ class Solicitud_juridica extends CI_Controller {
 			'id_empresaci' => $this->input->post('id_empresaci'),
 			'id_personal' => $this->input->post('id_personal'),
 			'id_personaci' => $this->input->post('id_personaci'),
+			'causa_expedienteci' => $this->input->post('causa_expedienteci'),
 			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
 			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))

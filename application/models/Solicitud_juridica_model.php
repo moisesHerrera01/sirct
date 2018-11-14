@@ -61,6 +61,7 @@ class Solicitud_juridica_model extends CI_Model {
 			'numerocaso_expedienteci' => '11',
 			'id_personaci' => $data['id_personaci'],
 			'id_representanteci' => $data['id_representanteci'],
+			'causa_expedienteci' => $data['causa_expedienteci'],
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
 			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
 			'tiposolicitud_expedienteci' => '3',
@@ -79,6 +80,7 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_empresaci' => $data['id_empresaci'],
 			'id_personal' => $data['id_personal'],
 			'id_personaci' => $data['id_personaci'],
+			'causa_expedienteci' => $data['causa_expedienteci'],
 			'id_representanteci' => $data['id_representanteci'],
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
 			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci']
