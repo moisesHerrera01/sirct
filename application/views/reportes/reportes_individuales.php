@@ -38,10 +38,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                                 <span class="mail-desc">Presenta el resumen de expedientes</span></div>
                                         </a>
                                         <!-- Message -->
-                                        <a href="#">
-                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status busy pull-right"></span> </div>
+                                        <a href="<?=site_url()?>/reportes/reportes_individuales/renuncia_voluntaria">
+                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status online pull-right"></span> </div>
                                             <div class="mail-contnet">
-                                                <h5>Sonu Nigam</h5> <span class="mail-desc">pamela1987@gmail.com</span></div>
+                                                <h5>Reporte de renuncias voluntarias</h5>
+                                                <span class="mail-desc">Presenta el resumen de expedientes de renuncias voluntarias</span></div>
                                         </a>
                                         <!-- Message -->
                                         <a href="#">
