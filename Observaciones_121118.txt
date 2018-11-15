@@ -9,7 +9,7 @@
 * Todos (defensor, patronal, delegado) deben ir en el resultado, no en la audiencia
 
 Otro estado - Pendiente para la segunda cita
-Meter los pagos en la resolución
+Meter los pagos en la resoluciï¿½n
 
 En el acta de audiencia si es hora exacta, se debe quitar lo de cero minutos
 
@@ -22,5 +22,6 @@ En la parte de delegado, deben ir todos los delegados del expediente.
 /****************************************************************************************/
 Retiro voluntario change to "Renuncia voluntaria"
 	- Notificada
+	- No notificada
 
 Resultado de la cita no "Resutado del Expediente"

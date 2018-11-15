@@ -17,6 +17,10 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
     data: {id : id_expedienteci, id_audiencia:id_fechasaudienciasci}
   })
   .done(function(res){
+    combo_defensores();
+    combo_representante_empresa();
+    combo_delega2();
+    combo_resultados();
     $('#cnt_modal_actions').html(res);
     $('#modal_resolucion').modal('show');
   });
@@ -113,15 +117,6 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
                       <div class="help-block"></div>
                 </div>
                 </div>
-
-                <div class="row">
-                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_defensores"></div>
-
-                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_representante_empresa"></div>
-
-                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div>
-                </div>
-
               <div align="right" id="btnadd6">
                 <button type="reset" onclick="cambiar();" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>

@@ -167,6 +167,17 @@ class Expediente extends CI_Controller {
 
 		}
 
+		public function combo_resultados() {
+			$resultados = $this->expedientes_model->obtener_resultados();
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_resultados',
+				array(
+					'id' => $this->input->post('id'),
+					'resultados' => $resultados
+				)
+			);
+
+		}
+
 		public function combo_profesiones() {
 			$profesiones = $this->expedientes_model->obtener_profesiones();
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_profesiones',

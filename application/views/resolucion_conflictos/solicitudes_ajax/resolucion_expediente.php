@@ -11,7 +11,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Registrar Resultado del Expediente</h4>
+        <h4 class="modal-title">Registrar resultado de la cita</h4>
       </div>
 
       <div class="modal-body" id="">
@@ -22,7 +22,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value="<?= $id_audiencia?>">
 
           <div class="row">
-            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+            <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Resulado de audiencia: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select onchange="mostrar()" id="resolucion" name="resolucion" class="form-control" required>
@@ -31,12 +31,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <option value="2">Sin conciliar</option>
                   <option value="3">Inasistencia</option>
                   <!-- <option value="4">Desistida</option> -->
-                  <option value="5">A multas</option>
+                  <!-- <option value="5">A multas</option> -->
                   <!-- <option value="6">No notificada</option>
                   <option value="7">Reinstalo</option> -->
-                </select>
+                <!-- </select>
               </div>
-            </div>
+            </div>  -->
+
+            <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_resultados"></div>
 
             <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                 <h5>Fecha del resultado: <span class="text-danger">*</span></h5>
@@ -55,6 +57,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   </select>
                 </div>
               </div>
+
+              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_defensores"></div>
+
+              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_representante_empresa"></div>
+
+              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div>
 
             <div id="det_resultado" class="form-group col-lg-12 col-sm-12" style="height: 83px;">
                 <h5>Detalle del resultado:<span class="text-danger">*</span></h5>
@@ -148,7 +156,7 @@ $(function(){
         })
         .done(function(res){
             if(res != "fracaso"){
-                swal({ title: "¡La resolucion se aplicó con exito!", type: "success", showConfirmButton: true });
+                swal({ title: "¡La resolucion se aplicó con éxito!", type: "success", showConfirmButton: true });
                 tabla_audiencias(formData.get('id_expedienteci'));
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });

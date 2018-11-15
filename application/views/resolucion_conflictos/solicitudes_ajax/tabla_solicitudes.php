@@ -47,7 +47,6 @@
                                               FROM sct_estadosci AS es
                                               JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                               JOIN sct_personaci p ON p.id_personaci=e.id_personaci
-                                              LEFT JOIN sge_empleador em ON em.id_empleador=e.id_empleador
                                               JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
                                               JOIN sir_empleado l on l.id_empleado=e.id_personal
                                               ".$add." WHERE tiposolicitud_expedienteci=1 ORDER BY e.id_expedienteci DESC");

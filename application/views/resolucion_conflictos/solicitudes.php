@@ -42,6 +42,19 @@ function combo_procuradores(seleccion){
   });
 }
 
+function combo_resultados(seleccion){
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_resultados",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_resultados').html(res);
+    $("#resolucion").select2();
+  });
+}
+
 function combo_estados_civiles(seleccion){
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_estados_civiles",
@@ -2327,9 +2340,6 @@ function audiencias(id_empresaci, id_expedienteci, origen) {
     $("#cnt_tabla").hide(0);
     $("#cnt_tabla_solicitudes").hide(0);
     $("#cnt_form_main").hide(0);
-    combo_defensores();
-    combo_representante_empresa();
-    combo_delega2();
     if (origen==1) {
         $("#paso4").show(0);
         tabla_audiencias(id_expedienteci);
