@@ -11,7 +11,10 @@ function nav(value) {
   var id_expedienteci = $("#id_expedienteci_copia2").val();
   var id_audiencia = $("#id_audiencia").val();
   if (value != "") { location.href = value+id_expedienteci+'/'+id_audiencia; }
-  cerrar_mantenimiento();
+  swal({ title: "¡Acta generada éxitosamente!", type: "success", showConfirmButton: true });
+  $("#modal_actas_tipo").modal("hide");
+  tabla_audiencias($("#id_expedienteci_copia2").val());
+  //cerrar_mantenimiento();
 }
 
 function validar_establecimiento(){
@@ -1869,7 +1872,7 @@ function volver(num) {
                       <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
                     </div>
 
-                    <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <div style="display: none;" class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Estado: <span class="text-danger">*</span></h5>
                         <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%" required="">
                             <option class="m-l-50" value="1">Activo</option>
@@ -2351,23 +2354,23 @@ function audiencias(id_empresaci, id_expedienteci, origen) {
   });
 }
 
-function pagos(id_expedienteci) {
-  $.ajax({
-    url: "<?php echo site_url(); ?>/resolucion_conflictos/pagos/programar_pagos",
-    type: "post",
-    dataType: "html",
-    data: {id : id_expedienteci}
-  })
-  .done(function(res){
-    console.log(res)
-    $('#cnt_actions').html(res);
-    $("#cnt_actions").show(0);
-    $("#cnt_tabla").hide(0);
-    $("#cnt_tabla_solicitudes").hide(0);
-    $("#cnt_form_main").hide(0);
-    tabla_pagos(id_expedienteci);
-  });
-}
+// function pagos(id_expedienteci) {
+//   $.ajax({
+//     url: "<?php echo site_url(); ?>/resolucion_conflictos/pagos/programar_pagos",
+//     type: "post",
+//     dataType: "html",
+//     data: {id : id_expedienteci}
+//   })
+//   .done(function(res){
+//     console.log(res)
+//     $('#cnt_actions').html(res);
+//     $("#cnt_actions").show(0);
+//     $("#cnt_tabla").hide(0);
+//     $("#cnt_tabla_solicitudes").hide(0);
+//     $("#cnt_form_main").hide(0);
+//     tabla_pagos(id_expedienteci);
+//   });
+// }
 
 function ocultar(){
   var value = $("#id_doc_identidad").val();

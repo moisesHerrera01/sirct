@@ -7,6 +7,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 
+<script>
+  function abrir_resolucion(){
+    $('#modal_pagos').modal('hide');
+    $('#modal_resolucion').modal('show');
+  }
+</script>
+
 <div class="modal fade" id="modal_resolucion" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -22,22 +29,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value="<?= $id_audiencia?>">
 
           <div class="row">
-            <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Resulado de audiencia: <span class="text-danger">*</span></h5>
-              <div class="controls">
-                <select onchange="mostrar()" id="resolucion" name="resolucion" class="form-control" required>
-                  <option value="">[Seleccione]</option>
-                  <option value="1">Conciliado</option>
-                  <option value="2">Sin conciliar</option>
-                  <option value="3">Inasistencia</option>
-                  <!-- <option value="4">Desistida</option> -->
-                  <!-- <option value="5">A multas</option> -->
-                  <!-- <option value="6">No notificada</option>
-                  <option value="7">Reinstalo</option> -->
-                <!-- </select>
-              </div>
-            </div>  -->
-
             <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_resultados"></div>
 
             <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -90,23 +81,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </div>
             </div>
 
-            <div class="form-group col-lg-4" style="height: 83px;">
-                <h5>Monto de pago($):<span class="text-danger">*</h5>
-                <input type="number" id="monto_pago" name="monto_pago" class="form-control" placeholder="Monto total de pago " step="0.01">
-                <div class="help-block"></div>
-            </div>
-
-            <div id="fhpago" class="form-group col-lg-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Fecha y hora de pago: <span class="text-danger">*</span></h5>
-              <div class="controls">
-                <input type="datetime-local" class="form-control" id="fecha_pago" nombre="fecha_pago">
-              </div>
-            </div>
-
-            <div id="p_pago" class="form-group col-lg-6" style="height: 83px;">
-                <h5>Monto de primer pago:<span class="text-danger">*</h5>
-                <input type="number" id="primer_pago" name="primer_pago" class="form-control" placeholder="Monto de primer pago" step="0.01">
-                <div class="help-block"></div>
+          <div id="registrar" class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+            <h5>Registrar fechas de pagos:<span class="text-danger">*</h5>
+                  <button type="button" onclick="pagos(<?= $id ?>);" class="btn waves-effect waves-light btn-info">Registrar</button>
             </div>
 
             <div  id="especifique" class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
@@ -193,6 +170,7 @@ function mostrar(){
   switch (value) {
     case '1':
     $(divs[1]).show(0); $(divs[2]).show(0);
+      $("#registrar").hide(0);
       $("#f_pago").show(500);
       $("#fhpago").show(0);
       $("#tipo_conciliacion").attr("required",'required');
@@ -203,9 +181,13 @@ function mostrar(){
           if (tipo=='2'){
             $("#primer_pago").attr("required",'required');
             $("#p_pago").show(500);
-          }else {
+            $("#registrar").show(500);
+          }else if(tipo=='1') {
             $("#primer_pago").removeAttr("required");
             $("#p_pago").hide(0);
+            $("#registrar").show(500);
+          }else {
+            $("#registrar").hide(0);
           }
         });
       $("#monto_pago").attr("required",'required');
@@ -219,7 +201,6 @@ function mostrar(){
       $("#inasistencia").change(
           function(){
             var esp = $("#inasistencia").val();
-            alert(esp)
             if (esp==2 || esp==3) {
               $("#asist").hide(500);
               $("#asistieron").removeAttr("required");

@@ -134,13 +134,7 @@ class Acta extends CI_Controller {
         $templateWord->setValue('forma_pago', mb_strtoupper($expediente->formapago_personaci));
         $templateWord->setValue('cargo_solicitante', mb_strtoupper($expediente->funciones_personaci));
         $templateWord->setValue('horario_solicitante', convertir_numeros_cadena($expediente->horarios_personaci));
-        $templateWord->setValue('nombre_delegado',
-                                $expediente->primer_nombre . ' '
-                                . $expediente->segundo_nombre . ' '
-                                . $expediente->tercer_nombre . ' '
-                                . $expediente->primer_apellido . ' '
-                                . $expediente->segundo_apellido . ' '
-                                . $expediente->apellido_casada);
+        $templateWord->setValue('nombre_delegado', $expediente->delegado_expediente);
 
         $nombreWord = $this->random();
 
@@ -316,13 +310,7 @@ class Acta extends CI_Controller {
         }
         $templateWord->setValue('representante_empresa', mb_strtoupper($expediente->nombres_representante));
         $templateWord->setValue('resolucion', mb_strtoupper($expediente->resultado_expedienteci));
-        $templateWord->setValue('nombre_delegado',
-                                $expediente->primer_nombre . ' '
-                                . $expediente->segundo_nombre . ' '
-                                . $expediente->tercer_nombre . ' '
-                                . $expediente->primer_apellido . ' '
-                                . $expediente->segundo_apellido . ' '
-                                . $expediente->apellido_casada);
+        $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
 
         $nombreWord = $this->random();
 

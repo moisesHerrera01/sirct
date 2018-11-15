@@ -9,6 +9,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 <script>
 
+function abrir_resolucion(){
+  $('#modal_pagos').modal('show');
+  $('#modal_resolucion').modal('hide');
+}
+
 function resolucion(id_expedienteci,id_fechasaudienciasci) {
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/resolucion_audiencia",
@@ -24,6 +29,50 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
     $('#cnt_modal_actions').html(res);
     $('#modal_resolucion').modal('show');
   });
+}
+
+function pagos(id_expedienteci, tipo_pago) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/pagos/pagos",
+    type: "post",
+    dataType: "html",
+    data: {id : id_expedienteci, tipo : tipo_pago}
+  })
+  .done(function(res){
+    $('#cnt_modal_pagos').html(res);
+    $('#modal_pagos').modal('show');
+    $('#modal_resolucion').modal('hide');
+    tipo = $("#tipo_conciliacion").val();
+    // alert(tipo)
+    if (tipo==2) {
+      $("#primer_pago").attr("required",'required');
+      $("#p_pago").show(500);
+      $("#boton_agregar").show(500);
+    }else {
+      $("#primer_pago").removeAttr("required");
+      $("#p_pago").hide(0);
+      $("#boton_agregar").hide(0);
+    }
+  });
+}
+
+var i =1;
+function agregar(){
+  var html = "<div id='fhpago"+i+"' class='form-group col-lg-5'>" +
+        "<div class='controls'>" +
+          "<input type='datetime-local' class='form-control' id='fecha_pago"+i+"' nombre='fecha_pago"+i+"'>" +
+        "</div>" +
+      "</div>" +
+
+      "<div id='p_pago"+i+"' class='form-group col-lg-5' style='height: 50px;'>" +
+          "<input type='number' id='primer_pago"+i+"' name='primer_pago"+i+"' class='form-control' placeholder='Monto del pago' step='0.01'>" +
+          "<div class='help-block'></div>" +
+      "</div>" +
+
+      "<div class='form-group col-lg-2 col-sm-2'>" +
+      "</div>";
+  $('#nuevo').append(html);
+  i++;
 }
 
 </script>
@@ -149,6 +198,7 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
     </div>
   </div>
   <div id="cnt_modal_actions"></div>
+  <div id="cnt_modal_pagos"></div>
 </div>
 
 <script>
