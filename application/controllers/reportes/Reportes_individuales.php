@@ -501,15 +501,38 @@ class Reportes_individuales extends CI_Controller {
 				);
 				$cuerpo .= table_row($cell_row);
 			}
+		}else{
+			$cuerpo .= no_rows(count($table_header1));
 		}
 		$cuerpo .= table_footer();
 
 		/********************** CASOS FINALIZADOS **************************/
-		$table_header1 = array('','M','F','TOTAL');
+
+		$table_header1 = array('');
+		$total = 0;
 		$cuerpo .= table_header($table_header1);
 		$registros = $this->reportes_individuales_model->registros_consolidado_casos_finalizados($data);
 		if($registros->num_rows()>0){
 			foreach ($registros->result() as $rows) {
+				$total+=$rows->cant_masc;
+			}
+
+			$cell_row = array( 'TOTAL', intval($total) );
+			$cuerpo .= table_row($cell_row);
+		}else{
+			$cell_row = array( 'TOTAL', intval($total) );
+			$cuerpo .= table_row($cell_row);
+		}
+		$cuerpo .= table_footer();
+
+		$table_header1 = array('','M','F','TOTAL');
+		$masc = 0; $feme = 0;
+		$cuerpo .= table_header($table_header1);
+		$registros = $this->reportes_individuales_model->registros_consolidado_casos_finalizados($data);
+		if($registros->num_rows()>0){
+			foreach ($registros->result() as $rows) {
+				$masc+=$rows->cant_masc;
+				$feme+=$rows->cant_feme;
 				$cell_row = array(
 					$rows->resultado,
 					$rows->cant_masc,
@@ -518,42 +541,20 @@ class Reportes_individuales extends CI_Controller {
 				);
 				$cuerpo .= table_row($cell_row);
 			}
+
+			$cell_row = array(
+				'TOTAL',
+				$masc,
+				$feme,
+				($masc+$feme)
+			);
+			$cuerpo .= table_row($cell_row);
 		}else{
 			$cuerpo .= no_rows(count($table_header1));
 		}
 		$cuerpo .= table_footer();
 
 
-		$cuerpo .= table_header($titles_head);
-		$registros = $this->reportes_individuales_model->registros_renuncia_voluntaria($data);
-		if($registros->num_rows()>0){
-			foreach ($registros->result() as $rows) {
-				$cell_row = array(
-					$rows->numerocaso_expedienteci,
-					$rows->departamento,
-					$rows->delegado,
-					fecha_ESP($rows->fecha_inicio),
-					fecha_ESP($rows->fecha_fin),
-					$rows->solicitante,
-					$rows->cant_masc,
-					$rows->cant_feme,
-					'',
-					$rows->edad,
-					$rows->discapacidadci,
-					$rows->nombre_empresa,
-					$rows->causa,
-					'',
-					$rows->actividad_catalogociiu,
-					$rows->resultadoci,
-					$rows->monto,
-					''
-				);
-			}
-			$cuerpo .= table_row($cell_row);
-		}else{
-			$cuerpo .= no_rows(count($titles_head));
-		}
-		$cuerpo .= table_footer();
 
 		return $cuerpo;
 	}
