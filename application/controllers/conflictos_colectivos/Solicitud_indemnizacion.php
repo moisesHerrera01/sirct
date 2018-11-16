@@ -225,8 +225,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
-			$data2['tipopeticion_personaci'] = $this->input->post('motivo');
-			$data2['funciones_personaci'] = $this->input->post('cago_persona');
+			$data2['funciones_personaci'] = $this->input->post('funciones');
 			$data2['salario_personaci'] = $this->input->post('salario');
 			$data2['formapago_personaci'] = $this->input->post('forma_pago');
 			$data2['horarios_personaci'] = $this->input->post('horario');
@@ -246,9 +245,8 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
-			$data2['tipopeticion_personaci'] = $this->input->post('motivo');
 			$data2['ocupacion'] = $this->input->post('ocupacion');
-			$data2['funciones_personaci'] = $this->input->post('cago_persona');
+			$data2['funciones_personaci'] = $this->input->post('funciones');
 			$data2['salario_personaci'] = $this->input->post('salario');
 			$data2['formapago_personaci'] = $this->input->post('forma_pago');
 			$data2['horarios_personaci'] = $this->input->post('horario');

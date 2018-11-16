@@ -124,6 +124,7 @@ class Expedientes_model extends CI_Model {
 												 ep.primer_apellido,
 												 ep.segundo_apellido,
 												 ep.nr,
+												 ep.id_empleado,
 												 p.id_personaci,
 												 p.nombre_personaci,
 												 p.apellido_personaci,

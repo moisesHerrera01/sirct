@@ -254,44 +254,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <input type="hidden" name="id_persona" id="id_persona2">
                         <input type="hidden" name="id_representante" id="id_representante_solicitante">
 
-                        <!-- <span class="etiqueta">Informaci&oacute;n del Solicitante</span>
-                        <blockquote class="m-t-0">
-                            <div class="row">
-                                <div class="form-group col-lg-6" style="height: 83px;">
-                                    <h5>Nombres de Representante: <span class="text-danger">*</span></h5>
-                                    <input type="text" id="nombre_representacion_solicitante" name="nombre_representacion_solicitante"
-                                        class="form-control" placeholder="Nombre de Representante" required>
-                                    <div class="help-block"></div>
-                                </div>
-                                <div class="form-group col-lg-6" style="height: 83px;">
-                                    <h5>Apellidos de Representante: <span class="text-danger">*</span></h5>
-                                    <input type="text" id="apellido_representacion_solicitante" name="apellido_representacion_solicitante"
-                                        class="form-control" placeholder="Apellidos de Representante" required>
-                                    <div class="help-block"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6" style="height: 83px;">
-                                    <h5>Tipo de Representación: <span class="text-danger">*</span></h5>
-                                    <input type="text" id="tipo_representacion_solicitante" name="tipo_representacion_solicitante"
-                                        class="form-control" placeholder="Tipo de Representación" required>
-                                    <div class="help-block"></div>
-                                </div>
-                            </div>
-                        </blockquote> -->
-
                         <span class="etiqueta">Motivo de la solicitud</span>
                         <blockquote class="m-t-0">
                             <div class="row">
-                                <div class="form-group col-lg-4" style="height: 83px;">
-                                    <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
-                                            <option value="">[Seleccione]</option>
-                                            <option value="1">Indemnización</option>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="form-group col-lg-8" style="height: 83px;">
                                     <h5>Ocupación: <span class="text-danger">*</span></h5>
                                     <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI"></textarea>
@@ -315,10 +280,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <div class="help-block"></div>
                                 </div>
 
-                                <div class="form-group col-lg-6" style="height: 83px;">
-                                    <h5>Forma de pago:<span class="text-danger">*</h5>
-                                    <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Forma de pago">
-                                    <div class="help-block"></div>
+                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <h5>Forma de pago: <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                    <select id="forma_pago" name="forma_pago" class="custom-select col-4" onchange="" required>
+                                        <option value="">[Seleccione]</option>
+                                        <option value="Diario">Diario</option>
+                                        <option value="Semanal">Semanal</option>
+                                        <option value="Catorcenal">Catorcenal</option>
+                                        <option value="Quincenal">Quincenal</option>
+                                        <option value="Mensual">Mensual</option>
+                                    </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -356,21 +329,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <input type="hidden" id="id_persona3" name="id_persona" value="">
 
                     <div class="row">
-                        <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                            <h5>Resoluci&oacute;n de intervenci&oacute;n: <span class="text-danger">*</span></h5>
-                            <div class="controls">
-                                <select onchange="mostrar()" id="resolucion" name="resolucion" class="form-control"
-                                    required>
-                                    <option value="">[Seleccione]</option>
-                                    <option value="1">Conciliado</option>
-                                    <option value="2">Sin conciliar</option>
-                                    <option value="3">Inasistencia</option>
-                                    <option value="4">Desistida</option>
-                                    <option value="5">A multas</option>
-                                    <option value="6">No notificada</option>
-                                    <option value="7">Reinstalo</option>
-                                </select>
-                            </div>
+                        <div id="div_combo_resultados">
                         </div>
 
                         <div id="tipo_conciliacion_div" style="display:none;" class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "
@@ -590,8 +549,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $('#band5').val('edit');
 
             $('#id_expediente3').val(result.id_expedienteci);
-            $('#id_persona1').val(result.id_personaci);
-            $('#id_persona2').val(result.id_personaci);
+            $('#id_persona1').val(id_solicitante);
+            $('#id_persona2').val(id_solicitante);
             $('#id_representante_solicitante').val(result.id_representantepersonaci);
 
             $('#nombre_solicitante').val(result.nombre_personaci);
