@@ -179,7 +179,7 @@ class Reportes_individuales_model extends CI_Model {
   	function registros_consolidado_casos_finalizados($data){
   		$fecha_actual = explode("-", $data["anio"]."-".$data["value"]."-01");
 
-		$this->db->select(" res.id_resultadoci AS resultado,
+		$this->db->select(" res.resultadoci AS resultado,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
 			COALESCE(SUM(p.sexo_personaci),0) cant_total,
