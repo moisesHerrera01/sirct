@@ -56,7 +56,7 @@ class Reportes_colectivos_model extends CI_Model {
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci < '".$anios50."' AND p2.sexo_personaci = 'F') AS aniosf50,
 			ecc.*, p.*, emp.*, est.*, ciiu.*")
 			->from('sct_expedienteci ecc')
-			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+			->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
 			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
@@ -100,7 +100,7 @@ class Reportes_colectivos_model extends CI_Model {
 												 ep.nombre_empresa solicitado
 											  ')
 						   ->from('sct_expedienteci ecc')
-							 ->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+							 ->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
 							 ->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 							 ->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
 							 ->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
