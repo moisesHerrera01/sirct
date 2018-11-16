@@ -227,6 +227,7 @@ class Acta extends CI_Controller {
               $templateWord->setValue('resultado_audiencia', mb_strtoupper($expediente->detalle_resultado));
               $templateWord->setValue('posee', ($expediente->asistieron=="2") ? "quien se hace acompañar de " : "");
               $templateWord->setValue('delegado_audiencia', mb_strtoupper($expediente->delegado_audiencia));
+
               $nombre_solicitante = mb_strtoupper($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
               $representante_persona = mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci);
               $dui_defensor = mb_strtoupper(convertir_dui($expediente->dui_representantepersonaci));
@@ -307,10 +308,19 @@ class Acta extends CI_Controller {
           $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
           $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
           $templateWord->setValue('tipo', $tipo_empresa);
+          $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
         }
         $templateWord->setValue('representante_empresa', mb_strtoupper($expediente->nombres_representante));
         $templateWord->setValue('resolucion', mb_strtoupper($expediente->resultado_expedienteci));
-        $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
+
+
+        if ($id_audiencia) {
+          if ($expediente->id_delegado_audiencia == $expediente->id_delegado_expediente) {
+              $templateWord->setValue('nombre_delegado',"");
+          }else {
+            $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
+          }
+        }
 
         $nombreWord = $this->random();
 

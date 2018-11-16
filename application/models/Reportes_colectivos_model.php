@@ -117,6 +117,7 @@ class Reportes_colectivos_model extends CI_Model {
 																												WHERE fa.id_expedienteci=fea.id_expedienteci
 																												AND fa.estado_audiencia=2)) a ',
 										 'a.id_expedienteci=ecc.id_expedienteci')
+							 ->where('ecc.tiposolicitud_expedienteci>3')
 							 ->group_by('ecc.id_expedienteci');
 							 if ($data['tipo_pago']!='') {
 							 	$this->db->where('a.tipo_pago',$data['tipo_pago']);

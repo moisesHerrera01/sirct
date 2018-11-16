@@ -340,7 +340,7 @@ function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,p
       $("#solicitud_pn_pj").show();
     }
     if (estado=="2") {
-      if (resultado=="1" || resultado=="2") {
+      if (resultado=="1" || resultado=="2" || resultado=="4" || resultado=="7") {
         $("#pf_st").show();
       }else if (resultado=="5") {
         $("#multa").show();

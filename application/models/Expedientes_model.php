@@ -34,6 +34,8 @@ class Expedientes_model extends CI_Model {
 												 ta.titulo_academico profesion_representante,
 												 CONCAT_WS(" ",ea.primer_nombre,ea.segundo_nombre,ea.tercer_nombre,ea.primer_apellido,ea.segundo_apellido,ea.apellido_casada) delegado_audiencia,
 												 CONCAT_WS(" ",ep.primer_nombre,ep.segundo_nombre,ep.tercer_nombre,ep.primer_apellido,ep.segundo_apellido,ep.apellido_casada) delegado_expediente,
+												 ea.id_empleado id_delegado_audiencia,
+												 ep.id_empleado id_delegado_expediente,
 												 emp.id_empleador,
 												 emp.nombre_empleador,
 												 emp.apellido_empleador,

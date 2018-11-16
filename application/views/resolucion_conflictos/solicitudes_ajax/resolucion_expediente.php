@@ -64,7 +64,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <div class="row" id='tipo_pago'>
 
-          <div class="form-group col-lg-4" style="height: 83px;">
+          <div id="num_folios" class="form-group col-lg-4" style="height: 83px;">
               <h5>Número folios:<span class="text-danger">*</h5>
               <input type="number" id="numero_folios" name="numero_folios" class="form-control" placeholder="Número folios" step="1">
               <div class="help-block"></div>
@@ -150,6 +150,14 @@ function mostrar(){
 
   var divs = $("#tipo_pago").children(".form-group");
   $(divs[0]).show(0); $(divs[1]).hide(0); $(divs[2]).hide(0);
+  $("#num_folios").show(0);
+  $("#numero_folios").attr("required","required");
+  $("#div_combo_defensores").show(0);
+  $("#defensor").attr("required","required");
+  $("#div_combo_delegado2").show(0);
+  $("#delegado").attr("required","required");
+  $("#div_combo_representante_empresa").show(0);
+  $("#representante_empresa").attr("required","required");
   $("#especifique").hide(0);
   $("#p_pago").hide(0);
   $("#f_pago").hide(0);
@@ -213,6 +221,20 @@ function mostrar(){
     case '5':
       $("#det_resultado").hide(0);
       $("#detalle_resultado").removeAttr("required");
+      break;
+    case '9':
+      $("#det_resultado").hide(0);
+      $("#detalle_resultado").removeAttr("required");
+      $("#num_folios").hide(0);
+      $("#numero_folios").removeAttr("required");
+      $("#div_combo_representante_empresa").hide(0);
+      $("#representante_empresa").removeAttr("required");
+      $("#div_combo_delegado2").hide(0);
+      $("#delegado").removeAttr("required");
+      $("#div_combo_defensores").hide(0);
+      $("#defensor").removeAttr("required");
+      $("#asist").hide(500);
+      $("#asistieron").removeAttr("required");
       break;
     default:
   }

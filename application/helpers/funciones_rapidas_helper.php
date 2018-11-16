@@ -254,7 +254,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								'TREINTA Y CUATRO','TREINTA Y CINCO','TREINTA Y SEIS','TREINTA Y SIETE','TREINTA Y OCHO','TREINTA Y NUEVE','CUARENTA','CUARENTA Y UNO',
 								'CUARENTA Y DOS','CUARENTA Y TRES','CUARENTA Y CUATRO','CUARENTA Y CINCO','CUARENTA Y SEIS','CUARENTA Y SIETE','CUARENTA Y OCHO','CUARENTA Y NUEVE',
 								'CINCUENTA','CINCUENTA Y UNO',' CINCUENTA Y DOS','CINCUENTA Y TRES','CINCUENTA Y CUATRO','CINCUENTA Y CINCO','CINCUENTA Y SEIS','CINCUENTA Y SIETE','CINCUENTA Y OCHO','CINCUENTA Y NUEVE','SESENTA');
-			return $arrayMinutos[$minutos];
+			if ($arrayMinutos[$minutos]=='CERO') {
+				return "";
+			}else {
+				return 'con '.$arrayMinutos[$minutos].' minutos';
+			}
 		}
 
 		function dia($dia) {
@@ -333,7 +337,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			}else{
 				return "N/A";
 			}
-	    
+
 		}
 
 		function convertir_dui($dui_numeros){
