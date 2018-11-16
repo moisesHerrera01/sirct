@@ -30,7 +30,7 @@
         	|| ($("#fecha_inicio").val()!="" && $("#fecha_fin").val()!="" && document.getElementById('radio_periodo').checked==true)
         )){
           
-          	var url = "<?php echo site_url()?>"+"/reportes/reportes_individuales/relaciones_individuales_report";
+          	var url = "<?php echo site_url()?>"+"/reportes/reportes_individuales/consolidado_report";
 
           	if(document.getElementById('radio_pdf').checked==true && tipo==""){
           		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2 , 'report_type' : 'pdf' };
@@ -135,8 +135,8 @@
 <div class="page-wrapper">
     <div class="container-fluid">
         <div class="row page-titles">
-            <div class="align-self-center" align="left" style="width: 100%">
-                <h3 class="text-themecolor m-b-0 m-t-0">Reporte de relaciones individuales
+        	<div class="align-self-center" align="left" style="width: 100%">
+                <h3 class="text-themecolor m-b-0 m-t-0">Consolidado de solicitudes individuales
                     <div class="pull-right"><small><a href="<?=site_url()?>/reportes/reportes_individuales"><span class="mdi mdi-arrow-left"></span> Volver</a></small></div></h3>
             </div>
         </div>

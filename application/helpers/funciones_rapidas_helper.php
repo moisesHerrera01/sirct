@@ -239,7 +239,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		return date("d-m-Y",strtotime($fecha));
 	}
 
-		function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtolower($mesesarray[($mes-1)]); }
+		function get_fecha($date = 0){ if($date == 0){$date = date('Y-m-d');} $date = explode("-", $date); return $date[2]." DE ".mes($date[1])." DE ".$date[0]; }
+
+		function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtoupper($mesesarray[($mes-1)]); }
 
 		function hora($hora) {
 			$arrayHoras = array('CERO','UNA','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',

@@ -135,8 +135,9 @@
 <div class="page-wrapper">
     <div class="container-fluid">
         <div class="row page-titles">
-            <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Reporte de renuncia voluntaria</h3>
+            <div class="align-self-center" align="left" style="width: 100%">
+                <h3 class="text-themecolor m-b-0 m-t-0">Reporte de renuncia voluntaria
+                    <div class="pull-right"><small><a href="<?=site_url()?>/reportes/reportes_individuales"><span class="mdi mdi-arrow-left"></span> Volver</a></small></div></h3>
             </div>
         </div>
         <div class="row">

@@ -36,7 +36,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
 			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
 			->where('fea.estado_audiencia = 2')
-			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
+			->where('(ecc.tiposolicitud_expedienteci = 1 OR ecc.tiposolicitud_expedienteci = 3)')
 			->group_by('ecc.id_expedienteci');
 
 		if($data["tipo"] == "mensual"){
@@ -59,25 +59,36 @@ class Reportes_individuales_model extends CI_Model {
         return $query=$this->db->get();
     }
 
-    function registros_edades($data){
-
-    	$anios16 = (intval(date("Y"))-16).date("-m-d");
-		$anios30 = (intval(date("Y"))-30).date("-m-d");
-		$anios50 = (intval(date("Y"))-50).date("-m-d");
-
+    function registros_renuncia_voluntaria($data){
 		$this->db->select("
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' AND p2.sexo_personaci = 'M') AS aniosm16,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p2.sexo_personaci = 'M') AS aniosm30,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci < '".$anios50."' AND p2.sexo_personaci = 'M') AS aniosm50,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' AND p2.sexo_personaci = 'F') AS aniosf16,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p2.sexo_personaci = 'F') AS aniosf30,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci < '".$anios50."' AND p2.sexo_personaci = 'F') AS aniosf50,
-			ecc.*, p.*, emp.*, est.*, ciiu.*")
-			->from('sct_expedienteci ecc')
+			ecc.numerocaso_expedienteci,
+			d.departamento,
+			CONCAT_WS(' ', emp.primer_nombre, emp.segundo_nombre, emp.tercer_nombre, emp.primer_apellido, emp.segundo_apellido, emp.apellido_casada) delegado,
+			CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE '' END cant_masc,
+			CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE '' END cant_feme,
+			ecc.fechacrea_expedienteci fecha_inicio,
+			MAX(fea.id_fechasaudienciasci) fecha_fin,
+			CONCAT_WS(' ',p.nombre_personaci,p.apellido_personaci) solicitante,
+			TIMESTAMPDIFF(YEAR,p.fnacimiento_personaci,CURDATE()) AS edad,
+			CASE WHEN p.discapacidad_personaci = 1 THEN 1 ELSE '' END discapacidadci,
+			est.nombre_empresa,
+			mv.nombre_motivo causa,
+			ciiu.grupo_catalogociiu,
+			ciiu.actividad_catalogociiu,
+			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp JOIN sct_personaci AS p3 WHERE p3.id_personaci = fp.id_persona AND p3.sexo_personaci = 'M') AS monto,
+			res.resultadoci")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
+			->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
+			->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
 			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
+			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
+			->where('fea.estado_audiencia = 2')
+			->where('ecc.tiposolicitud_expedienteci = 2')
 			->group_by('ecc.id_expedienteci');
 
 		if($data["tipo"] == "mensual"){
@@ -100,33 +111,93 @@ class Reportes_individuales_model extends CI_Model {
         return $query=$this->db->get();
     }
 
-		public function reporte_tipo_pago(){
-			$this->db->select('
-												 CONCAT_WS(" ",emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) delegado,
-												 d.departamento,
-												 ecc.numerocaso_expedienteci,
-												 ecc.fechaconflicto_personaci,
-												 (SELECT MAX(fea.id_fechasaudienciasci) FROM sct_fechasaudienciasci fea WHERE fea.id_expedienteci=ecc.id_expedienteci AND estado_audiencia=1) fecha_fin,
-												 CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) solicitante,
-												 (SELECT COUNT(pe.id_personaci) FROM sct_personaci pe WHERE pe.id_expedienteci=ecc.id_expedienteci AND pe.sexo="M") masculino,
-												 (SELECT COUNT(pe.id_personaci) FROM sct_personaci pe WHERE pe.id_expedienteci=ecc.id_expedienteci AND pe.sexo="F") femenino,
-												 CASE
-													 WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
-													 WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
-													 WHEN e.tiposolicitud_expedienteci=6 THEN "Renuncia Volutaria Multiple"
-													 ELSE e.tiposolicitud_expedienteci END AS tipo,
-												 ciiu.actividad_catalogociiu actividad_economica,
-												 e.resultado_expedienteci resultado,
+    function registros_consolidado_pendientes($data){
 
-											  ')
-						   ->from('sct_expedienteci ecc')
-							 ->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-							 ->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-							 ->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
-							 ->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
-							 ->join('org_municipio m','m.id_municipio=emp.id_municipio')
-							 ->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
-							 ->group_by('ecc.id_expedienteci');
-		}
+    	$fecha_actual = strtotime($data["anio"]."-".$data["value"]."-01");
+  		$fecha_menor = explode("-", date("Y-m-d", strtotime("-1 month", $fecha_actual)));
+  		$fecha_actual = explode("-", $fecha_actual);
+
+
+		$this->db->select(" 'DIFERENCIAS INDIVIDUALES DEL MES ANTERIOR' AS texto,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
+			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			ecc.fechacrea_expedienteci fecha_inicio,
+			fea.id_fechasaudienciasci fecha_fin")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
+			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
+			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa 
+					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
+			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_menor[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_menor[1]."')")
+			->where("(fea.estado_audiencia = 1 OR fea.resultado IN(1,4,5,6,7,8))");
+
+        return $query=$this->db->get();
+    }
+
+    function registros_consolidado_recibidos($data){
+  		$fecha_actual = explode("-", $data["anio"]."-".$data["value"]."-01");
+
+		$this->db->select("'DIFERENCIAS INDIVIDUALES DEL PRESENTE MES' texto,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
+			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			ecc.fechacrea_expedienteci fecha_inicio")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
+			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
+			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')");
+
+        return $query=$this->db->get();
+    }
+
+    function registros_consolidado_recibidos_por_causa($data){
+  		$fecha_actual = explode("-", $data["anio"]."-".$data["value"]."-01");
+
+		$this->db->select("mv.nombre_motivo,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
+			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			ecc.fechacrea_expedienteci fecha_inicio")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
+			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
+			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')")
+			->group_by('ecc.causa_expedienteci')
+			->order_by('mv.nombre_motivo');
+
+        return $query=$this->db->get();
+    }
+  	
+  	function registros_consolidado_casos_finalizados($data){
+  		$fecha_actual = explode("-", $data["anio"]."-".$data["value"]."-01");
+
+		$this->db->select(" res.id_resultadoci AS resultado,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
+			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			ecc.fechacrea_expedienteci fecha_inicio,
+			fea.id_fechasaudienciasci fecha_fin")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
+			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
+			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa 
+					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
+			->where("(YEAR(fea.fecha_resultado) = '".$fecha_actual[0]."' AND MONTH(fea.fecha_resultado) = '".$fecha_actual[1]."')")
+			->where("fea.estado_audiencia = 2")
+			->group_by('fea.resultado');
+
+        return $query=$this->db->get();
+    }
 
 }
