@@ -23,7 +23,7 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
   })
   .done(function(res){
     combo_defensores();
-    combo_representante_empresa();
+    combo_representante_empresa('', $("#id_empresa_audiencia").val());
     combo_delega2($("#id_empleado_audiencia").val());
     combo_resultados();
     $('#cnt_modal_actions').html(res);
@@ -136,6 +136,7 @@ function agregar(){
                 </table>
             </blockquote>
             <input type="hidden" name="id_empleado_audiencia" id="id_empleado_audiencia" value="<?= $expediente->id_empleado ?>">
+            <input type="hidden" name="id_empresa_audiencia" id="id_empresa_audiencia" value="<?= $expediente->id_empresa ?>">
             <div id="cnt_form6" class="cnt_form">
               <?php echo form_open('', array('id' => 'formajax6', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
 

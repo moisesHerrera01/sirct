@@ -128,6 +128,7 @@ class Expedientes_model extends CI_Model {
 												 p.id_personaci,
 												 p.nombre_personaci,
 												 p.apellido_personaci,
+												 em.id_empresa,
 												 em.nombre_empresa,
 												 s.nombre_sindicato'
 												)
