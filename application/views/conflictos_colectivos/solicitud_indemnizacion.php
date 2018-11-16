@@ -722,7 +722,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#representante_empresa").select2('close');
     }
 
-
+    function combo_resultados(seleccion){
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_resultados",
+            type: "post",
+            dataType: "html",
+            data: {id : seleccion}
+        })
+        .done(function(res){
+            $('#div_combo_resultados').html(res);
+            $("#resolucion").select2();
+        });
+    }
 
 </script>
 
