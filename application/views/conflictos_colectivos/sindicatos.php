@@ -43,6 +43,47 @@ function combo_delegado_tabla(seleccion){
   });
 }
 
+function combo_resultados(seleccion){
+  $.ajax({
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/sindicato/combo_resultados",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_resultados').html(res);
+    $("#resolucion").select2();
+  });
+}
+
+function combo_motivos(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/combo_motivo_solicitud",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_motivos').html(res);
+    $("#motivo").select2();
+  });
+}
+
+function combo_tipo_directivos(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/sindicato/combo_tipo_directivos",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_tipo_directivos').html(res);
+    $("#tipo_directivo").select2();
+  });
+}
+
 function cerrar_combo_defensores() {
     $("#defensor").select2('close');
     combo_tipo_representante();
@@ -550,6 +591,7 @@ function cambiar_nuevo(){
     combo_delegado('');
     combo_actividad_economica('');
     combo_municipio('');
+    combo_motivos();
     $("#motivo").val('');
     $("#descripcion_motivo").val();
     $("#id_personal").val('');
@@ -578,6 +620,7 @@ function cambiar_nuevo(){
 }
 
 function cambiar_nuevo2(){
+  combo_tipo_directivos();
   $("#id_directivo").val('');
   $("#nombre_directivo").val('');
   $("#apellido_directivo").val('');
@@ -619,6 +662,8 @@ function cambiar_editar(id_expedienteci,bandera){
       combo_actividad_economica(result.id_catalogociiu);
       combo_municipio(result.municipio_empresa);
       combo_delegado(result.id_personal);
+      combo_motivos(result.causa_expedienteci);
+      combo_tipo_directivos(result.tipo_directivo);
       $("#fecha_creacion_exp").val(result.fechacrea_expedienteci);
       $("#motivo").val(result.motivo_expedienteci);
       $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
@@ -665,8 +710,13 @@ function cambiar_editar2(id_directivo,bandera){
       $("#nombre_directivo").val(result.nombre_directivo);
       $("#apellido_directivo").val(result.apellido_directivo);
       $("#dui_directivo").val(result.dui_directivo);
-      $("#tipo_directivo").val(result.tipo_directivo);
+      combo_tipo_directivos(result.tipo_directivo);
       $("#acreditacion_directivo").val(result.acreditacion_directivo);
+      if (result.sexo_directivo=='M') {
+        document.getElementById('masculino').checked =true;
+      }else {
+        document.getElementById('femenino').checked =true;
+      }
       /*Fin directivo*/
       $("#band2").val("edit");
     });
@@ -875,7 +925,7 @@ function volver(num) {
                                 </div>
 
                                 <div class="row">
-                                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                  <!-- <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                       <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
                                       <div class="controls">
                                         <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
@@ -887,7 +937,8 @@ function volver(num) {
                                           <option value="Incumplimiento de aumento salarial">Incumplimiento de aumento salarial</option>
                                         </select>
                                       </div>
-                                  </div>
+                                  </div> -->
+                                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_motivos"></div>
 
                                   <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
                                 </div>
@@ -1140,7 +1191,7 @@ function volver(num) {
 <!-- INICIO MODAL DIRECTIVOS -->
 <!-- ============================================================== -->
 <div id="modal_directivo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
           <input type="hidden" id="band2" name="band2" value="save">
@@ -1150,44 +1201,52 @@ function volver(num) {
             </div>
             <div class="modal-body" id="">
                 <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Nombre del directivo: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="nombre_directivo" name="nombre_directivo" class="form-control" required="">
                       </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Apellido del directivo: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="apellido_directivo" name="apellido_directivo" class="form-control">
                       </div>
                   </div>
                 </div>
+
                 <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-4" style="height: 83px;">
+                      <h5>Sexo:</h5>
+                      <input name="sexo_directivo" type="radio" id="masculino" checked="" value="M">
+                      <label for="masculino">Masculino</label>
+                      <input name="sexo_directivo" type="radio" id="femenino" value="F">
+                      <label for="femenino">Femenino</label>
+                      <div class="help-block"></div>
+                </div>
+
+                  <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>DUI del directivo: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input data-mask="99999999-9" type="text" id="dui_directivo" name="dui_directivo" class="form-control">
                       </div>
                   </div>
-                </div>
 
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Tipo del directivo: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="tipo_directivo" name="tipo_directivo" class="form-control">
                       </div>
-                  </div>
+                  </div> -->
+                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_directivos"></div>
                 </div>
 
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Acreditación del directivo: <span class="text-danger">*</span></h5>
                       <div class="controls">
-                          <input type="text" id="acreditacion_directivo" name="acreditacion_directivo" class="form-control">
+                          <textarea type="text" id="acreditacion_directivo" name="acreditacion_directivo" class="form-control"></textarea>
                       </div>
                   </div>
                 </div>

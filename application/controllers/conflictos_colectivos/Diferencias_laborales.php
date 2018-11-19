@@ -13,13 +13,14 @@ class Diferencias_laborales extends CI_Controller {
 
 		if($this->input->post('band4') == "save"){
 						$data2 = array(
-                'motivo_expedienteci' => $this->input->post('motivo'),
+                'motivo_expedienteci' => 4,
                 'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
 								'id_personal' => $this->input->post('id_personal'),
 								'id_empresaci' => $this->input->post('establecimiento'),
 								'id_estadosci' => 1,
 								'fechacrea_expedienteci' => $fecha_actual,
 								'tiposolicitud_expedienteci' =>"4",
+								'causa_expedienteci' => $this->input->post('motivo')
             );
 
 						$id_expedienteci = $this->expediente_cc_model->insertar_expediente($data2);
@@ -39,11 +40,12 @@ class Diferencias_laborales extends CI_Controller {
 
 			$data2 = array(
 					'id_expedienteci' => $this->input->post('id_expedienteci'),
-					'motivo_expedienteci' => $this->input->post('motivo'),
+					'motivo_expedienteci' => 4,
 					'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
 					'id_personal' => $this->input->post('id_personal'),
 					'id_empresaci' => $this->input->post('establecimiento'),
-					'fechacrea_expedienteci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_creacion_exp')))
+					'fechacrea_expedienteci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_creacion_exp'))),
+					'causa_expedienteci' => $this->input->post('motivo')
 			);
 
 		 echo $this->expediente_cc_model->editar_expediente($data2);

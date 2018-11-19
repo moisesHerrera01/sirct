@@ -66,4 +66,27 @@ class Sindicatos_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	public function obtener_tipo_directivos(){
+		$this->db->select('id_tipo_directivo,tipo_directivo,estado_tipo_directivo')
+						 ->from('sge_tipo_directivo');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
+
+	public function obtener_resultados(){
+		$this->db->select('*')
+						 ->from('sct_resultadosci')
+						 ->where('id_tipo_solicitud',4);
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
 }

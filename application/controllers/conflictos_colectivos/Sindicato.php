@@ -45,5 +45,27 @@ class Sindicato extends CI_Controller {
 			echo $this->sindicatos_model->editar_sindicato($data);
 		}
 	}
+
+	public function combo_tipo_directivos() {
+		$resultados = $this->sindicatos_model->obtener_tipo_directivos();
+		$this->load->view('conflictos_colectivos/sindicatos_ajax/combo_tipo_directivos',
+			array(
+				'id' => $this->input->post('id'),
+				'resultados' => $resultados
+			)
+		);
+
+	}
+
+	public function combo_resultados() {
+		$resultados = $this->sindicatos_model->obtener_resultados();
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_resultados',
+			array(
+				'id' => $this->input->post('id'),
+				'resultados' => $resultados
+			)
+		);
+
+	}
 }
 ?>

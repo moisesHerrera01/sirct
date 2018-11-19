@@ -97,7 +97,7 @@ class Reportes_colectivos_model extends CI_Model {
 												 a.resultadoci resultado,
 												 a.fecha_fechasaudienciasci fecha_fin,
 												 ciiu.actividad_catalogociiu actividad_economica,
-												 ep.nombre_empresa solicitado
+												 est.nombre_empresa solicitado
 											  ')
 						   ->from('sct_expedienteci ecc')
 							 ->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
@@ -106,8 +106,7 @@ class Reportes_colectivos_model extends CI_Model {
 							 ->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
 							 ->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
 							 ->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
-							 ->join('sct_motivo_solicitud mt','mt.id_motivo_solicitud=motivo_expedienteci')
-							 ->join('sge_empresa ep','ep.id_empresa=ecc.id_empresaci')
+							 ->join('sct_motivo_solicitud mt','mt.id_motivo_solicitud=ecc.causa_expedienteci')
 							 ->join('(SELECT fea.tipo_pago,fea.id_expedienteci,r.resultadoci, fea.fecha_fechasaudienciasci,fea.id_fechasaudienciasci
 										 	 FROM sct_fechasaudienciasci fea
 											 JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
@@ -119,7 +118,7 @@ class Reportes_colectivos_model extends CI_Model {
 										 'a.id_expedienteci=ecc.id_expedienteci')
 							 ->where('ecc.tiposolicitud_expedienteci>3')
 							 ->group_by('ecc.id_expedienteci');
-							 if ($data['tipo_pago']!='') {
+							 if ($data['tipo_pago']!='' AND $data['tipo_pago']!=0) {
 							 	$this->db->where('a.tipo_pago',$data['tipo_pago']);
 							 }
 							 if($data["tipo"] == "mensual"){
@@ -139,7 +138,75 @@ class Reportes_colectivos_model extends CI_Model {
 								 $this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
 							 }
 
-							return $query=$this->db->get();
+							// return $query=$this->db->get();
+							$sql[] = '('.$this->db->get_compiled_select().')';
+
+							if ($data['tipo_pago']==1) {
+								$this->db->select('
+																		CONCAT_WS(" ",emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) delegado,
+																	 d.departamento,
+																	 e.numerocaso_expedienteci,
+																	 e.fechaconflicto_personaci,
+																	 e.fechacrea_expedienteci,
+																	 s.nombre_sindicato solicitante,
+																	 (SELECT COUNT(di.id_directivo) FROM sge_directivo di WHERE di.id_sindicato=s.id_sindicato AND di.sexo_directivo="M") masculino,
+																	 (SELECT COUNT(di.id_directivo) FROM sge_directivo di WHERE di.id_sindicato=s.id_sindicato AND di.sexo_directivo="F") femenino,
+																	 ciiu.actividad_catalogociiu actividad_economica,
+																	 mt.nombre_motivo causa,
+																	 a.resultadoci resultado,
+																	 a.fecha_resultado fecha_fin,
+																	 ciiu.actividad_catalogociiu actividad_economica,
+																	 est.nombre_empresa solicitado
+																	')
+												 ->from('sge_sindicato s')
+												 ->join('sge_directivo di','di.id_sindicato=s.id_sindicato')
+												 ->join('sct_expedienteci e','e.id_expedienteci=s.id_expedientecc')
+												 ->join('sir_empleado emp','emp.id_empleado=e.id_personal')
+												 ->join('sge_empresa est', 'est.id_empresa = e.id_empresaci')
+												 ->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
+												 ->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
+												 ->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
+												 ->join('sct_motivo_solicitud mt','mt.id_motivo_solicitud = e.causa_expedienteci')
+												 ->join('(SELECT r.id_resultadoci,fea.fecha_resultado, fea.tipo_pago,fea.id_expedienteci,r.resultadoci, fea.fecha_fechasaudienciasci,fea.id_fechasaudienciasci
+																 FROM sct_fechasaudienciasci fea
+																 JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
+																 WHERE estado_audiencia=2
+																 AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
+																																	FROM sct_fechasaudienciasci fa
+																																	WHERE fa.id_expedienteci=fea.id_expedienteci
+																																	AND fa.estado_audiencia=2)) a ',
+															 'a.id_expedienteci=e.id_expedienteci')
+													->where('e.tiposolicitud_expedienteci>3')
+													//->where('a.id_resultadoci',10)
+													->group_by('e.id_expedienteci');
+
+													if($data["tipo"] == "mensual"){
+					 								 $this->db->where('YEAR(e.fechacrea_expedienteci)', $data["anio"])
+					 										 ->where('MONTH(e.fechacrea_expedienteci)', $data["value"]);
+					 							 }else if($data["tipo"] == "trimestral"){
+					 									 $tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
+					 								 $this->db->where('YEAR(e.fechacrea_expedienteci)', $data["anio"])
+					 										 ->where("MONTH(e.fechacrea_expedienteci) BETWEEN '".$tminicio."' AND '".$tmfin."'");
+					 							 }else if($data["tipo"] == "semestral"){
+					 									 $smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
+					 									 $this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
+					 										 ->where("MONTH(e.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
+					 							 }else if($data["tipo"] == "semestral"){
+					 									 $this->db->where("e.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
+					 							 }else{
+					 								 $this->db->where('YEAR(e.fechacrea_expedienteci)', $data["anio"]);
+					 							 }
+
+												 $sql[] = '('.$this->db->get_compiled_select().')';
+
+	 											$sql = implode(' UNION ', $sql);
+												$query = $this->db->query($sql);
+
+							}else {
+								$query = $this->db->query($sql[0]);
+							}
+
+						return $query;
 		}
 
 

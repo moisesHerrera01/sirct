@@ -285,7 +285,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     /*Inicio establecimiento*/
                     combo_actividad_economica();
                     combo_municipio();
-                    combo_motivos(result.motivo_expedienteci);
+                    combo_motivos(result.causa_expedienteci);
                     $("#id_expediente").val(id_expediente);
                     /*Fin establecimiento*/
 

@@ -74,7 +74,8 @@ class Expediente_cc_model extends CI_Model {
                          m.municipio,
                          CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido,em.apellido_casada) delegado,
                          mu.id_municipio municipio_empresa,
-                         cat.id_catalogociiu'
+                         cat.id_catalogociiu,
+                         e.causa_expedienteci'
                        )
                ->from('sct_expedienteci e')
                ->join('sge_empresa es','es.id_empresa=e.id_empresaci')

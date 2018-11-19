@@ -21,7 +21,8 @@ class Directivos extends CI_Controller {
 			'apellido_directivo' => $this->input->post('apellido_directivo'),
 			'dui_directivo' => $this->input->post('dui_directivo'),
 			'tipo_directivo' => $this->input->post('tipo_directivo'),
-			'acreditacion_directivo' => $this->input->post('acreditacion_directivo')
+			'acreditacion_directivo' => $this->input->post('acreditacion_directivo'),
+			'sexo_directivo' => $this->input->post('sexo_directivo')
 			);
 			$this->directivos_model->insertar_directivo($data);
 			echo $data['id_sindicato'];
@@ -35,7 +36,8 @@ class Directivos extends CI_Controller {
 				'apellido_directivo' => $this->input->post('apellido_directivo'),
 				'dui_directivo' => $this->input->post('dui_directivo'),
 				'tipo_directivo' => $this->input->post('tipo_directivo'),
-				'acreditacion_directivo' => $this->input->post('acreditacion_directivo')
+				'acreditacion_directivo' => $this->input->post('acreditacion_directivo'),
+				'sexo_directivo' => $this->input->post('sexo_directivo')
 			);
 			$this->directivos_model->editar_directivo($data);
 			echo $data['id_sindicato'];
