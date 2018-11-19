@@ -138,17 +138,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	function table_header($titles){
 
-		$cabecera_vista = '<div class="table table-responsive">
+		$cabecera_vista = '<div class="table table-responsive" style="margin: 0; padding: 0;">
 			<table border="1" style="width:100%; border-collapse: collapse;">
 				<thead>
 					<tr>';
 		
 		for($i=0; $i < count($titles); $i++){
-			$cabecera_vista .= '<th align="center">'.mb_strtoupper($titles[$i])."</th>";
+			$cabecera_vista .= '<th align="center" style="text-align: center;">'.mb_strtoupper($titles[$i])."</th>";
 		}
 	 	
 		$cabecera_vista .= '</tr>
 				</thead>
+				<tbody>';
+	 	return $cabecera_vista;
+	}
+
+	function table_no_header(){
+
+		$cabecera_vista = '<div class="table table-responsive" style="margin: 0; padding: 0;">
+			<table border="1" style="width:100%; border-collapse: collapse;">
 				<tbody>';
 	 	return $cabecera_vista;
 	}

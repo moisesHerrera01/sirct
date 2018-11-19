@@ -446,7 +446,24 @@ class Reportes_individuales extends CI_Controller {
 			$this->mpdf->WriteHTML($body);
 			$this->mpdf->Output($titles[2].date(" - Ymd_His").'.pdf','I');
 		}else if($this->input->post('report_type') == "excel"){
-			$this->consolidado_excel($data, $titles, $titles_head);
+			header("Content-type: application/octet-stream");
+			header('Content-Type: text/html; charset=utf-8');
+			header("Content-Disposition: attachment; filename=consumo_vales.xls");
+			header("Pragma: no-cache");
+			header("Expires: 0");
+
+			$body .= '<!DOCTYPE HTML>
+			<head>
+			    <meta http-equiv="Content-Type" content="text/html" charset=utf-8" />
+			</head>
+			<body>';
+			$body .= head_table_html($titles, $data, 'html').$textadd;
+			$body .= $this->consolidado_html($data, $titles_head);
+			$body .= '</body></html>';
+
+			echo $body;
+
+			//$this->consolidado_excel($data, $titles, $titles_head);
 		}
 	}
 
@@ -468,9 +485,11 @@ class Reportes_individuales extends CI_Controller {
 				$cuerpo .= table_row($cell_row);
 			}
 		}
-		$cuerpo .= table_footer();
+		$cuerpo .= table_footer()."<br>";
 
 		/**************************** REGISTRADOS EN EL MES ACTUAL **************************/
+		$cuerpo .= '<table border="1" style="width:100%; border-collapse: collapse;"><tr><td style="padding: 10px;">';
+
 		$table_header1 = array('','M','F','TOTAL');
 		$cuerpo .= table_header($table_header1);
 		$registros = $this->reportes_individuales_model->registros_consolidado_recibidos($data);
@@ -485,9 +504,9 @@ class Reportes_individuales extends CI_Controller {
 				$cuerpo .= table_row($cell_row);
 			}
 		}
-		$cuerpo .= table_footer();
+		$cuerpo .= table_footer()."<br>";
 
-		/********************** REGISTRADOS EN EL MES ACTUAL POR CAUSA **************************/
+					/********************** REGISTRADOS EN EL MES ACTUAL POR CAUSA **************************/
 		$table_header1 = array('','M','F','TOTAL');
 		$cuerpo .= table_header($table_header1);
 		$registros = $this->reportes_individuales_model->registros_consolidado_recibidos_por_causa($data);
@@ -506,24 +525,22 @@ class Reportes_individuales extends CI_Controller {
 		}
 		$cuerpo .= table_footer();
 
+		$cuerpo .= '</td></tr></table><br>';
+
 		/********************** CASOS FINALIZADOS **************************/
 
-		$table_header1 = array('');
+		$cuerpo .= '<table border="1" style="width:100%; border-collapse: collapse;"><tr><td style="padding: 10px;">';
+
 		$total = 0;
-		$cuerpo .= table_header($table_header1);
 		$registros = $this->reportes_individuales_model->registros_consolidado_casos_finalizados($data);
 		if($registros->num_rows()>0){
 			foreach ($registros->result() as $rows) {
 				$total+=$rows->cant_masc;
 			}
-
-			$cell_row = array( 'TOTAL', intval($total) );
-			$cuerpo .= table_row($cell_row);
-		}else{
-			$cell_row = array( 'TOTAL', intval($total) );
-			$cuerpo .= table_row($cell_row);
-		}
+		}else{ $total = 0; }
+		$cuerpo .= table_header(array('CASOS FINALIZADOS', $total));
 		$cuerpo .= table_footer();
+
 
 		$table_header1 = array('','M','F','TOTAL');
 		$masc = 0; $feme = 0;
@@ -553,6 +570,89 @@ class Reportes_individuales extends CI_Controller {
 			$cuerpo .= no_rows(count($table_header1));
 		}
 		$cuerpo .= table_footer();
+
+		$cuerpo .= '</td></tr></table><br>';
+
+		/********************************** EXPEDIENTES PENDIENTES ************************************/
+
+		$masc = 0; $feme = 0;
+		$registros = $this->reportes_individuales_model->registros_consolidado_expedientes_pendientes($data);
+		if($registros->num_rows()>0){
+			foreach ($registros->result() as $rows) {
+				$masc+=$rows->cant_masc;
+				$feme+=$rows->cant_feme;
+			}
+		}else{ $total = 0; }
+		$cuerpo .= table_header(array($rows->texto, 'TOTAL: '.($feme+$masc), 'MUJERES: '.$feme, 'HOMBRES: '.$masc));
+		$cuerpo .= table_footer()."<br>";
+
+		/*******************************  ***********************************/
+
+		$cuerpo .= '<table style="width:100%; border: 1px solid black;"><tr>
+			<th>PERSONAS TRABAJADORAS</th>
+			<th>AUDIENCIAS CELEBRADAS EN EL MES</th>
+			<th>MONTOS ACORDADOS</th>
+		</tr><tr>';
+
+		$cuerpo .= '<td style="padding: 10px;" align="center">';
+			$cuerpo .= '<b>DESPEDIDAS</b>';
+			$total = 0;
+			$registros = $this->reportes_individuales_model->registros_consolidado_personas_despedidas($data);
+			if($registros->num_rows()>0){
+				foreach ($registros->result() as $rows) {
+					$total+=$rows->cant_masc;
+				}
+			}else{ $total = 0; }
+			$cuerpo .= table_header(array($total));
+			$cuerpo .= table_footer();
+
+		$cuerpo .= '</td>';
+		$cuerpo .= '<td style="padding: 10px;" align="center">';
+			$cuerpo .= '<b><small>(Total de conciliadas, sin consiliar y reinstalo)</small></b>';
+			$total = 0;
+			$registros = $this->reportes_individuales_model->registros_consolidado_audiencias($data);
+			if($registros->num_rows()>0){
+				foreach ($registros->result() as $rows) {
+					$total+=$rows->cant_masc;
+				}
+			}else{ $total = 0; }
+			$cuerpo .= table_header(array($total));
+			$cuerpo .= table_footer();
+
+		$cuerpo .= '</td>';
+		$cuerpo .= '<td style="padding: 10px;">';
+
+
+			$masc = 0; $feme = 0;
+			$cuerpo .= table_no_header();
+			$registros = $this->reportes_individuales_model->registros_consolidado_pagos($data);
+			if($registros->num_rows()>0){
+				foreach ($registros->result() as $rows) {
+					$cell_row = array(
+						"TOTAL",
+						$rows->cant_total,
+						"$ ".$rows->monto_total
+					);
+					$cuerpo .= table_row($cell_row);
+					$cell_row = array(
+						"MUJERES",
+						$rows->cant_feme,
+						"$ ".$rows->monto_feme
+					);
+					$cuerpo .= table_row($cell_row);
+					$cell_row = array(
+						"HOMBRES",
+						$rows->cant_masc,
+						"$ ".$rows->monto_masc
+					);
+					$cuerpo .= table_row($cell_row);
+				}
+			}
+			$cuerpo .= table_footer();
+
+		$cuerpo .= '</td>';
+
+		$cuerpo .= '</tr></table><br>';
 
 
 
