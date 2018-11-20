@@ -655,7 +655,6 @@ class Reportes_individuales extends CI_Controller {
 
 
 		/**************************** RENUNCIAS VOLUNTARIAS **************************/
-
 		$cuerpo .= '<table border="1" style="width:100%; border-collapse: collapse;"><tr><td style="padding: 10px;">';
 		$total = 0;
 		$registros = $this->reportes_individuales_model->registros_consolidado_renuncia_voluntario($data);
@@ -686,8 +685,8 @@ class Reportes_individuales extends CI_Controller {
 
 		$cuerpo .= '</td></tr></table><br>';
 
-		/********************************** TOTAL DE ASESORIAS ************************************/
 
+		/********************************** TOTAL DE ASESORIAS ************************************/
 		$masc = 0; $feme = 0;
 		$registros = $this->reportes_individuales_model->registros_consolidado_expedientes_pendientes($data);
 		if($registros->num_rows()>0){
