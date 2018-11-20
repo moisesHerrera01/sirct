@@ -130,7 +130,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
 			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
 			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa 
+			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
 					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
 			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_menor[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_menor[1]."')")
 			->where("(fea.estado_audiencia = 1 OR fea.resultado IN(1,4,5,6,7,8))");
@@ -175,7 +175,7 @@ class Reportes_individuales_model extends CI_Model {
 
         return $query=$this->db->get();
     }
-  	
+
   	function registros_consolidado_casos_finalizados($data){
   		$fecha_actual = explode("-", $data["anio"]."-".$data["value"]."-01");
 
@@ -191,7 +191,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
 			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
 			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa 
+			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
 					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
 			->where("(YEAR(fea.fecha_resultado) = '".$fecha_actual[0]."' AND MONTH(fea.fecha_resultado) = '".$fecha_actual[1]."')")
 			->where("fea.estado_audiencia = 2")
@@ -215,7 +215,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci','LEFT')
 			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado','LEFT')
 			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			->where('(fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa 
+			->where('(fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
 					 WHERE fa.id_expedienteci=fea.id_expedienteci) OR fea.id_expedienteci IS NULL)')
 			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')")
 			->where("(fea.estado_audiencia = 1 OR `fea`.`estado_audiencia` IS NULL OR fea.resultado IN(2,3))");
@@ -238,7 +238,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci','LEFT')
 			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado','LEFT')
 			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			->where('(fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa 
+			->where('(fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
 					 WHERE fa.id_expedienteci=fea.id_expedienteci) OR fea.id_expedienteci IS NULL)')
 			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')")
 			->where('ecc.motivo_expedienteci = 1');
@@ -281,7 +281,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
 			->join('sct_fechaspagosci AS fp', 'fp.id_persona = p.id_personaci')
-			->where('fea.id_fechasaudienciasci = (SELECT MIN(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa 
+			->where('fea.id_fechasaudienciasci = (SELECT MIN(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
 					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
 			->where('fea.estado_audiencia = 2')
 			->where('(ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3)');
