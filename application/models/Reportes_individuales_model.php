@@ -121,7 +121,7 @@ class Reportes_individuales_model extends CI_Model {
 		$this->db->select(" 'DIFERENCIAS INDIVIDUALES DEL MES ANTERIOR' AS texto,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			COALESCE(COUNT(p.sexo_personaci),0) cant_total,
 			ecc.fechacrea_expedienteci fecha_inicio,
 			fea.id_fechasaudienciasci fecha_fin")
 			->from('sct_expedienteci AS ecc')
@@ -144,7 +144,7 @@ class Reportes_individuales_model extends CI_Model {
 		$this->db->select("'DIFERENCIAS INDIVIDUALES DEL PRESENTE MES' texto,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			COALESCE(COUNT(p.sexo_personaci),0) cant_total,
 			ecc.fechacrea_expedienteci fecha_inicio")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
@@ -162,7 +162,7 @@ class Reportes_individuales_model extends CI_Model {
 		$this->db->select("mv.nombre_motivo,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			COALESCE(COUNT(p.sexo_personaci),0) cant_total,
 			ecc.fechacrea_expedienteci fecha_inicio")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
@@ -182,7 +182,7 @@ class Reportes_individuales_model extends CI_Model {
 		$this->db->select(" res.resultadoci AS resultado,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			COALESCE(COUNT(p.sexo_personaci),0) cant_total,
 			ecc.fechacrea_expedienteci fecha_inicio,
 			fea.id_fechasaudienciasci fecha_fin")
 			->from('sct_expedienteci AS ecc')
@@ -206,7 +206,7 @@ class Reportes_individuales_model extends CI_Model {
 		$this->db->select(" 'EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES' AS texto,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			COALESCE(COUNT(p.sexo_personaci),0) cant_total,
 			ecc.fechacrea_expedienteci fecha_inicio,
 			fea.id_fechasaudienciasci fecha_fin")
 			->from('sct_expedienteci AS ecc')
@@ -229,7 +229,7 @@ class Reportes_individuales_model extends CI_Model {
 		$this->db->select(" 'EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES' AS texto,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			COALESCE(COUNT(p.sexo_personaci),0) cant_total,
 			ecc.fechacrea_expedienteci fecha_inicio,
 			fea.id_fechasaudienciasci fecha_fin")
 			->from('sct_expedienteci AS ecc')
@@ -252,7 +252,7 @@ class Reportes_individuales_model extends CI_Model {
 		$this->db->select(" 'EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES' AS texto,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
+			COALESCE(COUNT(p.sexo_personaci),0) cant_total,
 			ecc.fechacrea_expedienteci fecha_inicio,
 			fea.id_fechasaudienciasci fecha_fin")
 			->from('sct_expedienteci AS ecc')
@@ -288,5 +288,28 @@ class Reportes_individuales_model extends CI_Model {
 
         return $query=$this->db->get();
     }
+
+    function registros_consolidado_renuncia_voluntario($data){
+    	$fecha_actual = explode("-",$data["anio"]."-".$data["value"]."-01");
+
+		$this->db->select(" (CASE WHEN fea.inasistencia = 1 THEN 'PARTE PATRONAL' WHEN fea.inasistencia = 2 THEN 'PARTE TRABAJADORA' WHEN fea.inasistencia = 3 THEN 'AMBAS PARTES' ELSE 'DESISTIDA' END) AS texto,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
+			COALESCE(COUNT(p.sexo_personaci),0) cant_total")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->where('ecc.tiposolicitud_expedienteci = 2')
+			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa 
+					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
+			->where("(YEAR(fea.fecha_resultado) = '".$fecha_actual[0]."' AND MONTH(fea.fecha_resultado) = '".$fecha_actual[1]."')")
+			->where("(fea.resultado IN(4,6,8))")
+			->group_by('fea.inasistencia');
+
+        return $query=$this->db->get();
+    }
+
+
 
 }
