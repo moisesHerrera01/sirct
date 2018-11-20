@@ -588,10 +588,10 @@ class Reportes_individuales extends CI_Controller {
 
 		/*******************************  ***********************************/
 
-		$cuerpo .= '<table style="width:100%; border: 1px solid black;"><tr>
-			<th>PERSONAS TRABAJADORAS</th>
-			<th>AUDIENCIAS CELEBRADAS EN EL MES</th>
-			<th>MONTOS ACORDADOS</th>
+		$cuerpo .= '<table style="width:100%; border: 1px solid black; border-collapse: collapse;"><tr>
+			<th style="text-align: center;">PERSONAS TRABAJADORAS</th>
+			<th style="text-align: center;">AUDIENCIAS CELEBRADAS EN EL MES</th>
+			<th style="text-align: center;">MONTOS ACORDADOS</th>
 		</tr><tr>';
 
 		$cuerpo .= '<td style="padding: 10px;" align="center">';
@@ -620,8 +620,7 @@ class Reportes_individuales extends CI_Controller {
 			$cuerpo .= table_footer();
 
 		$cuerpo .= '</td>';
-		$cuerpo .= '<td style="padding: 10px;">';
-
+		$cuerpo .= '<td style="padding: 10px;" width="50%">';
 
 			$masc = 0; $feme = 0;
 			$cuerpo .= table_no_header();
@@ -655,98 +654,53 @@ class Reportes_individuales extends CI_Controller {
 		$cuerpo .= '</tr></table><br>';
 
 
+		/**************************** RENUNCIAS VOLUNTARIAS **************************/
 
-		return $cuerpo;
-	}
+		$cuerpo .= '<table border="1" style="width:100%; border-collapse: collapse;"><tr><td style="padding: 10px;">';
+		$total = 0;
+		$registros = $this->reportes_individuales_model->registros_consolidado_renuncia_voluntario($data);
+		if($registros->num_rows()>0){
+			foreach ($registros->result() as $rows) {
+				$total+=$rows->cant_masc;
+			}
+		}else{ $total = 0; }
+		$cuerpo .= table_header(array('RENUNCIAS VOLUNTARIAS', $total));
+		$cuerpo .= table_footer();
 
-	function consolidado_excel($data, $titulos, $titles_table_head){
-		$this->load->library('phpe');
-		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE); 
-		$estilo = array( 'borders' => array( 'outline' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) ) );
-
-		if (PHP_SAPI == 'cli') die('Este reporte solo se ejecuta en un navegador web');
-
-		// Create new PHPExcel object
-		$this->objPHPExcel = new Phpe();
-
-		// Set document properties
-		PhpExcelSetProperties($this->objPHPExcel,"Sistema de Mediación Individual");
-
-		$titulo = $titulos[2].date(" - Ymd_His");
-
-		$f=1;
-		$letradesde = 'A';
-		$letrahasta = 'R';
-
-		//MODIFICANDO ANCHO DE LAS COLUMNAS 18
-		PhpExcelSetColumnWidth($this->objPHPExcel,
-			$width = array(5,10,30,15,15,30,5,5,10,5,12,30,10,30,30,10,15,20), 
-			$letradesde, $letrahasta);
-
-		//AGREGAMOS LOS TITULOS DEL REPORTE
-		$f = PhpExcelSetTitles($this->objPHPExcel,
-			$title = $titulos,
-		$letradesde, "L", $f);
-
-		/************************ 	  INICIO ENCABEZADOS DE LA TABLAS	********************************/
-		$f = PhpExcelAddHeaderTable($this->objPHPExcel, $titles_table_head, $letradesde, $letrahasta, $f, $estilo);
-	 	/************************* 	   FIN ENCABEZADOS DE LA TABLA   	**********************************/
-
-	 	/************************** 	   INICIO DE LOS REGISTROS DE LA TABLA   	*******************/
-	 	$registros = $this->reportes_individuales_model->registros_renuncia_voluntaria($data);
+		$table_header1 = array('','M','F','TOTAL');
+		$cuerpo .= table_header($table_header1);
 		if($registros->num_rows()>0){
 			foreach ($registros->result() as $rows) {
 				$cell_row = array(
-					$rows->numerocaso_expedienteci,
-					$rows->departamento,
-					$rows->delegado,
-					fecha_ESP($rows->fecha_inicio),
-					fecha_ESP($rows->fecha_fin),
-					$rows->solicitante,
+					$rows->texto,
 					$rows->cant_masc,
 					$rows->cant_feme,
-					'',
-					$rows->edad,
-					$rows->discapacidadci,
-					$rows->nombre_empresa,
-					$rows->causa,
-					'',
-					$rows->actividad_catalogociiu,
-					$rows->resultadoci,
-					$rows->monto,
-					''
+					$rows->cant_total
 				);
-				$f = PhpExcelAddRowTable($this->objPHPExcel, $cell_row, $letradesde, $letrahasta, $f, $estilo);
+				$cuerpo .= table_row($cell_row);
 			}
 		}else{
-			$f = PhpExcelAddNoRows($this->objPHPExcel,$letradesde, $letrahasta, $f, $estilo); //CUANDO NO HAY REGISTROS
+			$cuerpo .= no_rows(count($table_header1));
 		}
+		$cuerpo .= table_footer();
 
-		/************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	****************************/
-		
-		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true); 
+		$cuerpo .= '</td></tr></table><br>';
 
-		$f+=3;
+		/********************************** TOTAL DE ASESORIAS ************************************/
 
-	 	$fecha=strftime( "%d-%m-%Y - %H:%M:%S", time() );
-		$this->objPHPExcel->setActiveSheetIndex(0)->setCellValue("A".$f,"Fecha y Hora de Creación: ".$fecha); $f++;
-		$this->objPHPExcel->setActiveSheetIndex(0)->setCellValue("A".$f,"Usuario: ".$this->session->userdata('usuario'));
-		// Rename worksheet
-		$this->objPHPExcel->getActiveSheet()->setTitle($titulo);
-		// Redirect output to a client’s web browser (Excel5)
-		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="'.$titulo.'.xls"');
-		header('Cache-Control: max-age=0');
-		// If you're serving to IE 9, then the following may be needed
-		header('Cache-Control: max-age=1');
-		// If you're serving to IE over SSL, then the following may be needed
-		header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-		header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-		header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-		header ('Pragma: public'); // HTTP/1.0
-    	$writer = new PHPExcel_Writer_Excel5($this->objPHPExcel);
-		header('Content-type: application/vnd.ms-excel');
-		$writer->save('php://output');
+		$masc = 0; $feme = 0;
+		$registros = $this->reportes_individuales_model->registros_consolidado_expedientes_pendientes($data);
+		if($registros->num_rows()>0){
+			foreach ($registros->result() as $rows) {
+				$masc+=$rows->cant_masc;
+				$feme+=$rows->cant_feme;
+			}
+		}else{ $total = 0; }
+		$cuerpo .= table_header(array($rows->texto, 'TOTAL: ?', 'MUJERES: ?', 'HOMBRES: ?'));
+		$cuerpo .= table_footer()."<br>";
+
+
+		return $cuerpo;
 	}
 
 
