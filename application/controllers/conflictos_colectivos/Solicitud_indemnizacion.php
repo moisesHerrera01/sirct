@@ -289,4 +289,15 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 	}
 
+	public function combo_resultados() {
+		$resultados = $this->expediente_cc_model->obtener_resultados();
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_resultados',
+			array(
+				'id' => $this->input->post('id'),
+				'resultados' => $resultados
+			)
+		);
+
+	}
+
 }

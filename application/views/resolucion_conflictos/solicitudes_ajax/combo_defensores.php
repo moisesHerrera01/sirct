@@ -1,5 +1,5 @@
-<h5>Defensor(a) público(a): <span class="text-danger">*</span></h5>
-<select id="defensor" name="defensor" required class="select2 def" onchange=""  style="width: 100%">
+<h5>Defensor(a) público(a): </h5>
+<select id="defensor" name="defensor" class="select2 def" onchange=""  style="width: 100%">
     <option value="">[Sin defensor]</option>
         <?php
             if(!empty($defensor)){

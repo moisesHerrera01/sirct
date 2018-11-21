@@ -70,7 +70,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <div class="help-block"></div>
           </div>
 
-            <div  class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+            <div id='tipo_cc' class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Tipo de pago: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
@@ -173,6 +173,16 @@ function mostrar(){
   $("#asistieron").attr("required","required");
   var value = $("#resolucion").val();
 
+  $("#asistieron").change(
+      function(){
+        var esp = $("#asistieron").val();
+        if (esp==3) {
+          $("#defensor").removeAttr("required");
+        }else {
+          $("#asistieron").attr("required","required");
+        }
+    });
+
   if(value == ""){ $("#tipo_pago").hide(0); }else{ $("#tipo_pago").show(0); }
 
   switch (value) {
@@ -235,6 +245,10 @@ function mostrar(){
       $("#defensor").removeAttr("required");
       $("#asist").hide(500);
       $("#asistieron").removeAttr("required");
+      break;
+    case '10':
+        $("#tipo_conciliacion").attr("required",'required');
+        $("#tipo_cc").show();
       break;
     default:
   }

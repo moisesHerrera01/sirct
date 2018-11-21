@@ -708,11 +708,12 @@ class Reportes_colectivos extends CI_Controller {
 		$cuerpo = "";
 
 		/**************************** PENDIENTES DEL MES ANTERIOR **************************/
-
+		$pendientes_mes_anterior=0;
 		$registros = $this->reportes_colectivos_model->registros_consolidado_pendientes($data);
 		if($registros->num_rows()>0){
 			foreach ($registros->result() as $rows) {
 				$table_header1 = array('DIFERENCIAS COLECTIVAS PENDIENTES DEL MES ANTERIOR',$rows->cant_total);
+				$pendientes_mes_anterior=$rows->cant_total;
 				$cuerpo .= table_header($table_header1);
 			}
 		}
@@ -721,17 +722,18 @@ class Reportes_colectivos extends CI_Controller {
 		/**************************** REGISTRADOS EN EL MES ACTUAL **************************/
 		$cuerpo .= '<table border="1" style="width:100%; border-collapse: collapse;"><tr><td style="padding: 10px;">';
 
-
+		$total_recibidas=0;
 		$registros = $this->reportes_colectivos_model->registros_consolidado_recibidos($data);
 		if($registros->num_rows()>0){
 			foreach ($registros->result() as $rows) {
 				$table_header1 = array('DIFERENCIAS COLECTIVAS RECIBIDAS EN EL PRESENTE MES',$rows->cant_total);
+				$total_recibidas=$rows->cant_total;
 				$cuerpo .= table_header($table_header1);
 			}
 		}
 		$cuerpo .= table_footer()."<br>";
 
-					/********************** REGISTRADOS EN EL MES ACTUAL POR CAUSA **************************/
+		/********************** REGISTRADOS EN EL MES ACTUAL POR CAUSA **************************/
 		$table_header1 = array('','');
 		$cuerpo .= table_header($table_header1);
 		$registros = $this->reportes_colectivos_model->registros_consolidado_recibidos_por_causa($data);
@@ -754,16 +756,18 @@ class Reportes_colectivos extends CI_Controller {
 
 		$cuerpo .= '<table border="1" style="width:100%; border-collapse: collapse;"><tr><td style="padding: 10px;">';
 
-		$total = 0;
+		$total_finalizado = 0;
+		$registros = $this->reportes_colectivos_model->registros_consolidado_casos_finalizados($data);
+		foreach ($registros->result() as $r) {
+			$total_finalizado+=$r->cant_total;
+		}
 
-		$cuerpo .= table_header(array('CASOS FINALIZADOS', $total));
+		$cuerpo .= table_header(array('CASOS FINALIZADOS', $total_finalizado));
 		$cuerpo .= table_footer();
-
 
 		$table_header1 = array('','');
 		$masc = 0; $feme = 0;
 		$cuerpo .= table_header($table_header1);
-		$registros = $this->reportes_colectivos_model->registros_consolidado_casos_finalizados($data);
 		if($registros->num_rows()>0){
 			foreach ($registros->result() as $rows) {
 				$cell_row = array(
@@ -785,16 +789,9 @@ class Reportes_colectivos extends CI_Controller {
 		$cuerpo .= '</td></tr></table><br>';
 
 		/********************************** EXPEDIENTES PENDIENTES ************************************/
+		$total_pendientes=$total_recibidas+$pendientes_mes_anterior-$total_finalizado;
 
-		$masc = 0; $feme = 0;
-		$registros = $this->reportes_colectivos_model->registros_consolidado_expedientes_pendientes($data);
-		if($registros->num_rows()>0){
-			foreach ($registros->result() as $rows) {
-				$masc+=$rows->cant_masc;
-				$feme+=$rows->cant_feme;
-			}
-		}else{ $total = 0; }
-		$cuerpo .= table_header(array($rows->texto, 'TOTAL: '.($feme+$masc), 'MUJERES: '.$feme, 'HOMBRES: '.$masc));
+		$cuerpo .= table_header(array('EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES', 'TOTAL: '.($total_pendientes)));
 		$cuerpo .= table_footer()."<br>";
 
 		/*******************************  ***********************************/
@@ -811,7 +808,7 @@ class Reportes_colectivos extends CI_Controller {
 			$registros = $this->reportes_colectivos_model->registros_consolidado_personas_despedidas($data);
 			if($registros->num_rows()>0){
 				foreach ($registros->result() as $rows) {
-					$total+=$rows->cant_masc;
+					$total+=$rows->cant_total;
 				}
 			}else{ $total = 0; }
 			$cuerpo .= table_header(array($total));
@@ -819,12 +816,12 @@ class Reportes_colectivos extends CI_Controller {
 
 		$cuerpo .= '</td>';
 		$cuerpo .= '<td style="padding: 10px;" align="center">';
-			$cuerpo .= '<b><small>(Total de conciliadas, sin consiliar y reinstalo)</small></b>';
+			$cuerpo .= '<b><small>(Total de conciliadas, sin conciliar y reinstalo)</small></b>';
 			$total = 0;
 			$registros = $this->reportes_colectivos_model->registros_consolidado_audiencias($data);
 			if($registros->num_rows()>0){
 				foreach ($registros->result() as $rows) {
-					$total+=$rows->cant_masc;
+					$total=$rows->cant_total;
 				}
 			}else{ $total = 0; }
 			$cuerpo .= table_header(array($total));
@@ -865,8 +862,33 @@ class Reportes_colectivos extends CI_Controller {
 
 		$cuerpo .= '</tr></table><br>';
 
+		/*Otras mediaciones*/
+		$otras_mediaciones = 0;
+		$registros = $this->reportes_colectivos_model->registros_otras_mediaciones($data);
+		if ($registros->num_rows() >0 ) {
+			foreach ($registros->result() as $r) {
+				$otras_mediaciones = $r->cant_total;
+			}
+		}
 
+		$cuerpo .= table_header(array('OTRAS MEDIACIONES', 'TOTAL: '.($otras_mediaciones)));
+		$cuerpo .= table_footer()."<br>";
+		/*Pago diferido*/
+		$pago_diferido = 0;
+		$registros = $this->reportes_colectivos_model->registros_pago_diferido($data);
+		if ($registros->num_rows() >0 ) {
+			foreach ($registros->result() as $r) {
+				$pago_diferido = $r->cant_total;
+			}
+		}
 
+		$cuerpo .= table_header(array('PAGO DIFERIDO', 'TOTAL: '.($pago_diferido)));
+		$cuerpo .= table_footer()."<br>";
+		/*Asesorías*/
+		$total_pendientes=$total_recibidas+$pendientes_mes_anterior-$total_finalizado;
+
+		$cuerpo .= table_header(array('ASESORÍAS', 'TOTAL: '.($total_pendientes),'MUJERES: 0','HOMBRES: 0'));
+		$cuerpo .= table_footer()."<br>";
 		return $cuerpo;
 	}
 

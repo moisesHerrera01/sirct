@@ -724,7 +724,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function combo_resultados(seleccion){
         $.ajax({
-            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_resultados",
+            url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/combo_resultados",
             type: "post",
             dataType: "html",
             data: {id : seleccion}

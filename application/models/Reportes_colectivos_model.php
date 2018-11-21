@@ -249,10 +249,10 @@ class Reportes_colectivos_model extends CI_Model {
 																					AND YEAR(e.fechacrea_expedienteci)=".$fecha_actual[0]."
 																					AND MONTH(e.fechacrea_expedienteci)=".$fecha_actual[1].") cant_total")
 						->from('sct_motivo_solicitud mv')
+						->where('mv.id_tipo_solicitud>3')
 						->group_by('mv.id_motivo_solicitud')
 						->order_by('mv.nombre_motivo');
-
-        return $query=$this->db->get();
+        return $this->db->get();
     }
 
   	function registros_consolidado_casos_finalizados($data){
@@ -264,63 +264,35 @@ class Reportes_colectivos_model extends CI_Model {
 																					WHERE f.resultado=res.id_resultadoci
 																					AND e.tiposolicitud_expedienteci>3
 																					AND YEAR(e.fechacrea_expedienteci)=".$fecha_actual[0]."
-																					AND MONTH(e.fechacrea_expedienteci)=".$fecha_actual[1].") cant_total")
-			->from('sct_resultadosci AS res');
-			// ->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			// ->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
-			// ->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
-			// ->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			// ->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
-			// 		 WHERE fa.id_expedienteci=fea.id_expedienteci)')
-			// ->where("(YEAR(fea.fecha_resultado) = '".$fecha_actual[0]."' AND MONTH(fea.fecha_resultado) = '".$fecha_actual[1]."')")
-			// ->where("fea.estado_audiencia = 2")
-			// ->group_by('fea.resultado');
-
+																					AND MONTH(e.fechacrea_expedienteci)=".$fecha_actual[1]."
+																					AND f.id_fechasaudienciasci=(SELECT MAX(fa.id_fechasaudienciasci)
+																																			 FROM sct_fechasaudienciasci fa
+																					 		 										 		 WHERE fa.id_expedienteci=f.id_expedienteci
+																																			 AND fa.estado_audiencia=2)) cant_total")
+						->from('sct_resultadosci AS res')
+						->where('res.id_tipo_solicitud>3')
+						->group_by('res.id_resultadoci');
         return $query=$this->db->get();
     }
 
-    function registros_consolidado_expedientes_pendientes($data){
-  		$fecha_actual = explode("-",$data["anio"]."-".$data["value"]."-01");
 
-		$this->db->select(" 'EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES' AS texto,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
-			ecc.fechacrea_expedienteci fecha_inicio,
-			fea.id_fechasaudienciasci fecha_fin")
-			->from('sct_expedienteci AS ecc')
-			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci','LEFT')
-			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado','LEFT')
-			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			->where('(fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
-					 WHERE fa.id_expedienteci=fea.id_expedienteci) OR fea.id_expedienteci IS NULL)')
-			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')")
-			->where("(fea.estado_audiencia = 1 OR `fea`.`estado_audiencia` IS NULL OR fea.resultado IN(2,3))");
-
-        return $query=$this->db->get();
-    }
-
+		/*RESULTADO 16 es reinstalo de trabajadores
+		causas 2,3,6 corresponden a despido, despido por aumento al salario minimo y
+		despido por presentar renuncia voluntaria respectivamente*/
     function registros_consolidado_personas_despedidas($data){
   		$fecha_actual = explode("-",$data["anio"]."-".$data["value"]."-01");
 
-		$this->db->select(" 'EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES' AS texto,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
-			ecc.fechacrea_expedienteci fecha_inicio,
-			fea.id_fechasaudienciasci fecha_fin")
+		$this->db->select("COALESCE(COUNT(p.id_personaci),0) cant_total")
 			->from('sct_expedienteci AS ecc')
-			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci','LEFT')
-			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado','LEFT')
-			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			->where('(fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
-					 WHERE fa.id_expedienteci=fea.id_expedienteci) OR fea.id_expedienteci IS NULL)')
+			->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
+			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->where('ecc.tiposolicitud_expedienteci>3')
+			->where('(fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
+																						 FROM sct_fechasaudienciasci fa
+					 																 	 WHERE fa.id_expedienteci=fea.id_expedienteci
+																						 AND fa.resultado <> 16))')
 			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')")
-			->where('ecc.motivo_expedienteci = 1');
+			->where('ecc.causa_expedienteci IN (2,3,6)');
 
         return $query=$this->db->get();
     }
@@ -328,44 +300,63 @@ class Reportes_colectivos_model extends CI_Model {
     function registros_consolidado_audiencias($data){
   		$fecha_actual = explode("-",$data["anio"]."-".$data["value"]."-01");
 
-		$this->db->select(" 'EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES' AS texto,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(SUM(p.sexo_personaci),0) cant_total,
-			ecc.fechacrea_expedienteci fecha_inicio,
-			fea.id_fechasaudienciasci fecha_fin")
+		$this->db->select("COALESCE(COUNT(fea.id_fechasaudienciasci),0) cant_total")
 			->from('sct_expedienteci AS ecc')
-			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci','LEFT')
-			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado','LEFT')
-			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			->where('fea.resultado IN (1,2,7)')
+			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
+			->where('ecc.tiposolicitud_expedienteci>3')
+			->where('fea.resultado IN (10,12,16)')
+			->where('fea.estado_audiencia',2)
 			->where("(YEAR(fea.fecha_resultado) = '".$fecha_actual[0]."' AND MONTH(fea.fecha_resultado) = '".$fecha_actual[1]."')");
 
-        return $query=$this->db->get();
+        return $this->db->get();
     }
 
     function registros_consolidado_pagos($data){
 		$this->db->select("
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_masc,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_feme,
-			COALESCE(SUM(fp.montopago_fechaspagosci),0) monto_total,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COUNT(p.sexo_personaci) cant_total,
-			")
+											COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_masc,
+											COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_feme,
+											COALESCE(SUM(fp.montopago_fechaspagosci),0) monto_total,
+											COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
+											COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
+											COUNT(p.id_personaci) cant_total
+											")
 			->from('sct_expedienteci AS ecc')
-			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
 			->join('sct_fechaspagosci AS fp', 'fp.id_persona = p.id_personaci')
-			->where('fea.id_fechasaudienciasci = (SELECT MIN(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
-					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
-			->where('fea.estado_audiencia = 2')
-			->where('(ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3)');
+			->where('(ecc.tiposolicitud_expedienteci>3)');
 
-        return $query=$this->db->get();
+         return $this->db->get();
     }
+
+		function registros_otras_mediaciones($data){
+			$fecha_actual = explode("-",$data["anio"]."-".$data["value"]."-01");
+
+		$this->db->select("COALESCE(COUNT(fea.id_fechasaudienciasci),0) cant_total")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
+			->where('ecc.tiposolicitud_expedienteci>3')
+			->where('fea.resultado NOT IN (10,12,16)')
+			->where('fea.estado_audiencia',2)
+			->where("(YEAR(fea.fecha_resultado) = '".$fecha_actual[0]."' AND MONTH(fea.fecha_resultado) = '".$fecha_actual[1]."')");
+
+				return $this->db->get();
+		}
+
+		function registros_pago_diferido($data){
+			$fecha_actual = explode("-",$data["anio"]."-".$data["value"]."-01");
+
+		$this->db->select("COALESCE(COUNT(fea.id_fechasaudienciasci),0) cant_total")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->where('ecc.tiposolicitud_expedienteci>3')
+			->where('fea.tipo_pago',2)
+			->where("(YEAR(fea.fecha_resultado) = '".$fecha_actual[0]."' AND MONTH(fea.fecha_resultado) = '".$fecha_actual[1]."')");
+
+				return $this->db->get();
+		}
+
+
 
 }

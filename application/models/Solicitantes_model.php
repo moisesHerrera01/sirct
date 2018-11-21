@@ -14,12 +14,18 @@ class Solicitantes_model extends CI_Model {
                     a.nombre_personaci,
                     a.apellido_personaci,
                     a.estado_persona,
-                    c.estado_audiencia,
 										a.sexo_personaci,
-										a.estudios_personaci'
+										a.estudios_personaci,
+										(SELECT COUNT(f.id_fechasaudienciasci)
+										 FROM sct_fechasaudienciasci f
+										 WHERE f.id_expedienteci=a.id_expedienteci
+										 AND f.resultado=10)  conciliado,
+										 (SELECT COUNT(f.id_fechasaudienciasci)
+ 										 FROM sct_fechasaudienciasci f
+ 										 WHERE f.id_expedienteci=a.id_expedienteci
+ 										 AND f.estado_audiencia=1) activas'
                 )
                 ->from('sct_personaci a')
-                ->join('sct_fechasaudienciasci c', 'c.id_expedienteci = a.id_expedienteci', 'left')
                 ->where('a.id_expedienteci', $expediente)
                 ->group_by('a.id_personaci');
         $query=$this->db->get();

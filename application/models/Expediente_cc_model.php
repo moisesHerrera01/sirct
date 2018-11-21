@@ -155,6 +155,18 @@ class Expediente_cc_model extends CI_Model {
       }
     }
 
+    public function obtener_resultados(){
+      $this->db->select('*')
+               ->from('sct_resultadosci')
+               ->where('id_tipo_solicitud>3');
+      $query = $this->db->get();
+      if ($query->num_rows() > 0) {
+        return $query;
+      }else {
+        return FALSE;
+      }
+    }
+
 }
 
 ?>
