@@ -20,7 +20,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <?php } ?>
 
         <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-            tablasolicitudes();
+            combo_delegado_tabla();
         <?php }else{ ?>
             $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
         <?php } ?>
@@ -55,6 +55,23 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             //$("#id_catalogociuo").select2();
             combo_establecimiento(seleccion2);
         });
+    }
+
+    function combo_delegado_tabla(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado_tabla",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_delegado_tabla').html(res);
+        <?php if(obtener_rango($segmentos=2, $permiso=1)>1){?>
+                $("#nr_search").select2();
+          <?php } ?>
+        tablasolicitudes();
+      });
     }
 
     function combo_resultados(seleccion){
@@ -176,7 +193,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Fin Solicitante*/
 
         /*Inicio Solicitado*/
-        
+
         //
         /*Fin Solicitado*/
 
@@ -203,7 +220,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Fin Solicitante*/
 
         /*Inicio Solicitado*/
-        
+
         //
         /*Fin Solicitado*/
         open_form(3);
@@ -246,7 +263,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#discapacidad_personaci").val(result.discapacidad_personaci);
             $("#telefono_personaci").val(result.telefono_personaci);
             $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
-            $("#causa_expedienteci").val(result.causa_expedienteci).trigger('change.select2');    
+            $("#causa_expedienteci").val(result.causa_expedienteci).trigger('change.select2');
             $("#salario_personaci").val(result.salario_personaci);
             $("#horarios_personaci").val(result.horarios_personaci);
             $("#id_expedienteci").val(result.id_expedienteci);
@@ -291,7 +308,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#discapacidad_personaci").val(discapacidad_personaci);
         $("#telefono_personaci").val(telefono_personaci);
         $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');
-        $("#causa_expedienteci").val(causa_expedienteci).trigger('change.select2');     
+        $("#causa_expedienteci").val(causa_expedienteci).trigger('change.select2');
         $("#salario_personaci").val(salario_personaci);
         $("#horarios_personaci").val(horarios_personaci);
         $("#id_expedienteci").val(id_expedienteci);
@@ -333,7 +350,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         .done(function(res){
             $.when($('#div_combo_establecimiento').html(res) ).then(function( data, textStatus, jqXHR ) {
                 $("#establecimiento").select2({
-                    
+
                     'language': {
                         noResults: function () {
                             return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
@@ -361,7 +378,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#band2").val('save');
             $("#modal_representante").modal('show');
         }
-      
+
     }
 
     function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
@@ -393,14 +410,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         }else{
             var text = "Desea activar el registro";
             var title = "¿Activar?";
-        }       
-        swal({   
-            title: title,   
-            text: text,   
-            type: "warning",   
-            showCancelButton: true,   
-            confirmButtonColor: "#fc4b6c",   
-            confirmButtonText: "Sí, continuar" 
+        }
+        swal({
+            title: title,
+            text: text,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#fc4b6c",
+            confirmButtonText: "Sí, continuar"
         }, function(){
             if(estado == 1){
                 $.when( $("#estado_representante").val('0') ).then( $("#submit2").click() );
@@ -689,7 +706,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         .done(function(res){
             $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
                 $("#defensor").select2({
-                    
+
                     'language': {
                         noResults: function () {
                             return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
@@ -1024,7 +1041,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             }
                                         ?>
                                         </select>
-                                    </div> 
+                                    </div>
                                 </div>
                             </blockquote>
                             <div class="pull-left">
@@ -1057,25 +1074,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     </div>
                     <div class="card-body b-t" style="padding-top: 7px;">
                     <div>
+                      <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                         <div class="pull-left">
-                            <div class="form-group" style="width: 400px;">
-                                <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablasolicitudes();">
-                                <option value="">[Todos los empleados]</option>
-                                <?php
-                                    $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
-                                    if($otro_empleado->num_rows() > 0){
-                                        foreach ($otro_empleado->result() as $fila) {
-                                            if($nr_usuario == $fila->nr){
-                                               echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }else{
-                                                echo '<option class="m-l-50" value="'.$fila->nr.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }
-                                        }
-                                    }
-                                ?>
-                                </select>
-                            </div>
+                          <div class="form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado_tabla" style="width: 400px;"></div>
                         </div>
+                      <?php }else{ ?>
+                        <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
+                      <?php } ?>
                         <div class="pull-right">
                             <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
                             <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2" ><span class="mdi mdi-plus"></span> Nuevo registro</button>
@@ -1266,17 +1271,17 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <h5>Telefono: </h5>
                       <div class="controls">
                           <input type="text" placeholder="Telefono" id="telefono_empresa" name="telefono_empresa" class="form-control" data-mask="9999-9999">
-                          
+
                       </div>
                   </div>
                   <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Municipio: <span class="text-danger">*</span></h5>
                         <select id="id_municipio" name="id_municipio" class="select2" style="width: 100%" required>
                             <option value=''>[Seleccione el municipio]</option>
-                            <?php 
+                            <?php
                                 $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
                                 if($municipio->num_rows() > 0){
-                                    foreach ($municipio->result() as $fila2) {              
+                                    foreach ($municipio->result() as $fila2) {
                                        echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
                                     }
                                 }
@@ -1289,10 +1294,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <h5>Actividad económica: <span class="text-danger">*</span></h5>
                         <select id="id_catalogociiu" name="id_catalogociiu" class="select2" style="width: 100%" required>
                             <option value=''>[Seleccione la actividad]</option>
-                            <?php 
+                            <?php
                                 $catalogociiu = $this->db->query("SELECT * FROM sge_catalogociiu ORDER BY actividad_catalogociiu");
                                 if($catalogociiu->num_rows() > 0){
-                                    foreach ($catalogociiu->result() as $fila2) {              
+                                    foreach ($catalogociiu->result() as $fila2) {
                                        echo '<option class="m-l-50" value="'.$fila2->id_catalogociiu.'">'.$fila2->actividad_catalogociiu.'</option>';
                                     }
                                 }

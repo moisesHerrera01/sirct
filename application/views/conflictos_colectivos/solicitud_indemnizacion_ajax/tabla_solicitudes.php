@@ -38,7 +38,16 @@
                                         e.fechacrea_expedienteci AS fecha,
                                         e.id_expedienteci,
                                         es.id_estadosci AS estado,
-                                        (select count(*) from sct_fechasaudienciasci where id_expedienteci = e.id_expedienteci ) audiencias
+                                        (select count(*) from sct_fechasaudienciasci where id_expedienteci = e.id_expedienteci ) audiencias,
+                                        (SELECT r.resultadoci
+                                         FROM sct_fechasaudienciasci fea
+                                         JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
+                                         WHERE estado_audiencia=2
+                                         AND fea.id_expedienteci = e.id_expedienteci
+                                         AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
+                                                                          FROM sct_fechasaudienciasci fa
+                                                                          WHERE fa.id_expedienteci=fea.id_expedienteci
+                                                                          AND fa.estado_audiencia=2)) AS resultado
                                         FROM sct_estadosci AS es
                                         JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                         JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci

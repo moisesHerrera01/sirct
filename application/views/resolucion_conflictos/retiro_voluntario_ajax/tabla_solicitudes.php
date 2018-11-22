@@ -34,7 +34,15 @@
                                               CASE
                                                 WHEN e.tiposolicitud_expedienteci=2 THEN 'Renuncia Voluntaria'
                                                 ELSE e.tiposolicitud_expedienteci END AS tipo,
-                                              e.resultado_expedienteci AS resultado,
+                                                (SELECT r.resultadoci
+                																 FROM sct_fechasaudienciasci fea
+                																 JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
+                																 WHERE estado_audiencia=2
+                                                 AND fea.id_expedienteci = e.id_expedienteci
+                																 AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
+                																																	FROM sct_fechasaudienciasci fa
+                																																	WHERE fa.id_expedienteci=fea.id_expedienteci
+                																																	AND fa.estado_audiencia=2)) AS resultado,                                            
                                               e.fechacrea_expedienteci AS fecha,
                                               p.nombre_personaci,
                                               p.apellido_personaci,

@@ -51,7 +51,16 @@
                                               p.discapacidad_personaci,
                                               em.nombre_empresa,
                                               e.id_expedienteci,
-                                              es.id_estadosci AS estado
+                                              es.id_estadosci AS estado,
+                                              (SELECT r.resultadoci
+              																 FROM sct_fechasaudienciasci fea
+              																 JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
+              																 WHERE estado_audiencia=2
+                                               AND fea.id_expedienteci = e.id_expedienteci
+              																 AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
+              																																	FROM sct_fechasaudienciasci fa
+              																																	WHERE fa.id_expedienteci=fea.id_expedienteci
+              																																	AND fa.estado_audiencia=2)) AS resultado
                                               FROM sct_estadosci AS es
                                               JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                               JOIN sct_personaci p ON p.id_personaci=e.id_personaci

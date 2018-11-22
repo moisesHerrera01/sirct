@@ -885,103 +885,11 @@ class Reportes_colectivos extends CI_Controller {
 		$cuerpo .= table_header(array('PAGO DIFERIDO', 'TOTAL: '.($pago_diferido)));
 		$cuerpo .= table_footer()."<br>";
 		/*Asesorías*/
-		$total_pendientes=$total_recibidas+$pendientes_mes_anterior-$total_finalizado;
 
-		$cuerpo .= table_header(array('ASESORÍAS', 'TOTAL: '.($total_pendientes),'MUJERES: 0','HOMBRES: 0'));
+		$cuerpo .= table_header(array('ASESORÍAS', 'TOTAL: 0','MUJERES: 0','HOMBRES: 0'));
 		$cuerpo .= table_footer()."<br>";
+
 		return $cuerpo;
 	}
-
-	function consolidado_excel($data, $titulos, $titles_table_head){
-		$this->load->library('phpe');
-		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE);
-		$estilo = array( 'borders' => array( 'outline' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) ) );
-
-		if (PHP_SAPI == 'cli') die('Este reporte solo se ejecuta en un navegador web');
-
-		// Create new PHPExcel object
-		$this->objPHPExcel = new Phpe();
-
-		// Set document properties
-		PhpExcelSetProperties($this->objPHPExcel,"Sistema de Mediación Individual");
-
-		$titulo = $titulos[2].date(" - Ymd_His");
-
-		$f=1;
-		$letradesde = 'A';
-		$letrahasta = 'R';
-
-		//MODIFICANDO ANCHO DE LAS COLUMNAS 18
-		PhpExcelSetColumnWidth($this->objPHPExcel,
-			$width = array(5,10,30,15,15,30,5,5,10,5,12,30,10,30,30,10,15,20),
-			$letradesde, $letrahasta);
-
-		//AGREGAMOS LOS TITULOS DEL REPORTE
-		$f = PhpExcelSetTitles($this->objPHPExcel,
-			$title = $titulos,
-		$letradesde, "L", $f);
-
-		/************************ 	  INICIO ENCABEZADOS DE LA TABLAS	********************************/
-		$f = PhpExcelAddHeaderTable($this->objPHPExcel, $titles_table_head, $letradesde, $letrahasta, $f, $estilo);
-	 	/************************* 	   FIN ENCABEZADOS DE LA TABLA   	**********************************/
-
-	 	/************************** 	   INICIO DE LOS REGISTROS DE LA TABLA   	*******************/
-	 	$registros = $this->reportes_colectivos_model->registros_renuncia_voluntaria($data);
-		if($registros->num_rows()>0){
-			foreach ($registros->result() as $rows) {
-				$cell_row = array(
-					$rows->numerocaso_expedienteci,
-					$rows->departamento,
-					$rows->delegado,
-					fecha_ESP($rows->fecha_inicio),
-					fecha_ESP($rows->fecha_fin),
-					$rows->solicitante,
-					$rows->cant_masc,
-					$rows->cant_feme,
-					'',
-					$rows->edad,
-					$rows->discapacidadci,
-					$rows->nombre_empresa,
-					$rows->causa,
-					'',
-					$rows->actividad_catalogociiu,
-					$rows->resultadoci,
-					$rows->monto,
-					''
-				);
-				$f = PhpExcelAddRowTable($this->objPHPExcel, $cell_row, $letradesde, $letrahasta, $f, $estilo);
-			}
-		}else{
-			$f = PhpExcelAddNoRows($this->objPHPExcel,$letradesde, $letrahasta, $f, $estilo); //CUANDO NO HAY REGISTROS
-		}
-
-		/************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	****************************/
-
-		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
-
-		$f+=3;
-
-	 	$fecha=strftime( "%d-%m-%Y - %H:%M:%S", time() );
-		$this->objPHPExcel->setActiveSheetIndex(0)->setCellValue("A".$f,"Fecha y Hora de Creación: ".$fecha); $f++;
-		$this->objPHPExcel->setActiveSheetIndex(0)->setCellValue("A".$f,"Usuario: ".$this->session->userdata('usuario'));
-		// Rename worksheet
-		$this->objPHPExcel->getActiveSheet()->setTitle($titulo);
-		// Redirect output to a client’s web browser (Excel5)
-		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="'.$titulo.'.xls"');
-		header('Cache-Control: max-age=0');
-		// If you're serving to IE 9, then the following may be needed
-		header('Cache-Control: max-age=1');
-		// If you're serving to IE over SSL, then the following may be needed
-		header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-		header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-		header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-		header ('Pragma: public'); // HTTP/1.0
-    	$writer = new PHPExcel_Writer_Excel5($this->objPHPExcel);
-		header('Content-type: application/vnd.ms-excel');
-		$writer->save('php://output');
-	}
-	/*Fin reporte consolidado relaciones colectivas*/
-
 }
 ?>

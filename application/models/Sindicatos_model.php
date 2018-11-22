@@ -35,8 +35,16 @@ class Sindicatos_model extends CI_Model {
 											 em.nombre_empresa,
 											 CONCAT_WS(" ",e.primer_nombre,e.segundo_nombre,e.primer_apellido,e.segundo_apellido,e.apellido_casada) delegado,
 											 es.nombre_estadosci,
-											 ex.resultado_expedienteci,
-											 (select count(*) from sct_fechasaudienciasci f where f.id_expedienteci=ex.id_expedienteci) cuenta'
+											 (select count(*) from sct_fechasaudienciasci f where f.id_expedienteci=ex.id_expedienteci) cuenta,
+											 (SELECT r.resultadoci
+												FROM sct_fechasaudienciasci fea
+												JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
+												WHERE estado_audiencia=2
+												AND fea.id_expedienteci = ex.id_expedienteci
+												AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
+																												 FROM sct_fechasaudienciasci fa
+																												 WHERE fa.id_expedienteci=fea.id_expedienteci
+																												 AND fa.estado_audiencia=2)) AS resultado_expedienteci'
 										 )
 						 ->from('sir_empleado e')
 						 ->join('sct_expedienteci ex','ex.id_personal=e.id_empleado')
