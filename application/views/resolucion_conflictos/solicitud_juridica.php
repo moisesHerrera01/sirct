@@ -317,13 +317,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function cerrar_combo_establecimiento() {
-        select2 = $('.select2-search__field').val();
-        $("#nombre_empresa").val(select2)
+        var select2 = $('.select2-search__field').val();
+        $("#nombre_empresa").val(select2);
         $("#establecimiento").select2('close');
     }
 
     function combo_establecimiento(seleccion){
         $.ajax({
+            async: true,
           url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_establecimiento",
           type: "post",
           dataType: "html",

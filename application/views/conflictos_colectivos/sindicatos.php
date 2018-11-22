@@ -453,6 +453,8 @@ function combo_delegado(seleccion){
 }
 
 function cerrar_combo_establecimiento() {
+    var select2 = $('.select2-search__field').val();
+    $("#nombre_empresa").val(select2);
     $("#establecimiento").select2('close');
 }
 
