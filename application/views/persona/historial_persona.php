@@ -78,7 +78,7 @@ function combo_establecimiento(seleccion){
   .done(function(res){
     $('#div_combo_establecimiento').html(res);
     $(".est").select2({
-      'minimumInputLength': 3,
+      
       'language': {
         noResults: function () {
           return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" onClick="cerrar_combo_establecimiento()">Agregar uno nuevo</a>';

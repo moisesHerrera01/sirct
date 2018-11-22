@@ -55,7 +55,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         .done(function(res){
             $.when($('#div_combo_establecimiento').html(res) ).then(function( data, textStatus, jqXHR ) {
                 $("#establecimiento").select2({
-                    'minimumInputLength': 3,
+                    
                     'language': {
                         noResults: function () {
                             return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
@@ -607,7 +607,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         .done(function(res){
             $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
                 $("#defensor").select2({
-                    'minimumInputLength': 3,
+                    
                     'language': {
                         noResults: function () {
                             return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';

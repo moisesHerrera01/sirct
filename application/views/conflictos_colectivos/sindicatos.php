@@ -130,7 +130,7 @@ function combo_representante_empresa(seleccion){
   .done(function(res){
     $('#div_combo_representante_empresa').html(res);
     $("#representante_empresa").select2({
-        'minimumInputLength': 3,
+        
         'language': {
             noResults: function () {
                 return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo representante" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo representante</a></div>';
@@ -183,7 +183,7 @@ function combo_defensores(seleccion){
     .done(function(res){
         $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
             $("#defensor").select2({
-                'minimumInputLength': 3,
+                
                 'language': {
                     noResults: function () {
                         return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
@@ -467,7 +467,7 @@ function combo_establecimiento(seleccion){
   .done(function(res){
     $('#div_combo_establecimiento').html(res);
     $("#establecimiento").select2({
-      'minimumInputLength': 3,
+      
       'language': {
         noResults: function () {
           return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';

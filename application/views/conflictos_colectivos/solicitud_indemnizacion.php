@@ -43,7 +43,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             .done(function (res) {
                 $('#div_combo_establecimiento').html(res);
                 $(".est").select2({
-                    'minimumInputLength': 3,
+                    
                     'language': {
                         noResults: function () {
                             return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" onClick="cerrar_combo_establecimiento()">Agregar uno nuevo</a>';
@@ -654,7 +654,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         .done(function(res){
             $.when($('#div_combo_representante_empresa').html(res)).then(function( data, textStatus, jqXHR ) {
                 $("#representante_empresa").select2({
-                    'minimumInputLength': 3,
+                    
                     'language': {
                         noResults: function () {
                             return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo representante" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo representante</a></div>';
@@ -676,7 +676,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         .done(function(res){
             $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
                 $("#defensor").select2({
-                    'minimumInputLength': 3,
+                    
                     'language': {
                         noResults: function () {
                             return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
