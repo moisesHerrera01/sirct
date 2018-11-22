@@ -478,6 +478,8 @@ function cambiar_eliminar3(estado){
 }*/
 
 function cerrar_combo_establecimiento() {
+    var select2 = $('.select2-search__field').val();
+    $("#nombre_establecimiento").val(select2);
     $("#establecimiento").select2('close');
 }
 
