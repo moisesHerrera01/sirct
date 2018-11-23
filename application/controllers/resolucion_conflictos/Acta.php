@@ -185,7 +185,7 @@ class Acta extends CI_Controller {
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_PJ_estandar.docx');
             break;
           case '6':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSegundaCita/SEGUNDA_CITA_PN_PJ_CON_DEFENSOR.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_PJ_estandar.docx');
             break;
           case '7':
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSegundaCita/SEGUNDA_CITA_PN_PJ_SIN_DEFENSOR.docx');
@@ -277,7 +277,24 @@ class Acta extends CI_Controller {
               $templateWord->setValue('ausente',$inasistencia);
 
         }
-        if ($caso==5) {
+        if ($caso==5 || $caso==6) {
+            $encabezado_esquela = "";
+            $cuerpo_esquela = "";
+            $pie_esquela = "";
+            if ($expediente->tiposolicitud_empresa==2) {
+              $persona = "a la Sociedad";
+            }else {
+              $persona = "al Sr(a)";
+            }
+          if ($caso==6) {
+            $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER: ".$persona." $expediente->nombre_empresa representado(a) legalmente por $expediente->nombres_representante, que en las diligencias promovidas por el trabajador $expediente->solicitante se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
+            $cuerpo_esquela="’’’’’’’’’’’’EMAYARI’’’’’’’’’’ANTE MI XCM SRIA.’’’’’’’’’RUBRICAS’’’’’’’";
+            $pie_esquela="Y para que le sirva de legal notificación y citación, se expide la presente esquela en ________________, a las _____________horas y ________________ minutos del día __________________ del mes de ___________ de dos mil ______________.";
+            $templateWord->setValue('encabezado_esquela', $encabezado_esquela);
+            $templateWord->setValue('cuerpo_esquela',$cuerpo_esquela);
+            $templateWord->setValue('pie_esquela', $pie_esquela);
+          }
+
           $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));
           $mes_conflicto = mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci))));
           $anio_conflicto = anio(date('Y', strtotime($expediente->fechaconflicto_personaci)));
@@ -346,7 +363,7 @@ class Acta extends CI_Controller {
             header("Content-Disposition: attachment; filename='ACTA_SOLICITUD_".date('dmy_His').".docx'");
             break;
           case '6':
-            header("Content-Disposition: attachment; filename='SEGUNDA_CITA_PN_PJ_CON_DEFENSOR_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename='ESQUELA_".date('dmy_His').".docx'");
             break;
           case '7':
             header("Content-Disposition: attachment; filename='SEGUNDA_CITA_PN_PJ_SIN_DEFENSOR_".date('dmy_His').".docx'");

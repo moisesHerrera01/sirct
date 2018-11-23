@@ -338,6 +338,7 @@ function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,p
 
     if (cuenta_audiencias>1) {
       $("#solicitud_pn_pj").show();
+      $("#esquela").show();
     }
     if (estado=="2") {
       if (resultado=="1" || resultado=="2" || resultado=="4" || resultado=="7") {
@@ -463,7 +464,7 @@ function cambiar_eliminar3(estado){
   .done(function(res){
     $('#div_combo_establecimiento').html(res);
     $(".est").select2({
-      
+
       'language': {
         noResults: function () {
           return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" onClick="cerrar_combo_establecimiento()">Agregar uno nuevo</a>';
@@ -499,7 +500,7 @@ function combo_establecimiento(seleccion){
     .done(function(res){
         $.when($('#div_combo_establecimiento').html(res) ).then(function( data, textStatus, jqXHR ) {
             $("#establecimiento").select2({
-                
+
                 'language': {
                     noResults: function () {
                         return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
@@ -522,7 +523,7 @@ function combo_defensores(seleccion){
     .done(function(res){
         $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
             $("#defensor").select2({
-                
+
                 'language': {
                     noResults: function () {
                         return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
@@ -574,7 +575,7 @@ function combo_representante_empresa(seleccion){
   .done(function(res){
     $('#div_combo_representante_empresa').html(res);
     $("#representante_empresa").select2({
-        
+
         'language': {
             noResults: function () {
                 return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo representante" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo representante</a></div>';
@@ -1963,6 +1964,7 @@ function volver(num) {
                         <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor público</option>
                         <option id="diferido_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Conciliada pago diferido sin defensor público</option> -->
                         <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
+                        <option id="esquela" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
                         <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
                         <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor</option>
                         <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor</option> -->

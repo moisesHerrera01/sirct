@@ -140,8 +140,8 @@ $(function () {
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax9"));
-        formData.append("id_empresa", $('#establecimiento').val());
-        
+        formData.append("id_empresa", $('#id_empresaci').val());
+
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_representante",
             type: "post",
@@ -177,14 +177,14 @@ $(function () {
                     $('#representante_empresa').val(result.id_representante).trigger("change");
                     $("#modal_representante").modal('hide');
                 });
-                
+
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
         });
     });
 });
-    
+
 $(function() {
   $(document).ready(function () {
     $('#f_nacimiento_representante').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
