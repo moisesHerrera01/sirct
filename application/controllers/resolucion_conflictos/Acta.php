@@ -179,7 +179,7 @@ class Acta extends CI_Controller {
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SEGUNDA_CITA.docx');
             break;
           case '4':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasDeConciliacion/CONCILIADA_PAGO_DIFERIDO_SIN_DEFENSOR.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/DESISTIDA.docx');
             break;
           case '5':
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_PJ_estandar.docx');
@@ -212,7 +212,7 @@ class Acta extends CI_Controller {
         $templateWord->setValue('mes_audiencia2', mb_strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
         $templateWord->setValue('anio_audiencia2', anio(date('Y', strtotime($segunda->fecha_fechasaudienciasci))));
 
-        if ($caso== 1 || $caso==2 || $caso==3) {
+        if ($caso<5) {
               $templateWord->setValue('representante_persona', mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci));
               $templateWord->setValue('dui_defensor', mb_strtoupper(convertir_dui($expediente->dui_representantepersonaci)));
               $templateWord->setValue('tipo_representante', mb_strtoupper($expediente->tipo_representante_empresa));
@@ -226,7 +226,6 @@ class Acta extends CI_Controller {
               $templateWord->setValue('numero_folios', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras($expediente->numero_folios)));
               $templateWord->setValue('resultado_audiencia', mb_strtoupper($expediente->detalle_resultado));
               $templateWord->setValue('posee', ($expediente->asistieron=="2") ? "quien se hace acompañar de " : "");
-              $templateWord->setValue('delegado_audiencia', mb_strtoupper($expediente->delegado_audiencia));
 
               $nombre_solicitante = mb_strtoupper($expediente->nombre_personaci.' '.$expediente->apellido_personaci);
               $representante_persona = mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci);
@@ -278,9 +277,6 @@ class Acta extends CI_Controller {
 
         }
         if ($caso==5 || $caso==6) {
-            $encabezado_esquela = "";
-            $cuerpo_esquela = "";
-            $pie_esquela = "";
             if ($expediente->tiposolicitud_empresa==2) {
               $persona = "a la Sociedad";
             }else {
@@ -293,6 +289,10 @@ class Acta extends CI_Controller {
             $templateWord->setValue('encabezado_esquela', $encabezado_esquela);
             $templateWord->setValue('cuerpo_esquela',$cuerpo_esquela);
             $templateWord->setValue('pie_esquela', $pie_esquela);
+          }else {
+            $templateWord->setValue('encabezado_esquela', "");
+            $templateWord->setValue('cuerpo_esquela',"");
+            $templateWord->setValue('pie_esquela', "");
           }
 
           $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));
@@ -328,14 +328,20 @@ class Acta extends CI_Controller {
           $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
         }
         $templateWord->setValue('representante_empresa', mb_strtoupper($expediente->nombres_representante));
+        $templateWord->setValue('representante_legal', mb_strtoupper($expediente->representante_legal));
+        $templateWord->setValue('tipo_representante_exp', mb_strtoupper($expediente->tipo_representante_exp));
         $templateWord->setValue('resolucion', mb_strtoupper($expediente->resultado_expedienteci));
 
 
         if ($id_audiencia) {
           if ($expediente->id_delegado_audiencia == $expediente->id_delegado_expediente) {
               $templateWord->setValue('nombre_delegado',"");
+              $templateWord->setValue('delegado_audiencia', mb_strtoupper($expediente->delegado_audiencia));
+              $templateWord->setValue('delegado_titulo', "");
           }else {
             $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
+            $templateWord->setValue('delegado_audiencia', mb_strtoupper($expediente->delegado_audiencia));
+            $templateWord->setValue('delegado_titulo', mb_strtoupper("(Atendió: ".$expediente->delegado_audiencia.")"));
           }
         }
 
@@ -357,7 +363,7 @@ class Acta extends CI_Controller {
             header("Content-Disposition: attachment; filename='SEGUNDA_CITA_".date('dmy_His').".docx'");
             break;
           case '4':
-            header("Content-Disposition: attachment; filename='CONCILIADA_PAGO_DIFERIDO_SIN_DEFENSOR_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename='DESISTIDA_".date('dmy_His').".docx'");
             break;
           case '5':
             header("Content-Disposition: attachment; filename='ACTA_SOLICITUD_".date('dmy_His').".docx'");

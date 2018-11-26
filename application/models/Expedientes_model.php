@@ -30,6 +30,7 @@ class Expedientes_model extends CI_Model {
 												 mu.municipio municipio_empresa,
 												 mur.municipio municipio_representante,
 												 tr.tipo_representante tipo_representante_empresa,
+												 tre.tipo_representante tipo_representante_exp ,
 												 ec.estado_civil estado_civil_representante,
 												 ta.titulo_academico profesion_representante,
 												 CONCAT_WS(" ",ea.primer_nombre,ea.segundo_nombre,ea.tercer_nombre,ea.primer_apellido,ea.segundo_apellido,ea.apellido_casada) delegado_audiencia,
@@ -40,7 +41,9 @@ class Expedientes_model extends CI_Model {
 												 emp.id_empleador,
 												 emp.nombre_empleador,
 												 emp.apellido_empleador,
-												 emp.cargo_empleador'
+												 emp.cargo_empleador,
+												 r.nombres_representante representante_legal,
+												 re.nombres_representante representante_expediente'
 											  )
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
@@ -52,7 +55,8 @@ class Expedientes_model extends CI_Model {
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
 						 ->join('org_municipio mu','mu.id_municipio=em.id_municipio')
 						 ->join('sge_catalogociiu c','c.id_catalogociiu=em.id_catalogociiu')
-						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
+						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci','re.tipo_representante=1')
+						 ->join('sge_representante re ', ' re.id_representante = e.id_representanteci')
 						 ->join('org_municipio mur','mur.id_municipio = r.id_municipio')
 						 ->join('sir_estado_civil ec','ec.id_estado_civil=r.id_estado_civil')
 						 ->join('sir_titulo_academico ta','ta.id_titulo_academico=r.id_titulo_academico')
