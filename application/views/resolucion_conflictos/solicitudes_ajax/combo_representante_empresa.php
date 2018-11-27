@@ -1,5 +1,5 @@
-<h5>Parte patronal : <span class="text-danger">*</span></h5>
-<select id="representante_empresa" name="representante_empresa" required class="select2" onchange=""  style="width: 100%">
+<h5>Parte patronal : </h5>
+<select id="representante_empresa" name="representante_empresa" class="select2" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php
             if(!empty($rep_empresa)){

@@ -154,6 +154,7 @@ function mostrar(){
   $("#numero_folios").attr("required","required");
   $("#div_combo_defensores").show(0);
   $("#defensor").attr("required","required");
+  $("#representante_empresa").attr("required","required");
   $("#div_combo_delegado2").show(0);
   $("#delegado").attr("required","required");
   $("#div_combo_representante_empresa").show(0);
@@ -249,6 +250,12 @@ function mostrar(){
     case '10':
         $("#tipo_conciliacion").attr("required",'required');
         $("#tipo_cc").show();
+      break;
+    case '6':
+        $("#representante_empresa").removeAttr("required");
+      break;
+    case '8':
+        $("#representante_empresa").removeAttr("required");
       break;
     default:
   }

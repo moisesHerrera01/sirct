@@ -94,7 +94,7 @@ class Retiro_voluntario extends CI_Controller {
                 'fechacrea_expedienteci' => $fecha_actual,
                 'tiposolicitud_expedienteci' =>"2",
                 'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_preaviso'))),
-                'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),   
+                'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),
                 'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo')
            );
 
@@ -119,6 +119,17 @@ class Retiro_voluntario extends CI_Controller {
         $data['expediente'] = $this->expedientes_model->obtener_registro_expediente_retiro( $this->input->post('id') );
 
         $this->load->view('resolucion_conflictos/retiro_voluntario_ajax/vista_expediente', $data);
+    }
+
+    public function combo_resultados() {
+      $resultados = $this->expedientes_model->obtener_resultados_rv();
+      $this->load->view('resolucion_conflictos/solicitudes_ajax/combo_resultados',
+        array(
+          'id' => $this->input->post('id'),
+          'resultados' => $resultados
+        )
+      );
+
     }
 
 }

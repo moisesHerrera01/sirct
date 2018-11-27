@@ -43,7 +43,15 @@ class Expedientes_model extends CI_Model {
 												 emp.apellido_empleador,
 												 emp.cargo_empleador,
 												 r.nombres_representante representante_legal,
-												 re.nombres_representante representante_expediente'
+												 re.nombres_representante representante_expediente,
+												 TIMESTAMPDIFF(YEAR,re.f_nacimiento_representante,CURDATE()) edad_representante_exp,
+												 re.dui_representante dui_representante_exp,
+												 tar.titulo_academico profesion_representante_exp,
+												 mre.municipio municipio_representante_exp,
+												 dre.departamento depto_representante_exp,
+												 re.acreditacion_representante acreditacion_representante_exp,
+												 f.numero_folios
+												 '
 											  )
 						 ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
@@ -56,11 +64,15 @@ class Expedientes_model extends CI_Model {
 						 ->join('org_municipio mu','mu.id_municipio=em.id_municipio')
 						 ->join('sge_catalogociiu c','c.id_catalogociiu=em.id_catalogociiu')
 						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci','re.tipo_representante=1')
-						 ->join('sge_representante re ', ' re.id_representante = e.id_representanteci')
+						 ->join('sge_representante re ', ' re.id_representante = f.id_representaci','left')
 						 ->join('org_municipio mur','mur.id_municipio = r.id_municipio')
 						 ->join('sir_estado_civil ec','ec.id_estado_civil=r.id_estado_civil')
 						 ->join('sir_titulo_academico ta','ta.id_titulo_academico=r.id_titulo_academico')
 						 ->join('sct_tipo_representante tr','tr.id_tipo_representante=r.tipo_representante','left')
+						 ->join('sct_tipo_representante tre','tre.id_tipo_representante=re.tipo_representante','left')
+						 ->join('sir_titulo_academico tar','tar.id_titulo_academico=re.id_titulo_academico','left')
+						 ->join('org_municipio mre','mre.id_municipio=re.id_municipio','left')
+						 ->join('org_departamento dre','dre.id_departamento=mre.id_departamento_pais','left')
 						 ->join('sge_empleador emp','emp.id_empleador=e.id_empleador', 'left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 						 ->join('sir_empleado ea','ea.id_empleado=f.id_delegado')
@@ -259,6 +271,18 @@ class Expedientes_model extends CI_Model {
 		$this->db->select('*')
 						 ->from('sct_resultadosci')
 						 ->where('id_tipo_solicitud',1);
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
+
+	public function obtener_resultados_rv(){
+		$this->db->select('*')
+						 ->from('sct_resultadosci')
+						 ->where('id_tipo_solicitud',2);
 		$query = $this->db->get();
 		if ($query->num_rows() > 0) {
 			return $query;

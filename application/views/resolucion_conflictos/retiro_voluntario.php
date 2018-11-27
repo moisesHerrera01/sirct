@@ -44,6 +44,66 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         tablasolicitudes();
     }
 
+    function nav(value) {
+      var id_expedienteci = $("#id_expedienteci_copia2").val();
+      var id_audiencia = $("#id_audiencia").val();
+      if (value != "") { location.href = value+id_expedienteci+'/'+id_audiencia; }
+      swal({ title: "¡Acta generada éxitosamente!", type: "success", showConfirmButton: true });
+      $("#modal_actas_tipo").modal("hide");
+      tabla_audiencias($("#id_expedienteci_copia2").val());
+      //cerrar_mantenimiento();
+    }
+
+    function combo_resultados(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario/combo_resultados",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_resultados').html(res);
+        $("#resolucion").select2();
+      });
+    }
+
+    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
+           alert(id_representaci)
+          $("#solicitud_pn_pj").hide();
+          $("#pf_st").hide();
+          $("#multa").hide();
+          $("#inasistencia").hide();
+          $("#rv_ambas_partes").hide();
+          $("#rv_solo_trabajador").hide();
+
+        if (cuenta_audiencias>1) {
+          $("#solicitud_pn_pj").show();
+          $("#esquela").show();
+        }
+
+        if (estado=="2") {
+          if (resultado=="1" || resultado=="2" || resultado=="7") {
+            $("#pf_st").show();
+          }else if (resultado=="5") {
+            $("#multa").show();
+          }else if (resultado=="3") {
+            $("#inasistencia").show();
+          }else if (resultado=="4"){
+            $("#desistimiento").show();
+          }else if (resultado=="6" || resultado=="8") {
+            if (id_representaci>0) {
+              $("#rv_ambas_partes").show();
+            }else {
+              $("#rv_solo_trabajador").show();
+            }
+          }
+        }
+        $("#id_expedienteci_copia2").val(id_expedienteci);
+        $("#id_audiencia").val(id_audiencia);
+        $("#tipo_acta").val('').trigger('');
+        $("#modal_actas_tipo").modal("show");
+    }
+
     function combo_delegado_tabla(seleccion){
 
       $.ajax({
@@ -1175,6 +1235,54 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <div style="display:none;">
     <button id="submit_ubi" name="submit_ubi" type="button">clicks</button>
 </div>
+
+<!--INICIO MODAL GENERAR ACTA -->
+<div class="modal fade" id="modal_actas_tipo" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Emitir acta:</h4>
+      </div>
+
+      <div class="modal-body" id="">
+          <input type="hidden" id="id_expedienteci_copia2" name="id_expedienteci_copia2" value="">
+          <input type="hidden" id="id_audiencia" name="id_audiencia" value="">
+          <input type="hidden" id="cuenta_audiencias" name="cuenta_audiencias" value="">
+          <div class="row">
+            <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                <h5>Seleccione el tipo de acta: <span class="text-danger">*</span></h5>
+                <div class="controls">
+                  <!-- Tipo 1: Engloba 4 posibilidades primera y segunda fecha, con presencia del trabajador y sin el trabajador -->
+                  <select id="tipo_acta" name="tipo_acta" class="custom-select col-4" onchange="nav(this.value)" required>
+                    <option value="">[Seleccione]</option>
+                    <option id="pf_st" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Acta de audiencia</option>
+                    <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
+                    <option id="inasistencia" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Acta segunda audiencia</option>
+                    <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option>
+                    <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor público</option>
+                     -->
+                    <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
+                    <option id="rv_ambas_partes" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Acta renuncia volunataria</option>
+                    <option id="rv_solo_trabajador" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Acta renuncia volunataria</option>
+                    <option id="esquela" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
+                    <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
+                    <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor</option>
+                    <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor</option> -->
+                    <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Desistimiento de persona natural a persona juridica</option> -->
+                  </select>
+                </div>
+            </div>
+          </div>
+          <div align="right">
+            <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+          <!--  <button type="button" onclick="generar_actas_tipo();" class="btn waves-effect waves-light btn-success2"> Generar
+          </button> !-->
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--FIN MODAL GENERAR ACTA -->
 
 <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
     <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

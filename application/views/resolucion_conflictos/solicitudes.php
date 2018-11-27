@@ -329,7 +329,7 @@ function cambiar_delegado() {
     });
 }
 
-function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado) {
+function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
       // alert(posee_trabajador)
       $("#solicitud_pn_pj").hide();
       $("#pf_st").hide();
