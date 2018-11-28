@@ -38,9 +38,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             </div>
 
               <div id="asist" class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                <h5>Parte solicitante : <span class="text-danger">*</span></h5>
+                <h5>Parte solicitante : </h5>
                 <div class="controls">
-                  <select id="asistieron" name="asistieron" class="form-control" required>
+                  <select id="asistieron" name="asistieron" class="form-control">
                     <option value="">[Seleccione]</option>
                     <option value="1">Defensor público</option>
                     <option value="2">Defensor público y trabajador</option>
@@ -253,9 +253,13 @@ function mostrar(){
       break;
     case '6':
         $("#representante_empresa").removeAttr("required");
+        $("#asistieron").removeAttr("required");
+        $("#defensor").removeAttr("required");
       break;
     case '8':
         $("#representante_empresa").removeAttr("required");
+        $("#asistieron").removeAttr("required");
+        $("#defensor").removeAttr("required");
       break;
     default:
   }

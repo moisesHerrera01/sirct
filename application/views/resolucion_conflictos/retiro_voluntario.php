@@ -68,13 +68,15 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
-           alert(id_representaci)
+          // rv_ncnp
+          alert(posee_trabajador)
           $("#solicitud_pn_pj").hide();
           $("#pf_st").hide();
           $("#multa").hide();
           $("#inasistencia").hide();
           $("#rv_ambas_partes").hide();
           $("#rv_solo_trabajador").hide();
+          $("#desistimiento").hide();
 
         if (cuenta_audiencias>1) {
           $("#solicitud_pn_pj").show();
@@ -93,8 +95,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           }else if (resultado=="6" || resultado=="8") {
             if (id_representaci>0) {
               $("#rv_ambas_partes").show();
-            }else {
+            }else if(posee_trabajador>0){
               $("#rv_solo_trabajador").show();
+            }else {
+              $("#rv_ncnp").show();
             }
           }
         }
@@ -1264,6 +1268,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
                     <option id="rv_ambas_partes" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Acta renuncia volunataria</option>
                     <option id="rv_solo_trabajador" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Acta renuncia volunataria</option>
+                    <option id="rv_ncnp" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/9/')?>">Acta renuncia volunataria</option>
                     <option id="esquela" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
                     <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
                     <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor</option>

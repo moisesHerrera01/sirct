@@ -190,6 +190,9 @@ class Acta extends CI_Controller {
           case '8':
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_RV_ST.docx');
             break;
+          case '9':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_RV_NCNP.docx');
+            break;
           default:
             // code...
             break;
@@ -208,7 +211,7 @@ class Acta extends CI_Controller {
         $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,1);
         $primera= $audiencias->result()[0];
 
-        if ($caso!=7 && $caso!=8) {
+        if ($caso<7) {
           $segunda= $audiencias->result()[1];
           $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
           $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
@@ -294,7 +297,7 @@ class Acta extends CI_Controller {
               $persona = "al Sr(a)";
             }
           if ($caso==6) {
-            $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER: ".$persona." $expediente->nombre_empresa representado(a) legalmente por $expediente->nombres_representante, que en las diligencias promovidas por el trabajador $expediente->solicitante se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
+            $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER: ".$persona." $expediente->nombre_empresa representado(a) legalmente por $expediente->nombres_representante, que en las diligencias promovidas por el trabajador(a) $expediente->solicitante se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
             $cuerpo_esquela="’’’’’’’’’’’’EMAYARI’’’’’’’’’’ANTE MI XCM SRIA.’’’’’’’’’RUBRICAS’’’’’’’";
             $pie_esquela="Y para que le sirva de legal notificación y citación, se expide la presente esquela en ________________, a las _____________horas y ________________ minutos del día __________________ del mes de ___________ de dos mil ______________.";
             $templateWord->setValue('encabezado_esquela', $encabezado_esquela);
@@ -386,6 +389,9 @@ class Acta extends CI_Controller {
             break;
           case '8':
             header("Content-Disposition: attachment; filename='ACTA_RV_ST_".date('dmy_His').".docx'");
+            break;
+          case '9':
+            header("Content-Disposition: attachment; filename='ACTA_RV_NCNP_".date('dmy_His').".docx'");
             break;
           default:
             break;
