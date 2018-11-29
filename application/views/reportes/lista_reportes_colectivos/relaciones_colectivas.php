@@ -22,14 +22,14 @@
        		value2 = $("#fecha_fin").val();
        		type = "periodo";
        	}
-        
-        if(anio!="" &&  (($("#mes").val()!="0" && document.getElementById('radio_mensual').checked==true)	
-        	|| ($("#trimestre").val()!="0" && document.getElementById('radio_trimestral').checked==true)	
-        	|| ($("#semestre").val()!="0" && document.getElementById('radio_semestral').checked==true)	
+
+        if(anio!="" &&  (($("#mes").val()!="0" && document.getElementById('radio_mensual').checked==true)
+        	|| ($("#trimestre").val()!="0" && document.getElementById('radio_trimestral').checked==true)
+        	|| ($("#semestre").val()!="0" && document.getElementById('radio_semestral').checked==true)
         	|| document.getElementById('radio_anual').checked==true
         	|| ($("#fecha_inicio").val()!="" && $("#fecha_fin").val()!="" && document.getElementById('radio_periodo').checked==true)
         )){
-          
+
           	var url = "<?php echo site_url()?>"+"/reportes/reportes_colectivos/relaciones_colectivas_report";
 
           	if(document.getElementById('radio_pdf').checked==true && tipo==""){
@@ -105,7 +105,7 @@
      		document.getElementById("input_periodo").style.display="block";
      	}
     }
-     
+
     function iniciar() {
      	$("#mes").val(moment().format("M")).trigger('change.select2');
     }
@@ -115,7 +115,7 @@
     	$("#minimizar").show(0);
 
     	$("#cnt_form").hide(0);
-    	
+
     	var preview = $("#cnt_preview");
     	$(preview).removeClass("col-lg-8");
     	$(preview).addClass("col-lg-12");
@@ -135,9 +135,10 @@
 <div class="page-wrapper">
     <div class="container-fluid">
         <div class="row page-titles">
-            <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Reporte de relaciones colectivas</h3>
-            </div>
+					<div class="align-self-center" align="left" style="width: 100%">
+								<h3 class="text-themecolor m-b-0 m-t-0">Reporte de relaciones colectivas
+										<div class="pull-right"><small><a href="<?=site_url()?>/reportes/reportes_colectivos"><span class="mdi mdi-arrow-left"></span> Volver</a></small></div></h3>
+						</div>
         </div>
         <div class="row">
             <div class="col-lg-4" style="display: block;" id="cnt_form">

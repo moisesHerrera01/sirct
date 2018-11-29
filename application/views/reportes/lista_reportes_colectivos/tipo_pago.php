@@ -136,9 +136,10 @@
 <div class="page-wrapper">
     <div class="container-fluid">
         <div class="row page-titles">
-            <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Reporte por tipo de pago</h3>
-            </div>
+					<div class="align-self-center" align="left" style="width: 100%">
+								<h3 class="text-themecolor m-b-0 m-t-0">Reporte por tipo de pago
+										<div class="pull-right"><small><a href="<?=site_url()?>/reportes/reportes_colectivos"><span class="mdi mdi-arrow-left"></span> Volver</a></small></div></h3>
+						</div>
         </div>
         <div class="row">
             <div class="col-lg-4" style="display: block;" id="cnt_form">
