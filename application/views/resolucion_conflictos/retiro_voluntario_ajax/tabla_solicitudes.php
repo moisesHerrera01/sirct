@@ -42,7 +42,7 @@
                 																 AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
                 																																	FROM sct_fechasaudienciasci fa
                 																																	WHERE fa.id_expedienteci=fea.id_expedienteci
-                																																	AND fa.estado_audiencia=2)) AS resultado,                                            
+                																																	AND fa.estado_audiencia=2)) AS resultado,
                                               e.fechacrea_expedienteci AS fecha,
                                               p.nombre_personaci,
                                               p.apellido_personaci,
@@ -100,10 +100,10 @@
                                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
                                             <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci.','.$fila->id_empresaci?>)">Visualizar</a>
                                             <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_empresaci.','.$fila->id_expedienteci.',2'?>)">Gestionar audiencias</a>
-                                            <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_personaci.','.$fila->id_personal?>)">Cambiar delegado</a>
+                                            <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_personaci.','.$fila->id_personal?>)">Cambiar delegado</a> -->
                                             <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a>
-                                            <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas(<?=$fila->id_expedienteci?>)">Gestionar Actas</a>
-                                            <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
+                                            <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas(<?=$fila->id_expedienteci?>)">Subir actas escaneadas</a>
+                                            <!-- <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a> -->
                                             <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>
                                         </div>
                                     </div>

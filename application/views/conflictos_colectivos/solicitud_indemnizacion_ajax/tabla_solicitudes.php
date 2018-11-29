@@ -99,7 +99,7 @@
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci?>)">Visualizar</a>
                                     <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_expedienteci?>,<?=$fila->id_empresaci?>)">Gestionar audiencias</a>
-                                    <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci?>)">Cambiar delegado</a>
+                                    <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci?>)">Cambiar delegado</a> -->
                                     <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->estado?>)">Cambiar estado</a>
                                     <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_ficha_indemnizacion/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
                                     <?php if ($fila->audiencias >= 2 ) { ?>
