@@ -75,7 +75,7 @@ class Expedientes_model extends CI_Model {
 						 ->join('org_departamento dre','dre.id_departamento=mre.id_departamento_pais','left')
 						 ->join('sge_empleador emp','emp.id_empleador=e.id_empleador', 'left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
-						 ->join('sir_empleado ea','ea.id_empleado=f.id_delegado')
+						 ->join('sir_empleado ea','ea.id_empleado=f.id_delegado','left')
 						 ->where('e.id_expedienteci', $id_expedienteci);
 		 	if ($id_audiencia) {
 		 		$this->db->where('f.id_fechasaudienciasci',$id_audiencia);
@@ -212,19 +212,39 @@ class Expedientes_model extends CI_Model {
 
 	}
 //Tipo 1: Individuales, Tipo 2: Colectivos
-	public function obtener_delegados_rol($tipo) {
+	public function obtener_delegados_rol($tipo,$abre) {
 			$this->db->select("
 							e.id_empleado,
 							e.nr,
 							upper(concat_ws(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) as nombre_completo,
 							r.nombre_rol,
-							r.id_rol
+							r.id_rol,
+							CASE s.nombre_seccion
+									 WHEN 'OFICINA DEPARTAMENTAL DE SAN VICENTE' THEN 'SV'
+									 WHEN 'OFICINA DEPARTAMENTAL DE AHUACHAPAN' THEN 'AH'
+									 WHEN 'OFICINA DEPARTAMENTAL DE CHALATENANGO' THEN 'CH'
+									 WHEN 'OFICINA DEPARTAMENTAL DE SONSONATE' THEN 'SO'
+									 WHEN 'OFICINA DEPARTAMENTAL DE CABANAS' THEN 'CA'
+									 WHEN 'OFICINA DEPARTAMENTAL DE CUSCATLAN' THEN 'CU'
+									 WHEN 'OFICINA DEPARTAMENTAL DE LA UNION' THEN 'LU'
+									 WHEN 'OFICINA DEPARTAMENTAL DE LA LIBERTAD' THEN 'LL'
+									 WHEN 'OFICINA DEPARTAMENTAL DE USULUTAN' THEN 'US'
+									 WHEN 'OFICINA DEPARTAMENTAL DE MORAZAN' THEN 'MO'
+									 WHEN 'OFICINA REGIONAL DE SAN MIGUEL' THEN 'SM'
+									 WHEN 'OFICINA REGIONAL DE SANTA ANA' THEN 'SA'
+									 WHEN 'OFICINA PARACENTRAL DE ZACATECOLUCA' THEN 'LP'
+									 ELSE 'SS' END  pre
 							")
 						 ->from('sir_empleado e')
+						 ->join('sir_empleado_informacion_laboral eil','eil.id_empleado=e.id_empleado')
+						 ->join('tcm_empleado_informacion_laboral eil1','eil1.id_empleado=eil.id_empleado','eil1.fecha_inicio=eil.fecha_inicio')
+				 		 ->join('org_seccion s','s.id_seccion=eil.id_seccion')
 						 ->join('org_usuario u', 'e.nr = u.nr')
 						 ->join('org_usuario_rol ur', 'u.id_usuario = ur.id_usuario')
 						 ->join('org_rol r', 'ur.id_rol = r.id_rol')
-						 ->where('e.id_estado', '00001');
+						 ->where('e.id_estado', '00001')
+						 ->having('pre',$abre)
+						 ->group_by('e.id_empleado');
 			if ($tipo==1) {
 				$this->db->where('r.nombre_rol', 'FILTRO CCIT')
 								 ->or_where('r.nombre_rol', 'Delegado(a) CCIT');
@@ -286,6 +306,36 @@ class Expedientes_model extends CI_Model {
 		$query = $this->db->get();
 		if ($query->num_rows() > 0) {
 			return $query;
+		}else {
+			return FALSE;
+		}
+	}
+
+	public function obtener_abreviatura_depto($nr){
+		$this->db->select("DISTINCT CASE s.nombre_seccion
+											 WHEN 'OFICINA DEPARTAMENTAL DE SAN VICENTE' THEN 'SV'
+											 WHEN 'OFICINA DEPARTAMENTAL DE AHUACHAPAN' THEN 'AH'
+											 WHEN 'OFICINA DEPARTAMENTAL DE CHALATENANGO' THEN 'CH'
+											 WHEN 'OFICINA DEPARTAMENTAL DE SONSONATE' THEN 'SO'
+											 WHEN 'OFICINA DEPARTAMENTAL DE CABANAS' THEN 'CA'
+											 WHEN 'OFICINA DEPARTAMENTAL DE CUSCATLAN' THEN 'CU'
+											 WHEN 'OFICINA DEPARTAMENTAL DE LA UNION' THEN 'LU'
+											 WHEN 'OFICINA DEPARTAMENTAL DE LA LIBERTAD' THEN 'LL'
+											 WHEN 'OFICINA DEPARTAMENTAL DE USULUTAN' THEN 'US'
+											 WHEN 'OFICINA DEPARTAMENTAL DE MORAZAN' THEN 'MO'
+											 WHEN 'OFICINA REGIONAL DE SAN MIGUEL' THEN 'SM'
+											 WHEN 'OFICINA REGIONAL DE SANTA ANA' THEN 'SA'
+											 WHEN 'OFICINA PARACENTRAL DE ZACATECOLUCA' THEN 'LP'
+											 ELSE 'SS' END  pre"
+											)
+						 ->from('sir_empleado e')
+						 ->join('sir_empleado_informacion_laboral eil','eil.id_empleado=e.id_empleado')
+						 ->join('tcm_empleado_informacion_laboral eil1','eil1.id_empleado=eil.id_empleado','eil1.fecha_inicio=eil.fecha_inicio')
+						 ->join('org_seccion s','s.id_seccion=eil.id_seccion')
+						 ->where('e.nr',$nr);
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->row();
 		}else {
 			return FALSE;
 		}

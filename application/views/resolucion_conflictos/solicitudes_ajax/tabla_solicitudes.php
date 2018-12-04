@@ -1,4 +1,5 @@
 <div class="table-responsive">
+  <!-- <?php var_dump($abreviatura->pre) ?> -->
             <table id="myTable" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
@@ -58,7 +59,9 @@
                                               JOIN sct_personaci p ON p.id_personaci=e.id_personaci
                                               JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
                                               JOIN sir_empleado l on l.id_empleado=e.id_personal
-                                              ".$add." WHERE tiposolicitud_expedienteci=1 ORDER BY e.id_expedienteci DESC");
+                                              ".$add." WHERE tiposolicitud_expedienteci=1
+                                              AND RIGHT(e.numerocaso_expedienteci,2)='".$abreviatura->pre."'
+                                              ORDER BY e.id_expedienteci DESC");
                     if($solicitudes->num_rows() > 0){
                         foreach ($solicitudes->result() as $fila) {
                           echo "<tr>";

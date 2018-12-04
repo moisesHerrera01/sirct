@@ -15,7 +15,8 @@ class Roles extends CI_Controller {
       }else {
         $tipo = 2;
       }
-			$data['colaboradores'] = $this->expedientes_model->obtener_delegados_rol($tipo);
+      $abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+			$data['colaboradores'] = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 			$this->load->view('templates/header');
 			$this->load->view('resolucion_conflictos/roles', $data);
 			$this->load->view('templates/footer');
@@ -28,7 +29,8 @@ class Roles extends CI_Controller {
     }else {
       $tipo = 2;
     }
-		$colaboradores = $this->expedientes_model->obtener_delegados_rol($tipo);
+    $abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$colaboradores = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 
 		if ($colaboradores) {
 			foreach ($colaboradores->result() as $delegado) {

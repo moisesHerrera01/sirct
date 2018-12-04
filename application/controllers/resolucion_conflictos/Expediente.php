@@ -112,7 +112,8 @@ class Expediente extends CI_Controller {
       }else {
         $tipo = 2;
       }
-			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo);
+			$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado',
 				array(
 					'id' => $this->input->post('id'),
@@ -129,7 +130,8 @@ class Expediente extends CI_Controller {
 			}else {
 				$tipo = 2;
 			}
-			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo);
+			$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delega2',
 				array(
 					'id' => $this->input->post('id'),
@@ -146,7 +148,8 @@ class Expediente extends CI_Controller {
       }else {
         $tipo = 2;
       }
-			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo);
+			$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado_tabla',
 				array(
 					'id' => $this->input->post('id'),

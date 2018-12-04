@@ -6,6 +6,7 @@ class Solicitudes extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('solicitudes_model');
+		$this->load->model('expedientes_model');
 		$this->load->model('solicitud_juridica_model');
 		$this->load->library('FPDF/fpdf');
 	}
@@ -20,7 +21,8 @@ class Solicitudes extends CI_Controller {
 	}
 
 	public function tabla_solicitudes(){
-		$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_solicitudes');
+		$data['abreviatura'] = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_solicitudes',$data);
 	}
 
 	public function tabla_representantes(){
