@@ -54,26 +54,27 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function combo_establecimiento(seleccion){
-        $.ajax({
-            async: true,
-          url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_establecimiento",
-          type: "post",
-          dataType: "html",
-          data: {id : seleccion}
-        })
-        .done(function(res){
-            $.when($('#div_combo_establecimiento').html(res) ).then(function( data, textStatus, jqXHR ) {
-                $("#establecimiento").select2({
+      $.ajax({
+        async: true,
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_establecimiento').html(res);
+        $("#establecimiento").select2({
 
-                    'language': {
-                        noResults: function () {
-                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
-                        }
-                    }, 'escapeMarkup': function (markup) { return markup; }
-                });
-                tabla_representantes()
-            });
+          'language': {
+            noResults: function () {
+              return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
+            }
+          },
+          'escapeMarkup': function (markup) {
+            return markup;
+          }
         });
+      });
     }
 
     function combo_actividad_economica() {
