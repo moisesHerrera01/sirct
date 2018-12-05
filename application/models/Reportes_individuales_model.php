@@ -15,7 +15,7 @@ class Reportes_individuales_model extends CI_Model {
 			CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE '' END cant_masc,
 			CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE '' END cant_feme,
 			ecc.fechacrea_expedienteci fecha_inicio,
-			fecha_fechasaudienciasci fecha_fin,
+			ecc.fechacrea_expedienteci fecha_fin,
 			CONCAT_WS(' ',p.nombre_personaci,p.apellido_personaci) solicitante,
 			TIMESTAMPDIFF(YEAR,p.fnacimiento_personaci,CURDATE()) AS edad,
 			CASE WHEN p.discapacidad_personaci = 1 THEN 1 ELSE '' END discapacidadci,
@@ -24,7 +24,10 @@ class Reportes_individuales_model extends CI_Model {
 			ciiu.grupo_catalogociiu,
 			ciiu.actividad_catalogociiu,
 			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp JOIN sct_personaci AS p3 WHERE p3.id_personaci = fp.id_persona AND p3.sexo_personaci = 'M') AS monto,
-			res.resultadoci")
+			(SELECT r.resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci 
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)) resultadoci")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
@@ -33,11 +36,6 @@ class Reportes_individuales_model extends CI_Model {
 			->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
 			->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
 			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
-			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
-			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
-			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
-					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
-			->where('fea.estado_audiencia = 2')
 			->where('(ecc.tiposolicitud_expedienteci = 1 OR ecc.tiposolicitud_expedienteci = 3)')
 			->group_by('ecc.id_expedienteci');
 
