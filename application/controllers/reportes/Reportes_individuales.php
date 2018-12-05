@@ -123,8 +123,8 @@ class Reportes_individuales extends CI_Controller {
 					$rows->monto,
 					''
 				);
+				$cuerpo .= table_row($cell_row);
 			}
-			$cuerpo .= table_row($cell_row);
 		}else{
 			$cuerpo .= no_rows(count($titles_head));
 		}

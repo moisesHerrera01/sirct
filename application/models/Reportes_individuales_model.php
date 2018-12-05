@@ -36,6 +36,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci', 'left')
 			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado', 'left')
 			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
+					 WHERE fa.id_expedienteci=fea.id_expedienteci) OR fea.id_fechasaudienciasci NOT IN (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
 					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
 			->where('(ecc.tiposolicitud_expedienteci = 1 OR ecc.tiposolicitud_expedienteci = 3)')
 			->group_by('ecc.id_expedienteci');
@@ -57,7 +58,7 @@ class Reportes_individuales_model extends CI_Model {
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
 	 	}
 
-	 	echo $this->db->get_compiled_select();
+	 	//echo $this->db->get_compiled_select();
 
         return $query=$this->db->get();
     }
