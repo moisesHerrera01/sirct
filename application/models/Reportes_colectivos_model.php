@@ -231,8 +231,8 @@ class Reportes_colectivos_model extends CI_Model {
     function registros_consolidado_recibidos($data){
   		$fecha_actual = explode("-", $data["anio"]."-".$data["value"]."-01");
 
-		$this->db->select("COALESCE(COUNT(ecc.id_expedienteci),0) cant_total,	ecc.fechacrea_expedienteci fecha_inicio")
-			->from('sct_expedienteci AS ecc')
+		$this->db->select("COALESCE(COUNT(DISTINCT ecc.id_expedienteci),0) cant_total")
+			->from('sct_expedienteci ecc')
 			->where('ecc.tiposolicitud_expedienteci>3')
 			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')");
 
@@ -242,7 +242,7 @@ class Reportes_colectivos_model extends CI_Model {
     function registros_consolidado_recibidos_por_causa($data){
   	$fecha_actual = explode("-", $data["anio"]."-".$data["value"]."-01");
 
-		$this->db->select("mv.nombre_motivo, (SELECT COUNT(e.id_expedienteci)
+		$this->db->select("mv.nombre_motivo, (SELECT COUNT(DISTINCT e.id_expedienteci)
 																					FROM sct_expedienteci e
 																					WHERE e.causa_expedienteci=mv.id_motivo_solicitud
 																					AND e.tiposolicitud_expedienteci>3
@@ -258,17 +258,16 @@ class Reportes_colectivos_model extends CI_Model {
   	function registros_consolidado_casos_finalizados($data){
   		$fecha_actual = explode("-", $data["anio"]."-".$data["value"]."-01");
 
-		$this->db->select(" UPPER(res.resultadoci) resultado,	(SELECT COUNT(e.id_expedienteci)
-																					FROM sct_expedienteci e
-																					JOIN sct_fechasaudienciasci f ON f.id_expedienteci=e.id_expedienteci
+		$this->db->select(" UPPER(res.resultadoci) resultado,	(SELECT COUNT(f.id_expedienteci)
+																					FROM sct_fechasaudienciasci f
 																					WHERE f.resultado=res.id_resultadoci
-																					AND e.tiposolicitud_expedienteci>3
-																					AND YEAR(e.fechacrea_expedienteci)=".$fecha_actual[0]."
-																					AND MONTH(e.fechacrea_expedienteci)=".$fecha_actual[1]."
 																					AND f.id_fechasaudienciasci=(SELECT MAX(fa.id_fechasaudienciasci)
 																																			 FROM sct_fechasaudienciasci fa
 																					 		 										 		 WHERE fa.id_expedienteci=f.id_expedienteci
-																																			 AND fa.estado_audiencia=2)) cant_total")
+																																			 AND fa.estado_audiencia=2)
+																					AND YEAR(f.fecha_fechasaudienciasci)=".$fecha_actual[0]."
+																					AND MONTH(f.fecha_fechasaudienciasci)=".$fecha_actual[1]."
+																					) cant_total")
 						->from('sct_resultadosci AS res')
 						->where('res.id_tipo_solicitud>3')
 						->group_by('res.id_resultadoci');
@@ -277,7 +276,7 @@ class Reportes_colectivos_model extends CI_Model {
 
 
 		/*RESULTADO 16 es reinstalo de trabajadores
-		causas 2,3,6 corresponden a despido, despido por aumento al salario minimo y
+		causas 2,3,13 corresponden a despido, despido por aumento al salario minimo y
 		despido por presentar renuncia voluntaria respectivamente*/
     function registros_consolidado_personas_despedidas($data){
   		$fecha_actual = explode("-",$data["anio"]."-".$data["value"]."-01");
@@ -292,7 +291,7 @@ class Reportes_colectivos_model extends CI_Model {
 					 																 	 WHERE fa.id_expedienteci=fea.id_expedienteci
 																						 AND fa.resultado <> 16))')
 			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')")
-			->where('ecc.causa_expedienteci IN (2,3,6)');
+			->where('ecc.causa_expedienteci IN (2,3,13)');
 
         return $query=$this->db->get();
     }
@@ -313,6 +312,8 @@ class Reportes_colectivos_model extends CI_Model {
     }
 
     function registros_consolidado_pagos($data){
+		$fecha_actual = explode("-",$data["anio"]."-".$data["value"]."-01");
+
 		$this->db->select("
 											COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_masc,
 											COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_feme,
@@ -324,7 +325,8 @@ class Reportes_colectivos_model extends CI_Model {
 			->from('sct_expedienteci AS ecc')
 			->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
 			->join('sct_fechaspagosci AS fp', 'fp.id_persona = p.id_personaci')
-			->where('(ecc.tiposolicitud_expedienteci>3)');
+			->where('(ecc.tiposolicitud_expedienteci>3)')
+			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')");
 
          return $this->db->get();
     }

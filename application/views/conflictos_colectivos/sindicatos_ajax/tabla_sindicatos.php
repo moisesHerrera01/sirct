@@ -30,9 +30,9 @@
                             }else if($fila->id_estadosci == 1){
                                 echo '<td><span class="label label-success">ESPERANDO AUDIENCIA</span></td>';
                             }else if($fila->id_estadosci == 2){
-                                echo '<td><span class="label label-success">CON RESULTADO</span></td>';
+                                echo '<td><span class="label label-info">CON RESULTADO</span></td>';
                             }else if($fila->id_estadosci == 3){
-                                echo '<td><span class="label label-success">ARCHIVADO</span></td>';
+                                echo '<td><span class="label label-danger">ARCHIVADO</span></td>';
                             }else if($fila->id_estadosci == 4){
                                 echo '<td><span class="label label-danger">INHABILITADO</span></td>';
                             }

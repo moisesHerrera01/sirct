@@ -47,7 +47,8 @@
                                          AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
                                                                           FROM sct_fechasaudienciasci fa
                                                                           WHERE fa.id_expedienteci=fea.id_expedienteci
-                                                                          AND fa.estado_audiencia=2)) AS resultado
+                                                                          AND fa.estado_audiencia=2)) AS resultado,
+                                        (select count(*) from sct_personaci where id_expedienteci = e.id_expedienteci ) personas
                                         FROM sct_estadosci AS es
                                         JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                         JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
@@ -71,9 +72,9 @@
                     }else if($fila->estado == 1){
                         echo '<td><span class="label label-success">ESPERANDO AUDIENCIA</span></td>';
                     }else if($fila->estado == 2){
-                        echo '<td><span class="label label-success">CON RESULTADO</span></td>';
+                        echo '<td><span class="label label-info">CON RESULTADO</span></td>';
                     }else if($fila->estado == 3){
-                        echo '<td><span class="label label-success">ARCHIVADO</span></td>';
+                        echo '<td><span class="label label-danger">ARCHIVADO</span></td>';
                     }else if($fila->estado == 4){
                         echo '<td><span class="label label-danger">INHABILITADO</span></td>';
                     }
@@ -101,7 +102,9 @@
                                     <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_expedienteci?>,<?=$fila->id_empresaci?>)">Gestionar audiencias</a>
                                     <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci?>)">Cambiar delegado</a> -->
                                     <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->estado?>)">Cambiar estado</a>
-                                    <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_ficha_indemnizacion/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
+                                    <?php if ($fila->personas > 0 ) { ?>
+                                        <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_ficha_indemnizacion/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
+                                    <?php }?>
                                     <?php if ($fila->audiencias >= 2 ) { ?>
                                         <a class="dropdown-item" href="javascript:;" onClick="generar_acta(<?=$fila->id_expedienteci?>)">Emitir Actas</a>
                                     <?php }?>
