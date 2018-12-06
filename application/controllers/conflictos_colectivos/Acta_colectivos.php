@@ -112,7 +112,7 @@ class Acta_colectivos extends CI_Controller {
 
     }
 
-    public function generar_acta_indemnizacion($id_expedienteci, $info_adicional) {
+  public function generar_acta_indemnizacion($id_expedienteci/*, $info_adicional*/) {
         $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];
         $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci);
         $primera= $audiencias->result()[0];
@@ -137,11 +137,11 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->setValue('direccion_empresa', $expediente->direccion_empresa);
         $templateWord->setValue('nombre_representante', $expediente->nombres_representante);
         $templateWord->setValue('persona_conflicto',$expediente->nombre_personaci .' '. $expediente->apellido_personaci);
-        $templateWord->setValue('direccion_solicitante', $expediente->direccion_solicitante);        
+        $templateWord->setValue('direccion_solicitante', $expediente->direccion_solicitante);
         $templateWord->setValue('horario_solicitante',convertir_numeros_cadena($expediente->horarios_solicitante));
         $templateWord->setValue('nombre_delegado',$expediente->delegado);
         $templateWord->setValue('solicitantes',$concat_solicitantes);
-        $templateWord->setValue('info_adicional', urldecode($info_adicional));
+      $templateWord->setValue('info_adicional','' /*urldecode($info_adicional)*/);
 
         $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
         $templateWord->setValue('mes_conflicto', strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));

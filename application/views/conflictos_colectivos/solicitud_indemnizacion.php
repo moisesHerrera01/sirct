@@ -641,27 +641,28 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function generar_acta(id_expedienteci) {
-        swal({
-            title: "Información Adicional para Generar Acta",
-            text: " Especifique el período que se detalla en las correspondientes hojas de calculos que se agregan a las presentes diligencias: *",
-            type: "input",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            inputPlaceholder: "Agregar información adicional para generar acta"
-        }, function (inputValue) {
-            if (inputValue === false) return false;
-            if (inputValue === "") {
-                swal.showInputError("Se necesita información adicional para generar el acta.");
-                return false
-            }
-            location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci + "/" + inputValue;
+        // swal({
+        //     title: "Información Adicional para Generar Acta",
+        //     text: " Especifique el período que se detalla en las correspondientes hojas de calculos que se agregan a las presentes diligencias: *",
+        //     type: "input",
+        //     showCancelButton: true,
+        //     closeOnConfirm: false,
+        //     inputPlaceholder: "Agregar información adicional para generar acta"
+        // },
+        // function (inputValue) {
+            // if (inputValue === false) return false;
+            // if (inputValue === "") {
+            //     swal.showInputError("Se necesita información adicional para generar el acta.");
+            //     return false
+            // }
+            location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci/* + "/" + inputValue*/;
 
             swal({
                 title: "¡Acta generada exitosmente!",
                 type: "success",
                 showConfirmButton: true
             });
-        });
+        // });
     }
 
     function combo_representante_empresa(seleccion,id_emp){
