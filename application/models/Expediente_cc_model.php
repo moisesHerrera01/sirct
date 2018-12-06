@@ -98,7 +98,7 @@ class Expediente_cc_model extends CI_Model {
                   a.id_expedienteci,
                   a.numerocaso_expedienteci,
                   a.fechacrea_expedienteci,
-                  b.fechaconflicto_personaci,
+                  a.fechaconflicto_personaci,
                   b.nombre_personaci,
                   b.apellido_personaci,
                   b.funciones_personaci,
