@@ -132,7 +132,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-			->where('(ecc.tiposolicitud_expedienteci = 1 OR ecc.tiposolicitud_expedienteci = 3)')
+			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
 			->where("ecc.id_expedienteci NOT IN(SELECT ecc.id_expedienteci FROM sct_fechasaudienciasci fea
 				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
 				AND fea.id_expedienteci = ecc.id_expedienteci 
@@ -155,7 +155,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-			->where('(ecc.tiposolicitud_expedienteci = 1 OR ecc.tiposolicitud_expedienteci = 3)')
+			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
 			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')");
 
         return $query=$this->db->get();
