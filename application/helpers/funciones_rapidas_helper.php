@@ -236,7 +236,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	}
 
 	function fecha_ESP($fecha){
-		return date("d-m-Y",strtotime($fecha));
+		if($fecha == "N/A"){
+			return $fecha;
+		}else{
+			return date("d-m-Y",strtotime($fecha));
+		}
 	}
 
 		function get_fecha($date = 0){ if($date == 0){$date = date('Y-m-d');} $date = explode("-", $date); return $date[2]." DE ".mes($date[1])." DE ".$date[0]; }

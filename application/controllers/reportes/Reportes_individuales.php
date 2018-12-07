@@ -537,6 +537,7 @@ class Reportes_individuales extends CI_Controller {
 		if($registros->num_rows()>0){
 			foreach ($registros->result() as $rows) {
 				$total+=$rows->cant_masc;
+				$total+=$rows->cant_feme;
 			}
 		}else{ $total = 0; }
 		$cuerpo .= table_header(array('CASOS FINALIZADOS', $total));
