@@ -259,42 +259,28 @@ class Reportes_individuales_model extends CI_Model {
 				AND fea.id_expedienteci = ecc.id_expedienteci 
 				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND (fa.estado_audiencia=2 AND fea.resultado IN(1,2,7)) AND DATE_FORMAT(fea.fecha_resultado, '%Y%m') = '".$fecha_actual."' ))");
 
-		/*$this->db->select(" 'EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES' AS texto,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COALESCE(COUNT(p.sexo_personaci),0) cant_total,
-			ecc.fechacrea_expedienteci fecha_inicio,
-			fea.fecha_fechasaudienciasci fecha_fin")
-			->from('sct_expedienteci AS ecc')
-			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci','LEFT')
-			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado','LEFT')
-			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			->where('fea.resultado IN (1,2,7)')
-			->where("AND DATE_FORMAT(fea.fecha_resultado, '%Y%m') = '".$fecha_actual."'");*/
-
         return $query=$this->db->get();
     }
 
     function registros_consolidado_pagos($data){
+    	$fecha_actual = date("Ym", strtotime($data["anio"]."-".$data["value"]."-01"));
+
 		$this->db->select("
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_feme,
 			COALESCE(SUM(fp.montopago_fechaspagosci),0) monto_total,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-			COUNT(p.sexo_personaci) cant_total,
+			COUNT(p.sexo_personaci) cant_total
 			")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
-			->join('sct_fechaspagosci AS fp', 'fp.id_persona = p.id_personaci')
-			->where('fea.id_fechasaudienciasci = (SELECT MIN(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
-					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
-			->where('fea.estado_audiencia = 2')
+			->join('sct_fechaspagosci AS fp', 'fp.id_expedienteci = ecc.id_expedienteci')
+			->where("DATE_FORMAT(fp.fechapago_fechaspagosci, '%Y%m') = '".$fecha_actual."'")
 			->where('(ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3)');
+
+		//echo $this->db->get_compiled_select();
 
         return $query=$this->db->get();
     }
