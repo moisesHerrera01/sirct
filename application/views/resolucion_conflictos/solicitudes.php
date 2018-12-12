@@ -158,16 +158,19 @@ function cambiar_update_post(id_personaci,bandera){
         $('#dui').unmask();
         if (result.id_doc_identidad==4) {
           $('#partida_div').show();
+          $('#tipo_aco').show(500);
           $('#div_numero_doc_identidad').hide();
           $("#dui").removeAttr("required");
         }else {
           $('#partida_div').hide();
+          $('#tipo_aco').hide(500);
           $('#div_numero_doc_identidad').show();
           $("#dui").attr("required",'required');
         }
       }else {
          $('#dui').mask('99999999-9', {reverse: true});
          $('#partida_div').hide();
+         $('#tipo_aco').hide(500);
          $('#div_numero_doc_identidad').show();
          $("#dui").attr("required",'required');
       }
@@ -741,6 +744,7 @@ function open_form(num){
 function cerrar_mantenimiento(){
 
     $('#partida_div').hide();
+    $('#tipo_aco').hide(500);
     $('#div_numero_doc_identidad').show();
     $("#dui").attr("required",'required');
     $("#ocultar_div").hide();
@@ -985,16 +989,19 @@ function cambiar_editar(id_expedienteci,bandera){
         $('#dui').unmask();
         if (result.id_doc_identidad==4) {
           $('#partida_div').show();
+          $('#tipo_aco').show(500);
           $('#div_numero_doc_identidad').hide();
           $("#dui").removeAttr("required");
         }else {
           $('#partida_div').hide();
+          $('#tipo_aco').hide(500);
           $('#div_numero_doc_identidad').show();
           $("#dui").attr("required",'required');
         }
       }else {
          $('#dui').mask('99999999-9', {reverse: true});
          $('#partida_div').hide();
+         $('#tipo_aco').hide(500);
          $('#div_numero_doc_identidad').show();
          $("#dui").attr("required",'required');
       }
@@ -1125,7 +1132,7 @@ function volver(num) {
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de Resolución de Conflictos de Trabajo</h3>
+                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de mediación de conflictos de trabajo</h3>
             </div>
         </div>
         <!-- ============================================================== -->
@@ -1153,7 +1160,7 @@ function volver(num) {
                         <div id="cnt_form1" class="cnt_form">
                           <h3 class="box-title" style="margin: 0px;">
                               <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
-                              Información del solicitante
+                              Información de la persona solicitante
                             </h3><hr class="m-t-0 m-b-30">
                             <input type="hidden" id="band" name="band" value="save">
                             <input type="hidden" id="band1" name="band1" value="save">
@@ -1197,10 +1204,30 @@ function volver(num) {
                                     <div class="help-block"></div>
                                 </div>
 
+                                <div id="tipo_aco" style="display: none;" class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <h5>Tipo de representante del menor: </h5>
+                                    <div class="controls">
+                                      <select id="acompaniante" name="acompaniante" class="custom-select col-4">
+                                        <option value="">[Seleccione el tipo]</option>
+                                        <option value="0">Papá</option>
+                                        <option value="1">Mamá</option>
+                                        <option value="2">Acurador</option>
+                                        <option value="3">Otro</option>
+                                      </select>
+                                    </div>
+                                </div>
+
                             </div>
+
 
                             <div id="partida_div" style="display: none;">
                               <div class="row">
+                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Representante del menor: </h5>
+                                    <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre representante del menor">
+                                    <div class="help-block"></div>
+                                </div>
+
                                 <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                     <h5>Número:</h5>
                                     <div class="controls">
@@ -1214,16 +1241,16 @@ function volver(num) {
                                         <input type="text" placeholder="Folio partida nacimiento" id="folio_partida" name="folio_partida" class="form-control">
                                     </div>
                                 </div>
+                              </div>
 
+                              <div class="row">
                                 <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                     <h5>Libro: <span class="text-danger">*</span></h5>
                                     <div class="controls">
                                         <input type="text" placeholder="Libro partida nacimiento" id="libro_partida" name="libro_partida" class="form-control">
                                     </div>
                                 </div>
-                              </div>
 
-                              <div class="row">
                                 <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                     <h5>Asiento: <span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -1269,13 +1296,28 @@ function volver(num) {
                               </div>
                         </div>
                         <div class="row">
-                          <div class="form-group col-lg-12" style="height: 83px;">
+                          <div class="form-group col-lg-8" style="height: 83px;">
                               <h5>Dirección:</h5>
                               <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
                               <div class="help-block"></div>
                           </div>
+
+                          <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
                         </div>
                         <div class="row">
+                          <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                              <h5>Estudios realizados: <span class="text-danger">*</span></h5>
+                              <div class="controls">
+                                <select id="estudios" name="estudios" class="custom-select col-4" onchange="" required>
+                                  <option value="">[Seleccione]</option>
+                                  <option value="Sin estudio">Sin estudio</option>
+                                  <option value="Educacion Básica">Educacion Básica</option>
+                                  <option value="Bachillerato">Bachillerato</option>
+                                  <option value="Universidad">Universidad</option>
+                                </select>
+                              </div>
+                          </div>
+
                             <div class="form-group col-lg-2" style="height: 83px; display: none;">
                                 <h5>Representante:</h5>
                                 <input name="posee_representante" type="radio" id="si_posee" value='1'>
@@ -1286,49 +1328,48 @@ function volver(num) {
                          </div>
 
                          <div class="form-group col-lg-2" style="height: 83px;">
-                             <h5>Sexo:</h5>
+                             <h5>Pertenece a LGTBI:</h5>
+                             <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
+                             <label for="si_lgbt">Si </label><Br>
+                             <input name="pertenece_lgbt" type="radio" id="no_lgbt" checked="" value='0'>
+                             <label for="no_lgbt">No</label>
+                        <div class="help-block"></div>
+                      </div>
+
+                         <div class="form-group col-lg-2" style="height: 83px;">
+                             <h5>Sexo de la persona:</h5>
                              <input name="sexo" type="radio" id="masculino" checked="" value="M">
-                             <label for="masculino">Masculino</label>
+                             <label for="masculino">Hombre</label>
                              <input name="sexo" type="radio" id="femenino" value="F">
-                             <label for="femenino">Femenino</label>
+                             <label for="femenino">Mujer</label>
                              <div class="help-block"></div>
                        </div>
 
-                      <div class="form-group col-lg-2" style="height: 83px;">
-                          <h5>Pertenece LGTBI:</h5>
-                          <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
-                          <label for="si_lgbt">Si </label><Br>
-                          <input name="pertenece_lgbt" type="radio" id="no_lgbt" checked="" value='0'>
-                          <label for="no_lgbt">No</label>
-                     <div class="help-block"></div>
-                   </div>
+                       <div id="embarazada" class="form-group col-lg-2" style="height: 83px; display: none;">
+                         <!-- <div id="embarazada"> -->
+                           <h5>Está embarazada:</h5>
+                           <input name="embarazada" type="radio" id="si_e" value='1'>
+                           <label for="si_e">Si </label><Br>
+                           <input name="embarazada" type="radio" id="no_e" checked="" value='0'>
+                           <label for="no_e">No</label>
+                      <div class="help-block"></div>
+                    <!-- </div> -->
+                  </div>
 
-                         <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                             <h5>Estudios realizados: <span class="text-danger">*</span></h5>
-                             <div class="controls">
-                               <select id="estudios" name="estudios" class="custom-select col-4" onchange="" required>
-                                 <option value="">[Seleccione]</option>
-                                 <option value="Sin estudio">Sin estudio</option>
-                                 <option value="Educacion Básica">Educacion Básica</option>
-                                 <option value="Bachillerato">Bachillerato</option>
-                                 <option value="Universidad">Universidad</option>
-                               </select>
-                             </div>
-                         </div>
+                   <div class="form-group col-lg-2" style="height: 83px;">
+                       <h5>Posee discapacidad:</h5>
+                       <input name="discapacidad" type="radio" id="si" value='1'>
+                       <label for="si">Si </label><Br>
+                       <input name="discapacidad" type="radio" id="no" checked="" value='0'>
+                       <label for="no">No</label>
+                  <div class="help-block"></div>
+                </div>
 
-                         <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
                         </div>
                         <div class="row">
-                          <div class="form-group col-lg-2" style="height: 83px;">
-                              <h5>Posee discapacidad:</h5>
-                              <input name="discapacidad" type="radio" id="si" value='1'>
-                              <label for="si">Si </label><Br>
-                              <input name="discapacidad" type="radio" id="no" checked="" value='0'>
-                              <label for="no">No</label>
-                         <div class="help-block"></div>
-                       </div>
 
-                       <div id="ocultar_div" class="form-group col-lg-8" style="height: 83px;">
+
+                       <div id="ocultar_div" class="form-group col-lg-8" style="height: 83px; display: none;">
                            <h5>Discapacidad:</h5>
                            <textarea type="text" id="discapacidad_desc" name="discapacidad_desc" class="form-control" placeholder="Ingrese la discapacidad"></textarea>
                            <div class="help-block"></div>
@@ -1403,10 +1444,10 @@ function volver(num) {
                                       <div id="cnt_form4" class="cnt_form">
                                         <h3 class="box-title" style="margin: 0px;">
                                             <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
-                                            Información del solicitado
+                                            Información de la persona solicitada
                                           </h3><hr class="m-t-0 m-b-30">
                                           <input type="hidden" id="id_representanteci" name="id_representanteci" value="">
-                                          <span class="etiqueta">Datos del establecimiento solicitado</span>
+                                          <span class="etiqueta">Datos de la persona solicitada</span>
                                           <blockquote class="m-t-0">
                                               <div class="row">
                                               	<div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento">
@@ -1414,7 +1455,7 @@ function volver(num) {
                                               </div>
                                           </blockquote>
 
-                                          <span class="etiqueta">Representante</span>
+                                          <span class="etiqueta">Personas representantes</span>
                                           <blockquote class="m-t-0">
                                               <div id="cnt_tabla_representantes"></div>
                                           </blockquote>
@@ -1689,7 +1730,7 @@ function volver(num) {
                 </div>
 
                 <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Nombre del establecimiento:</h5>
+                    <h5>Persona solicitada :</h5>
                     <div class="controls">
                         <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control">
                     </div>
@@ -2386,16 +2427,19 @@ function ocultar(){
     $('#dui').unmask();
     if (value==4) {
       $('#partida_div').show(500);
+      $('#tipo_aco').show(500);
       $('#div_numero_doc_identidad').hide(500);
       $("#dui").removeAttr("required");
     }else {
       $('#partida_div').hide(500);
+      $('#tipo_aco').hide(500);
       $('#div_numero_doc_identidad').show(500);
       $("#dui").attr("required",'required');
     }
   }else {
      $('#dui').mask('99999999-9', {reverse: true});
      $('#partida_div').hide(500);
+     $('#tipo_aco').hide(500);
      $('#div_numero_doc_identidad').show(500);
      $("#dui").attr("required",'required');
   }
@@ -2424,6 +2468,15 @@ $(function(){
                 $("#ocultar_div").show(500);
             }
     });
+
+    $("input[name=sexo]").click(function(evento){
+          var valor = $(this).val();
+          if(valor == "M"){
+              $("#embarazada").hide(500);
+          }else{
+              $("#embarazada").show(500);
+          }
+  });
 
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());

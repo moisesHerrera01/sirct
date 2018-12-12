@@ -1,4 +1,4 @@
-<h5>Establecimiento: <span class="text-danger">*</span></h5>
+<h5>Persona solicitada: <span class="text-danger">*</span></h5>
 <select id="establecimiento" name="establecimiento" required class="select2 est" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php

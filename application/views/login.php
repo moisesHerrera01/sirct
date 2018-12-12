@@ -71,7 +71,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
      ?>
         <a href="javascript:void(0)" class="text-center db"><img height="160px;" src="<?php echo base_url(); ?>assets/images/Logo.png" alt="Home" /></a>
        <div class="form-group m-t-40">
-          <div class="col-lg-12"><input class="form-control" type="text" name="usuario" required="" placeholder="Usuario"></div>
+          <div class="col-lg-12"><input class="form-control" type="text" name="usuario" required="" placeholder="Persona usuaria"></div>
         </div>
         <div class="form-group" style="margin-bottom: 10px;">
           <div class="col-lg-12"><input class="form-control" type="password" id="password" name="password" required="" placeholder="Contraseña"></div>
@@ -115,22 +115,22 @@ $(function(){
                 localStorage["ventanasvyp"] = 0;
                 location.href = "<?php echo base_url(); ?>";
             }else if(res == "usuario"){
-                swal({ title: "¡Usuario no existe!", text: "El usuario que intenta identificar no exíste.", type: "warning", showConfirmButton: true });
+                swal({ title: "¡Usuario no existe!", text: "La persona usuaria que intenta identificar no exíste.", type: "warning", showConfirmButton: true });
                 $("#Save_info").hide(0);
             }else if(res == "estado"){
-                swal({ title: "¡Cuenta inactiva!", text: "La cuenta de este usuario esta deshabilitada.", type: "warning", showConfirmButton: true });
+                swal({ title: "¡Cuenta inactiva!", text: "La cuenta de esta persona usuaria esta deshabilitada.", type: "warning", showConfirmButton: true });
                 $("#Save_info").hide(0);
             }else if(res == "password"){
                 swal({ title: "¡Clave no válida!", text: "La clave ingresada no es válida.", type: "warning", showConfirmButton: true });
                 $("#Save_info").hide(0);
             }else if(res == "activeDirectory"){
-                swal({ title: "¡No encontrado en Active Directory!", text: "Usuario o contraseña no encontrado en Active Directory.", type: "warning", showConfirmButton: true });
+                swal({ title: "¡No encontrado en Active Directory!", text: "Persona usuaria o contraseña no encontrado en Active Directory.", type: "warning", showConfirmButton: true });
                 $("#Save_info").hide(0);
             }else if(res == "sesion"){
                 swal({ title: "¡Ocurrió un error!", text: "Falló el inicio de sesión. Por favor intentelo nuevamente.", type: "error", showConfirmButton: true });
                 $("#Save_info").hide(0);
             }else{
-                swal({ title: "¡Ocurrió un error!", text: "El usuario o contraseña son incorrectos, o no se logró conectar a Active Directory.", type: "error", showConfirmButton: true });
+                swal({ title: "¡Ocurrió un error!", text: "La persona usuaria o contraseña son incorrectos, o no se logró conectar a Active Directory.", type: "error", showConfirmButton: true });
                 $("#Save_info").hide(0);
             }
         })

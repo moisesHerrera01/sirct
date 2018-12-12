@@ -3,7 +3,7 @@
         <div class="card-actions">
 
         </div>
-        <h4 class="card-title m-b-0">Listado de representantes</h4>
+        <h4 class="card-title m-b-0">Listado de personas representantes</h4>
     </div>
     <div class="card-body b-t"  style="padding-top: 7px;">
     	<div class="pull-right">
@@ -16,7 +16,7 @@
             <table id="tabla_representante" class="table stylish-table">
                 <thead class="bg-info text-white">
                     <tr>
-                        <th class="text-white" colspan="2">Representante</th>
+                        <th class="text-white" colspan="2">Persona representante</th>
                         <th class="text-white">DUI</th>
                         <th class="text-white">Estado</th>
                         <th style="min-width: 20px;" class="text-white">(*)</th>

@@ -883,7 +883,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Renuncia Voluntaria</h3>
+                <h3 class="text-themecolor m-b-0 m-t-0">Notificación de renuncia voluntaria</h3>
             </div>
         </div>
         <!-- ============================================================== -->
