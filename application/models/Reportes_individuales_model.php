@@ -39,7 +39,7 @@ class Reportes_individuales_model extends CI_Model {
 			->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
 			->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
 			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
-			->where("ecc.id_personal IN('".$data["id_delegado"]."')")
+			->where("ecc.id_personal IN(".$data["id_delegado"].")")
 			->where('(ecc.tiposolicitud_expedienteci = 1 OR ecc.tiposolicitud_expedienteci = 3)')
 			->group_by('ecc.id_expedienteci');
 
@@ -60,7 +60,7 @@ class Reportes_individuales_model extends CI_Model {
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
 	 	}
 
-	 	//echo $this->db->get_compiled_select();
+	 	echo $this->db->get_compiled_select();
 
         return $query=$this->db->get();
     }
