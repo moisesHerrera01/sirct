@@ -13,11 +13,10 @@ class Reportes_colectivos_model extends CI_Model {
 			ecc.numerocaso_expedienteci,
 			d.departamento,
 			CONCAT_WS(' ', emp.primer_nombre, emp.segundo_nombre, emp.tercer_nombre, emp.primer_apellido, emp.segundo_apellido, emp.apellido_casada) delegado,
-			CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE '' END cant_masc,
-			CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE '' END cant_feme,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_masc,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_feme,
-			COALESCE(SUM(fp.montopago_fechaspagosci),0) monto_total,
+			(SELECT COUNT(p2.sexo_personaci) FROM sct_personaci AS p2 WHERE p2.sexo_personaci = 'M' AND p2.id_expedienteci = ecc.id_expedienteci) cant_masc,
+			(SELECT COUNT(p2.sexo_personaci) FROM sct_personaci AS p2 WHERE p2.sexo_personaci = 'F' AND p2.id_expedienteci = ecc.id_expedienteci) cant_feme,
+			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_expedienteci ecc2 JOIN sct_personaci AS p2 ON p2.id_expedienteci = ecc2.id_expedienteci JOIN sct_fechaspagosci AS fp ON fp.id_persona = p2.id_personaci AND p2.sexo_personaci = 'M' WHERE ecc2.id_expedienteci = ecc.id_expedienteci) monto_masc,			
+			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_expedienteci ecc2 JOIN sct_personaci AS p2 ON p2.id_expedienteci = ecc2.id_expedienteci JOIN sct_fechaspagosci AS fp ON fp.id_persona = ecc2.id_personaci AND p2.sexo_personaci = 'F' WHERE ecc2.id_expedienteci = ecc.id_expedienteci) monto_feme,
 			ecc.fechacrea_expedienteci fecha_inicio,
 			COALESCE((SELECT fea.fecha_resultado FROM sct_fechasaudienciasci fea
 				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
@@ -25,7 +24,7 @@ class Reportes_colectivos_model extends CI_Model {
 				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'N/A') fecha_fin,
 			CONCAT_WS(' ',p.nombre_personaci,p.apellido_personaci) solicitante,
 			TIMESTAMPDIFF(YEAR,p.fnacimiento_personaci,CURDATE()) AS edad,
-			CASE WHEN p.discapacidad_personaci = 1 THEN 1 ELSE '' END discapacidadci,
+			(SELECT COUNT(p2.sexo_personaci) FROM sct_personaci AS p2 WHERE p2.discapacidad_personaci = 1 AND p2.id_expedienteci = ecc.id_expedienteci) discapacidadci,
 			est.nombre_empresa,
 			mv.nombre_motivo causa,
 			ciiu.grupo_catalogociiu,
@@ -37,8 +36,8 @@ class Reportes_colectivos_model extends CI_Model {
 				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'Pendiente 99') resultadoci")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
-			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci', 'LEFT')
-			->join('sct_fechaspagosci AS fp', 'fp.id_expedienteci = ecc.id_expedienteci')
+			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+			->join('sct_fechaspagosci AS fp', 'fp.id_expedienteci = ecc.id_expedienteci','LEFT')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
 			->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
@@ -68,40 +67,6 @@ class Reportes_colectivos_model extends CI_Model {
 	 	//echo $this->db->get_compiled_select();
 
         return $query=$this->db->get();
-
-
-		/*$this->db->select("
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.sexo_personaci = 'M') AS cant_masc,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci  AND p2.sexo_personaci = 'F') AS cant_feme,
-			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp JOIN sct_personaci AS p3 WHERE p3.id_personaci = fp.id_persona AND p3.sexo_personaci = 'M') AS monto_masc,
-			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp JOIN sct_personaci AS p3 WHERE p3.id_personaci = fp.id_persona AND p3.sexo_personaci = 'F') AS monto_feme,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci  AND p2.discapacidad_personaci = '1') AS discapacidadci,
-			ecc.*, p.*, emp.*, est.*, ciiu.*")
-			->from('sct_expedienteci AS ecc')
-			->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
-			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
-			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
-			->group_by('ecc.id_expedienteci');
-
-		if($data["tipo"] == "mensual"){
-			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
-					->where('MONTH(ecc.fechacrea_expedienteci)', $data["value"]);
-	 	}else if($data["tipo"] == "trimestral"){
- 			$tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
-	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
-					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$tminicio."' AND '".$tmfin."'");
-	 	}else if($data["tipo"] == "semestral"){
- 			$smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
- 			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
-					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-	 	}else if($data["tipo"] == "semestral"){
- 			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
-	 	}else{
-	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
-	 	}*/
-
-        return $query=$this->db->get();
     }
 
     function registros_edades($data){
@@ -110,18 +75,30 @@ class Reportes_colectivos_model extends CI_Model {
 		$anios50 = (intval(date("Y"))-50).date("-m-d");
 
 		$this->db->select("
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' AND p2.sexo_personaci = 'M') AS aniosm16,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p2.sexo_personaci = 'M') AS aniosm30,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci < '".$anios50."' AND p2.sexo_personaci = 'M') AS aniosm50,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' AND p2.sexo_personaci = 'F') AS aniosf16,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p2.sexo_personaci = 'F') AS aniosf30,
-			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.fnacimiento_personaci < '".$anios50."' AND p2.sexo_personaci = 'F') AS aniosf50,
-			ecc.*, p.*, emp.*, est.*, ciiu.*")
-			->from('sct_expedienteci ecc')
-			->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
+			ecc.numerocaso_expedienteci,
+			CONCAT_WS(' ', emp.primer_nombre, emp.segundo_nombre, emp.tercer_nombre, emp.primer_apellido, emp.segundo_apellido, emp.apellido_casada) delegado,
+			ecc.fechacrea_expedienteci fecha_inicio,
+			COALESCE((SELECT r.resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci 
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'Pendiente 99') resultadoci,
+			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_personaci = ecc.id_personaci AND p2.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' AND p2.sexo_personaci = 'M') AS aniosm16,
+			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_personaci = ecc.id_personaci AND p2.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p2.sexo_personaci = 'M') AS aniosm30,
+			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_personaci = ecc.id_personaci AND p2.fnacimiento_personaci < '".$anios50."' AND p2.sexo_personaci = 'M') AS aniosm50,
+			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_personaci = ecc.id_personaci AND p2.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' AND p2.sexo_personaci = 'F') AS aniosf16,
+			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_personaci = ecc.id_personaci AND p2.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p2.sexo_personaci = 'F') AS aniosf30,
+			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_personaci = ecc.id_personaci AND p2.fnacimiento_personaci < '".$anios50."' AND p2.sexo_personaci = 'F') AS aniosf50 ")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
+			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
+			->join('sct_fechaspagosci AS fp', 'fp.id_expedienteci = ecc.id_expedienteci','LEFT')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
+			->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
+			->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
 			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
+			//->where("ecc.id_personal IN(".$data["id_delegado"].")")
+			->where('ecc.tiposolicitud_expedienteci > 3')
 			->group_by('ecc.id_expedienteci');
 
 		if($data["tipo"] == "mensual"){

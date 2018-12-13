@@ -133,7 +133,7 @@ class Reportes_colectivos extends CI_Controller {
 					"$ ".number_format($rows->monto_masc,2,'.',','),
 					"$ ".number_format($rows->monto_feme,2,'.',','),
 					"$ ".number_format($rows->monto_masc+$rows->monto_feme,2,'.',','),
-					$rows->numerocaso_expedienteci,
+					'',
 				);
 
 				$cuerpo .= table_row($cell_row);
@@ -311,9 +311,9 @@ class Reportes_colectivos extends CI_Controller {
 
 				$cell_row = array(
 					$rows->numerocaso_expedienteci,
-					fecha_ESP($rows->fechacrea_expedienteci),
-					$rows->resultado_expedienteci,
-					implode(" ", array($rows->primer_nombre, $rows->segundo_nombre, $rows->tercer_nombre, $rows->primer_apellido, $rows->segundo_apellido, $rows->apellido_casada)),
+					fecha_ESP($rows->fecha_inicio),
+					$rows->resultadoci,
+					$rows->delegado,
 					$rows->aniosm16,
 					$rows->aniosm30,
 					$rows->aniosm50,
