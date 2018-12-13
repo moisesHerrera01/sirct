@@ -5,31 +5,60 @@ class Reportes_individuales extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('reportes_individuales_model');
+		$this->load->model(array('reportes_individuales_model', 'login_model', 'expedientes_model'));
 	}
 
 	public function index(){
-		//$data['id_modulo']=$id_modulo;
 		$this->load->view('templates/header');
 		$this->load->view('reportes/reportes_individuales');
 		$this->load->view('templates/footer');
 	}
 
 	public function relaciones_individuales(){
+		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+	    if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) { $tipo = 1;
+	    }else { $tipo = 2; }
+		$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
+
 		$this->load->view('templates/header');
-		$this->load->view('reportes/lista_reportes_individuales/relaciones_individuales');
+		$this->load->view('reportes/lista_reportes_individuales/relaciones_individuales',
+			array(
+				'id' => $this->input->post('id'),
+				'colaborador' => $delegados
+			));
 		$this->load->view('templates/footer');
 	}
 
 	public function renuncia_voluntaria(){
+		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+	    if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) { $tipo = 1;
+	    }else { $tipo = 2; }
+		$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
+
 		$this->load->view('templates/header');
-		$this->load->view('reportes/lista_reportes_individuales/renuncia_voluntaria');
+		$this->load->view('reportes/lista_reportes_individuales/renuncia_voluntaria',
+			array(
+				'id' => $this->input->post('id'),
+				'colaborador' => $delegados
+			));
 		$this->load->view('templates/footer');
 	}
 
 	public function consolidado(){
+		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+	    if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) { $tipo = 1;
+	    }else { $tipo = 2; }
+		$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
+
 		$this->load->view('templates/header');
-		$this->load->view('reportes/lista_reportes_individuales/consolidado');
+		$this->load->view('reportes/lista_reportes_individuales/consolidado',
+			array(
+				'id' => $this->input->post('id'),
+				'colaborador' => $delegados
+			));
 		$this->load->view('templates/footer');
 	}
 
@@ -38,7 +67,8 @@ class Reportes_individuales extends CI_Controller {
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
 			'value' => $this->input->post('value'),
-			'value2' => $this->input->post('value2')
+			'value2' => $this->input->post('value2'),
+			'id_delegado' => $this->input->post('id_delegado')
 		);
 
 		$titles = array(
@@ -229,7 +259,8 @@ class Reportes_individuales extends CI_Controller {
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
 			'value' => $this->input->post('value'),
-			'value2' => $this->input->post('value2')
+			'value2' => $this->input->post('value2'),
+			'id_delegado' => $this->input->post('id_delegado')
 		);
 
 		$titles = array(
@@ -405,7 +436,8 @@ class Reportes_individuales extends CI_Controller {
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
 			'value' => $this->input->post('value'),
-			'value2' => $this->input->post('value2')
+			'value2' => $this->input->post('value2'),
+			'id_delegado' => $this->input->post('id_delegado')
 		);
 
 		$titles = array(
