@@ -45,10 +45,7 @@
                                               e.id_expedienteci,
                                               es.id_estadosci AS estado,
                                               (select count(*) from sct_fechasaudienciasci f where f.id_expedienteci=e.id_expedienteci) AS cuenta,
-                                              (select id_personal from sct_delegado_exp de
-                                                where de.id_expedienteci=e.id_expedienteci
-                                                AND de.id_delegado_exp = (SELECT MAX(aux.id_delegado_exp) FROM sct_delegado_exp aux WHERE aux.id_expedienteci=de.id_expedienteci)
-                                                ) AS max_personal,
+                                              d.delegado_actual,
                                               (SELECT r.resultadoci
               																 FROM sct_fechasaudienciasci fea
               																 JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
@@ -62,7 +59,15 @@
                                               JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                               JOIN sct_personaci p ON p.id_personaci=e.id_personaci
                                               JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
-                                              JOIN sir_empleado l on l.id_empleado=e.id_personal
+                                              JOIN (
+                                                    SELECT de.id_expedienteci,de.id_personal delegado_actual
+                                                    FROM sct_delegado_exp de
+                                                    WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+                                                                                FROM sct_delegado_exp de2
+                                                                                WHERE de2.id_expedienteci=de.id_expedienteci
+                                                                               )
+                                                  ) d ON d.id_expedienteci=e.id_expedienteci
+                                              JOIN sir_empleado l on l.id_empleado=d.delegado_actual
                                               ".$add." WHERE tiposolicitud_expedienteci=1
                                               AND RIGHT(e.numerocaso_expedienteci,2)='".$abreviatura->pre."'
                                               ORDER BY e.id_expedienteci DESC");
@@ -72,7 +77,7 @@
                             echo "<td>".$fila->numero."</td>";
                             echo "<td>".$fila->nombre_personaci.' '.$fila->apellido_personaci."</td>";
                             echo "<td>".$fila->nombre_empresa."</td>";
-                            echo "<td>".$fila->tipo."</td>";
+                            echo "<td>".$fila->tipo.$fila->id_personal.$fila->delegado_actual."</td>";
                             if ($fila->resultado==NULL) {
                               $fila->resultado="Sin Intervenir";
                             }
@@ -111,7 +116,7 @@
                                       <!-- <?php if ($fila->id_estadosci=="2") {?>
                                         <a class="dropdown-item" href="javascript:;" onClick="pagos(<?=$fila->id_expedienteci?>)">Gestionar pagos</a>
                                       <?php } ?> -->
-                                      <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar delegado</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado</a>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/'.$fila->id_expedienteci)?>">Acta de solicitud</a>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/'.$fila->id_expedienteci)?>">Acta de esquela</a>
                                       <!-- <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci?>)">Registrar resolución</a> -->
