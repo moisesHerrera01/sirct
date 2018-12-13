@@ -5,7 +5,8 @@ class Expediente extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("solicitudes_model","representante_persona_model","expedientes_model","empleadores_model","pagos_model","login_model"));
+		$this->load->model(array("solicitudes_model","representante_persona_model","expedientes_model","empleadores_model",
+		"pagos_model","login_model","delegados_model"));
 	}
 
 	public function gestionar_expediente() {
@@ -36,7 +37,10 @@ class Expediente extends CI_Controller {
 								'formapago_personaci' => $this->input->post('forma_pago'),
 								'horarios_personaci' => $this->input->post('horario'),
 								'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
-								'ocupacion' => $this->input->post('ocupacion')
+								'ocupacion' => $this->input->post('ocupacion'),
+								'embarazada' => $this->input->post('embarazada'),
+								'tipo_representante_menor' => $this->input->post('acompaniante'),
+								'nombre_representante_menor' => $this->input->post('nombre_acompaniante')
             );
 						if ($this->input->post('nombres_jefe')!='') {
 							$id_empleador = $this->empleadores_model->insertar_empleador($data3);
@@ -78,7 +82,10 @@ class Expediente extends CI_Controller {
 					'horarios_personaci' => $this->input->post('horario'),
 					'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_conflicto'))),
 					'ocupacion' => $this->input->post('ocupacion'),
-					'id_empleador' => $this->input->post('id_emplea')
+					'id_empleador' => $this->input->post('id_emplea'),
+					'embarazada' => $this->input->post('embarazada'),
+					'tipo_representante_menor' => $this->input->post('acompaniante'),
+					'nombre_representante_menor' => $this->input->post('nombre_acompaniante')
 			);
 
 			$data = array(
@@ -115,6 +122,24 @@ class Expediente extends CI_Controller {
 			$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
 			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado',
+				array(
+					'id' => $this->input->post('id'),
+					'colaborador' => $delegados
+				)
+			);
+
+		}
+
+		public function combo_cambiar_delegado() {
+			$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+			if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) {
+				$tipo = 1;
+			}else {
+				$tipo = 2;
+			}
+			$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+			$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_cambiar_delegado',
 				array(
 					'id' => $this->input->post('id'),
 					'colaborador' => $delegados
@@ -246,8 +271,9 @@ class Expediente extends CI_Controller {
 				$data = array(
 					'id_expedienteci' => $this->input->post('id_expedienteci'),
 					'id_personal' => $this->input->post('id_personal'),
+					'fecha_cambio_delegado' => date("Y-m-d")
 				);
-				echo $this->expedientes_model->cambiar_delegado($data);
+				echo $this->delegados_model->insertar_delegado_exp($data);
 			}
 
 			public function cambiar_estado() {

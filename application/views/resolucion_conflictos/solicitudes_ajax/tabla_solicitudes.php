@@ -45,6 +45,10 @@
                                               e.id_expedienteci,
                                               es.id_estadosci AS estado,
                                               (select count(*) from sct_fechasaudienciasci f where f.id_expedienteci=e.id_expedienteci) AS cuenta,
+                                              (select id_personal from sct_delegado_exp de
+                                                where de.id_expedienteci=e.id_expedienteci
+                                                AND de.id_delegado_exp = (SELECT MAX(aux.id_delegado_exp) FROM sct_delegado_exp aux WHERE aux.id_expedienteci=de.id_expedienteci)
+                                                ) AS max_personal,
                                               (SELECT r.resultadoci
               																 FROM sct_fechasaudienciasci fea
               																 JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
@@ -107,7 +111,7 @@
                                       <!-- <?php if ($fila->id_estadosci=="2") {?>
                                         <a class="dropdown-item" href="javascript:;" onClick="pagos(<?=$fila->id_expedienteci?>)">Gestionar pagos</a>
                                       <?php } ?> -->
-                                      <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar delegado</a> -->
+                                      <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar delegado</a>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/'.$fila->id_expedienteci)?>">Acta de solicitud</a>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/'.$fila->id_expedienteci)?>">Acta de esquela</a>
                                       <!-- <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci?>)">Registrar resolución</a> -->

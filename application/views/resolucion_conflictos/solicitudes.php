@@ -92,6 +92,8 @@ function iniciar(){
           } elseif ($band_mantto == 'update_post') { ?>
             cambiar_update_post('<?=$id_expedienteci?>','update_post');
       <?php }else{ ?>
+          $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy'});
+          $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy'});
           cambiar_editar('<?=$id_expedienteci?>','edit');
       <?php } ?>
   <?php }else{ ?>
@@ -236,6 +238,7 @@ function cambiar_update_post(id_personaci,bandera){
       $("#band").val("save");
       $("#band1").val("edit");
       $("#band2").val("save");
+      $("#bandx").val("save");
       // $("#band6").val('save');
 
       $("#ttl_form").addClass("bg-success");
@@ -305,8 +308,9 @@ function convert_lim_text(lim){
 
 function modal_delegado(id_expedienteci, id_personal) {
     $("#id_expedienteci_copia").val(id_expedienteci);
-    $("#id_personal_copia").val(id_personal).trigger('change.select2');
+    // $("#id_personal_copia").val(id_personal).trigger('change.select2');
     $("#modal_delegado").modal("show");
+    combo_cambiar_delegado(id_personal);
 }
 
 function cambiar_delegado() {
@@ -322,7 +326,7 @@ function cambiar_delegado() {
       }
     })
     .done(function (res) {
-      if(res == "exito"){
+      if(res != "fracaso"){
         cerrar_mantenimiento()
         tablasolicitudes();
         swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
@@ -697,6 +701,20 @@ function combo_delegado(seleccion){
   });
 }
 
+function combo_cambiar_delegado(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_cambiar_delegado",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_cambiar_delegado').html(res);
+    $("#id_personal_copia").select2();
+  });
+}
+
 function combo_delega2(seleccion){
 
   $.ajax({
@@ -781,6 +799,7 @@ function tablasolicitudes(){
             document.getElementById("cnt_tabla_solicitudes").innerHTML=xmlhttpB.responseText;
             $('[data-toggle="tooltip"]').tooltip();
             $('#myTable').DataTable();
+
         }
     }
     xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_solicitudes?nr="+nr_empleado+"&tipo="+estado_pestana,true);
@@ -974,7 +993,7 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#telefono2").val(result.telefono2_personaci);
       $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
-      $("#fecha_nacimiento").val(result.fnacimiento_personaci);
+      $("#fecha_nacimiento").datepicker("setDate", moment(result.fnacimiento_personaci).format("DD-MM-YYYY"));
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
       $("#discapacidad_desc").val(result.discapacidad);
@@ -1055,6 +1074,8 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#id_emplea").val(result.id_empleador);
       $("#causa_expedienteci").val(result.causa_expedienteci).trigger('change.select2');
       $("#nombres_jefe").val(result.nombre_empleador);
+      $("#nombre_acompaniante").val(result.nombre_representante_menor);
+      $("#acompaniante").val(result.tipo_representante_menor);
       $("#apellidos_jefe").val(result.apellido_empleador);
       $("#cargo_jefe").val(result.cargo_empleador);
       $("#motivo").val(result.motivo_expedienteci);
@@ -1062,9 +1083,14 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#funciones").val(result.funciones_personaci);
       $("#forma_pago").val(result.formapago_personaci);
       $("#horario").val(result.horarios_personaci);
-      $("#fecha_conflicto").val(result.fechaconflicto_personaci);
+      $("#fecha_conflicto").datepicker("setDate", moment(result.fechaconflicto_personaci).format("DD-MM-YYYY"));
       $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
       $("#id_representanteci").val(result.id_representanteci);
+      if (result.embarazada=='1') {
+        document.getElementById('si_e').checked =true;
+      }else {
+        document.getElementById('no_e').checked =true;
+      }
       combo_establecimiento(result.id_empresaci);
       /*Fin expediente*/
 
@@ -1949,8 +1975,11 @@ function volver(num) {
           <div class="modal-body" id="">
               <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
               <div class="row">
-                <div class="form-group col-lg-12 col-sm-12">
-                    <div class="form-group">
+                <!-- <div class="form-group col-lg-12 col-sm-12"> -->
+                  <!-- <div class="pull-left"> -->
+                    <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_cambiar_delegado"></div>
+                  <!-- </div> -->
+                    <!-- <div class="form-group">
                         <h5>Delegado/a:<span class="text-danger">*</h5>
                         <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%" required="">
                         <option value="">[Todos los empleados]</option>
@@ -1968,8 +1997,8 @@ function volver(num) {
                             }
                         ?>
                         </select>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
               </div>
               <div align="right">
                 <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
@@ -2182,6 +2211,10 @@ $(function(){
         formData.append("id_representante", $('#id_representante').val());
         formData.append("id_representanteci", $('#id_representanteci').val());
         formData.append("id_representante_persona", $('#id_representante_persona').val());
+
+        formData.append("embarazada", $('#embarazada').val());
+        formData.append("acompaniante", $('#acompaniante').val());
+        formData.append("nombre_acompaniante", $('#nombre_acompaniante').val());
         $.ajax({
           url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_expediente",
           type: "post",
@@ -2479,9 +2512,9 @@ $(function(){
   });
 
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
-        $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
-        $('#f_nacimiento_representante').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
-        $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
+        $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
+        $('#f_nacimiento_representante').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
+        $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
     });
     });
 </script>
