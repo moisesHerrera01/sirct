@@ -8,7 +8,69 @@ class Reportes_colectivos_model extends CI_Model {
 	}
 
 	function registros_relaciones_colectivas($data){
+
 		$this->db->select("
+			ecc.numerocaso_expedienteci,
+			d.departamento,
+			CONCAT_WS(' ', emp.primer_nombre, emp.segundo_nombre, emp.tercer_nombre, emp.primer_apellido, emp.segundo_apellido, emp.apellido_casada) delegado,
+			CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE '' END cant_masc,
+			CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE '' END cant_feme,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_masc,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN fp.montopago_fechaspagosci ELSE 0 END),0) monto_feme,
+			COALESCE(SUM(fp.montopago_fechaspagosci),0) monto_total,
+			ecc.fechacrea_expedienteci fecha_inicio,
+			COALESCE((SELECT fea.fecha_resultado FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci 
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'N/A') fecha_fin,
+			CONCAT_WS(' ',p.nombre_personaci,p.apellido_personaci) solicitante,
+			TIMESTAMPDIFF(YEAR,p.fnacimiento_personaci,CURDATE()) AS edad,
+			CASE WHEN p.discapacidad_personaci = 1 THEN 1 ELSE '' END discapacidadci,
+			est.nombre_empresa,
+			mv.nombre_motivo causa,
+			ciiu.grupo_catalogociiu,
+			ciiu.actividad_catalogociiu,
+			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp WHERE fp.id_expedienteci = ecc.id_expedienteci) AS monto,
+			COALESCE((SELECT r.resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci 
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'Pendiente 99') resultadoci")
+			->from('sct_expedienteci AS ecc')
+			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
+			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci', 'LEFT')
+			->join('sct_fechaspagosci AS fp', 'fp.id_expedienteci = ecc.id_expedienteci')
+			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
+			->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
+			->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
+			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
+			//->where("ecc.id_personal IN(".$data["id_delegado"].")")
+			->where('ecc.tiposolicitud_expedienteci > 3')
+			->group_by('ecc.id_expedienteci');
+
+		if($data["tipo"] == "mensual"){
+			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
+					->where('MONTH(ecc.fechacrea_expedienteci)', $data["value"]);
+	 	}else if($data["tipo"] == "trimestral"){
+ 			$tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
+	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
+					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$tminicio."' AND '".$tmfin."'");
+	 	}else if($data["tipo"] == "semestral"){
+ 			$smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
+ 			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
+					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
+	 	}else if($data["tipo"] == "semestral"){
+ 			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
+	 	}else{
+	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
+	 	}
+
+	 	//echo $this->db->get_compiled_select();
+
+        return $query=$this->db->get();
+
+
+		/*$this->db->select("
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci AND p2.sexo_personaci = 'M') AS cant_masc,
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_expedienteci = ecc.id_expedienteci  AND p2.sexo_personaci = 'F') AS cant_feme,
 			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp JOIN sct_personaci AS p3 WHERE p3.id_personaci = fp.id_persona AND p3.sexo_personaci = 'M') AS monto_masc,
@@ -37,7 +99,7 @@ class Reportes_colectivos_model extends CI_Model {
  			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
-	 	}
+	 	}*/
 
         return $query=$this->db->get();
     }

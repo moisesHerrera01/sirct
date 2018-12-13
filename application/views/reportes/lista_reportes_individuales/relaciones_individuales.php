@@ -4,7 +4,7 @@
 		var value = "";
 		var value2 = "";
        	anio = $("#anio_actual").val();
-        id_delegado = $("#id_delegado").val();
+        id_delegado = $("#id_delegado").val().toString();
 	    if(document.getElementById('radio_mensual').checked==true){
 	    	value = $("#mes").val();
 	    	type = "mensual";

@@ -139,7 +139,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	function table_header($titles){
 
 		$cabecera_vista = '<div class="table table-responsive" style="margin: 0; padding: 0;">
-			<table border="1" style="width:100%; border-collapse: collapse;">
+			<table border="1" style="width:100%; border-collapse: collapse; font-size: 12px;">
 				<thead>
 					<tr>';
 		
