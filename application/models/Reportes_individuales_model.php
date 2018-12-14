@@ -54,7 +54,7 @@ class Reportes_individuales_model extends CI_Model {
  			$smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
  			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
 					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-	 	}else if($data["tipo"] == "semestral"){
+	 	}else if($data["tipo"] == "periodo"){
  			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
@@ -110,7 +110,7 @@ class Reportes_individuales_model extends CI_Model {
  			$smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
  			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
 					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-	 	}else if($data["tipo"] == "semestral"){
+	 	}else if($data["tipo"] == "periodo"){
  			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);

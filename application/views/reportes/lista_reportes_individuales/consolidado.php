@@ -169,7 +169,7 @@
                                 ?>
                             </select>
                         </div>
-                        <div class="demo-radio-button">
+                        <div class="demo-radio-button" style="display: none;">
                         	<h5>Periodo: <span class="text-danger"></span></h5>
                         	<div class="d-flex flex-row">
                                 <div class="p-0" style="width: 50%;">

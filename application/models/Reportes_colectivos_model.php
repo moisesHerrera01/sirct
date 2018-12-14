@@ -58,7 +58,7 @@ class Reportes_colectivos_model extends CI_Model {
  			$smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
  			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
 					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-	 	}else if($data["tipo"] == "semestral"){
+	 	}else if($data["tipo"] == "periodo"){
  			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
@@ -112,7 +112,7 @@ class Reportes_colectivos_model extends CI_Model {
  			$smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
  			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
 					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-	 	}else if($data["tipo"] == "semestral"){
+	 	}else if($data["tipo"] == "periodo"){
  			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
@@ -171,7 +171,7 @@ class Reportes_colectivos_model extends CI_Model {
 									 $smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
 									 $this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
 										 ->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-							 }else if($data["tipo"] == "semestral"){
+							 }else if($data["tipo"] == "periodo"){
 									 $this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 							 }else{
 								 $this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
@@ -230,7 +230,7 @@ class Reportes_colectivos_model extends CI_Model {
 					 									 $smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
 					 									 $this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
 					 										 ->where("MONTH(e.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-					 							 }else if($data["tipo"] == "semestral"){
+					 							 }else if($data["tipo"] == "periodo"){
 					 									 $this->db->where("e.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 					 							 }else{
 					 								 $this->db->where('YEAR(e.fechacrea_expedienteci)', $data["anio"]);
@@ -251,8 +251,7 @@ class Reportes_colectivos_model extends CI_Model {
 		function registros_consolidado_pendientes($data){
 
     	$fecha_actual = strtotime($data["anio"]."-".$data["value"]."-01");
-  		$fecha_menor = explode("-", date("Y-m-d", strtotime("-1 month", $fecha_actual)));
-  		$fecha_actual = explode("-", $fecha_actual);
+  		$fecha_menor = date("Ym", strtotime("-1 month", $fecha_actual));
 
 		$this->db->select("COALESCE(COUNT(ecc.id_expedienteci),0) cant_total")
 			->from('sct_expedienteci AS ecc')
@@ -262,7 +261,7 @@ class Reportes_colectivos_model extends CI_Model {
 			->where('ecc.tiposolicitud_expedienteci>3')
 			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
 					 WHERE fea.id_expedienteci=fa.id_expedienteci)')
-			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_menor[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_menor[1]."')")
+			->where("DATE_FORMAT(ecc.fechacrea_expedienteci, '%Y%m') = '".$fecha_menor."'")
 			->where("(fea.estado_audiencia = 1 OR fea.resultado IN(1,4,5,6,7,8))");
        return $this->db->get();
     }
@@ -295,7 +294,7 @@ class Reportes_colectivos_model extends CI_Model {
     }
 
   	function registros_consolidado_casos_finalizados($data){
-  		$fecha_actual = explode("-", $data["anio"]."-".$data["value"]."-01");
+  		$fecha_actual = date("Ym", strtotime($data["anio"]."-".$data["value"]."-01"));
 
 		$this->db->select(" UPPER(res.resultadoci) resultado,	(SELECT COUNT(f.id_expedienteci)
 																					FROM sct_fechasaudienciasci f
@@ -304,8 +303,7 @@ class Reportes_colectivos_model extends CI_Model {
 																																			 FROM sct_fechasaudienciasci fa
 																					 		 										 		 WHERE fa.id_expedienteci=f.id_expedienteci
 																																			 AND fa.estado_audiencia=2)
-																					AND YEAR(f.fecha_fechasaudienciasci)=".$fecha_actual[0]."
-																					AND MONTH(f.fecha_fechasaudienciasci)=".$fecha_actual[1]."
+																					AND DATE_FORMAT(f.fecha_fechasaudienciasci, '%Y%m') = '".$fecha_actual."'
 																					) cant_total")
 						->from('sct_resultadosci AS res')
 						->where('res.id_tipo_solicitud>3')
@@ -318,7 +316,7 @@ class Reportes_colectivos_model extends CI_Model {
 		causas 2,3,13 corresponden a despido, despido por aumento al salario minimo y
 		despido por presentar renuncia voluntaria respectivamente*/
     function registros_consolidado_personas_despedidas($data){
-  		$fecha_actual = explode("-",$data["anio"]."-".$data["value"]."-01");
+  		$fecha_actual = date("Ym", strtotime($data["anio"]."-".$data["value"]."-01"));
 
 		$this->db->select("COALESCE(COUNT(p.id_personaci),0) cant_total")
 			->from('sct_expedienteci AS ecc')
@@ -329,7 +327,7 @@ class Reportes_colectivos_model extends CI_Model {
 																						 FROM sct_fechasaudienciasci fa
 					 																 	 WHERE fa.id_expedienteci=fea.id_expedienteci
 																						 AND fa.resultado <> 16))')
-			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')")
+			->where(" DATE_FORMAT(ecc.fechacrea_expedienteci, '%Y%m') = '".$fecha_actual."'")
 			->where('ecc.causa_expedienteci IN (2,3,13)');
 
         return $query=$this->db->get();

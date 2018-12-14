@@ -4,6 +4,7 @@
 		var value = "";
 		var value2 = "";
        	anio = $("#anio_actual").val();
+        id_delegado = $("#id_delegado").val().toString();
 	    if(document.getElementById('radio_mensual').checked==true){
 	    	value = $("#mes").val();
 	    	type = "mensual";
@@ -33,13 +34,13 @@
           	var url = "<?php echo site_url()?>"+"/reportes/reportes_colectivos/relaciones_colectivas_report";
 
           	if(document.getElementById('radio_pdf').checked==true && tipo==""){
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2 , 'report_type' : 'pdf' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'id_delegado' : id_delegado, 'report_type' : 'pdf' };
         		OpenWindowWithPost(url, param, "_blank");
           	}else if(document.getElementById('radio_excel').checked==true && tipo==""){
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'report_type' : 'excel' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'id_delegado' : id_delegado, 'report_type' : 'excel' };
         		OpenWindowWithPost(url, param, "_blank");
           	}else{
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'report_type' : 'html' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'id_delegado' : id_delegado, 'report_type' : 'html' };
         		embed_html(url, param);
           	}
         }else{
@@ -147,6 +148,27 @@
                         <h4 class="card-title m-b-0 text-white">Datos</h4>
                     </div>
                     <div class="card-body b-t">
+                        <div class="form-group">
+                            <h5>Delegados: <span class="text-danger"></span></h5>
+                            <select id="id_delegado" name="id_delegado" class="select2" onchange="" style="width: 100%">
+                                <?php
+                                    $ids_delegados = array();
+                                    $content = "";
+                                    if($colaborador->num_rows() > 0){
+                                        foreach ($colaborador->result() as $fila) {
+                                            array_push($ids_delegados, $fila->id_empleado);
+                                            if($fila->id_empleado==$id){ 
+                                                $content .= "<option value='".$fila->id_empleado."' selected>".$fila->nombre_completo."</option>";
+                                            }else{
+                                                $content .= "<option value='".$fila->id_empleado."'>".$fila->nombre_completo."</option>";
+                                            }
+                                        }
+                                    }
+                                    $ids_delegados = implode(",", $ids_delegados);
+                                    echo "<option value='".$ids_delegados."'>[Seleccione]</option>".$content;
+                                ?>
+                            </select>
+                        </div>
                         <div class="demo-radio-button">
                         	<h5>Periodo: <span class="text-danger"></span></h5>
                         	<div class="d-flex flex-row">

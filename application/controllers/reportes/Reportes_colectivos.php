@@ -44,7 +44,8 @@ class Reportes_colectivos extends CI_Controller {
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
 			'value' => $this->input->post('value'),
-			'value2' => $this->input->post('value2')
+			'value2' => $this->input->post('value2'),
+			'id_delegado' => $this->input->post('id_delegado')
 		);
 
 		$titles = array(
@@ -249,7 +250,8 @@ class Reportes_colectivos extends CI_Controller {
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
 			'value' => $this->input->post('value'),
-			'value2' => $this->input->post('value2')
+			'value2' => $this->input->post('value2'),
+			'id_delegado' => $this->input->post('id_delegado')
 		);
 
 		$titles = array(
@@ -437,7 +439,8 @@ class Reportes_colectivos extends CI_Controller {
 			'tipo' => $this->input->post('tipo'),
 			'value' => $this->input->post('value'),
 			'value2' => $this->input->post('value2'),
-			'tipo_pago' => $this->input->post('tipo_pago')
+			'tipo_pago' => $this->input->post('tipo_pago'),
+			'id_delegado' => $this->input->post('id_delegado')
 		);
 
 		$titles = array(
@@ -641,7 +644,8 @@ class Reportes_colectivos extends CI_Controller {
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
 			'value' => $this->input->post('value'),
-			'value2' => $this->input->post('value2')
+			'value2' => $this->input->post('value2'),
+			'id_delegado' => $this->input->post('id_delegado')
 		);
 
 		$titles = array(
