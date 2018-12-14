@@ -58,6 +58,16 @@ class Audiencias_model extends CI_Model {
 					->join('sct_personaci P','p.id_personaci=e.id_personaci','left')
 					->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
 					->join('sir_empleado em','em.id_empleado=e.id_personal')
+					->join("(
+								SELECT de.id_expedienteci,de.id_personal delegado_actual,
+								CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
+								FROM sct_delegado_exp de
+								JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
+								WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																						FROM sct_delegado_exp de2
+																						WHERE de2.id_expedienteci=de.id_expedienteci
+																					 )
+							) d" , "d.id_expedienteci=e.id_expedienteci")
 					->group_by('f.id_fechasaudienciasci');
 		if ($id_delegado) {
 			$this->db->where('em.nr', $id_delegado);
