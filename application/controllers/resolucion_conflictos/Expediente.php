@@ -55,6 +55,12 @@ class Expediente extends CI_Controller {
 						echo $id_expedienteci = $this->expedientes_model->insertar_expediente($data2);
 						$data['id_expedienteci'] = $id_expedienteci;
 						$this->representante_persona_model->editar_representante($data);
+						$delegado = array(
+							'id_expedienteci' => $id_expedienteci,
+							'id_personal' => $data2['id_personal'],
+							'fecha_cambio_delegado' => date('Y-m-d')
+						);
+						$this->delegados_model->insertar_delegado_exp($delegado);
 
 		} else if($this->input->post('band2') == "edit"){
 

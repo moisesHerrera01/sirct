@@ -34,7 +34,7 @@ class Consultar_fechas extends CI_Controller {
 				 $fin =date("d-M-Y g:i:s A", strtotime($au->fecha_fechasaudienciasci.' '.$au->hora_fechasaudienciasci.' + 1 hours'));
 				 $id = $au->id_fechasaudienciasci;
 				 $tipo = strtoupper($au->tipo);
-				 $delegado = $au->delegado;
+				 $delegado = $au->nombre_delegado_actual;
 				if ($au->tiposolicitud_expedienteci=='1' || $au->tiposolicitud_expedienteci == '5') {
 				 	$solicitante = strtoupper($au->persona);
 				}elseif ($au->tiposolicitud_expedienteci == '4') {
@@ -79,7 +79,8 @@ class Consultar_fechas extends CI_Controller {
 													 'fin' => $fin,
 													 'tipo'=>$tipo,
 													 'delegado'=>$delegado,
-													 'persona' =>$solicitante
+													 'persona' =>$solicitante,
+													 // 'className' =>"bg-danger"
 												 );
 			}
 		}
