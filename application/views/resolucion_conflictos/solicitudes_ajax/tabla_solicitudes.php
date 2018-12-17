@@ -33,8 +33,8 @@
                                               ep.nombre_empresa,
                                               e.id_empresaci,
                                               CASE
-                                                WHEN e.tiposolicitud_expedienteci=1 THEN 'Persona natural'
-                                                ELSE e.tiposolicitud_expedienteci END AS tipo,
+                                                WHEN e.motivo_expedienteci=1 THEN 'Despido'
+                                                ELSE 'Conflicto Laboral' END AS tipo,
                                               e.resultado_expedienteci AS resultado,
                                               e.fechacrea_expedienteci AS fecha,
                                               e.tipocociliacion_expedienteci AS tipo_conciliacion,
