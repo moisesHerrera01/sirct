@@ -80,9 +80,10 @@ class Login extends CI_Controller {
 	               'id_usuario' => $fila->id_usuario,
 	               'usuario' => $fila->usuario,
 	               'nombre_usuario' => $fila->nombre_completo,
-					'nr' => $fila->nr,
+								 'nr' => $fila->nr,
 	               'sesion' => TRUE,
-
+								 'nombre_rol' => $fila->nombre_rol,
+								 'id_rol' => $fila->id_rol
 	            );
 				$this->session->set_userdata($usuario_data);
 				/************** Inicio de fragmento bitácora *********************/

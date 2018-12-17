@@ -296,7 +296,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             <div class="u-text">
                                                 <h4><?php echo $this->session->userdata('nombre_usuario'); ?></h4>
 
-                                                <p align="right"><a href="#!" class="btn btn-rounded btn-info waves-effect waves-light">Activo</a></p>
+                                                <p align="right"><a href="#!" class="btn btn-rounded btn-info waves-effect waves-light"><?=$this->session->userdata('nombre_rol') ?> </a></p>
+
                                             </div>
                                         </div>
                                     </li>

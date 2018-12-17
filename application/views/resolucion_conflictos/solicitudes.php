@@ -306,7 +306,7 @@ function convert_lim_text(lim){
     return tlim;
 }
 
-function modal_delegado(id_expedienteci, id_personal) {
+function modal_delegado(id_expedienteci) {
     $("#id_expedienteci_copia").val(id_expedienteci);
     // $("#id_personal_copia").val(id_personal).trigger('change.select2');
     $("#modal_delegado").modal("show");
@@ -407,6 +407,7 @@ function modal_bitacora_delegados(id_expedienteci) {
   .done(function(res){
     $('#cnt_modal_bitacora_delegado').html(res);
     $('#modal_bitacora_delegados').modal('show');
+    tabla_delegados(id_expedienteci);
   });
 }
 
@@ -817,6 +818,23 @@ function tablasolicitudes(){
         }
     }
     xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_solicitudes?nr="+nr_empleado+"&tipo="+estado_pestana,true);
+    xmlhttpB.send();
+}
+
+function tabla_delegados(id_expedienteci){
+    if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttpB=new XMLHttpRequest();
+    }else{// code for IE6, IE5
+        xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+    }
+    xmlhttpB.onreadystatechange=function(){
+        if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+            document.getElementById("cnt_tabla_delegados").innerHTML=xmlhttpB.responseText;
+            //$('[data-toggle="tooltip"]').tooltip();
+            $('#myTable').DataTable();
+        }
+    }
+    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/expediente/tabla_delegados?id="+id_expedienteci,true);
     xmlhttpB.send();
 }
 
@@ -1734,6 +1752,7 @@ function volver(num) {
         <!-- ============================================================== -->
     </div>
     <div id="cnt_modal_acciones"></div>
+    <div id="cnt_modal_bitacora_delegado"></div>
 </div>
 <!-- ============================================================== -->
 <!-- Fin de DIV de inicio (ENVOLTURA) -->

@@ -277,7 +277,9 @@ class Expediente extends CI_Controller {
 				$data = array(
 					'id_expedienteci' => $this->input->post('id_expedienteci'),
 					'id_personal' => $this->input->post('id_personal'),
-					'fecha_cambio_delegado' => date("Y-m-d")
+					'fecha_cambio_delegado' => date("Y-m-d"),
+					'id_rol_guarda' => $this->session->userdata('id_rol'),
+					'id_usuario_guarda' => $this->session->userdata('id_usuario')
 				);
 				echo $this->delegados_model->insertar_delegado_exp($data);
 			}
@@ -318,5 +320,17 @@ class Expediente extends CI_Controller {
 				$this->pagos_model->insertar_pago($data2);
 			}
 		}
+
+		public function bitacora_delegados() {
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/modal_bitacora_delegado',
+			array(
+				'id' => $this->input->post('id')
+			));
+		}
+
+	public function tabla_delegados(){
+		$data['delegados'] = $this->delegados_model->obtener_delegados_expediente($this->input->get('id'));
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_bitacora_delegado',$data);
+	}
 }
 ?>

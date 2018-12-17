@@ -125,6 +125,37 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       });
     }
 
+    function tabla_delegados(id_expedienteci){
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla_delegados").innerHTML=xmlhttpB.responseText;
+                //$('[data-toggle="tooltip"]').tooltip();
+                $('#myTable').DataTable();
+            }
+        }
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/expediente/tabla_delegados?id="+id_expedienteci,true);
+        xmlhttpB.send();
+    }
+
+    function modal_bitacora_delegados(id_expedienteci) {
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/bitacora_delegados",
+        type: "post",
+        dataType: "html",
+        data: {id : id_expedienteci}
+      })
+      .done(function(res){
+        $('#cnt_modal_bitacora_delegado').html(res);
+        $('#modal_bitacora_delegados').modal('show');
+        tabla_delegados(id_expedienteci);
+      });
+    }
+
     function combo_cambiar_delegado(seleccion){
 
       $.ajax({
@@ -1246,6 +1277,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <!-- Fin CUERPO DE LA SECCIÓN -->
         <!-- ============================================================== -->
     </div>
+    <div id="cnt_modal_bitacora_delegado"></div>
 </div>
 <!-- ============================================================== -->
 <!-- Fin de DIV de inicio (ENVOLTURA) -->
