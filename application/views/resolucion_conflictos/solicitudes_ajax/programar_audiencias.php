@@ -112,11 +112,8 @@ function agregar(){
                         </div>
 
                         <div class="form-group col-lg-5" style="height: 20px;">
-                        <small class="text-muted db"> Nombre delegado(a) expediente</small>
-                        <h5><?=$expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.
-                        $expediente->primer_apellido.' '.$expediente->segundo_apellido.' '.
-                        (($expediente->apellido_casada) ? $expediente->apellido_casada : ' ')?>
-                        </h5>
+                        <small class="text-muted db"> Nombre delegado/a expediente</small>
+                        <h5><?=$expediente->nombre_delegado_actual?></h5>
                         </div>
 
                         <div class="form-group col-lg-5" style="height: 20px;">

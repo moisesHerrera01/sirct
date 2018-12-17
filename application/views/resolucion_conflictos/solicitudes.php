@@ -396,6 +396,20 @@ function modal_estado(id_expedienteci, id_estadosci) {
     $("#modal_estado").modal("show");
 }
 
+
+function modal_bitacora_delegados(id_expedienteci) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/bitacora_delegados",
+    type: "post",
+    dataType: "html",
+    data: {id : id_expedienteci}
+  })
+  .done(function(res){
+    $('#cnt_modal_bitacora_delegado').html(res);
+    $('#modal_bitacora_delegados').modal('show');
+  });
+}
+
 function cambiar_estado() {
     var id_expedienteci = $("#id_expedienteci_copia").val();
     var id_estadosci = $("#id_estado_copia").val();

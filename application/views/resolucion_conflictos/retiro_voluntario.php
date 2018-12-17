@@ -125,6 +125,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       });
     }
 
+    function combo_cambiar_delegado(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_cambiar_delegado",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_cambiar_delegado').html(res);
+        $("#id_personal_copia").select2();
+      });
+    }
+
     function combo_establecimiento(seleccion){
         $.ajax({
             async: true,
@@ -528,6 +542,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#id_expedienteci_copia").val(id_expedienteci);
         $("#id_personal_copia").val(id_personal).trigger('change.select2');
         $("#modal_delegado").modal("show");
+        combo_cambiar_delegado(id_personal);
     }
 
     function cambiar_delegado() {
@@ -543,7 +558,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         }
         })
         .done(function (res) {
-        if(res == "exito"){
+        if(res != "fracaso"){
             cerrar_mantenimiento()
             tablasolicitudes();
             swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
@@ -1465,7 +1480,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div class="modal-body" id="">
                 <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
                 <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12">
+                  <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_cambiar_delegado"></div>
+                    <!-- <div class="form-group col-lg-12 col-sm-12">
                         <div class="form-group">
                             <h5>Delegado/a:<span class="text-danger">*</h5>
                             <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%"
@@ -1486,7 +1502,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         ?>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div align="right">
                     <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>

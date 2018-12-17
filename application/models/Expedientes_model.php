@@ -159,13 +159,24 @@ class Expedientes_model extends CI_Model {
 												 p.apellido_personaci,
 												 em.id_empresa,
 												 em.nombre_empresa,
-												 s.nombre_sindicato'
+												 s.nombre_sindicato,
+												 nombre_delegado_actual'
 												)
              ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci','left')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
 						 ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
+						 ->join("(
+									 SELECT de.id_expedienteci,de.id_personal delegado_actual,
+									 CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
+									 FROM sct_delegado_exp de
+									 JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
+									 WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																							 FROM sct_delegado_exp de2
+																							 WHERE de2.id_expedienteci=de.id_expedienteci
+																							)
+								 ) d" , "d.id_expedienteci=e.id_expedienteci")
 						 ->group_by('e.id_expedienteci')
 						 ->where('e.id_expedienteci', $id);
 	  $query=$this->db->get();
@@ -189,13 +200,23 @@ class Expedientes_model extends CI_Model {
 
 	public function obtener_registro_expediente_retiro($id) {
 
-		$this->db->select('e.*,p.*,n.*,m.*,em.*,ep.*,e.id_expedienteci,m.id_municipio')
+		$this->db->select('e.*,p.*,n.*,m.*,em.*,ep.*,e.id_expedienteci,m.id_municipio,d.nombre_delegado_actual')
 					 ->from('sct_expedienteci e')
 					 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 					 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
 					 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 					 ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
 					 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
+					 ->join("(
+								 SELECT de.id_expedienteci,de.id_personal delegado_actual,
+								 CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
+								 FROM sct_delegado_exp de
+								 JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
+								 WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																						 FROM sct_delegado_exp de2
+																						 WHERE de2.id_expedienteci=de.id_expedienteci
+																						)
+							 ) d" , "d.id_expedienteci=e.id_expedienteci")
 					 ->where('e.id_expedienteci', $id);
 		$query=$this->db->get();
 		if ($query->num_rows() > 0) {

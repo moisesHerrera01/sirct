@@ -262,11 +262,9 @@
                             Delegado asignado:
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
-                            <h5>
-                                <?= $expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.
-                          $expediente->primer_apellido.' '.$expediente->segundo_apellido.' '.
-                          (($expediente->apellido_casada) ? $expediente->apellido_casada : ' ') ?>
-                            </h5>
+                          <h5>
+                              <?= $expediente->nombre_delegado_actual ?>
+                          </h5>
                         </div>
                     </div>
                 </tbody>
