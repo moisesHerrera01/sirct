@@ -36,7 +36,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </div>
                       <div class="row">
                         <div class="form-group col-lg-5" style="height: 20px;">
-                          Nombre delegado(a) actual:
+                          Nombre delegado/a actual:
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
                               <h5><?= $expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.

@@ -2,12 +2,12 @@
             <table id="myTable" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
-                      <th width="130px">Número de Expediente</th>
-                      <th>Nombre Solicitante</th>
-                      <th>Nombre Solicitado</th>
-                      <th>Nombre Encargado(a)</th>
-                      <th>Resulato de Intervención</th>
-                      <th>Estado Actual</th>
+                      <th width="130px">Número de expediente</th>
+                      <th>Nombre solicitante</th>
+                      <th>Nombre solicitado</th>
+                      <th>Nombre encargado(a)</th>
+                      <th>Resultado de mediación</th>
+                      <th>Estado actual</th>
                         <th width="200px">(*)</th>
                     </tr>
                 </thead>
@@ -58,7 +58,7 @@
                                       <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci.','.$fila->id_empresa?>)">Visualizar</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_empresa.','.$fila->id_expedienteci.',2'?>)">Gestionar audiencias</a>
                                       <!-- <a class="dropdown-item" href="javascript:;" onClick="pagos(<?=$fila->id_expedienteci?>)">Gestionar pagos</a> -->
-                                      <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar delegado</a> -->
+                                      <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar delegado/a</a> -->
                                       <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
                                       <?php if (((integer)$fila->cuenta)>=2) {?>
                                       <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_solicitud/'.$fila->id_expedienteci.'/')?>" >Emitir Acta</a>

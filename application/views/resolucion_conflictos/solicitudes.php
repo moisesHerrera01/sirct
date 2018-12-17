@@ -25,7 +25,7 @@ function validar_establecimiento(){
         if(establecimiento == ""){
             swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
         /*}else{
-            swal({ title: "Seleccione representante", text: "Agregue o seleccione un representante de la lista.", type: "warning", showConfirmButton: true });
+            swal({ title: "Seleccione una persona representante", text: "Agregue o seleccione una persona representante de la lista.", type: "warning", showConfirmButton: true });
         */}
     }else{
         open_form(2);
@@ -329,7 +329,7 @@ function cambiar_delegado() {
       if(res != "fracaso"){
         cerrar_mantenimiento()
         tablasolicitudes();
-        swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+        swal({ title: "¡Delegado/a modificado exitosamente!", type: "success", showConfirmButton: true });
       }else{
           swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
       }
@@ -549,7 +549,7 @@ function combo_defensores(seleccion){
 
                 'language': {
                     noResults: function () {
-                        return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
+                        return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
                     }
                 }, 'escapeMarkup': function (markup) { return markup; }
             });
@@ -601,7 +601,7 @@ function combo_representante_empresa(seleccion){
 
         'language': {
             noResults: function () {
-                return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo representante" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo representante</a></div>';
+                return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
             }
         }, 'escapeMarkup': function (markup) { return markup; }
     });
@@ -1263,7 +1263,7 @@ function volver(num) {
                             <div id="partida_div" style="display: none;">
                               <div class="row">
                                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Representante del menor: </h5>
+                                    <h5>Persona representante del menor: </h5>
                                     <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre representante del menor">
                                     <div class="help-block"></div>
                                 </div>
@@ -1359,7 +1359,7 @@ function volver(num) {
                           </div>
 
                             <div class="form-group col-lg-2" style="height: 83px; display: none;">
-                                <h5>Representante:</h5>
+                                <h5>Persona representante:</h5>
                                 <input name="posee_representante" type="radio" id="si_posee" value='1'>
                                 <label for="si_posee">Si </label><Br>
                                 <input name="posee_representante" type="radio" id="no_posee" checked="" value='0' required>
@@ -1448,7 +1448,7 @@ function volver(num) {
                             <div id="cnt_form3" class="cnt_form" style="display: block;">
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
-                                Representante de la persona
+                                Persona representante de solicitante
                               </h3><hr class="m-t-0 m-b-30">
                               <!-- <input type="hidden" id="band6" name="band6" value="save"> -->
                               <input type="hidden" id="id_representante_persona" name="id_representante_persona" value="">
@@ -1566,7 +1566,7 @@ function volver(num) {
                                           <select id="motivo" name="motivo" class="custom-select" required style="width: 100%">
                                             <option value="">[Seleccione el motivo]</option>
                                             <option value="1">Despido de hecho o injustificado</option>
-                                            <option value="2">Diferencia laboral</option>
+                                            <option value="2">Conflicto laboral</option>
                                         </select>
                                       </div>
                                   </div>
@@ -1629,19 +1629,19 @@ function volver(num) {
 
                                 <div class="row">
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Nombres de jefe inmediato: </h5>
-                                        <input type="text" id="nombres_jefe" name="nombres_jefe" class="form-control" placeholder="Nombres de jefe inmediato">
+                                        <h5>Nombres de jefatura inmediato: </h5>
+                                        <input type="text" id="nombres_jefe" name="nombres_jefe" class="form-control" placeholder="Nombres de jefatura inmediato">
                                         <div class="help-block"></div>
                                     </div>
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Apellidos de jefe inmediato:</h5>
-                                        <input type="text" id="apellidos_jefe" name="apellidos_jefe" class="form-control" placeholder="Apellidos de jefe inmediato">
+                                        <h5>Apellidos de jefatura inmediato:</h5>
+                                        <input type="text" id="apellidos_jefe" name="apellidos_jefe" class="form-control" placeholder="Apellidos de jefatura inmediato">
                                         <div class="help-block"></div>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Cargo de jefe inmediato: </h5>
-                                        <input type="text" id="cargo_jefe" name="cargo_jefe" class="form-control" placeholder="Cargo de jefe inmediato">
+                                        <h5>Cargo de jefatura inmediato: </h5>
+                                        <input type="text" id="cargo_jefe" name="cargo_jefe" class="form-control" placeholder="Cargo de jefatura inmediato">
                                         <div class="help-block"></div>
                                     </div>
                               </div>
@@ -1837,37 +1837,37 @@ function volver(num) {
           <input type="hidden" id="id_procuradorci" name="id_procuradorci" value="">
           <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
             <div class="modal-header">
-                <h4 class="modal-title">Defensores legales</h4>
+                <h4 class="modal-title">Gestión de personas defensores legales</h4>
             </div>
             <div class="modal-body" id="">
               <div class="row">
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Nombres del representante: <span class="text-danger">*</span></h5>
+                    <h5>Nombres de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres del representante" required>
+                        <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres de la persona representante" required>
                     </div>
                 </div>
 
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
+                    <h5>Apellidos de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos del representante" required>
+                        <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos de la persona representante" required>
                     </div>
                 </div>
               </div>
 
               <div class="row">
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>DUI de representante: <span class="text-danger">*</span></h5>
+                    <h5>DUI de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
+                        <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui de la persona representante" required>
                     </div>
                 </div>
 
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
+                    <h5>Tel&eacute;fono la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
+                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono de la persona representante" required>
                     </div>
                 </div>
               </div>
@@ -1903,12 +1903,12 @@ function volver(num) {
               <input type="hidden" id="band4" name="band4" value="save">
               <input type="hidden" id="id_representante" name="id_representante" value="">
                 <div class="modal-header">
-                    <h4 class="modal-title">Gestión de representantes</h4>
+                    <h4 class="modal-title">Gestión de personas representantes</h4>
                 </div>
                 <div class="modal-body" id="">
                     <div class="row">
                       <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                          <h5>Nombre del representante: <span class="text-danger">*</span></h5>
+                          <h5>Nombre de la persona: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
                           </div>
@@ -1983,7 +1983,7 @@ function volver(num) {
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Cambiar asignación de delegado:</h4>
+            <h4 class="modal-title">Cambiar asignación de delegado/a:</h4>
           </div>
 
           <div class="modal-body" id="">
@@ -2048,13 +2048,13 @@ function volver(num) {
                         <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
                         <option id="inasistencia" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Acta segunda audiencia</option>
                         <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option>
-                        <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor público</option>
+                        <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor/a público</option>
                          -->
                         <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
                         <option id="esquela" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
                         <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
-                        <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor</option>
-                        <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor</option> -->
+                        <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor/a</option>
+                        <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor/a</option> -->
                         <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Desistimiento de persona natural a persona juridica</option> -->
                       </select>
                     </div>
@@ -2346,7 +2346,7 @@ $("#formajax8").on("submit", function(e){
             if($("#band6").val() == "save"){
                 //$("#id_empresa").val(res[1])
                 $("#modal_defensores").modal('hide');
-                $.toast({ heading: 'Registro exitoso', text: 'Registro de defensor exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                $.toast({ heading: 'Registro exitoso', text: 'Registro de persona defensora exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                 combo_defensores(res[1]);
             }else if($("#band6").val() == "edit"){
                 swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });

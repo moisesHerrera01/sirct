@@ -149,7 +149,7 @@
                     </div>
                     <div class="card-body b-t">
                         <div class="form-group">
-                            <h5>Delegados: <span class="text-danger"></span></h5>
+                            <h5>Persona delegada: <span class="text-danger"></span></h5>
                             <select id="id_delegado" name="id_delegado" class="select2" onchange="" style="width: 100%">
                                 <?php
                                     $ids_delegados = array();

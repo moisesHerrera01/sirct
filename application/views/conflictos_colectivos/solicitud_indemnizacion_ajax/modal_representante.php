@@ -60,12 +60,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <input type="hidden" id="band4" name="band4" value="save">
               <input type="hidden" id="id_representante" name="id_representante" value="">
                 <div class="modal-header">
-                    <h4 class="modal-title">Gestión de representantes</h4>
+                    <h4 class="modal-title">Gestión de personas representantes</h4>
                 </div>
                 <div class="modal-body" id="">
                     <div class="row">
                       <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                          <h5>Nombre del representante: <span class="text-danger">*</span></h5>
+                          <h5>Nombre de la persona: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
                           </div>

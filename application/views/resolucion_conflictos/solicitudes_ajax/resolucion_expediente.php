@@ -42,9 +42,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="controls">
                   <select id="asistieron" name="asistieron" class="form-control">
                     <option value="">[Seleccione]</option>
-                    <option value="1">Defensor público</option>
-                    <option value="2">Defensor público y trabajador</option>
-                    <option value="3">Trabajador</option>
+                    <option value="1">Persona defensora pública</option>
+                    <option value="2">Persona defensora pública y trabajadora</option>
+                    <option value="3">Persona trabajadora</option>
                   </select>
                 </div>
               </div>
@@ -91,9 +91,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <div class="controls">
                 <select id="inasistencia" name="inasistencia" class="form-control" required>
                   <option value="">[Seleccione]</option>
-                  <option value="1">Parte patronal</option>
+                  <option value="1">Parte empleadora</option>
                   <option value="2">Parte trabajadora</option>
-                  <option value="3">Parte patronal y trabajadora</option>
+                  <option value="3">Parte empleadora y trabajadora</option>
                 </select>
               </div>
             </div>

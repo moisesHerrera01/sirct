@@ -1,4 +1,4 @@
-<h5>Defensor(a) público(a): </h5>
+<h5>Persona defensora pública: </h5>
 <select id="defensor" name="defensor" class="select2 def" onchange=""  style="width: 100%">
     <option value="">[Sin defensor]</option>
         <?php

@@ -3,13 +3,13 @@
             <table id="myTable" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
-                      <th width="130px">Número de Expediente</th>
-                      <th>Nombre Solicitante</th>
-                      <th>Nombre Solicitado</th>
-                      <th>Tipo de Solicitud</th>
-                      <th>Resulato de Intervención</th>
-                      <th>Fecha de Registro</th>
-                      <th>Estado Actual</th>
+                      <th width="130px">Número de expediente</th>
+                      <th>Nombre solicitante</th>
+                      <th>Nombre solicitado</th>
+                      <th>Tipo de solicitud</th>
+                      <th>Resultado de mediación</th>
+                      <th>Fecha de registro</th>
+                      <th>Estado actual</th>
                         <th width="150px">(*)</th>
                     </tr>
                 </thead>
@@ -117,7 +117,7 @@
                                         <a class="dropdown-item" href="javascript:;" onClick="pagos(<?=$fila->id_expedienteci?>)">Gestionar pagos</a>
                                       <?php } ?> -->
                                       <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
-                                        <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado</a>
+                                        <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado/a</a>
                                         <?php  } ?>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/'.$fila->id_expedienteci)?>">Acta de solicitud</a>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/'.$fila->id_expedienteci)?>">Acta de esquela</a>

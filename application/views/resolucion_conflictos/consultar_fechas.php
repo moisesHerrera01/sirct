@@ -115,7 +115,7 @@ function tablasolicitudes(){
               <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title m-b-0 ">Filtrar por delegado</h4>
+                        <h4 class="card-title m-b-0 ">Filtrar por delegado/a</h4>
                     </div>
                     <div class="card-body b-t" style="padding-top: 7px;">
                     <div>
@@ -186,7 +186,7 @@ function tablasolicitudes(){
           </div>
           <div class="row">
             <div class="form-group col-lg-6" style="height: 20px;">
-              Nombre delegado(a):
+              Nombre delegado/a:
             </div>
             <div class="form-group col-lg-6" style="height: 20px;">
                   <h5 id="delegado"></h5>

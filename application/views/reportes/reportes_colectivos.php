@@ -16,7 +16,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
    <div class="container-fluid">
        <div class="row page-titles">
            <div class="align-self-center" align="center">
-               <h3 class="text-themecolor m-b-0 m-t-0">Reportes conciliación indivial</h3>
+               <h3 class="text-themecolor m-b-0 m-t-0">Reportes mediación indivial</h3>
            </div>
        </div>
        <div class="row">

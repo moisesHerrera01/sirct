@@ -122,7 +122,7 @@ function redireccionar_retiro_voluntario(tipo){
                     <div class="card blog-widget">
                         <div class="card-body text-center">
                             <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/diferencia_laboral.jpg'?>" alt="img" class="img-responsive"></div>
-                            <h3>Diferencia laboral</h3>
+                            <h3>Conflicto laboral</h3>
                             <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
                             <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2)" class="m-t-10 waves-effect waves-dark btn btn-warning btn-md btn-rounded">Persona jurídica</a>
                             <br><br>
@@ -149,7 +149,7 @@ function redireccionar_retiro_voluntario(tipo){
                     <div class="card blog-widget">
                         <div class="card-body text-center">
                             <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/sindicato_cc.jpg'?>" alt="img" class="img-responsive"></div>
-                            <h3>Diferencia Laboral</h3>
+                            <h3>Conflicto Laboral</h3>
                             <div>
                             <br>
                             <a href="javascript:void(0)" onclick="redireccionar_colectivo('sindicato')" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Nueva solicitud</a>

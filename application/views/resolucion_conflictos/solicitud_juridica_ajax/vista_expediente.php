@@ -59,7 +59,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Representante:
+                      Persona representante:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5>
@@ -138,7 +138,7 @@
                           <h5><?php if($expediente->motivo_expedienteci == '1'){
                               echo "Despido de hecho o injustificado";
                             }else{
-                              echo "Diferencia laboral";
+                              echo "Conflicto laboral";
                             } ?>
                           </h5>
                     </div>
@@ -153,7 +153,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Delegado asignado:
+                      Persona delegada asignada:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?php echo implode(" ", array($expediente->primer_nombre, $expediente->segundo_nombre, $expediente->tercer_nombre, $expediente->primer_apellido, $expediente->segundo_apellido, $expediente->apellido_casada)); ?></h5>

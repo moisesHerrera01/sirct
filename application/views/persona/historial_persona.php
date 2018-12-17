@@ -783,7 +783,7 @@ function volver(num) {
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-2" style="height: 83px; display: none;">
-                                <h5>Representante:</h5>
+                                <h5>Persona representante:</h5>
                                 <input name="posee_representante" type="radio" id="si_posee" value='1'>
                                 <label for="si_posee">Si </label><Br>
                                 <input name="posee_representante" type="radio" id="no_posee" checked="" value='0' required>
@@ -794,9 +794,9 @@ function volver(num) {
                          <div class="form-group col-lg-2" style="height: 83px;">
                              <h5>Sexo:</h5>
                              <input name="sexo" type="radio" id="masculino" checked="" value="M">
-                             <label for="masculino">Masculino</label>
+                             <label for="masculino">Hombre</label>
                              <input name="sexo" type="radio" id="femenino" value="F">
-                             <label for="femenino">Femenino</label>
+                             <label for="femenino">Mujer</label>
                              <div class="help-block"></div>
                        </div>
 
@@ -1108,7 +1108,7 @@ function volver(num) {
           <input type="hidden" id="band3" name="band3" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de representantes</h4>
+                <h4 class="modal-title">Gestión de personas representantes</h4>
             </div>
             <div class="modal-body" id="">
 
@@ -1141,7 +1141,7 @@ function volver(num) {
 
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Telefono: </h5>
+                      <h5>Tel&eacute;fono: </h5>
                       <div class="controls">
                           <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento" class="form-control" data-mask="9999-9999">
                           <div class="help-block"></div>
@@ -1159,7 +1159,7 @@ function volver(num) {
 
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del representante: <span class="text-danger">*</span></h5>
+                      <h5>Nombre de la persona: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="nombre_representante" name="nombre_representante" class="form-control" required>
                       </div>

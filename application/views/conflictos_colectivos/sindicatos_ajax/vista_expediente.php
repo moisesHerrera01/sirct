@@ -147,7 +147,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Representante:
+                      Persona representante:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $empresa->nombres_representante ?></h5>
@@ -180,7 +180,7 @@
 
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Delegado asignado:
+                      Persona delegada asignada:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->delegado ?></h5>

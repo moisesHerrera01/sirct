@@ -32,6 +32,8 @@ class Reportes_individuales_model extends CI_Model {
 				AND fea.id_expedienteci = ecc.id_expedienteci 
 				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'Pendiente 99') resultadoci")
 			->from('sct_expedienteci AS ecc')
+			/*->join("( SELECT MAX(de2.id_delegado_exp), de2.id_expedienteci FROM sct_delegado_exp de2 GROUP BY de2.id_expedienteci ORDER BY de2.id_delegado_exp DESC
+					) d2" , "d2.id_expedienteci=ecc.id_expedienteci")*/
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
 			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')

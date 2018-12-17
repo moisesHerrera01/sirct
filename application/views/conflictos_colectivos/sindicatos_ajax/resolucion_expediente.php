@@ -22,7 +22,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <div class="row">
             <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Resulato de intervenci&oacute;n conciliator&iacute;a: <span class="text-danger">*</span></h5>
+              <h5>Resultado de mediaci&oacute;n conciliator&iacute;a: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select id="resolucion" name="resolucion" class="form-control" required>
                   <option value="">[Seleccione]</option>
