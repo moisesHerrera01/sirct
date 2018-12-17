@@ -22,7 +22,7 @@ class Consultar_fechas extends CI_Controller {
 		}else {
 			$tipo = 2;
 		}
-    $data = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('nr'),FALSE,FALSE,$tipo );
+    	$data = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('nr'),FALSE,FALSE,$tipo );
 		$data2= $this->pagos_model->obtener_pagos_delegado($this->input->get('nr'),$tipo);
 
 		if ($data!=FALSE && $data!=NULL) {
@@ -92,4 +92,109 @@ class Consultar_fechas extends CI_Controller {
 			print_r($arrayJson);
 		}
   }
+
+  	public function imprimir_citas_del_dia_pdf(){
+  		$data = array(
+			'fecha' => $this->input->post('fecha'),
+			'id_delegado' => $this->input->post('id_delegado')
+		);
+
+		$titles = array(
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
+				'DIRECCIÓN GENERAL DE TRABAJO', 
+				'LISTADO DE CITAS DEL '.fecha_ESP($data["fecha"])
+			);
+
+		$titles_head = array(
+			'N° Exp',
+			'Delegado',
+			'Solicitante',
+			'Estado',
+			'Hora'
+		);
+
+		$body = '';
+		if($this->input->post('report_type') == "html"){
+			$body .= head_table_html($titles, $data, 'html');
+			$body .= $this->registros_citas_fecha($data, $titles_head);
+			echo $body;
+		}else if($this->input->post('report_type') == "pdf"){
+			$this->load->library('mpdf');
+			$this->mpdf=new mPDF('c','letter','10','Arial',10,10,35,17,3,9);
+
+		 	$header = head_table_html($titles, $data, 'pdf');
+
+		 	$this->mpdf->SetHTMLHeader($header);
+		 	
+		 	$body .= $this->registros_citas_fecha($data, $titles_head);
+
+		 	$pie = piePagina($this->session->userdata('usuario'));
+			$this->mpdf->setFooter($pie);
+
+			$stylesheet = file_get_contents(base_url().'assets/css/bootstrap.min.css');
+			$this->mpdf->AddPage('L','','','','',10,10,35,17,5,10);
+			$this->mpdf->SetTitle($titles[2]);
+			$this->mpdf->WriteHTML($stylesheet,1);  // The parameter 1 tells that this iscss/style only and no body/html/
+			$this->mpdf->WriteHTML($body);
+			$this->mpdf->Output($titles[2].date(" - Ymd_His").'.pdf','I');
+		}
+  	}
+
+  	function registros_citas_fecha($data, $titles_head){
+  		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+		if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) {
+			$tipo = 1;
+		}else {
+			$tipo = 2;
+		}
+    	$citas = $this->audiencias_model->obtener_audiencias_delegado( $data["id_delegado"],FALSE,FALSE,$tipo,$data["fecha"]);
+		$pagos = $this->pagos_model->obtener_pagos_delegado($data["id_delegado"],$tipo,$data["fecha"]);
+
+		$cuerpo = "<h5 aligh='center'>CITAS DE AUDIENCIAS</h5>";
+		$cuerpo .= table_header($titles_head);
+		if($citas){
+			foreach ($citas->result() as $rows) {
+				$solicitante = "";
+				if ($rows->tiposolicitud_expedienteci=='1' || $rows->tiposolicitud_expedienteci=='3' || $rows->tiposolicitud_expedienteci == '5') {
+					$solicitante = strtoupper($rows->persona);
+				}elseif ($rows->tiposolicitud_expedienteci == '4') {
+					$solicitante = strtoupper($rows->nombre_sindicato);
+				}/*elseif ($rows->tiposolicitud_expedienteci == '3') {
+					$solicitante = strtoupper($rows->nombre_empresa);
+				}*/
+				$cell_row = array(
+					$rows->numerocaso_expedienteci,
+					$rows->delegado,
+					$solicitante,
+					'resultado',
+					date("h:i A",strtotime($rows->hora_fechasaudienciasci))
+				);
+				$cuerpo .= table_row($cell_row);
+			}
+		}else{
+			$cuerpo .= no_rows(count($titles_head));
+		}
+		$cuerpo .= table_footer();
+
+		$cuerpo .= "<br><h5 aligh='center'>CITAS DE PAGOS</h5>";
+		$cuerpo .= table_header($titles_head);
+		if($pagos){
+			foreach ($pagos->result() as $rows) {
+				$cell_row = array(
+					$rows->numerocaso_expedienteci,
+					$rows->nombre_completo,
+					$rows->persona,
+					'resultado',
+					'Pendiente'
+				);
+				$cuerpo .= table_row($cell_row);
+			}
+		}else{
+			$cuerpo .= no_rows(count($titles_head));
+		}
+		$cuerpo .= table_footer();
+
+		return $cuerpo;
+	}
+
 }

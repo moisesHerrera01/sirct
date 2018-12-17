@@ -42,7 +42,9 @@ function tabla_calendario(){
               $('#modalBody').html(event.description);
               $('#eventUrl').attr('href',event.url);
               $('#calendarModal').modal();
-          },
+          },dayClick: function(date, jsEvent, view) {
+            imprimir_citas_del_dia(date, "html")
+        },
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -54,6 +56,7 @@ function tabla_calendario(){
     },
         defaultView: 'month',
         defaultDate: date,
+        selectable: true,
         editable:true
     })
 }
@@ -78,8 +81,83 @@ function combo_delegado_tabla(seleccion){
 function tablasolicitudes(){
   tabla_calendario();
 }
-</script>
 
+  function imprimir_citas_del_dia(end, tipo){
+    var id_delegado = $("#nr_search").val();
+    var fecha_seleccionada = getDateEnd(end);
+    $("#fecha").val(fecha_seleccionada);
+    $("#titulo_vista_previa").text("Citas para la fecha: "+castDate(fecha_seleccionada));
+
+    var param = {id_delegado: id_delegado, fecha: fecha_seleccionada, report_type: tipo};
+
+    if(tipo == "html"){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/imprimir_citas_del_dia_pdf",
+        type: "post",
+        dataType: "html",
+        data: param
+      })
+      .done(function(res){
+        $("#modal_vista_previa").modal('show');
+        $("#cnt_vista_previa").html(res);
+      });
+    }else{
+      OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/imprimir_citas_del_dia_pdf", param, "_blank");
+    }
+
+    
+  }
+
+  function castDate(date){
+    var fecha = date.split("-");
+    return fecha[2]+"/"+fecha[1]+"/"+fecha[0];
+  }
+
+  function getDateEnd(date){
+    return moment(date).format('YYYY-MM-DD');
+  }
+
+  function OpenWindowWithPost(url, params, target){
+      var form = document.createElement("form");
+      form.setAttribute("method", "post");
+      form.setAttribute("action", url);
+      form.setAttribute("target", target);
+
+      for (var i in params) {
+          if (params.hasOwnProperty(i)) {
+              var input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = i;
+              input.value = params[i];
+              form.appendChild(input);
+          }
+      }
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+  }
+
+</script>
+<style type="text/css">
+  .fc-button {
+      background: #ffffff;
+      border: 1px solid rgba(120, 130, 140, 0.13);
+      color: #67757c;
+      text-transform: capitalize;
+  }
+  .fc-event {
+      border-radius: 0px;
+      border: none;
+      cursor: move;
+      color: #ffffff !important;
+      font-size: 13px;
+      margin: 1px -1px 0 -1px;
+      padding: 5px 5px;
+      margin: 0px 1px;
+      text-align: center;
+      background: #1e88e5;
+  }
+</style>
 <input type="hidden" id="address" name="">
 <div class="page-wrapper">
     <div class="container-fluid">
@@ -227,6 +305,33 @@ function tablasolicitudes(){
 <!--FIN MODAL DE EVENTO CALENDARIO -->
 <!-- ============================================================== -->
 
+<!-- ============================================================== -->
+<!--INICIO MODAL DE EVENTO CALENDARIO -->
+<!-- ============================================================== -->
+<div id="modal_vista_previa" class="modal fade">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="titulo_vista_previa"></h4>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">Cerrar</span></button>
+        </div>
+        <div id="modalBody" class="modal-body">
+          <input type="hidden" id="fecha" name="fecha">
+          <div class="row">
+            <div class="col-lg-12" id="cnt_vista_previa">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" onclick="imprimir_citas_del_dia($('#fecha').val(),'pdf')"><span class="mdi mdi-file-pdf"></span> Imprimir</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+</div>
+</div>
+<!-- ============================================================== -->
+<!--FIN MODAL DE EVENTO CALENDARIO -->
+<!-- ============================================================== -->
 
 <script>
 $(document).ready(function () {
@@ -240,6 +345,7 @@ $(document).ready(function () {
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
         // put your options and callbacks here
+        selectable: true,
         eventClick:  function(event, jsEvent, view) {
               $('#numero_caso_exp').html(event.title);
               $('#tipo_sol').html(event.tipo);
@@ -251,6 +357,7 @@ $(document).ready(function () {
               $('#eventUrl').attr('href',event.url);
               $('#calendarModal').modal();
           },
+          
         header: {
             left: 'prev,next today',
             center: 'title',

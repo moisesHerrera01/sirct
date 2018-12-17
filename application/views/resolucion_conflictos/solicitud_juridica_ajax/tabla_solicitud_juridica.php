@@ -30,8 +30,8 @@
                     $solicitudes = $this->db->query("SELECT e.*,
                                               e.numerocaso_expedienteci AS numero,
                                               CASE
-                                                WHEN e.tiposolicitud_expedienteci=3 THEN 'Persona jurídica'
-                                                ELSE e.tiposolicitud_expedienteci END AS tipo,
+                                                WHEN e.motivo_expedienteci=1 THEN 'Despido'
+                                                ELSE 'Conflicto Laboral' END AS tipo,
                                               es.nombre_estadosci AS nombre_estado,
                                               e.resultado_expedienteci AS resultado,
                                               e.fechacrea_expedienteci AS fecha,
