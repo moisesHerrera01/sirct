@@ -917,9 +917,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <center>
                                     <h5>Seleccione el sexo:</h5>
                                     <input name="sexo_personaci" type="radio" id="masculino" checked="" value="M">
-                                    <label for="masculino">Masculino</label><br>
+                                    <label for="masculino">Hombre</label><br>
                                     <input name="sexo_personaci" type="radio" id="femenino" value="F">
-                                    <label for="femenino">Femenino</label>
+                                    <label for="femenino">Mujer</label>
                                     </center>
                                 </div>
                             </div>
@@ -999,7 +999,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             <select id="motivo_expedienteci" name="motivo_expedienteci" class="custom-select" required style="width: 100%">
                                                 <option value="">[Seleccione el motivo]</option>
                                                 <option value="1">Despido de hecho o injustificado</option>
-                                                <option value="2">Diferencia laboral</option>
+                                                <option value="2">Conflicto laboral</option>
                                             </select>
                                         </div>
                                     </div>

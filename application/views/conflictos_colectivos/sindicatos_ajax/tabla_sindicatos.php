@@ -2,12 +2,12 @@
             <table id="myTable" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
-                      <th width="130px">Número de Expediente</th>
-                      <th>Nombre Solicitante</th>
-                      <th>Nombre Solicitado</th>
-                      <th>Nombre Encargado(a)</th>
-                      <th>Resulato de Intervención</th>
-                      <th>Estado Actual</th>
+                      <th width="130px">Número de expediente</th>
+                      <th>Nombre solicitante</th>
+                      <th>Nombre solicitado</th>
+                      <th>Nombre encargado(a)</th>
+                      <th>Resultado de mediación</th>
+                      <th>Estado actual</th>
                         <th width="200px">(*)</th>
                     </tr>
                 </thead>

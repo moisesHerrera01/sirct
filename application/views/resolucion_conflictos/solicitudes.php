@@ -1552,7 +1552,7 @@ function volver(num) {
                                           <select id="motivo" name="motivo" class="custom-select" required style="width: 100%">
                                             <option value="">[Seleccione el motivo]</option>
                                             <option value="1">Despido de hecho o injustificado</option>
-                                            <option value="2">Diferencia laboral</option>
+                                            <option value="2">Conflicto laboral</option>
                                         </select>
                                       </div>
                                   </div>
@@ -1615,19 +1615,19 @@ function volver(num) {
 
                                 <div class="row">
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Nombres de jefe inmediato: </h5>
-                                        <input type="text" id="nombres_jefe" name="nombres_jefe" class="form-control" placeholder="Nombres de jefe inmediato">
+                                        <h5>Nombres de jefatura inmediato: </h5>
+                                        <input type="text" id="nombres_jefe" name="nombres_jefe" class="form-control" placeholder="Nombres de jefatura inmediato">
                                         <div class="help-block"></div>
                                     </div>
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Apellidos de jefe inmediato:</h5>
-                                        <input type="text" id="apellidos_jefe" name="apellidos_jefe" class="form-control" placeholder="Apellidos de jefe inmediato">
+                                        <h5>Apellidos de jefatura inmediato:</h5>
+                                        <input type="text" id="apellidos_jefe" name="apellidos_jefe" class="form-control" placeholder="Apellidos de jefatura inmediato">
                                         <div class="help-block"></div>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Cargo de jefe inmediato: </h5>
-                                        <input type="text" id="cargo_jefe" name="cargo_jefe" class="form-control" placeholder="Cargo de jefe inmediato">
+                                        <h5>Cargo de jefatura inmediato: </h5>
+                                        <input type="text" id="cargo_jefe" name="cargo_jefe" class="form-control" placeholder="Cargo de jefatura inmediato">
                                         <div class="help-block"></div>
                                     </div>
                               </div>

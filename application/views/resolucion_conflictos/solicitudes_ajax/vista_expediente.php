@@ -109,7 +109,7 @@
                       Sexo:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= ($expediente->sexo_personaci == "M") ? "Masculino" : "Femenino" ; ?></h5>
+                          <h5><?= ($expediente->sexo_personaci == "M") ? "Hombre" : "Mujer" ; ?></h5>
                     </div>
                   </div>
                   <div class="row">
@@ -214,7 +214,7 @@
                       Motivo de la solicitud:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= ($expediente->motivo_expedienteci==1) ? "Despido de hecho o injustificado" : "Diferencias laborales" ;  ?></h5>
+                          <h5><?= ($expediente->motivo_expedienteci==1) ? "Despido de hecho o injustificado" : "Conflictos laborales" ;  ?></h5>
                     </div>
                   </div>
                   <div class="row">
@@ -286,7 +286,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Nombres de jefe inmediato:
+                      Nombres de jefatura inmediato:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->nombre_empleador ?></h5>
@@ -294,7 +294,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Apellidos de jefe inmediato:
+                      Apellidos de jefatura inmediato:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->apellido_empleador ?></h5>
@@ -302,7 +302,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Cargo de jefe inmediato:
+                      Cargo de jefatura inmediato:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->cargo_empleador ?></h5>

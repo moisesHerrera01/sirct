@@ -51,8 +51,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                         <div class="profiletimeline">
                         	<div align="center">
-	                        	<a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2,'<?=$row->id_empresa?>','save');" class="m-t-10 m-r-20 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
-	                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2,'<?=$row->id_empresa?>','save');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
+	                        	<a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2,'<?=$row->id_empresa?>','save');" class="m-t-10 m-r-20 waves-effect waves-dark btn btn-success btn-rounded">Mediación por despido <br>de hecho o injustificado</a>
+	                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2,'<?=$row->id_empresa?>','save');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Mediación por <br>conflicto laboral</a>
 	                        </div>
                             <br><br>
                         	<?php

@@ -128,7 +128,7 @@
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
                             <h5>
-                                <?= ($expediente->sexo_personaci == "M") ? "Masculino" : "Femenino" ; ?>
+                                <?= ($expediente->sexo_personaci == "M") ? "Hombre" : "Mujer" ; ?>
                             </h5>
                         </div>
                     </div>

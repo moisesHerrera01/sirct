@@ -744,7 +744,7 @@ function volver(num) {
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud por diferencia laboral</h3>
+                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud por conflicto laboral</h3>
             </div>
         </div>
         <!-- ============================================================== -->
@@ -1222,9 +1222,9 @@ function volver(num) {
                   <div class="form-group col-lg-4" style="height: 83px;">
                       <h5>Sexo:</h5>
                       <input name="sexo_directivo" type="radio" id="masculino" checked="" value="M">
-                      <label for="masculino">Masculino</label>
+                      <label for="masculino">Hombre</label>
                       <input name="sexo_directivo" type="radio" id="femenino" value="F">
-                      <label for="femenino">Femenino</label>
+                      <label for="femenino">Mujer</label>
                       <div class="help-block"></div>
                 </div>
 

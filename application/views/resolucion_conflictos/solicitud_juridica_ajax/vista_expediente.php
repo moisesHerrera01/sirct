@@ -138,7 +138,7 @@
                           <h5><?php if($expediente->motivo_expedienteci == '1'){
                               echo "Despido de hecho o injustificado";
                             }else{
-                              echo "Diferencia laboral";
+                              echo "Conflicto laboral";
                             } ?>
                           </h5>
                     </div>

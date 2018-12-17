@@ -18,7 +18,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <?php echo (empty($row->estado_persona)) ? '<span class="label label-info">Cuenta activa</span>' : '<span class="label label-danger">Cuenta inactiva</span>'; ?>
 
                     <div class="row" align="left">
-                        <div class="col-6"><a href="javascript:void(0)" class="link"><i class="icon-people"></i> <font class="font-medium">Edad: <?=calcular_edad($row->fnacimiento_personaci)?> años<br>Sexo: <?php echo ($row->sexo_personaci == 'M') ? 'Masculino' : 'Femenino'; ?></font></a></div>
+                        <div class="col-6"><a href="javascript:void(0)" class="link"><i class="icon-people"></i> <font class="font-medium">Edad: <?=calcular_edad($row->fnacimiento_personaci)?> años<br>Sexo: <?php echo ($row->sexo_personaci == 'M') ? 'Hombre' : 'Mujer'; ?></font></a></div>
                         <div class="col-6"><a href="javascript:void(0)" class="link"><i class="icon-picture"></i> <font class="font-medium"><br>
                         	<?php if($row->pertenece_lgbt){ ?>LGTBI <img src="<?=base_url()."assets/images/silueta/lgtbi.png"?>" style="max-height: 15px;"><?php } ?></font></a></div>
                     </div>
@@ -62,8 +62,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <div class="profiletimeline">
 
                           <div align="center">
-                            <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1,'<?=$row->id_personaci?>','update_post');" class="m-t-10 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
-                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1,'<?=$row->id_personaci?>','update_post');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_despido_hecho(1,'<?=$row->id_personaci?>','update_post');" class="m-t-10 waves-effect waves-dark btn btn-success btn-rounded">Mediación por despido <br>de hecho o injustificado</a>
+                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1,'<?=$row->id_personaci?>','update_post');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Mediación por <br>conflicto laboral</a>
                             <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(1,'<?=$row->id_personaci?>','update_post');" class="m-t-10 waves-effect waves-dark btn btn-secondary btn-rounded">Noticicación de <br>renuncia voluntaria</a>
                         </div><br>
 
@@ -105,7 +105,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             <?php if($fila->motivo_expedienteci == '1'){ ?>
                                               Despido de hecho o injustificado
                                             <?php }elseif($fila->motivo_expedienteci == '2'){ ?>
-                                              Diferencia laboral
+                                              Conflicto laboral
                                             <?php }else{ ?>
                                               Notificación de renuncia voluntaria
                                             <?php } ?>

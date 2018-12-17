@@ -180,9 +180,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <div class="form-group col-lg-2" style="height: 83px;">
                                 <h5>Sexo:</h5>
                                 <input name="sexo_solicitante" type="radio" id="masculino" checked="" value="M">
-                                <label for="masculino">Masculino</label>
+                                <label for="masculino">Hombre</label>
                                 <input name="sexo_solicitante" type="radio" id="femenino" value="F">
-                                <label for="femenino">Femenino</label>
+                                <label for="femenino">Mujer</label>
                                 <div class="help-block"></div>
                           </div>
 
@@ -334,7 +334,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                         <div id="tipo_conciliacion_div" style="display:none;" class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "
                             pull-left"; } ?>">
-                            <h5>Tipo de Conciliaci&oacute;n: </h5>
+                            <h5>Tipo de Mediaci&oacute;n: </h5>
                             <div class="controls">
                                 <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
                                     <option value="">[Seleccione]</option>
