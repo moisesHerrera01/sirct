@@ -55,7 +55,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                           <div class="col-4">
                             <div class="switch">
                               <label>
-                                Delegado(a)
+                                Delegado/a
                                 <input type="checkbox" <?= ($fila->nombre_rol == 'FILTRO CCIT' || $fila->nombre_rol == 'FILTRO CCCT') ? "class='checked pred'" : "class='check'" ?> name="<?= $fila->id_empleado?>" value="1">
                                 <span class="lever switch-col-blue"></span>Filtro
                               </label>

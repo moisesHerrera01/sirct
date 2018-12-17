@@ -8,7 +8,7 @@
     <div class="card-body b-t"  style="padding-top: 7px;">
     	<div class="pull-right">
           <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
-            <button type="button" onclick="cambiar_nuevo2();" class="btn waves-effect waves-light btn-success2"><span class="mdi mdi-plus"></span> Nuevo representante</button>
+            <button type="button" onclick="cambiar_nuevo2();" class="btn waves-effect waves-light btn-success2"><span class="mdi mdi-plus"></span> Nuevo registro</button>
           <?php } ?>
         </div>
         <div class="table-responsive">

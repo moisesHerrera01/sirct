@@ -1,4 +1,4 @@
-<!-- <h5>Asignar delegado: <span class="text-danger">*</span></h5> -->
+<!-- <h5>Asignar delegado/a: <span class="text-danger">*</span></h5> -->
 <select id="nr_search" name="nr_search" class="select2" onchange="tablasolicitudes();" style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php

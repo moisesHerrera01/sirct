@@ -448,7 +448,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             if(establecimiento == ""){
                 swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
             }else{
-                swal({ title: "Seleccione representante", text: "Agregue o seleccione un representante de la lista.", type: "warning", showConfirmButton: true });
+                swal({ title: "Seleccione una persona representante", text: "Agregue o seleccione una persona representante de la lista.", type: "warning", showConfirmButton: true });
             }
         }else{
             open_form(2);
@@ -546,7 +546,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         .done(function (res) {
           if(res == "exito"){
             tablasolicitudes();
-            swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+            swal({ title: "¡Delegado/a modificado exitosamente!", type: "success", showConfirmButton: true });
           }else{
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
           }
@@ -709,7 +709,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                     'language': {
                         noResults: function () {
-                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
                         }
                     }, 'escapeMarkup': function (markup) { return markup; }
                 });
@@ -867,7 +867,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 </div>
                             </blockquote>
 
-                            <span class="etiqueta">Representante</span>
+                            <span class="etiqueta">Persona representante</span>
                             <blockquote class="m-t-0">
                                 <div id="cnt_tabla_representantes"></div>
                             </blockquote>
@@ -1025,7 +1025,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     </div>
                                 </div>
                             </blockquote>
-                            <span class="etiqueta">Asignación de delegado</span>
+                            <span class="etiqueta">Asignación de delegado/a</span>
                             <blockquote class="m-t-0">
                                 <div class="row">
                                     <div class="form-group col-lg-6">
@@ -1144,12 +1144,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="band4" name="band4" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de representantes</h4>
+                <h4 class="modal-title">Gestión de personas representantes</h4>
             </div>
             <div class="modal-body" id="">
                 <div class="row">
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del representante: <span class="text-danger">*</span></h5>
+                      <h5>Nombre de la persona: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
                       </div>
@@ -1401,37 +1401,37 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="id_procuradorci" name="id_procuradorci" value="">
           <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
             <div class="modal-header">
-                <h4 class="modal-title">Defensores legales</h4>
+                <h4 class="modal-title">Gestión de personas defensoras legales</h4>
             </div>
             <div class="modal-body" id="">
               <div class="row">
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Nombres del representante: <span class="text-danger">*</span></h5>
+                    <h5>Nombres de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres del representante" required>
+                        <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres de la persona representante" required>
                     </div>
                 </div>
 
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
+                    <h5>Apellidos de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos del representante" required>
+                        <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos de la persona representante" required>
                     </div>
                 </div>
               </div>
 
               <div class="row">
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>DUI de representante: <span class="text-danger">*</span></h5>
+                    <h5>DUI de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
+                        <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui de la persona representante" required>
                     </div>
                 </div>
 
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
+                    <h5>Tel&eacute;fono de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
+                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono de la persona representante" required>
                     </div>
                 </div>
               </div>
@@ -1657,7 +1657,7 @@ $(function(){
                 if($("#band6").val() == "save"){
                     //$("#id_empresa").val(res[1])
                     $("#modal_defensores").modal('hide');
-                    $.toast({ heading: 'Registro exitoso', text: 'Registro de defensor exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                    $.toast({ heading: 'Registro exitoso', text: 'Registro de persona defensora exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                     combo_defensores(res[1]);
                 }else if($("#band6").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });

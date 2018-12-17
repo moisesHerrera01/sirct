@@ -477,7 +477,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         if(res == "exito"){
             cerrar_mantenimiento()
             tablasolicitudes();
-            swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+            swal({ title: "¡Delegado/a modificado exitosamente!", type: "success", showConfirmButton: true });
         }else{
             swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
         }
@@ -678,7 +678,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                     'language': {
                         noResults: function () {
-                            return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo representante" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo representante</a></div>';
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
                         }
                     }, 'escapeMarkup': function (markup) { return markup; }
                 });
@@ -700,7 +700,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                     'language': {
                         noResults: function () {
-                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
                         }
                     }, 'escapeMarkup': function (markup) { return markup; }
                 });
@@ -1113,7 +1113,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Cambiar asignación de delegado:</h4>
+                <h4 class="modal-title">Cambiar asignación de delegado/a:</h4>
             </div>
 
             <div class="modal-body" id="">
@@ -1204,37 +1204,37 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="id_procuradorci" name="id_procuradorci" value="">
           <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
             <div class="modal-header">
-                <h4 class="modal-title">Defensores legales</h4>
+                <h4 class="modal-title">Gestión de personas defensoras legales</h4>
             </div>
             <div class="modal-body" id="">
               <div class="row">
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Nombres del representante: <span class="text-danger">*</span></h5>
+                    <h5>Nombres de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres del representante" required>
+                        <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres de la persona representante" required>
                     </div>
                 </div>
 
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
+                    <h5>Apellidos de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos del representante" required>
+                        <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos de la persona representante" required>
                     </div>
                 </div>
               </div>
 
               <div class="row">
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>DUI de representante: <span class="text-danger">*</span></h5>
+                    <h5>DUI de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
+                        <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui de la persona representante" required>
                     </div>
                 </div>
 
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
+                    <h5>Tel&eacute;fono de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
+                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono de la persona representante" required>
                     </div>
                 </div>
               </div>

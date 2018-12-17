@@ -1,4 +1,4 @@
-<h5>Parte patronal : </h5>
+<h5>Parte empleadora : </h5>
 <select id="representante_empresa" name="representante_empresa" class="select2" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php

@@ -4,22 +4,22 @@
         <div class="card-actions">
 
         </div>
-        <h4 class="card-title m-b-0">Listado de directivos</h4>
+        <h4 class="card-title m-b-0">Listado de personas directivas</h4>
     </div>
     <div class="card-body b-t"  style="padding-top: 7px;">
     	<div class="pull-right">
           <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
-            <button type="button" onclick="cambiar_nuevo2();" class="btn waves-effect waves-light btn-success2"><span class="mdi mdi-plus"></span> Nuevo directivo</button>
+            <button type="button" onclick="cambiar_nuevo2();" class="btn waves-effect waves-light btn-success2"><span class="mdi mdi-plus"></span> Nuevo registro</button>
           <?php } ?>
         </div>
           <div class="table-responsive">
             <table id="myTable2" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
-                      <th>Nombre directivo</th>
-                      <th>Apellido directivo</th>
-                      <th>Tipo directivo</th>
-                      <th>Acreditación directivo</th>
+                      <th>Nombre directivo/a</th>
+                      <th>Apellido directivo/a</th>
+                      <th>Tipo directivo/a</th>
+                      <th>Acreditación directivo/a</th>
                         <th width="150px">(*)</th>
                     </tr>
                 </thead>

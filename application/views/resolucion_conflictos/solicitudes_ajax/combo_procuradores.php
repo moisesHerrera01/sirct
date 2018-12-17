@@ -1,4 +1,4 @@
-<h5>Procurador: </h5>
+<h5>Persona defensora pública: </h5>
 <select id="procurador" name="procurador" class="select2" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php

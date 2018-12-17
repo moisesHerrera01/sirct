@@ -133,7 +133,7 @@ function combo_representante_empresa(seleccion){
         
         'language': {
             noResults: function () {
-                return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo representante" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo representante</a></div>';
+                return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
             }
         }, 'escapeMarkup': function (markup) { return markup; }
     });
@@ -186,7 +186,7 @@ function combo_defensores(seleccion){
                 
                 'language': {
                     noResults: function () {
-                        return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
+                        return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
                     }
                 }, 'escapeMarkup': function (markup) { return markup; }
             });
@@ -217,7 +217,7 @@ function cambiar_delegado() {
       if(res == "exito"){
         cerrar_mantenimiento()
         tablasolicitudes();
-        swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+        swal({ title: "¡Delegado/a modificado exitosamente!", type: "success", showConfirmButton: true });
       }else{
           swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
       }
@@ -857,7 +857,7 @@ function volver(num) {
                         <div id="cnt_form3" class="cnt_form" style="display: none;">
                             <h3 class="box-title" style="margin: 0px;">
                                 <button id="paso2" type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
-                                Datos de directivo:
+                                Datos de la persona directiva:
                             </h3><hr class="m-t-0 m-b-30">
 
                             <div id="cnt_tabla_directivos"></div>
@@ -1132,37 +1132,37 @@ function volver(num) {
       <input type="hidden" id="id_procuradorci" name="id_procuradorci" value="">
       <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
         <div class="modal-header">
-            <h4 class="modal-title">Defensores legales</h4>
+            <h4 class="modal-title">Gestión de personas defensoras legales</h4>
         </div>
         <div class="modal-body" id="">
           <div class="row">
             <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                <h5>Nombres del representante: <span class="text-danger">*</span></h5>
+                <h5>Nombres de la persona: <span class="text-danger">*</span></h5>
                 <div class="controls">
-                    <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres del representante" required>
+                    <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombre de la persona representante" required>
                 </div>
             </div>
 
             <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                <h5>Apellidos del representante: <span class="text-danger">*</span></h5>
+                <h5>Apellidos de la persona: <span class="text-danger">*</span></h5>
                 <div class="controls">
-                    <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos del representante" required>
+                    <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos de la persona representante" required>
                 </div>
             </div>
           </div>
 
           <div class="row">
             <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                <h5>DUI de representante: <span class="text-danger">*</span></h5>
+                <h5>DUI de la persona: <span class="text-danger">*</span></h5>
                 <div class="controls">
-                    <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui del representante" required>
+                    <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui de la persona representante" required>
                 </div>
             </div>
 
             <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                <h5>Tel&eacute;fono representante: <span class="text-danger">*</span></h5>
+                <h5>Tel&eacute;fono de la persona: <span class="text-danger">*</span></h5>
                 <div class="controls">
-                    <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono del representante" required>
+                    <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono de la persona representante" required>
                 </div>
             </div>
           </div>
@@ -1199,19 +1199,19 @@ function volver(num) {
           <input type="hidden" id="band2" name="band2" value="save">
           <input type="hidden" id="id_directivo" name="id_directivo" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de directivos</h4>
+                <h4 class="modal-title">Gestión de personas directivas</h4>
             </div>
             <div class="modal-body" id="">
                 <div class="row">
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del directivo: <span class="text-danger">*</span></h5>
+                      <h5>Nombre de la persona: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="nombre_directivo" name="nombre_directivo" class="form-control" required="">
                       </div>
                   </div>
 
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Apellido del directivo: <span class="text-danger">*</span></h5>
+                      <h5>Apellido de la persona: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="apellido_directivo" name="apellido_directivo" class="form-control">
                       </div>
@@ -1229,7 +1229,7 @@ function volver(num) {
                 </div>
 
                   <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>DUI del directivo: <span class="text-danger">*</span></h5>
+                      <h5>DUI de la persona: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input data-mask="99999999-9" type="text" id="dui_directivo" name="dui_directivo" class="form-control">
                       </div>
@@ -1246,7 +1246,7 @@ function volver(num) {
 
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Acreditación del directivo: <span class="text-danger">*</span></h5>
+                      <h5>Acreditación de la persona: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <textarea type="text" id="acreditacion_directivo" name="acreditacion_directivo" class="form-control"></textarea>
                       </div>
@@ -1272,7 +1272,7 @@ function volver(num) {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Cambiar asignación de delegado:</h4>
+        <h4 class="modal-title">Cambiar asignación de delegado/a:</h4>
       </div>
 
       <div class="modal-body" id="">
@@ -1579,7 +1579,7 @@ function activar(id_directivo) {
             if (res == "exito") {
                 tabla_directivos();
                 swal({
-                    title: "¡Directivo activado exitosamente!",
+                    title: "¡Persona directiva activado exitosamente!",
                     type: "success",
                     showConfirmButton: true
                 });
@@ -1617,7 +1617,7 @@ $("#formajax8").on("submit", function(e){
             if($("#band6").val() == "save"){
                 //$("#id_empresa").val(res[1])
                 $("#modal_defensores").modal('hide');
-                $.toast({ heading: 'Registro exitoso', text: 'Registro de defensor exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                $.toast({ heading: 'Registro exitoso', text: 'Registro de persona defensora exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                 combo_defensores(res[1]);
             }else if($("#band6").val() == "edit"){
                 swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
