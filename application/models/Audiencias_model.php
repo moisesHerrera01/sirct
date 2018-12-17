@@ -42,7 +42,7 @@ class Audiencias_model extends CI_Model {
 			}
 	}
 
-	public function obtener_audiencias_delegado($id_delegado,$fecha=FALSE,$hora=FALSE,$tipo=FALSE) {
+	public function obtener_audiencias_delegado($id_delegado,$fecha=FALSE,$hora=FALSE,$tipo=FALSE,$fecha=FALSE) {
 		$this->db->select('s.nombre_sindicato,e.motivo_expedienteci,e.numerocaso_expedienteci,f.id_expedienteci,f.id_fechasaudienciasci,
 												f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci,tiposolicitud_expedienteci,
 												(CASE WHEN e.tiposolicitud_expedienteci=1 THEN "Persona natural"
@@ -72,6 +72,9 @@ class Audiencias_model extends CI_Model {
 					->group_by('f.id_fechasaudienciasci');
 		if ($id_delegado) {
 			$this->db->where('d.nr_delegado_actual', $id_delegado);
+		}
+		if ($fecha) {
+			$this->db->where('f.fecha_fechasaudienciasci', $fecha);
 		}
 		if ($tipo==1) {
 			$this->db->where('e.id_personaci<>0');
