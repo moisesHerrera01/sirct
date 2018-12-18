@@ -56,7 +56,7 @@ class Audiencias_model extends CI_Model {
 												d.nombre_delegado_actual')
 					->from('sct_fechasaudienciasci f')
 					->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
-					->join('sct_personaci P','p.id_personaci=e.id_personaci','left')
+					->join('sct_personaci p','p.id_personaci=e.id_personaci','left')
 					->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
 					->join('sir_empleado em','em.id_empleado=e.id_personal')
 					->join("(

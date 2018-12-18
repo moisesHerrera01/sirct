@@ -106,7 +106,7 @@ class Expedientes_model extends CI_Model {
 	public function obtener_municipio($id) {
 
 		$this->db->select(
-											'e.numinscripcion_empresa,
+											'e.id_empresa, e.numinscripcion_empresa,
 											 m.municipio,
 											 cat.actividad_catalogociiu,
 											 cat.grupo_catalogociiu,

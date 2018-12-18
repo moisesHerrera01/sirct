@@ -50,6 +50,7 @@ function tabla_calendario(){
             center: 'title',
             right: 'month,agendaWeek,agendaDay,listMonth'
         },
+        eventLimit: true,
         events: {
         url: "<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/calendario?nr="+id_delegado,
         cache: true

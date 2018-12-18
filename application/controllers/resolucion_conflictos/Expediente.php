@@ -335,5 +335,12 @@ class Expediente extends CI_Controller {
 		$data['delegados'] = $this->delegados_model->obtener_delegados_expediente($this->input->get('id'));
 		$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_bitacora_delegado',$data);
 	}
+
+	public function imprimir_ficha_pdf() {
+		$data['empresa'] = $this->expedientes_model->obtener_municipio($this->input->post('id_empresa'));
+		$data['expediente'] = $this->expedientes_model->obtener_registros_expedientes( $this->input->post('id_expediente') );
+
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/vista_expediente', $data);
+	}
 }
 ?>

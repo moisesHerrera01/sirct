@@ -5,7 +5,7 @@ class Reportes_colectivos extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('reportes_colectivos_model');
+		$this->load->model(array('reportes_colectivos_model', 'login_model', 'expedientes_model'));
 	}
 
 	public function index(){
@@ -16,26 +16,62 @@ class Reportes_colectivos extends CI_Controller {
 	}
 
 	public function relaciones_colectivas(){
+		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+	    if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) { $tipo = 1;
+	    }else { $tipo = 2; }
+		$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 		$this->load->view('templates/header');
-		$this->load->view('reportes/lista_reportes_colectivos/relaciones_colectivas');
+		$this->load->view('reportes/lista_reportes_colectivos/relaciones_colectivas',
+			array(
+				'id' => $this->input->post('id'),
+				'colaborador' => $delegados
+			));
 		$this->load->view('templates/footer');
 	}
 
 	public function registro_edades(){
+		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+	    if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) { $tipo = 1;
+	    }else { $tipo = 2; }
+		$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 		$this->load->view('templates/header');
-		$this->load->view('reportes/lista_reportes_colectivos/registro_edades');
+		$this->load->view('reportes/lista_reportes_colectivos/registro_edades',
+			array(
+				'id' => $this->input->post('id'),
+				'colaborador' => $delegados
+			));
 		$this->load->view('templates/footer');
 	}
 
 	public function tipo_pago(){
+		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+	    if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) { $tipo = 1;
+	    }else { $tipo = 2; }
+		$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 		$this->load->view('templates/header');
-		$this->load->view('reportes/lista_reportes_colectivos/tipo_pago');
+		$this->load->view('reportes/lista_reportes_colectivos/tipo_pago',
+			array(
+				'id' => $this->input->post('id'),
+				'colaborador' => $delegados
+			));
 		$this->load->view('templates/footer');
 	}
 
 	public function consolidado(){
+		$id_rol = $this->login_model->obtener_rol_usuario($_SESSION['id_usuario'])->id_rol;
+	    if ($id_rol == DELEGADO || $id_rol == FILTRO || $id_rol == JEFE) { $tipo = 1;
+	    }else { $tipo = 2; }
+		$abreviatura = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$delegados = $this->expedientes_model->obtener_delegados_rol($tipo,$abreviatura->pre);
 		$this->load->view('templates/header');
-		$this->load->view('reportes/lista_reportes_colectivos/consolidado');
+		$this->load->view('reportes/lista_reportes_colectivos/consolidado',
+			array(
+				'id' => $this->input->post('id'),
+				'colaborador' => $delegados
+			));
 		$this->load->view('templates/footer');
 	}
 
