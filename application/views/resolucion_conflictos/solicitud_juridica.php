@@ -57,6 +57,37 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
+    function tabla_delegados(id_expedienteci){
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla_delegados").innerHTML=xmlhttpB.responseText;
+                //$('[data-toggle="tooltip"]').tooltip();
+                $('#myTable').DataTable();
+            }
+        }
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/expediente/tabla_delegados?id="+id_expedienteci,true);
+        xmlhttpB.send();
+    }
+
+    function modal_bitacora_delegados(id_expedienteci) {
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/bitacora_delegados",
+        type: "post",
+        dataType: "html",
+        data: {id : id_expedienteci}
+      })
+      .done(function(res){
+        $('#cnt_modal_bitacora_delegado').html(res);
+        $('#modal_bitacora_delegados').modal('show');
+        tabla_delegados(id_expedienteci);
+      });
+    }
+
     function combo_delegado_tabla(seleccion){
 
       $.ajax({
@@ -527,8 +558,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function modal_delegado(id_expedienteci, id_personal) {
         $("#id_expedienteci_copia").val(id_expedienteci);
-        $("#id_personal_copia").val(id_personal).trigger('change.select2');
+        combo_cambiar_delegado(id_personal);
         $("#modal_delegado").modal("show");
+    }
+
+    function combo_cambiar_delegado(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_cambiar_delegado",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_cambiar_delegado').html(res);
+        $("#id_personal_copia").select2();
+      });
     }
 
     function cambiar_delegado() {
@@ -1127,6 +1172,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <!-- Fin CUERPO DE LA SECCIÓN -->
         <!-- ============================================================== -->
     </div>
+    <div id="cnt_modal_bitacora_delegado"></div>
 </div>
 <!-- ============================================================== -->
 <!-- Fin de DIV de inicio (ENVOLTURA) -->
@@ -1325,7 +1371,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       <div class="modal-body" id="">
           <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
           <div class="row">
-            <div class="form-group col-lg-12 col-sm-12">
+            <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_cambiar_delegado"></div>
+            <!-- <div class="form-group col-lg-12 col-sm-12">
                 <div class="form-group">
                     <h5>Delegado/a:<span class="text-danger">*</h5>
                     <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%" required="">
@@ -1340,7 +1387,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     ?>
                     </select>
                 </div>
-            </div>
+            </div> -->
           </div>
           <div align="right">
             <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>

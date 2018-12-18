@@ -65,7 +65,6 @@
                                               JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                               JOIN sct_personaci p ON p.id_personaci=e.id_personaci
                                               JOIN sge_empresa em ON em.id_empresa=e.id_empresaci
-                                              /*JOIN lista_empleados_estado l on l.id_empleado=e.id_personal*/
                                               JOIN sir_empleado l on l.id_empleado=e.id_personal
                                               ".$add." AND tiposolicitud_expedienteci = '3' ORDER BY e.id_expedienteci DESC");
 
@@ -110,10 +109,11 @@
                                   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
                                       <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci.','.$fila->id_empresaci.','.$fila->id_personaci?>)">Visualizar</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="audiencias('<?=$fila->id_empresaci?>',<?=$fila->id_expedienteci?>, 2)">Gestionar audiencias</a>
-                                      <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)"">Cambiar Delegado</a> -->
+                                      <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar Delegado</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci?>)">Cambios de delegados/as</a>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/solicitud_juridica/emitir_ficha/'.$fila->id_expedienteci.'/')?>">Emitir Ficha</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci?>)">Registrar resolución</a>
-                                      <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a>
+                                      <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a> -->
                                       <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas(<?=$fila->id_expedienteci?>)">Gestionar actas</a>
                                       <?php if ($fila->id_estadosci == "1") { ?>
                                             <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>

@@ -45,7 +45,7 @@ class Pagos_model extends CI_Model {
 				$this->db->where('em.nr', $id_delegado);
 				}
 				if ($fecha) {
-				$this->db->where('f.fechapago_fechaspagosci', $fecha);
+				$this->db->where("DATE_FORMAT(f.fechapago_fechaspagosci, '%Y-%m-%d') = ", $fecha);
 				}
 				if ($tipo==1) {
 					$this->db->where('e.id_personaci<>0');
@@ -74,7 +74,7 @@ class Pagos_model extends CI_Model {
 			$this->db->where('em.nr', $id_delegado);
 		}
 		if ($fecha) {
-			$this->db->where('f.fechapago_fechaspagosci', $fecha);
+			$this->db->where("DATE_FORMAT(f.fechapago_fechaspagosci, '%Y-%m-%d') = ", $fecha);
 		}
 
 		$sql[] = '('.$this->db->get_compiled_select().')';

@@ -50,7 +50,7 @@ class Consultar_fechas extends CI_Controller {
 														'fin' => $fin,
 														'tipo'=>$tipo,
 														'delegado'=>$delegado,
-														'persona' =>$solicitante, 
+														'persona' =>$solicitante,
 														'className' => 'bg-success'
 													);
 			}
@@ -101,8 +101,8 @@ class Consultar_fechas extends CI_Controller {
 		);
 
 		$titles = array(
-				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
-				'DIRECCIÓN GENERAL DE TRABAJO', 
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',
+				'DIRECCIÓN GENERAL DE TRABAJO',
 				'LISTADO DE CITAS DEL '.fecha_ESP($data["fecha"])
 			);
 
@@ -126,7 +126,7 @@ class Consultar_fechas extends CI_Controller {
 		 	$header = head_table_html($titles, $data, 'pdf');
 
 		 	$this->mpdf->SetHTMLHeader($header);
-		 	
+
 		 	$body .= $this->registros_citas_fecha($data, $titles_head);
 
 		 	$pie = piePagina($this->session->userdata('usuario'));
@@ -149,7 +149,7 @@ class Consultar_fechas extends CI_Controller {
 			$tipo = 2;
 		}
     	$citas = $this->audiencias_model->obtener_audiencias_delegado( $data["id_delegado"],FALSE,FALSE,$tipo,$data["fecha"]);
-		$pagos = $this->pagos_model->obtener_pagos_delegado($data["id_delegado"],$tipo);
+		$pagos = $this->pagos_model->obtener_pagos_delegado($data["id_delegado"],$tipo,$data["fecha"]);
 
 		$cuerpo = "<h5 aligh='center'>CITAS DE AUDIENCIAS</h5>";
 		$cuerpo .= table_header($titles_head);

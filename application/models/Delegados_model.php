@@ -22,7 +22,8 @@ class Delegados_model extends CI_Model {
 						 ->join('org_usuario u','u.id_usuario=d.id_usuario_guarda')
 						 ->join('org_rol r','r.id_rol=d.id_rol_guarda')
 						 ->join('sir_empleado e','e.id_empleado=d.id_personal')
-						 ->where('d.id_expedienteci',$id_expedienteci);
+						 ->where('d.id_expedienteci',$id_expedienteci)
+						 ->order_by('d.id_delegado_exp','DESC');
 		$query = $this->db->get();
 		if ($query->num_rows() > 0) {
 			return $query;

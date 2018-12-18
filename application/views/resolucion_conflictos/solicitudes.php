@@ -306,7 +306,7 @@ function convert_lim_text(lim){
     return tlim;
 }
 
-function modal_delegado(id_expedienteci) {
+function modal_delegado(id_expedienteci,id_personal) {
     $("#id_expedienteci_copia").val(id_expedienteci);
     // $("#id_personal_copia").val(id_personal).trigger('change.select2');
     $("#modal_delegado").modal("show");
@@ -702,13 +702,13 @@ function combo_municipio2(seleccion){
 
 }
 
-function combo_delegado(seleccion){
+function combo_delegado(seleccion,tipo=false){
 
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado",
     type: "post",
     dataType: "html",
-    data: {id : seleccion}
+    data: {id : seleccion,tipo: tipo}
   })
   .done(function(res){
     $('#div_combo_delegado').html(res);
@@ -1097,7 +1097,8 @@ function cambiar_editar(id_expedienteci,bandera){
       combo_doc_identidad(result.id_doc_identidad);
       combo_nacionalidades(result.nacionalidad_personaci);
       //combo_ocupacion(result.id_catalogociuo);
-      combo_delegado(result.id_personal);
+      combo_delegado(result.id_personal,"disabled");
+
       combo_actividad_economica(result.id_catalogociiu);
       combo_municipio(result.id_municipio1);
       $("#ocupacion").val(result.ocupacion);
@@ -1130,7 +1131,6 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#bandx").val("edit");
       $("#band1").val("edit");
       $("#band2").val("edit");
-      // $("#band6").val('edit');
     });
 
 
@@ -2248,6 +2248,9 @@ $(function(){
         formData.append("embarazada", $('#embarazada').val());
         formData.append("acompaniante", $('#acompaniante').val());
         formData.append("nombre_acompaniante", $('#nombre_acompaniante').val());
+        if ($("#band").val()=='edit') {
+          formData.append("id_personal",$("#id_personal").val());
+        }
         $.ajax({
           url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_expediente",
           type: "post",

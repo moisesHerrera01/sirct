@@ -41,7 +41,7 @@ class Solicitud_juridica extends CI_Controller {
 	}
 
   	public function combo_establecimiento() {
-		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento', 
+		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento',
 			array(
 				'id' => $this->input->post('id'),
 				'establecimiento' => $this->db->get('sge_empresa')
@@ -159,7 +159,15 @@ class Solicitud_juridica extends CI_Controller {
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
 			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))
 			);
-			echo $this->solicitud_juridica_model->insertar_expediente($data);
+			echo $id_expedienteci = $this->solicitud_juridica_model->insertar_expediente($data);
+			$delegado = array(
+				'id_expedienteci' => $id_expedienteci,
+				'id_personal' => $data['id_personal'],
+				'fecha_cambio_delegado' => date('Y-m-d'),
+				'id_rol_guarda' => $this->session->userdata('id_rol'),
+				'id_usuario_guarda' => $this->session->userdata('id_usuario')
+			);
+			$this->delegados_model->insertar_delegado_exp($delegado);
 
 		}else if($this->input->post('band4') == "edit"){
 			$data = array(
@@ -194,7 +202,7 @@ class Solicitud_juridica extends CI_Controller {
 	}
 
 	public function emitir_ficha($id_expedienteci) {
-        
+
         $this->load->library("phpword");
         $PHPWord = new PHPWord();
         $titulo = 'FichaSolicitud_PJPN';
@@ -208,7 +216,7 @@ class Solicitud_juridica extends CI_Controller {
         $get = array ('AAAA', 'BBBB', 'CCCC', 'DDDD', 'EEEE', 'FFFF', 'GGGG', 'HHHH', 'IIII', 'JJJJ', 'KKKK');
         $set = array ($expediente->numerocaso_expedienteci, $expediente->fechacrea_expedienteci, $personaci->direccion_personaci, $personaci->nombre_personaci." ".$personaci->apellido_personaci, $personaci->primarios_catalogociuo, $expediente->nombre_empresa, $expediente->telefono_empresa, $expediente->direccion_empresa, $expediente->primer_nombre." ".$expediente->segundo_nombre." ".$expediente->tercer_nombre." ".$expediente->primer_apellido." ".$expediente->segundo_apellido." ".$expediente->apellido_casada);
 
-        $templateWord->setValue($get,$set);        
+        $templateWord->setValue($get,$set);
 
         $nombreWord = $this->random();
 

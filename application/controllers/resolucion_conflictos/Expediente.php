@@ -58,7 +58,9 @@ class Expediente extends CI_Controller {
 						$delegado = array(
 							'id_expedienteci' => $id_expedienteci,
 							'id_personal' => $data2['id_personal'],
-							'fecha_cambio_delegado' => date('Y-m-d')
+							'fecha_cambio_delegado' => date('Y-m-d'),
+							'id_rol_guarda' => $this->session->userdata('id_rol'),
+							'id_usuario_guarda' => $this->session->userdata('id_usuario')
 						);
 						$this->delegados_model->insertar_delegado_exp($delegado);
 
@@ -130,6 +132,7 @@ class Expediente extends CI_Controller {
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_delegado',
 				array(
 					'id' => $this->input->post('id'),
+					'tipo' => $this->input->post('tipo'),
 					'colaborador' => $delegados
 				)
 			);

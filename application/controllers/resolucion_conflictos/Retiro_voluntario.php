@@ -79,6 +79,14 @@ class Retiro_voluntario extends CI_Controller {
             );
 
               echo $this->expedientes_model->insertar_expediente($data);
+              $delegado = array(
+  							'id_expedienteci' => $id_expedienteci,
+  							'id_personal' => $data2['id_personal'],
+  							'fecha_cambio_delegado' => date('Y-m-d'),
+  							'id_rol_guarda' => $this->session->userdata('id_rol'),
+  							'id_usuario_guarda' => $this->session->userdata('id_usuario')
+  						);
+  						$this->delegados_model->insertar_delegado_exp($delegado);
 
 
        } else if($this->input->post('band2') == "edit"){
