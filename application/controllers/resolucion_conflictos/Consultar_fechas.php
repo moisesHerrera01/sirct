@@ -41,8 +41,8 @@ class Consultar_fechas extends CI_Controller {
 					$solicitante = strtoupper($au->nombre_sindicato);
 				}
 
-				$ColorClass = "bg-info bg-opacity";
-				if($au->fecha_fechasaudienciasci >= date("Y-m-d")){ $ColorClass = "bg-info"; }
+				$ColorClass = "bg-success bg-opacity";
+				if($au->fecha_fechasaudienciasci >= date("Y-m-d")){ $ColorClass = "bg-success"; }
 
 				 $eventos[] = array(
 					 									'id' => $id,
@@ -183,6 +183,8 @@ class Consultar_fechas extends CI_Controller {
 		}
 		$cuerpo .= table_footer();
 
+		$titles_head = array('N° Exp', 'Delegado', 'Solicitante', 'Monto', 'Hora');
+
 		$cuerpo .= "<br><h5 aligh='center'>CITAS DE PAGOS</h5>";
 		$cuerpo .= table_header($titles_head);
 		if($pagos){
@@ -192,7 +194,7 @@ class Consultar_fechas extends CI_Controller {
 					$rows->nombre_completo,
 					$rows->persona,
 					$rows->montopago_fechaspagosci,
-					date("h:i A",strtotime($rows->fechapago_fechaspagosci))
+					"$".date("h:i A",strtotime($rows->fechapago_fechaspagosci))
 				);
 				$cuerpo .= table_row($cell_row);
 			}

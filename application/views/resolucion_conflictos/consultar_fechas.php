@@ -152,25 +152,32 @@ function tablasolicitudes(){
       cursor: move;
       color: #ffffff !important;
       font-size: 13px;
-      margin: 1px -1px 0 -1px;
       padding: 5px 5px;
-      margin: 0px 1px;
+      margin: 1px;
       text-align: center;
       background: #1e88e5;
   }
 
   a.fc-event.fc-draggable:hover { 
-    width: 135px;
-    position: absolute;
+    width: 160px;
+    position: relative;
     z-index: 3;
   }
 
-  .bg-success2.bg-opacity{
-        background-color: #595f65 !important;
+  .bg-success.bg-opacity{
+        background-color: #989898 !important;
   }
 
-  .bg-info.bg-opacity{
+  .bg-success.bg-opacity:hover{
+        background-color: #40afaa !important;
+  }
+ 
+  .bg-success2.bg-opacity{
         background-color: #989898 !important;
+  }
+
+  .bg-success2.bg-opacity:hover{
+        background-color: #56ad61 !important;
   }
 
   .bg-success:hover {
