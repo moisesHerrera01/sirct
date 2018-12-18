@@ -39,11 +39,14 @@ class Login_model extends CI_Model {
 
 		$this->db->select('o.id_usuario,o.usuario,o.nombre_completo,e.nr,r.nombre_rol,r.id_rol')
 						 ->from('org_usuario o')
-						 ->join('org_usuario_rol ur','ur.id_usuario=ur.id_usuario')
+						 ->join('org_usuario_rol ur','ur.id_usuario=o.id_usuario')
 						 ->join('org_rol r','r.id_rol=ur.id_rol')
+						 ->join('org_rol_modulo_permiso rmp','rmp.id_rol=r.id_rol')
+						 ->join('org_modulo m','m.id_modulo=rmp.id_modulo')
 						 ->join('sir_empleado e','e.nr=o.nr')
 						 ->where('o.usuario',$data['usuario'])
-						 ->where('o.estado','1');
+						 ->where('o.estado','1')
+						 ->where('m.id_sistema',$this->config->item('id_sistema'));
 		$query = $this->db->get();
 		return $query;
 	}
