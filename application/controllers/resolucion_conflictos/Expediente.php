@@ -337,10 +337,55 @@ class Expediente extends CI_Controller {
 	}
 
 	public function imprimir_ficha_pdf() {
-		$data['empresa'] = $this->expedientes_model->obtener_municipio($this->input->post('id_empresa'));
-		$data['expediente'] = $this->expedientes_model->obtener_registros_expedientes( $this->input->post('id_expediente') );
+		//$data['empresa'] = $this->expedientes_model->obtener_municipio($this->input->post('id_empresa'));
+		$expediente = $this->expedientes_model->obtener_registros_expedientes( $this->input->post('id_expediente') );
+		$expediente = $expediente->result()[0];
 
-		$this->load->view('resolucion_conflictos/solicitudes_ajax/vista_expediente', $data);
+		$html = "<table width='100%' style='border-outline: 1px; border-collapse: collapse;'><tbody>
+				<tr>
+					<td align='right'>
+					<p style='font-size: 18px;'><small>N&uacute;mero de caso:</small> <b>$expediente->numerocaso_expedienteci</b><br></p>
+					<b>Fecha y hora de creaci&oacute;n del expediente:</b> ".date("d-M-Y g:i:s A", strtotime($expediente->fechacrea_expedienteci))."</td>
+				</tr>
+		</tbody></table><br>";
+
+		$html .= "<table width='100%' style='border: 1px solid black;'><tbody>
+				<tr>
+					<td>
+						<b>N&uacute;mero de DUI: </b>$expediente->dui_personaci</td>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<b>Nombre de la persona solicitante: </b>$expediente->nombre_personaci $expediente->apellido_personaci</td>
+					</td>
+				</tr>
+
+		</tbody></table>";
+
+		$titles = array(
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',
+				'DIRECCIÓN GENERAL DE TRABAJO',
+				'FICHA DE EXPEDIENTE');
+
+		$this->load->library('mpdf');
+		$this->mpdf=new mPDF('c','letter','10','Arial',10,10,30,17,3,9);
+
+	 	$header = head_table_html($titles, $data, 'pdf');
+
+	 	$this->mpdf->SetHTMLHeader($header);
+
+	 	$pie = piePagina($this->session->userdata('usuario'));
+		$this->mpdf->setFooter($pie);
+
+		$stylesheet = file_get_contents(base_url().'assets/css/bootstrap.min.css');
+		$this->mpdf->AddPage('P','','','','',10,10,30,17,5,10);
+		$this->mpdf->SetTitle($titles[2]);
+		$this->mpdf->WriteHTML($stylesheet,1);  // The parameter 1 tells that this iscss/style only and no body/html/
+		$this->mpdf->WriteHTML($html);
+		$this->mpdf->Output($titles[2].date(" - Ymd_His").'.pdf','I');
+
+		//$this->load->view('resolucion_conflictos/solicitudes_ajax/vista_expediente', $data);
 	}
 }
 ?>

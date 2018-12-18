@@ -20,7 +20,7 @@
 
     <div class="card-body b-t" style="padding-top: 7px;">
         <div align="right">
-          <button class="btn btn-secondary" onclick="imprimir_ficha_pdf('<?= $expediente->numerocaso_expedienteci ?>', '<?= $empresa->id_empresa ?>')"><span class="mdi mdi-file-pdf"></span> Imprimir ficha</button>
+          <button class="btn btn-secondary" onclick="imprimir_ficha_pdf('<?= $expediente->id_expedienteci ?>', '<?= $empresa->id_empresa ?>')"><span class="mdi mdi-file-pdf"></span> Imprimir ficha</button>
         </div><br>
         <blockquote class="m-t-0">
             <table class="table no-border">
