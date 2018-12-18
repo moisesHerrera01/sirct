@@ -149,7 +149,7 @@ class Consultar_fechas extends CI_Controller {
 			$tipo = 2;
 		}
     	$citas = $this->audiencias_model->obtener_audiencias_delegado( $data["id_delegado"],FALSE,FALSE,$tipo,$data["fecha"]);
-		$pagos = $this->pagos_model->obtener_pagos_delegado($data["id_delegado"],$tipo,$data["fecha"]);
+		$pagos = $this->pagos_model->obtener_pagos_delegado($data["id_delegado"],$tipo);
 
 		$cuerpo = "<h5 aligh='center'>CITAS DE AUDIENCIAS</h5>";
 		$cuerpo .= table_header($titles_head);

@@ -54,7 +54,7 @@ function tabla_calendario(){
         url: "<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/calendario?nr="+id_delegado,
         cache: true
     },
-  timeFormat: 'H:mm a',
+  timeFormat: 'h:mm a',
         defaultView: 'month',
         defaultDate: date,
         selectable: true,
