@@ -7,6 +7,7 @@ class Solicitud_juridica extends CI_Controller {
 		parent::__construct();
 		$this->load->model('solicitud_juridica_model');
 		$this->load->model('expedientes_model');
+		$this->load->model('delegados_model');
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -160,8 +161,9 @@ class Solicitud_juridica extends CI_Controller {
 			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))
 			);
 			echo $id_expedienteci = $this->solicitud_juridica_model->insertar_expediente($data);
+			$id_expedienteci = explode(',',$id_expedienteci);
 			$delegado = array(
-				'id_expedienteci' => $id_expedienteci,
+				'id_expedienteci' => $id_expedienteci[1],
 				'id_personal' => $data['id_personal'],
 				'fecha_cambio_delegado' => date('Y-m-d'),
 				'id_rol_guarda' => $this->session->userdata('id_rol'),

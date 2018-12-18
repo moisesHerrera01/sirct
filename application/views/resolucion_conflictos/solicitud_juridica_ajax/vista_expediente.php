@@ -71,7 +71,7 @@
                           </h5>
                     </div>
                   </div>
-                  
+
                 </tbody>
             </table>
         </blockquote>
@@ -121,7 +121,7 @@
                           <h5><?= $personaci->municipio ?></h5>
                     </div>
                   </div>
-                  
+
                 </tbody>
             </table>
         </blockquote>
@@ -156,7 +156,7 @@
                       Persona delegada asignada:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?php echo implode(" ", array($expediente->primer_nombre, $expediente->segundo_nombre, $expediente->tercer_nombre, $expediente->primer_apellido, $expediente->segundo_apellido, $expediente->apellido_casada)); ?></h5>
+                          <h5><?= $expediente->nombre_delegado_actual ?></h5>                          
                     </div>
                   </div>
                 </tbody>

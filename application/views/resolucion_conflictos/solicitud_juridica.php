@@ -589,7 +589,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           }
         })
         .done(function (res) {
-          if(res == "exito"){
+          if(res != "fracaso"){
             tablasolicitudes();
             swal({ title: "¡Delegado/a modificado exitosamente!", type: "success", showConfirmButton: true });
           }else{
