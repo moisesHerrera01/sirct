@@ -158,14 +158,18 @@ function tablasolicitudes(){
       background: #1e88e5;
   }
 
-  a.fc-event.fc-draggable:hover { 
+  a.fc-day-grid-event.fc-draggable:hover { 
     width: 160px;
     position: relative;
     z-index: 3;
   }
 
+  .fc-list-item .fc-widget-content{
+    color: white;
+  }
+
   .bg-success.bg-opacity{
-        background-color: #989898 !important;
+        background-color: #989898a8 !important;
   }
 
   .bg-success.bg-opacity:hover{
@@ -173,7 +177,7 @@ function tablasolicitudes(){
   }
  
   .bg-success2.bg-opacity{
-        background-color: #989898 !important;
+        background-color: #989898a8 !important;
   }
 
   .bg-success2.bg-opacity:hover{
