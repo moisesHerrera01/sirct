@@ -50,7 +50,8 @@ class Consultar_fechas extends CI_Controller {
 														'fin' => $fin,
 														'tipo'=>$tipo,
 														'delegado'=>$delegado,
-														'persona' =>$solicitante
+														'persona' =>$solicitante, 
+														'className' => 'bg-success'
 													);
 			}
 		}
@@ -80,7 +81,7 @@ class Consultar_fechas extends CI_Controller {
 													 'tipo'=>$tipo,
 													 'delegado'=>$delegado,
 													 'persona' =>$solicitante,
-													 // 'className' =>"bg-danger"
+													 'className' =>"bg-success2"
 												 );
 			}
 		}

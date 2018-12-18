@@ -54,6 +54,7 @@ function tabla_calendario(){
         url: "<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/calendario?nr="+id_delegado,
         cache: true
     },
+  timeFormat: 'H:mm a',
         defaultView: 'month',
         defaultDate: date,
         selectable: true,
@@ -157,6 +158,17 @@ function tablasolicitudes(){
       text-align: center;
       background: #1e88e5;
   }
+
+  a.fc-event.fc-draggable:hover { 
+    width: 135px;
+    position: absolute;
+    z-index: 3;
+  }
+
+  .bg-success:hover {
+    background-color: #26c6da !important;
+  }
+
 </style>
 <input type="hidden" id="address" name="">
 <div class="page-wrapper">
