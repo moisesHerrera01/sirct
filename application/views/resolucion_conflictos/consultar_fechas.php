@@ -165,6 +165,14 @@ function tablasolicitudes(){
     z-index: 3;
   }
 
+  .bg-success2.bg-opacity{
+        background-color: #595f65 !important;
+  }
+
+  .bg-info.bg-opacity{
+        background-color: #989898 !important;
+  }
+
   .bg-success:hover {
     background-color: #26c6da !important;
   }

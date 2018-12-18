@@ -41,6 +41,9 @@ class Consultar_fechas extends CI_Controller {
 					$solicitante = strtoupper($au->nombre_sindicato);
 				}
 
+				$ColorClass = "bg-info bg-opacity";
+				if($au->fecha_fechasaudienciasci >= date("Y-m-d")){ $ColorClass = "bg-info"; }
+
 				 $eventos[] = array(
 					 									'id' => $id,
 														'title' => $title,
@@ -51,7 +54,7 @@ class Consultar_fechas extends CI_Controller {
 														'tipo'=>$tipo,
 														'delegado'=>$delegado,
 														'persona' =>$solicitante,
-														'className' => 'bg-success'
+														'className' => $ColorClass
 													);
 			}
 		}
@@ -71,6 +74,9 @@ class Consultar_fechas extends CI_Controller {
 				 $solicitante = strtoupper($pago->nombre_sindicato);
 			 }
 
+			 	$ColorClass = "bg-success2 bg-opacity";
+				if( date("Y-m-d", strtotime($pago->fechapago_fechaspagosci)) >= date("Y-m-d")){ $ColorClass = "bg-success2"; }
+
 				$eventos[] = array(
 													 'id' => $id,
 													 'title' => $title,
@@ -81,7 +87,7 @@ class Consultar_fechas extends CI_Controller {
 													 'tipo'=>$tipo,
 													 'delegado'=>$delegado,
 													 'persona' =>$solicitante,
-													 'className' =>"bg-success2"
+													 'className' => $ColorClass
 												 );
 			}
 		}
@@ -185,8 +191,8 @@ class Consultar_fechas extends CI_Controller {
 					$rows->numerocaso_expedienteci,
 					$rows->nombre_completo,
 					$rows->persona,
-					'resultado',
-					'Pendiente'
+					$rows->montopago_fechaspagosci,
+					date("h:i A",strtotime($rows->fechapago_fechaspagosci))
 				);
 				$cuerpo .= table_row($cell_row);
 			}
