@@ -337,7 +337,7 @@ class Expediente extends CI_Controller {
 	}
 
 	public function imprimir_ficha_pdf() {
-		//$data['empresa'] = $this->expedientes_model->obtener_municipio($this->input->post('id_empresa'));
+		$empresa = $this->expedientes_model->obtener_municipio($this->input->post('id_empresa'));
 		$expediente = $this->expedientes_model->obtener_registros_expedientes( $this->input->post('id_expediente') );
 		$expediente = $expediente->result()[0];
 
@@ -345,23 +345,172 @@ class Expediente extends CI_Controller {
 				<tr>
 					<td align='right'>
 					<p style='font-size: 18px;'><small>N&uacute;mero de caso:</small> <b>$expediente->numerocaso_expedienteci</b><br></p>
-					<b>Fecha y hora de creaci&oacute;n del expediente:</b> ".date("d-M-Y g:i:s A", strtotime($expediente->fechacrea_expedienteci))."</td>
+					<b>Fecha y hora de creaci&oacute;n del expediente:</b> ".date("d-M-Y h:i:s A", strtotime($expediente->fechacrea_expedienteci))."</td>
 				</tr>
 		</tbody></table><br>";
 
-		$html .= "<table width='100%' style='border: 1px solid black;'><tbody>
-				<tr>
-					<td>
-						<b>N&uacute;mero de DUI: </b>$expediente->dui_personaci</td>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<b>Nombre de la persona solicitante: </b>$expediente->nombre_personaci $expediente->apellido_personaci</td>
-					</td>
-				</tr>
+		$html .= "
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td align='center'><span style='font-weight: bold; font-size: 14px;'>Información de la persona solicitante</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td colspan='3'>
+							<b>N&uacute;mero de DUI: </b>$expediente->dui_personaci
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Nombre de la persona solicitante: </b>$expediente->nombre_personaci $expediente->apellido_personaci
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Teléfono: </b>$expediente->telefono_personaci
+						</td>
+						
+						<td>
+							<b>Fecha de nacimiento: </b>".fecha_ESP($expediente->fnacimiento_personaci)."
+						</td>
+						<td>
+							<b>Posee discapacidad: </b>".(($expediente->discapacidad_personaci) ? "SI" : "NO")."
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Sexo: </b>".(($expediente->sexo_personaci == "M") ? "Hombre" : "Mujer")."
+						</td>
+						<td>
+							<b>Nacionalidad: </b>$expediente->nacionalidad
+						</td>
+						<td>
+							<b>Municipio: </b>$expediente->municipio
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Dirección: </b>$expediente->direccion_personaci
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Estudios realizados: </b>$expediente->estudios_personaci
+						</td>
+					</tr>
+				</tbody>
+			</table><br>";
 
-		</tbody></table>";
+		$html .= "
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td align='center'><span style='font-weight: bold; font-size: 14px;'>Información de la persona solicitada</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td colspan='3'>
+							<b>N&uacute;mero de Inscripci&oacute;n de empresa: </b>$expediente->numinscripcion_empresa
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Nombre de la empresa: </b>$empresa->nombre_empresa
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Actividad: </b>$empresa->actividad_catalogociiu
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Dirección: </b>$empresa->direccion_empresa
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Municipio: </b>$empresa->municipio
+						</td>
+						<td>
+							<b>Teléfono: </b>$empresa->telefono_empresa
+						</td>
+						
+						<td>
+							<b>Persona representante: </b>$empresa->nombres_representante
+						</td>
+					</tr>
+				</tbody>
+			</table><br>";
+
+		$html .= "
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td align='center'><span style='font-weight: bold; font-size: 14px;'>Información de la solicitud</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td colspan='1'>
+							<b>Fecha del conflicto: </b>".fecha_ESP($expediente->fechaconflicto_personaci)."
+						</td>
+						<td colspan='2'>
+							<b>Persona delegada asignada: </b>$expediente->nombre_delegado_actual
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Motivo de la solicitud: </b>".(($expediente->motivo_expedienteci==1) ? "Despido de hecho o injustificado" : "Conflictos laborales")."
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Descripción del motivo: </b>$expediente->descripmotivo_expedienteci
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Ocupación: </b>$expediente->ocupacion
+						</td>
+						<td>
+							<b>Funciones laborales: </b>$expediente->funciones_personaci
+						</td>
+						
+						<td>
+							<b>Salario: </b>$ $expediente->salario_personaci
+						</td>
+					</tr>
+					<tr>
+						<td colspan='2'>
+							<b>Horario: </b>$expediente->horarios_personaci
+						</td>
+						<td>
+							<b>Forma de pago: </b>$expediente->formapago_personaci
+						</td>
+					</tr>
+					<tr>
+						<td colspan='2'>
+							<b>Nombre de la jefatura: </b>$expediente->nombre_empleador $expediente->apellido_empleador
+						</td>
+						<td>
+							<b>Cargo de jefatura: </b>$expediente->cargo_empleador
+						</td>
+					</tr>
+				</tbody>
+			</table>";
 
 		$titles = array(
 				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',

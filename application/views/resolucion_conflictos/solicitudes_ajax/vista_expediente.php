@@ -38,7 +38,7 @@
                       Fecha y Hora de Creaci&oacute;n del expediente:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= date("d-M-Y g:i:s A", strtotime($expediente->fechacrea_expedienteci)) ?></h5>
+                          <h5><?= date("d-M-Y h:i:s A", strtotime($expediente->fechacrea_expedienteci)) ?></h5>
                     </div>
                   </div>
                 </tbody>
@@ -85,7 +85,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Tel&eacute;fono:
+                      Municipio:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->municipio ?></h5>
@@ -104,7 +104,7 @@
                       Fecha de nacimiento:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->fnacimiento_personaci ?></h5>
+                          <h5><?= fecha_ESP($expediente->fnacimiento_personaci) ?></h5>
                     </div>
                   </div>
                   <div class="row">
@@ -233,7 +233,7 @@
                       Fecha del conflicto:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->fechaconflicto_personaci ?></h5>
+                          <h5><?= fecha_ESP($expediente->fechaconflicto_personaci) ?></h5>
                     </div>
                   </div>
                   <div class="row">
