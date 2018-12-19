@@ -129,6 +129,17 @@ class Expedientes_model extends CI_Model {
 		}
 	}
 
+	public function obtener_empresa($id) {
+		$this->db->select(' ')->from('sge_empresa e')->where('e.id_empresa', $id);
+		$query=$this->db->get();
+		if ($query->num_rows() > 0) {
+				return $query->row();
+		}
+		else {
+				return FALSE;
+		}
+	}
+
 	public function editar_expediente($data){
 		$this->db->where("id_expedienteci",$data["id_expedienteci"]);
 		if ($this->db->update('sct_expedienteci', $data)) {

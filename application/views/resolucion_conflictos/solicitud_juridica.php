@@ -175,6 +175,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 document.getElementById("cnt_tabla_representantes").innerHTML=xmlhttpB.responseText;
                 $('[data-toggle="tooltip"]').tooltip();
                 $('#myTable2').DataTable();
+                if(id_empresa != ""){
+                    verificar_empresa_completa(id_empresa);
+                }
             }
         }
         xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
@@ -365,8 +368,17 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function cerrar_combo_establecimiento() {
-        var select2 = $('.select2-search__field').val();
-        $("#nombre_empresa").val(select2);
+        $("#id_empresa").val('');
+        $("#tiposolicitud_empresa").val('');
+        $("#razon_social").val('');
+        $("#nombre_empresa").val('');
+        $("#abreviatura_empresa").val('');
+        $("#direccion_empresa").val('');
+        $("#telefono_empresa").val('');
+        $("#id_municipio").val('').trigger('change.select2');
+        $("#id_catalogociiu").val('').trigger('change.select2');
+        $("#band").val('save');
+        $("#alert_empresa").html('');
         $("#establecimiento").select2('close');
     }
 
@@ -863,6 +875,43 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     }
 
+    function verificar_empresa_completa(id_empresa) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/verificar_empresa_completa",
+            type: "POST",
+            data: {
+                id_empresa: id_empresa
+            }
+        })
+        .done(function (res) {
+            if(res != "completo"){
+                result = JSON.parse(res);
+                $("#id_empresa").val(result.id_empresa);
+                $("#tiposolicitud_empresa").val(result.tiposolicitud_empresa);
+                $("#razon_social").val(result.razon_social);
+                $("#nombre_empresa").val(result.nombre_empresa);
+                $("#abreviatura_empresa").val(result.abreviatura_empresa);
+                $("#direccion_empresa").val(result.direccion_empresa);
+                $("#telefono_empresa").val(result.telefono_empresa);
+                $("#id_municipio").val(result.id_municipio).trigger('change.select2');
+                $("#id_catalogociiu").val(result.id_catalogociiu).trigger('change.select2');
+                $("#band").val('edit');
+
+                $("#modal_establecimiento").modal('show');
+                $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, complete la información de la empresa</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
+            }else{
+                $("#alert_empresa").html('');
+                $.toast({ heading: 'DATOS COMPLETOS', text: 'Los datos de la empresa están completos', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+            }
+        });
+    }
+
+    function limpiar_modal_empresa(){
+        $("#modal_establecimiento").modal('hide');
+        $("#establecimiento").val('').trigger('change.select2');
+    }
+
+
 </script>
 <input type="hidden" id="id_empresaci" name="id_empresaci">
 <input type="hidden" id="address" name="">
@@ -1265,7 +1314,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </div>
 <!--FIN MODAL REPRESENTANTE EMPRESA -->
 
-<div class="modal fade" id="modal_establecimiento" role="dialog">
+<div class="modal fade" id="modal_establecimiento" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
     <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
@@ -1275,6 +1324,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <h4 class="modal-title">Gestión de empresas</h4>
             </div>
             <div class="modal-body" id="">
+                <div id="alert_empresa"></div>
                 <div class="row">
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Tipo de inscripción: <span class="text-danger">*</span></h5>
@@ -1353,7 +1403,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger waves-effect text-white" onclick="limpiar_modal_empresa();">Cerrar</button>
                 <button type="submit" class="btn btn-info waves-effect text-white">Aceptar</button>
             </div>
           <?php echo form_close(); ?>
@@ -1557,6 +1607,7 @@ $(function(){
                     combo_establecimiento(res[1]);
                 }else if($("#band").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                    $("#modal_establecimiento").modal('hide');
                     tabla_representantes();
                 }
             }else{

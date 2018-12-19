@@ -94,6 +94,7 @@ class Solicitud_juridica extends CI_Controller {
       		echo $this->solicitud_juridica_model->insertar_establecimiento($data);
 		}else if($this->input->post('band') == "edit"){
       		$data = array(
+      		'id_empresa' => $this->input->post('id_empresa'),
       		'tiposolicitud_empresa' => ($this->input->post('tiposolicitud_empresa')),
 			'razon_social' => mb_strtoupper($this->input->post('razon_social')),
 			'abreviatura_empresa' => mb_strtoupper($this->input->post('abreviatura_empresa')),

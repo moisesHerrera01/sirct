@@ -107,6 +107,15 @@ class Solicitud_juridica_model extends CI_Model {
 		}
 	}
 
+	public function editar_establecimiento($data){
+		$this->db->where("id_empresa",$data["id_empresa"]);
+		if ($this->db->update('sge_empresa', $data)) {
+			return "exito";//return $data['id_partida'];
+		}else {
+			return "fracaso";
+		}
+	}
+
 	// function insertar_representante($data){
 	// 	if($this->db->insert('sge_representante', array(
 	// 		'id_empresa' => $data['id_empresa'],
