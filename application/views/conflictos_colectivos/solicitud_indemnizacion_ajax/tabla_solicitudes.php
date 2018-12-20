@@ -37,6 +37,7 @@
                                         e.resultado_expedienteci AS resultado,
                                         e.fechacrea_expedienteci AS fecha,
                                         e.id_expedienteci,
+                                        d.delegado_actual,
                                         es.id_estadosci AS estado,
                                         (select count(*) from sct_fechasaudienciasci where id_expedienteci = e.id_expedienteci ) audiencias,
                                         (SELECT r.resultadoci
@@ -52,7 +53,15 @@
                                         FROM sct_estadosci AS es
                                         JOIN sct_expedienteci AS e ON es.id_estadosci = e.id_estadosci
                                         JOIN sge_empresa ep ON ep.id_empresa=e.id_empresaci
-                                        JOIN sir_empleado l ON l.id_empleado=e.id_personal
+                                        JOIN (
+                                              SELECT de.id_expedienteci,de.id_personal delegado_actual
+                                              FROM sct_delegado_exp de
+                                              WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+                                                                          FROM sct_delegado_exp de2
+                                                                          WHERE de2.id_expedienteci=de.id_expedienteci
+                                                                         )
+                                            ) d ON d.id_expedienteci=e.id_expedienteci
+                                        JOIN sir_empleado l ON l.id_empleado=d.delegado_actual
                                         ".$add." AND e.tiposolicitud_expedienteci = '5' ORDER BY e.id_expedienteci DESC");
 
             if($solicitudes->num_rows() > 0){
@@ -100,8 +109,9 @@
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci?>)">Visualizar</a>
                                     <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_expedienteci?>,<?=$fila->id_empresaci?>)">Gestionar audiencias</a>
-                                    <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci?>)">Cambiar delegado/a</a> -->
-                                    <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->estado?>)">Cambiar estado</a>
+                                    <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado/a</a>
+                                    <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci?>)">Cambios de delegados/as</a>
+                                    <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->estado?>)">Cambiar estado</a> -->
                                     <?php if ($fila->personas > 0 ) { ?>
                                         <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_ficha_indemnizacion/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
                                     <?php }?>

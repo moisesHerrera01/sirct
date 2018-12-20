@@ -86,7 +86,7 @@ function agregar(){
         <div class="card">
           <div class="card-header bg-success2" id="ttl_form">
             <div class="card-actions text-white">
-              <a style="font-size: 16px;" onclick="cerrar_mantenimiento();">
+              <a style="font-size: 16px;" onclick="finalizar();">
                 <i class="mdi mdi-window-close"></i>
               </a>
             </div>
@@ -237,6 +237,20 @@ function eliminar_audiencia(){
      }
    }
  }
+
+ // function cerrar(){
+ //   if (true) {
+ //
+ //   }
+ //   $("#ocultar_div").hide();
+ //   $("#cnt_tabla").show(0);
+ //   $("#cnt_tabla_solicitudes").show(0);
+ //   $("#cnt_form_main").hide(0);
+ //   $("#cnt_actions").hide(0);
+ //   $("#cnt_actions").remove('.card');
+ //   open_form(1);
+ //   tablasolicitudes();
+ // }
 
  function cambiar(){
    $("#ttl_form").addClass("bg-success");
