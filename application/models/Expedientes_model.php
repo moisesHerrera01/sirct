@@ -65,7 +65,7 @@ class Expedientes_model extends CI_Model {
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
 						 ->join('org_municipio mu','mu.id_municipio=em.id_municipio')
 						 ->join('sge_catalogociiu c','c.id_catalogociiu=em.id_catalogociiu')
-						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci','re.tipo_representante=1')
+						 ->join('sge_representante r ', ' r.id_empresa = e.id_empresaci AND re.tipo_representante=1','left')
 						 ->join('sge_representante re ', ' re.id_representante = f.id_representaci','left')
 						 ->join('org_municipio mur','mur.id_municipio = r.id_municipio')
 						 ->join('sir_estado_civil ec','ec.id_estado_civil=r.id_estado_civil')
@@ -118,7 +118,7 @@ class Expedientes_model extends CI_Model {
 						->from('sge_empresa e')
 						->join('org_municipio m', ' m.id_municipio = e.id_municipio')
 						->join('sge_catalogociiu cat','cat.id_catalogociiu=e.id_catalogociiu', 'left')
-						->join('sge_representante r','r.id_empresa=e.id_empresa')
+						->join('sge_representante r','r.id_empresa=e.id_empresa','left')
 						->where('e.id_empresa', $id);
 		$query=$this->db->get();
 		if ($query->num_rows() > 0) {
