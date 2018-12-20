@@ -702,8 +702,8 @@ function combo_municipio2(seleccion){
 
 }
 
-function combo_delegado(seleccion,tipo=false){
-
+function combo_delegado(seleccion,tipo){
+  tipo=tipo || false
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado",
     type: "post",
@@ -1300,9 +1300,7 @@ function volver(num) {
                                       </select>
                                     </div>
                                 </div>
-
                             </div>
-
 
                             <div id="partida_div" style="display: none;">
                               <div class="row">
@@ -1381,8 +1379,8 @@ function volver(num) {
                         </div>
                         <div class="row">
                           <div class="form-group col-lg-8" style="height: 83px;">
-                              <h5>Dirección:</h5>
-                              <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
+                              <h5>Dirección: <span class="text-danger">*</span></h5>
+                              <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa" required></textarea>
                               <div class="help-block"></div>
                           </div>
 
@@ -1605,7 +1603,7 @@ function volver(num) {
 
                                 <div class="row">
                                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                      <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
+                                      <h5>Motivo de la solicitud: <span class="text-danger">*</span></span></h5>
                                       <div class="controls">
                                           <select id="motivo" name="motivo" class="custom-select" required style="width: 100%">
                                             <option value="">[Seleccione el motivo]</option>
@@ -1618,7 +1616,7 @@ function volver(num) {
 
 
                                   <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Descripción del motivo:<span class="text-danger">*</h5>
+                                      <h5>Descripción del motivo:<span class="text-danger">*</span></h5>
                                       <textarea type="text" id="descripcion_motivo" name="descripcion_motivo" class="form-control" placeholder="Descipción del motivo"></textarea>
                                       <div class="help-block"></div>
                                   </div>
@@ -1626,21 +1624,21 @@ function volver(num) {
 
                                 <div class="row">
                                   <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Ocupación según DUI:<span class="text-danger">*</h5>
+                                      <h5>Ocupación según DUI:<span class="text-danger">*</span></h5>
                                       <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI" required=""></textarea>
                                       <div class="help-block"></div>
                                   </div>
 
                                   <div class="form-group col-lg-4" style="height: 83px;">
-                                      <h5>Salario($):<span class="text-danger">*</h5>
-                                      <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01">
+                                      <h5>Salario($):<span class="text-danger">*</span></h5>
+                                      <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01" min="1">
                                       <div class="help-block"></div>
                                   </div>
                                 </div>
 
                                 <div class="row">
                                   <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Funciones:<span class="text-danger">*</h5>
+                                      <h5>Funciones:<span class="text-danger">*</span></h5>
                                       <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones laborales" required=""></textarea>
                                       <div class="help-block"></div>
                                   </div>
@@ -1662,7 +1660,7 @@ function volver(num) {
 
                                 <div class="row">
                                   <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Horario laboral:<span class="text-danger">*</h5>
+                                      <h5>Horario laboral:</h5>
                                       <textarea type="text" id="horario" name="horario" class="form-control" placeholder="Horario laboral"></textarea>
                                       <div class="help-block"></div>
                                   </div>
@@ -1815,25 +1813,25 @@ function volver(num) {
                 </div>
 
                 <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Persona solicitada :</h5>
+                    <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control">
+                        <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required>
                     </div>
                 </div>
               </div>
 
                 <div class="row" id="ocultar_pn">
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Razon social del establecimiento:</h5>
+                      <h5>Raz&oacute;n social de la parte empleadora:</h5>
                       <div class="controls">
-                          <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control" required="">
+                          <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control">
                       </div>
                   </div>
 
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Abreviatura del establecimiento: <span class="text-danger">*</span></h5>
+                      <h5>Abreviatura de la parte empleadora:</h5>
                       <div class="controls">
-                          <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control" required>
+                          <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control">
                       </div>
                   </div>
                 </div>
@@ -1853,7 +1851,7 @@ function volver(num) {
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
                       <h5>Telefono: </h5>
                       <div class="controls">
-                          <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento" class="form-control" data-mask="9999-9999" required>
+                          <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento" class="form-control" data-mask="9999-9999">
                           <div class="help-block"></div>
                       </div>
                   </div>
@@ -1882,7 +1880,7 @@ function volver(num) {
           <input type="hidden" id="id_procuradorci" name="id_procuradorci" value="">
           <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de personas defensores legales</h4>
+                <h4 class="modal-title">Gestión de personas defensoras legales</h4>
             </div>
             <div class="modal-body" id="">
               <div class="row">
@@ -1910,9 +1908,9 @@ function volver(num) {
                 </div>
 
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Tel&eacute;fono la persona: <span class="text-danger">*</span></h5>
+                    <h5>Tel&eacute;fono la persona: </h5>
                     <div class="controls">
-                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono de la persona representante" required>
+                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono de la persona representante">
                     </div>
                 </div>
               </div>
@@ -2199,7 +2197,7 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax"));
         formData.append("dato", "valor");
-
+        
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_solicitudes",
             type: "post",
@@ -2213,7 +2211,7 @@ $(function(){
             if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
-              if (formData.get('posee_representante') == 1) {
+              if ($("input[name='posee_representante']:checked").val() == 1) {
                 open_form(3);
               }else {
                 open_form(4);

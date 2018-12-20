@@ -116,19 +116,25 @@ class Solicitud_juridica_model extends CI_Model {
 		}
 	}
 
-	// function insertar_representante($data){
-	// 	if($this->db->insert('sge_representante', array(
-	// 		'id_empresa' => $data['id_empresa'],
-	// 		'nombres_representante' => $data['nombres_representante'],
-	// 		'dui_representante' => $data['dui_representante'],
-	// 		'acreditacion_representante' => $data['acreditacion_representante'],
-	// 		'tipo_representante' => $data['tipo_representante']
-	// 	))){
-	// 		return "exito";
-	// 	}else{
-	// 		return "fracaso";
-	// 	}
-	// }
+	function upgrade_establecimiento($data){
+		if($this->db->query("INSERT INTO sge_empresa_actualizacion (
+				id_empresa, numinscripcion_empresa, id_oficina, id_municipio, id_catalogociiu, nombre_empresa,
+				abreviatura_empresa, nit_empresa, telefono_empresa, direccion_empresa, correoelectronico_empresa,
+				activobalance_empresa, capitalsocial_empresa, trabajadores_adomicilio_empresa, tipo_empresa,
+				archivo_empresa, tiposolicitud_empresa, fechacrea_empresa, fechamodf_empresa, numtotal_empresa,
+				numinscripanterior_empresa, actualizada_empresa, razon_social
+			) SELECT
+				id_empresa, numinscripcion_empresa, id_oficina, id_municipio, id_catalogociiu, nombre_empresa,
+				abreviatura_empresa, nit_empresa, telefono_empresa, direccion_empresa, correoelectronico_empresa,
+				activobalance_empresa, capitalsocial_empresa, trabajadores_adomicilio_empresa, tipo_empresa,
+				archivo_empresa, tiposolicitud_empresa, fechacrea_empresa, fechamodf_empresa, numtotal_empresa,
+				numinscripanterior_empresa, actualizada_empresa, razon_social
+			FROM sge_empresa WHERE id_empresa = '".$data["id_empresa"]."'")){
+			return $this->editar_establecimiento($data);
+		}else{
+			return "fracaso";
+		}
+	}
 
 	function insertar_representante($data){
 		if ($this->db->insert('sge_representante',$data)) {
