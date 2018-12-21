@@ -314,10 +314,17 @@ class Acta extends CI_Controller {
           $anio_conflicto = anio(date('Y', strtotime($expediente->fechaconflicto_personaci)));
 
           if ($expediente->tiposolicitud_empresa==2) {
-            $tipo_empresa="";
-            $tipo_empresa = " y DICE: Que laboraba para la Sociedad $expediente->nombre_empresa que puede abreviarse $expediente->abreviatura_empresa, ubicada en $expediente->direccion_empresa, DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
+            if ($expediente->motivo_expedienteci==1) {
+              $tipo_empresa = " quien laboraba para la Sociedad $expediente->nombre_empresa que puede abreviarse $expediente->abreviatura_empresa, ubicada en $expediente->direccion_empresa, DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto, en que fue despedido(a) de su trabajo sin que hasta la fecha se le haya pagado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que, ";
+            }else {
+              $tipo_empresa = " y DICE: Que laboraba para la Sociedad $expediente->nombre_empresa que puede abreviarse $expediente->abreviatura_empresa, ubicada en $expediente->direccion_empresa, DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
+            }
           }else {
-            $tipo_empresa = "quien laboraba para el señor $expediente->nombre_empresa, que puede ser ubicado en: $expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto, en que fue despedido(a) de su trabajo sin que hasta la fecha se le cancelado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que";
+            if ($expediente->motivo_expedienteci==1) {
+              $tipo_empresa = "quien laboraba para el señor $expediente->nombre_empresa, que puede ser ubicado en: $expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto, en que fue despedido(a) de su trabajo sin que hasta la fecha se le cancelado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que";
+            }else {
+              $tipo_empresa = "y DICE Que laboraba para el señor $expediente->nombre_empresa, que puede ser ubicado en: $expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
+            }
           }
           $templateWord->setValue('direccion_empresa', mb_strtoupper($expediente->direccion_empresa));
           $templateWord->setValue('direccion_solicitante', mb_strtoupper($expediente->direccion_personaci));

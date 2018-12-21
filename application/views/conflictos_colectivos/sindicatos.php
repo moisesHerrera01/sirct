@@ -130,7 +130,7 @@ function combo_representante_empresa(seleccion){
   .done(function(res){
     $('#div_combo_representante_empresa').html(res);
     $("#representante_empresa").select2({
-        
+
         'language': {
             noResults: function () {
                 return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
@@ -183,7 +183,7 @@ function combo_defensores(seleccion){
     .done(function(res){
         $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
             $("#defensor").select2({
-                
+
                 'language': {
                     noResults: function () {
                         return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
@@ -214,7 +214,7 @@ function cambiar_delegado() {
       }
     })
     .done(function (res) {
-      if(res == "exito"){
+      if(res != "fracaso"){
         cerrar_mantenimiento()
         tablasolicitudes();
         swal({ title: "¡Delegado/a modificado exitosamente!", type: "success", showConfirmButton: true });
@@ -311,10 +311,55 @@ function cambiar_estado() {
     });
 }
 
-function modal_delegado(id_expedienteci, id_personal) {
+function modal_delegado(id_expedienteci,id_personal) {
     $("#id_expedienteci_copia").val(id_expedienteci);
-    $("#id_personal_copia").val(id_personal).trigger('change.select2');
     $("#modal_delegado").modal("show");
+    combo_cambiar_delegado(id_personal);
+}
+
+function tabla_delegados(id_expedienteci){
+    if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttpB=new XMLHttpRequest();
+    }else{// code for IE6, IE5
+        xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+    }
+    xmlhttpB.onreadystatechange=function(){
+        if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+            document.getElementById("cnt_tabla_delegados").innerHTML=xmlhttpB.responseText;
+            //$('[data-toggle="tooltip"]').tooltip();
+            $('#myTable').DataTable();
+        }
+    }
+    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/expediente/tabla_delegados?id="+id_expedienteci,true);
+    xmlhttpB.send();
+}
+
+function modal_bitacora_delegados(id_expedienteci) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/bitacora_delegados",
+    type: "post",
+    dataType: "html",
+    data: {id : id_expedienteci}
+  })
+  .done(function(res){
+    $('#cnt_modal_bitacora_delegado').html(res);
+    $('#modal_bitacora_delegados').modal('show');
+    tabla_delegados(id_expedienteci);
+  });
+}
+
+function combo_cambiar_delegado(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_cambiar_delegado",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_cambiar_delegado').html(res);
+    $("#id_personal_copia").select2();
+  });
 }
 
 function resolucion(id_expedienteci) {
@@ -469,7 +514,7 @@ function combo_establecimiento(seleccion){
   .done(function(res){
     $('#div_combo_establecimiento').html(res);
     $("#establecimiento").select2({
-      
+
       'language': {
         noResults: function () {
           return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
@@ -1027,7 +1072,7 @@ function volver(num) {
                     </div>
                 </div>
             </div>
-
+            <div id="cnt_modal_bitacora_delegado"></div>
         </div>
         <!-- ============================================================== -->
         <!-- Fin CUERPO DE LA SECCIÓN -->
@@ -1278,7 +1323,8 @@ function volver(num) {
       <div class="modal-body" id="">
           <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
           <div class="row">
-            <div class="form-group col-lg-12 col-sm-12">
+            <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_cambiar_delegado"></div>
+            <!-- <div class="form-group col-lg-12 col-sm-12">
                 <div class="form-group">
                     <h5>Delegado/a:<span class="text-danger">*</h5>
                     <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%" required="">
@@ -1298,7 +1344,7 @@ function volver(num) {
                     ?>
                     </select>
                 </div>
-            </div>
+            </div> -->
           </div>
           <div align="right">
             <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>

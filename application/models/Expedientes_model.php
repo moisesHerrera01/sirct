@@ -82,17 +82,17 @@ class Expedientes_model extends CI_Model {
 					 						 ->join('sir_estado_civil ec','ec.id_estado_civil=r.id_estado_civil','left')
 					 						 ->join('sir_titulo_academico ta','ta.id_titulo_academico=r.id_titulo_academico','left')
 					 						 ->join('sct_tipo_representante tr','tr.id_tipo_representante=r.tipo_representante','left')
-						 ->join("(
-									 SELECT de.id_expedienteci,de.id_personal delegado_actual,
-									 CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
-									 FROM sct_delegado_exp de
-									 JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
-									 WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
-																							 FROM sct_delegado_exp de2
-																							 WHERE de2.id_expedienteci=de.id_expedienteci
-																							)
-								 ) d" , "d.id_expedienteci=e.id_expedienteci")
-						 ->where('e.id_expedienteci', $id_expedienteci);
+											 ->join("(
+														 SELECT de.id_expedienteci,de.id_personal delegado_actual,
+														 CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
+														 FROM sct_delegado_exp de
+														 JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
+														 WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																												 FROM sct_delegado_exp de2
+																												 WHERE de2.id_expedienteci=de.id_expedienteci
+																												)
+													 ) d" , "d.id_expedienteci=e.id_expedienteci")
+						 					 ->where('e.id_expedienteci', $id_expedienteci);
 		 	if ($id_audiencia) {
 		 		$this->db->where('f.id_fechasaudienciasci',$id_audiencia);
 		 	}

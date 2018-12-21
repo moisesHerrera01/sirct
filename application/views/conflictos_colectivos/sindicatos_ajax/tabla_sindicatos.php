@@ -19,7 +19,7 @@
                             echo "<td>".$fila->numerocaso_expedienteci."</td>";
                             echo "<td>".$fila->nombre_sindicato."</td>";
                             echo "<td>".$fila->nombre_empresa."</td>";
-                            echo "<td>".$fila->delegado."</td>";
+                            echo "<td>".$fila->nombre_delegado_actual."</td>";
                             if ($fila->resultado_expedienteci==NULL) {
                               $fila->resultado_expedienteci="Sin Intervenir";
                             }
@@ -58,7 +58,8 @@
                                       <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci.','.$fila->id_empresa?>)">Visualizar</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_empresa.','.$fila->id_expedienteci.',2'?>)">Gestionar audiencias</a>
                                       <!-- <a class="dropdown-item" href="javascript:;" onClick="pagos(<?=$fila->id_expedienteci?>)">Gestionar pagos</a> -->
-                                      <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->id_personal?>)">Cambiar delegado/a</a> -->
+                                      <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado/a</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci?>)">Cambios de delegados/as</a>
                                       <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
                                       <?php if (((integer)$fila->cuenta)>=2) {?>
                                       <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_solicitud/'.$fila->id_expedienteci.'/')?>" >Emitir Acta</a>

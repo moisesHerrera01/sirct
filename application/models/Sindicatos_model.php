@@ -25,7 +25,9 @@ class Sindicatos_model extends CI_Model {
 
 	public function obtener_expedientes_sindicatos($nr,$estado){
 		$this->db->select(
-											's.id_sindicato,
+											'd.delegado_actual,
+											 d.nombre_delegado_actual,
+											 s.id_sindicato,
 											 ex.id_expedienteci,
 											 em.id_empresa,
 											 ex.id_personal,
@@ -50,7 +52,17 @@ class Sindicatos_model extends CI_Model {
 						 ->join('sct_expedienteci ex','ex.id_personal=e.id_empleado')
 						 ->join('sge_sindicato s','s.id_expedientecc=ex.id_expedienteci')
 						 ->join('sge_empresa em','em.id_empresa=ex.id_empresaci')
-						 ->join('sct_estadosci es','es.id_estadosci=ex.id_estadosci');
+						 ->join('sct_estadosci es','es.id_estadosci=ex.id_estadosci')
+						 ->join("(
+									SELECT de.id_expedienteci,de.id_personal delegado_actual,
+									CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
+									FROM sct_delegado_exp de
+									JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
+									WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																							FROM sct_delegado_exp de2
+																							WHERE de2.id_expedienteci=de.id_expedienteci
+																						 )
+								) d" , "d.id_expedienteci=ex.id_expedienteci");
 		if ($nr) {
 			$this->db->where('e.nr',$nr);
 		}if ($estado) {

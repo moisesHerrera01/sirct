@@ -183,7 +183,7 @@
                       Persona delegada asignada:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->delegado ?></h5>
+                          <h5><?= $expediente->nombre_delegado_actual ?></h5>
                     </div>
                   </div>
                 </tbody>

@@ -75,7 +75,8 @@ class Expediente_cc_model extends CI_Model {
                          CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido,em.apellido_casada) delegado,
                          mu.id_municipio municipio_empresa,
                          cat.id_catalogociiu,
-                         e.causa_expedienteci'
+                         e.causa_expedienteci,
+                         d.nombre_delegado_actual'
                        )
                ->from('sct_expedienteci e')
                ->join('sge_empresa es','es.id_empresa=e.id_empresaci')
@@ -84,6 +85,16 @@ class Expediente_cc_model extends CI_Model {
                ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci')
                ->join('org_municipio m','m.id_municipio=s.id_municipio')
                ->join('sir_empleado em','em.id_empleado=e.id_personal')
+               ->join("(
+                    SELECT de.id_expedienteci,de.id_personal delegado_actual,
+                    CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
+                    FROM sct_delegado_exp de
+                    JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
+                    WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+                                                FROM sct_delegado_exp de2
+                                                WHERE de2.id_expedienteci=de.id_expedienteci
+                                               )
+                  ) d" , "d.id_expedienteci=e.id_expedienteci")
                ->where('e.id_expedienteci',$id_expedienteci);
       $query = $this->db->get();
       if ($query->num_rows() > 0) {
@@ -118,7 +129,8 @@ class Expediente_cc_model extends CI_Model {
                   h.salario_personaci salario_solicitante,
                   h.formapago_personaci formapago_solicitante,
                   h.funciones_personaci funciones_solicitante,
-                  h.horarios_personaci horarios_solicitante
+                  h.horarios_personaci horarios_solicitante,
+                  d.nombre_delegado_actual
               ')
                ->from('sct_expedienteci a')
                ->join('sct_personaci b', 'a.id_personaci = b.id_personaci', 'left')
@@ -128,6 +140,16 @@ class Expediente_cc_model extends CI_Model {
                ->join('sge_representante f', 'c.id_empresa = f.id_empresa', 'left')
                ->join('sir_empleado g','g.id_empleado = a.id_personal')
                ->join('sct_personaci h', 'a.id_expedienteci = h.id_expedienteci')
+               ->join("(
+                    SELECT de.id_expedienteci,de.id_personal delegado_actual,
+                    CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
+                    FROM sct_delegado_exp de
+                    JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
+                    WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+                                                FROM sct_delegado_exp de2
+                                                WHERE de2.id_expedienteci=de.id_expedienteci
+                                               )
+                  ) d" , "d.id_expedienteci=a.id_expedienteci")
                ->where("a.id_expedienteci", $id)
                ->limit(1)
                ->order_by('h.id_personaci', 'DESC');
