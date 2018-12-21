@@ -540,7 +540,7 @@ class Expediente extends CI_Controller {
 	public function verificar_empresa_completa() {
 		$empresa = $this->expedientes_model->obtener_empresa($this->input->post('id_empresa'));
 
-		if( empty($empresa->tiposolicitud_empresa) || empty($empresa->razon_social) || empty($empresa->nombre_empresa) || empty($empresa->abreviatura_empresa) || empty($empresa->direccion_empresa) || empty($empresa->id_municipio) || empty($empresa->id_catalogociiu) ){
+		if( empty($empresa->tiposolicitud_empresa) || empty($empresa->nombre_empresa) || empty($empresa->abreviatura_empresa) || empty($empresa->direccion_empresa) || empty($empresa->id_municipio) || empty($empresa->id_catalogociiu) ){
 			print json_encode( $empresa );
 		}else{
 			echo "completo";

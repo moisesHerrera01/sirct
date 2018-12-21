@@ -43,19 +43,31 @@ class Establecimiento extends CI_Controller {
 
 	public function gestionar_establecimiento() {
 		if($this->input->post('band3') == "save"){
-
 			$data = array(
                 'numinscripcion_empresa' => '1-2018 SS',
-                'nombre_empresa' => $this->input->post('nombre_establecimiento'),
-								'razon_social' => $this->input->post('razon_social'),
-                'abreviatura_empresa' => $this->input->post('abre_establecimiento'),
-                'direccion_empresa'  => $this->input->post('dir_establecimiento'),
+                'nombre_empresa' => mb_strtoupper($this->input->post('nombre_establecimiento')),
+				'razon_social' => mb_strtoupper($this->input->post('razon_social')),
+                'abreviatura_empresa' => mb_strtoupper($this->input->post('abre_establecimiento')),
+                'direccion_empresa'  => mb_strtoupper($this->input->post('dir_establecimiento')),
                 'telefono_empresa' => $this->input->post('telefono_establecimiento'),
                 'id_catalogociiu' => $this->input->post('act_economica'),
                 'id_municipio' => $this->input->post('municipio2'),
-								'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
+				'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
             );
 			echo $this->establecimiento_model->insertar_establecimiento($data);
+		}else if($this->input->post('band3') == "edit"){
+      		$data = array(
+	      		'id_empresa' => $this->input->post('id_empresaci'),
+	      		'nombre_empresa' => mb_strtoupper($this->input->post('nombre_establecimiento')),
+				'razon_social' => mb_strtoupper($this->input->post('razon_social')),
+                'abreviatura_empresa' => mb_strtoupper($this->input->post('abre_establecimiento')),
+                'direccion_empresa'  => mb_strtoupper($this->input->post('dir_establecimiento')),
+                'telefono_empresa' => $this->input->post('telefono_establecimiento'),
+                'id_catalogociiu' => $this->input->post('act_economica'),
+                'id_municipio' => $this->input->post('municipio2'),
+				'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
+			);
+			echo $this->establecimiento_model->upgrade_establecimiento($data);
 		}
 	}
 

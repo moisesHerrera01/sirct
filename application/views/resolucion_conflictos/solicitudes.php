@@ -143,7 +143,7 @@ function cambiar_update_post(id_personaci,bandera){
       $("#dui").val(result.dui_personaci);
       $("#telefono").val(result.telefono_personaci);
       $("#telefono2").val(result.telefono2_personaci);
-      $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
+      $("#municipio").val(result.id_municipio).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
       $("#fecha_nacimiento").datepicker("setDate", result.fnacimiento_personaci);
       $("#estudios").val(result.estudios_personaci);
@@ -503,10 +503,58 @@ function cambiar_eliminar3(estado){
 }*/
 
 function cerrar_combo_establecimiento() {
-    var select2 = $('.select2-search__field').val();
-    $("#nombre_establecimiento").val(select2);
+    //var select2 = $('.select2-search__field').val();
+    //$("#nombre_establecimiento").val(select2);
+    
+    $("#id_empresaci").val('');
+    $("#tipo_establecimiento").val('');
+    $("#razon_social").val('');
+    $("#nombre_establecimiento").val('');
+    $("#abre_establecimiento").val('');
+    $("#dir_establecimiento").val('');
+    $("#telefono_establecimiento").val('');
+    $("#municipio2").val('').trigger('change.select2');
+    $("#act_economica").val('').trigger('change.select2');
+    $("#band3").val('save');
+    $("#alert_empresa").html('');
     $("#establecimiento").select2('close');
 }
+
+    function verificar_empresa_completa(id_empresa) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/verificar_empresa_completa",
+            type: "POST",
+            data: {
+                id_empresa: id_empresa
+            }
+        })
+        .done(function (res) {
+            if(res != "completo"){
+                result = JSON.parse(res);
+                $("#id_empresaci").val(result.id_empresa);
+                $("#tipo_establecimiento").val(result.tiposolicitud_empresa);
+                $("#razon_social").val(result.razon_social);
+                $("#nombre_establecimiento").val(result.nombre_empresa);
+                $("#abre_establecimiento").val(result.abreviatura_empresa);
+                $("#dir_establecimiento").val(result.direccion_empresa);
+                $("#telefono_establecimiento").val(result.telefono_empresa);
+                $("#municipio2").val(result.id_municipio).trigger('change.select2');
+                $("#act_economica").val(result.id_catalogociiu).trigger('change.select2');
+                $("#band3").val('edit');
+
+                $("#modal_establecimiento").modal('show');
+                $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
+            }else{
+                $("#alert_empresa").html('');
+                $.toast({ heading: 'DATOS COMPLETOS', text: 'Los datos de la parte empleadora están completos', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+            }
+        });
+    }
+
+    function limpiar_modal_empresa(){
+        $("#modal_establecimiento").modal('hide');
+        $("#establecimiento").val('').trigger('change.select2');
+    }
 
 function cerrar_combo_defensores() {
     $("#defensor").select2('close');
@@ -869,6 +917,9 @@ function tabla_representantes(){
             document.getElementById("cnt_tabla_representantes").innerHTML=xmlhttpB.responseText;
             $('[data-toggle="tooltip"]').tooltip();
             $('#myTable2').DataTable();
+            if(id_empresa != ""){
+                  verificar_empresa_completa(id_empresa);
+              }
         }
     }
     xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
@@ -897,8 +948,8 @@ function alertFunc() {
     $('[data-toggle="tooltip"]').tooltip()
 }
 
-function cambiar_nuevo(){
-      open_form(1);
+function cambiar_nuevo() {
+    open_form(1);
     /*Inicio Solicitante*/
     $("#id_personaci").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
@@ -1001,8 +1052,6 @@ function cambiar_nuevo2(){
 
 }
 
-
-
 function cambiar_editar(id_expedienteci,bandera){
   open_form(1);
   if(bandera == "edit"){
@@ -1023,7 +1072,7 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#dui").val(result.dui_personaci);
       $("#telefono").val(result.telefono_personaci);
       $("#telefono2").val(result.telefono2_personaci);
-      $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
+      $("#municipio").val(result.id_municipio).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
       $("#fecha_nacimiento").datepicker("setDate", moment(result.fnacimiento_personaci).format("DD-MM-YYYY"));
       $("#estudios").val(result.estudios_personaci);
@@ -1365,7 +1414,7 @@ function volver(num) {
                                           $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
                                           if($municipio->num_rows() > 0){
                                               foreach ($municipio->result() as $fila2) {
-                                                 echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
+                                                 echo '<option class="m-l-50" value="'.intval($fila2->id_municipio).'">'.$fila2->municipio.'</option>';
                                               }
                                           }
                                       ?>
@@ -1788,7 +1837,7 @@ function volver(num) {
 
 
     <!--INICIA MODAL DE ESTABLECIMIENTOS -->
-  <div class="modal fade" id="modal_establecimiento" role="dialog">
+  <div class="modal fade" id="modal_establecimiento" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
     <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
@@ -1799,7 +1848,7 @@ function volver(num) {
                 <h4 class="modal-title">Gestión de establecimientos</h4>
             </div>
             <div class="modal-body" id="">
-
+              <div id="alert_empresa"></div>
               <div class="row">
                 <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Tipo: <span class="text-danger">*</span></h5>
@@ -1849,7 +1898,7 @@ function volver(num) {
                   <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
 
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Telefono: </h5>
+                      <h5>Tel&eacute;fono: </h5>
                       <div class="controls">
                           <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento" class="form-control" data-mask="9999-9999">
                           <div class="help-block"></div>
@@ -1862,7 +1911,7 @@ function volver(num) {
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger waves-effect text-white" onclick="limpiar_modal_empresa();">Cerrar</button>
                 <button type="submit" id="submit2" class="btn btn-info waves-effect text-white">Aceptar</button>
             </div>
           <?php echo form_close(); ?>
@@ -2361,7 +2410,8 @@ $("#formajax3").on("submit", function(e){
                 combo_establecimiento(res[1]);
             }else if($("#band3").val() == "edit"){
                 swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                tabla_representantes();
+                $("#modal_establecimiento").modal('hide');
+                combo_establecimiento($("#establecimiento").val());
             }
         }else{
             swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });

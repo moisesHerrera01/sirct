@@ -296,7 +296,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#direccion_personaci").val(result.direccion_personaci);
             $("#discapacidad_personaci").val(result.discapacidad_personaci);
             $("#telefono_personaci").val(result.telefono_personaci);
-            $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
+            $("#municipio").val(result.id_municipio).trigger('change.select2');
             $("#causa_expedienteci").val(result.causa_expedienteci).trigger('change.select2');
             $("#salario_personaci").val(result.salario_personaci);
             $("#horarios_personaci").val(result.horarios_personaci);
@@ -341,7 +341,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#direccion_personaci").val(direccion_personaci);
         $("#discapacidad_personaci").val(discapacidad_personaci);
         $("#telefono_personaci").val(telefono_personaci);
-        $("#municipio").val(id_municipio.padStart(5,"00000")).trigger('change.select2');
+        $("#municipio").val(id_municipio).trigger('change.select2');
         $("#causa_expedienteci").val(causa_expedienteci).trigger('change.select2');
         $("#salario_personaci").val(salario_personaci);
         $("#horarios_personaci").val(horarios_personaci);
@@ -898,10 +898,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $("#band").val('edit');
 
                 $("#modal_establecimiento").modal('show');
-                $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, complete la información de la empresa</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
+                $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
             }else{
                 $("#alert_empresa").html('');
-                $.toast({ heading: 'DATOS COMPLETOS', text: 'Los datos de la empresa están completos', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                $.toast({ heading: 'DATOS COMPLETOS', text: 'Los datos de la parte empleadora están completos', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
             }
         });
     }
@@ -1045,7 +1045,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
                                             if($municipio->num_rows() > 0){
                                                 foreach ($municipio->result() as $fila2) {
-                                                   echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
+                                                   echo '<option class="m-l-50" value="'.intval($fila2->id_municipio).'">'.$fila2->municipio.'</option>';
                                                 }
                                             }
                                         ?>
@@ -1321,7 +1321,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="band" name="band" value="save">
           <input type="hidden" id="id_empresa" name="id_empresa" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de empresas</h4>
+                <h4 class="modal-title">Gestión de parte empleadora</h4>
             </div>
             <div class="modal-body" id="">
                 <div id="alert_empresa"></div>
@@ -1342,7 +1342,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
                 <div class="row">
                   <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
+                      <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" placeholder="Nombre" id="nombre_empresa" name="nombre_empresa" class="form-control" required="">
                       </div>
@@ -1364,7 +1364,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
                 <div class="row">
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Telefono: </h5>
+                      <h5>Tel&eacute;fono: </h5>
                       <div class="controls">
                           <input type="text" placeholder="Telefono" id="telefono_empresa" name="telefono_empresa" class="form-control" data-mask="9999-9999">
 
@@ -1378,7 +1378,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
                                 if($municipio->num_rows() > 0){
                                     foreach ($municipio->result() as $fila2) {
-                                       echo '<option class="m-l-50" value="'.$fila2->id_municipio.'">'.$fila2->municipio.'</option>';
+                                       echo '<option class="m-l-50" value="'.intval($fila2->id_municipio).'">'.$fila2->municipio.'</option>';
                                     }
                                 }
                             ?>
@@ -1387,7 +1387,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>Actividad económica: <span class="text-danger">*</span></h5>
+                        <h5>Actividad econ&oacute;mica: <span class="text-danger">*</span></h5>
                         <select id="id_catalogociiu" name="id_catalogociiu" class="select2" style="width: 100%" required>
                             <option value=''>[Seleccione la actividad]</option>
                             <?php
@@ -1608,7 +1608,7 @@ $(function(){
                 }else if($("#band").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
                     $("#modal_establecimiento").modal('hide');
-                    tabla_representantes();
+                    combo_establecimiento($("#establecimiento").val());
                 }
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
