@@ -215,7 +215,7 @@ class Expedientes_model extends CI_Model {
 
 	public function obtener_registro_expediente_retiro($id) {
 
-		$this->db->select('e.*,p.*,n.*,m.*,em.*,ep.*,e.id_expedienteci,m.id_municipio,d.nombre_delegado_actual')
+		$this->db->select('e.*,p.*,n.*,m.*,em.*,ep.*,e.id_expedienteci,m.id_municipio,d.nombre_delegado_actual,e.fechaconflicto_personaci')
 					 ->from('sct_expedienteci e')
 					 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 					 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')

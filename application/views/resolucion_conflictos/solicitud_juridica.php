@@ -1252,7 +1252,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                     <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                    <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy" readonly="">
+                    <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
                     <div class="help-block"></div>
                 </div>
 
