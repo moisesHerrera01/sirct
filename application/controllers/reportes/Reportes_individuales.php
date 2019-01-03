@@ -729,7 +729,7 @@ class Reportes_individuales extends CI_Controller {
 				$feme+=$rows->cant_feme;
 			}
 		}else{ $total = 0; }
-		$cuerpo .= table_header(array($rows->texto, 'TOTAL: ?', 'MUJERES: ?', 'HOMBRES: ?'));
+		$cuerpo .= table_header(array('ASESORIAS', 'TOTAL: ?', 'MUJERES: ?', 'HOMBRES: ?'));
 		$cuerpo .= table_footer()."<br>";
 
 

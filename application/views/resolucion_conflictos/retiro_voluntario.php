@@ -193,6 +193,73 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
+    function cerrar_combo_establecimiento() {
+        //var select2 = $('.select2-search__field').val();
+        //$("#nombre_establecimiento").val(select2);
+        
+        $("#id_empresaci").val('');
+        $("#tipo_establecimiento").val('');
+        $("#razon_social").val('');
+        $("#nombre_establecimiento").val('');
+        $("#abre_establecimiento").val('');
+        $("#dir_establecimiento").val('');
+        $("#telefono_establecimiento").val('');
+        $("#municipio2").val('').trigger('change.select2');
+        $("#act_economica").val('').trigger('change.select2');
+        $("#band3").val('save');
+        $("#alert_empresa").html('');
+        $("#establecimiento").select2('close');
+    }
+
+    function limpiar_modal_empresa(){
+        $("#modal_establecimiento").modal('hide');
+        $("#establecimiento").val('').trigger('change.select2');
+    }
+
+    function verificar_empresa_completa(id_empresa) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/verificar_empresa_completa",
+            type: "POST",
+            data: {
+                id_empresa: id_empresa
+            }
+        })
+        .done(function (res) {
+            if(res != "completo"){
+                result = JSON.parse(res);
+                $("#id_empresaci").val(result.id_empresa);
+                $("#tipo_establecimiento").val(result.tiposolicitud_empresa);
+                $("#razon_social").val(result.razon_social);
+                $("#nombre_establecimiento").val(result.nombre_empresa);
+                $("#abre_establecimiento").val(result.abreviatura_empresa);
+                $("#dir_establecimiento").val(result.direccion_empresa);
+                $("#telefono_establecimiento").val(result.telefono_empresa);
+                $("#municipio2").val(result.id_municipio).trigger('change.select2');
+                $("#act_economica").val(result.id_catalogociiu).trigger('change.select2');
+                $("#band3").val('edit');
+
+                $("#modal_establecimiento").modal('show');
+                $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
+            }else{
+                $("#alert_empresa").html('');
+                $.toast({ heading: 'DATOS COMPLETOS', text: 'Los datos de la parte empleadora están completos', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+            }
+        });
+    }
+
+    function ocultar_pn(){
+      var value = $("#tipo_establecimiento").val();
+      if (value==1) {
+        $("#razon_social").removeAttr("required");
+        $("#abre_establecimiento").removeAttr("required");
+        $('#ocultar_pn').hide(500);
+      }else {
+         $('#ocultar_pn').show(500);
+         $("#razon_social").attr("required",'required');
+         $("#abre_establecimiento").attr("required",'required');
+      }
+    }
+
     function combo_actividad_economica() {
 
         $.ajax({
@@ -202,7 +269,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             })
             .done(function (res) {
                 $('#div_combo_actividad_economica').html(res);
-                //$(".select2").select2();
+                $("#act_economica").select2();
             });
 
     }
@@ -216,7 +283,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             })
             .done(function (res) {
                 $('#div_combo_municipio').html(res);
-                $("#municipio").select2();
+                $("#municipio2").select2();
             });
 
     }
@@ -815,6 +882,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 document.getElementById("cnt_tabla_representantes").innerHTML=xmlhttpB.responseText;
                 $('[data-toggle="tooltip"]').tooltip();
                 $('#myTable2').DataTable();
+                if(id_empresa != ""){
+                  verificar_empresa_completa(id_empresa);
+                }
             }
         }
         xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
@@ -920,7 +990,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 
 </script>
-<input type="hidden" id="id_empresaci" name="id_empresaci">
 <input type="hidden" id="bandx" name="bandx">
 <div class="page-wrapper">
     <div class="container-fluid">
@@ -1420,86 +1489,90 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
   <!--FIN MODAL REPRESENTANTE EMPRESA -->
 
+
 <!--INICIA MODAL DE ESTABLECIMIENTOS -->
-<div class="modal fade" id="modal_establecimiento" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-            <input type="hidden" id="band3" name="band3" value="save">
-            <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
+  <div class="modal fade" id="modal_establecimiento" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+    <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band3" name="band3" value="save">
+          <input type="hidden" id="id_empresaci" name="id_empresaci" value="">
+          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de representantes</h4>
+                <h4 class="modal-title">Gestión de establecimientos</h4>
             </div>
             <div class="modal-body" id="">
-
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento"
-                                class="form-control" required="">
-                        </div>
+              <div id="alert_empresa"></div>
+              <div class="row">
+                <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Tipo: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="tipo_establecimiento" name="tipo_establecimiento" class="custom-select col-4" onchange="ocultar_pn()" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="1">Persona natural</option>
+                        <option value="2">Persona jurídica</option>
+                      </select>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Abreviatura del establecimiento: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento"
-                                class="form-control" required="">
-                        </div>
+                <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required>
                     </div>
                 </div>
+              </div>
 
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Direcci&oacute;n: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <textarea type="text" id="dir_establecimiento" name="dir_establecimiento" class="form-control"
-                                required=""></textarea>
-                        </div>
-                    </div>
+                <div class="row" id="ocultar_pn">
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Raz&oacute;n social de la parte empleadora:</h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control">
+                      </div>
+                  </div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Abreviatura de la parte empleadora:</h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control">
+                      </div>
+                  </div>
                 </div>
 
                 <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Telefono: </h5>
-                        <div class="controls">
-                            <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento"
-                                class="form-control" data-mask="9999-9999">
-                            <div class="help-block"></div>
-                        </div>
-                    </div>
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Direcci&oacute;n: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <textarea type="text" id="dir_establecimiento" name="dir_establecimiento" class="form-control" required=""></textarea>
+                      </div>
+                  </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_actividad_economica"></div>
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Tel&eacute;fono: </h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento" class="form-control" data-mask="9999-9999">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Nombre del representante: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" id="nombre_representante" name="nombre_representante" class="form-control"
-                                required>
-                        </div>
-                    </div>
+                  <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_actividad_economica"></div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger waves-effect text-white" onclick="limpiar_modal_empresa();">Cerrar</button>
                 <button type="submit" id="submit2" class="btn btn-info waves-effect text-white">Aceptar</button>
             </div>
-            <?php echo form_close(); ?>
-        </div>
+          <?php echo form_close(); ?>
     </div>
+  </div>
 </div>
-<!--FIN MODAL DE ESTABLECIMIENTOS -->
+    <!--FIN MODAL DE ESTABLECIMIENTOS -->
 
 <!--INICIO MODAL DE DELEGADO -->
 <div class="modal fade" id="modal_delegado" role="dialog">
@@ -1696,30 +1769,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     processData: false
                 })
                 .done(function (res) {
-                    if (res == "fracaso") {
-                        swal({
-                            title: "¡Ups! Error",
-                            text: "Intentalo nuevamente.",
-                            type: "error",
-                            showConfirmButton: true
-                        });
-                    } else {
-                        swal({
-                            title: "¡Registro exitoso!",
-                            type: "success",
-                            showConfirmButton: true
-                        });
-
-                        var data = {
-                            id: res,
-                            text: $("#nombre_establecimiento").val()
-                        };
-
-                        var newOption = new Option(data.text, data.id, false, false);
-                        $('#establecimiento').append(newOption).trigger('change');
-                        $('#establecimiento').val(data.id).trigger("change");
-                        $('#modal_establecimiento').modal('toggle');
-                    }
+                    console.log(res)
+                      res = res.split(",");
+                        if(res[0] == "exito"){
+                            if($("#band3").val() == "save"){
+                                //$("#id_empresa").val(res[1])
+                                $("#modal_establecimiento").modal('hide');
+                                $.toast({ heading: 'Registro exitoso', text: 'Registro de establecimiento exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                                combo_establecimiento(res[1]);
+                            }else if($("#band3").val() == "edit"){
+                                swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                                $("#modal_establecimiento").modal('hide');
+                                combo_establecimiento($("#establecimiento").val());
+                            }
+                        }else{
+                            swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+                        }
                 });
 
         });
