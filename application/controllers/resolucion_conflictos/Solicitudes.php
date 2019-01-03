@@ -34,7 +34,7 @@ class Solicitudes extends CI_Controller {
 
 		if($this->input->post('band1') == "save"){
 			$data = array(
-		'nombre_personaci' => $this->input->post('nombres'),
+			'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
 			'conocido_por' => $this->input->post('conocido_por'),
 			'dui_personaci' => $this->input->post('dui'),
@@ -51,6 +51,8 @@ class Solicitudes extends CI_Controller {
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 			'id_doc_identidad' => $this->input->post('id_doc_identidad'),
 			'discapacidad' => $this->input->post('discapacidad_desc'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 
 			$data2  = array(
@@ -89,7 +91,9 @@ class Solicitudes extends CI_Controller {
 			'posee_representante' => $this->input->post('posee_representante'),
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 			'discapacidad' => $this->input->post('discapacidad_desc'),
-			'id_partida' =>$this->input->post('id_partida')
+			'id_partida' =>$this->input->post('id_partida'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 
 			$data2  = array(

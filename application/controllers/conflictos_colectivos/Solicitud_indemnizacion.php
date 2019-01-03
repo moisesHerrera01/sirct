@@ -29,8 +29,20 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'tiposolicitud_expedienteci' => '5',
 				'fechacrea_expedienteci' => date("Y-m-d H:i:s"),
         'id_estadosci' => 1,
+				'id_usuario' => $this->session->userdata('id_usuario'),
+				'fecha_modifica' => date('Y-m-d')
 			);
-			echo $this->expediente_cc_model->insertar_expediente($data);
+			$id_expedienteci = $this->expediente_cc_model->insertar_expediente($data);
+			echo $id_expedienteci;
+			$delegado = array(
+				'id_expedienteci' => $id_expedienteci,
+				'id_personal' => $data['id_personal'],
+				'fecha_cambio_delegado' => date('Y-m-d'),
+				'id_rol_guarda' => $this->session->userdata('id_rol'),
+				'id_usuario_guarda' => $this->session->userdata('id_usuario'),
+				'cambios' => "Asignación de expediente"
+			);
+			$this->delegados_model->insertar_delegado_exp($delegado);
 
 		} else if ($this->input->post('band1') == "edit") {
 
@@ -38,6 +50,8 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 			$data['id_empresaci'] = $this->input->post('establecimiento');
 			$data['id_personal'] = $this->input->post('id_personal');
+			$data['id_usuario'] = $this->session->userdata('id_usuario');
+			$data['fecha_modifica'] = date('Y-m-d');
 			if ($this->expediente_cc_model->editar_expediente($data) != "fracaso") {
 				echo $this->input->post('id_expediente');
 			} else {
@@ -150,7 +164,9 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'discapacidad' => $this->input->post('discapacidad_desc'),
 				'estudios_personaci' => $this->input->post('estudios'),
 				'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
-				'id_doc_identidad' => $this->input->post('id_doc_identidad')
+				'id_doc_identidad' => $this->input->post('id_doc_identidad'),
+				'id_usuario' => $this->session->userdata('id_usuario'),
+				'fecha_modifica' => date('Y-m-d')
 			);
 
 			$data2  = array(
@@ -185,7 +201,9 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 				'id_doc_identidad' => $this->input->post('id_doc_identidad'),
 				'nacionalidad_personaci'=> $this->input->post('nacionalidad'),
-				'id_partida' => $this->input->post('id_partida')
+				'id_partida' => $this->input->post('id_partida'),
+				'id_usuario' => $this->session->userdata('id_usuario'),
+				'fecha_modifica' => date('Y-m-d')
 			);
 
 			$data2  = array(

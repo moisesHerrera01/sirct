@@ -20,10 +20,22 @@ class Diferencias_laborales extends CI_Controller {
 								'id_estadosci' => 1,
 								'fechacrea_expedienteci' => $fecha_actual,
 								'tiposolicitud_expedienteci' =>"4",
-								'causa_expedienteci' => $this->input->post('motivo')
+								'causa_expedienteci' => $this->input->post('motivo'),
+								'id_usuario' => $this->session->userdata('id_usuario'),
+								'fecha_modifica' => date('Y-m-d')
             );
 
 						$id_expedienteci = $this->expediente_cc_model->insertar_expediente($data2);
+
+						$delegado = array(
+							'id_expedienteci' => $id_expedienteci,
+							'id_personal' => $data2['id_personal'],
+							'fecha_cambio_delegado' => date('Y-m-d'),
+							'id_rol_guarda' => $this->session->userdata('id_rol'),
+							'id_usuario_guarda' => $this->session->userdata('id_usuario'),
+							'cambios' => "Asignación de expediente"
+						);
+						$this->delegados_model->insertar_delegado_exp($delegado);
 
             if ("fracaso" != $id_expedienteci) {
 								$data = array(
@@ -45,7 +57,9 @@ class Diferencias_laborales extends CI_Controller {
 					'id_personal' => $this->input->post('id_personal'),
 					'id_empresaci' => $this->input->post('establecimiento'),
 					'fechacrea_expedienteci' =>  date("Y-m-d H:i:s", strtotime($this->input->post('fecha_creacion_exp'))),
-					'causa_expedienteci' => $this->input->post('motivo')
+					'causa_expedienteci' => $this->input->post('motivo'),
+					'id_usuario' => $this->session->userdata('id_usuario'),
+					'fecha_modifica' => date('Y-m-d')
 			);
 
 		 echo $this->expediente_cc_model->editar_expediente($data2);

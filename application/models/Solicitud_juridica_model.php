@@ -21,7 +21,9 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_municipio' => $data['id_municipio'],
 			'direccion_personaci' => $data['direccion_personaci'],
 			'sexo_personaci' => $data['sexo_personaci'],
-			'discapacidad_personaci' => $data['discapacidad_personaci']
+			'discapacidad_personaci' => $data['discapacidad_personaci'],
+			'id_usuario' => $data['id_usuario'],
+			'fecha_modifica' => $data['fecha_modifica']
 		))){
 			return "exito,".$this->db->insert_id();
 		}else{
@@ -38,7 +40,9 @@ class Solicitud_juridica_model extends CI_Model {
 			'id_municipio' => $data['id_municipio'],
 			'direccion_personaci' => $data['direccion_personaci'],
 			'sexo_personaci' => $data['sexo_personaci'],
-			'discapacidad_personaci' => $data['discapacidad_personaci']
+			'discapacidad_personaci' => $data['discapacidad_personaci'],
+			'id_usuario' => $data['id_usuario'],
+			'fecha_modifica' => $data['fecha_modifica']
 		))){
 			return "exito";
 		}else{
@@ -83,7 +87,9 @@ class Solicitud_juridica_model extends CI_Model {
 			'causa_expedienteci' => $data['causa_expedienteci'],
 			'id_representanteci' => $data['id_representanteci'],
 			'motivo_expedienteci' => $data['motivo_expedienteci'],
-			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci']
+			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
+			'id_usuario' => $data['id_usuario'],
+			'fecha_modifica' => $data['fecha_modifica']
 		))){
 			return "exito,".$data["id_expedienteci"];
 		}else{

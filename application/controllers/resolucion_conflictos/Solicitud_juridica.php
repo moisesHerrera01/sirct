@@ -117,14 +117,16 @@ class Solicitud_juridica extends CI_Controller {
 	public function gestionar_solicitado(){
 		if($this->input->post('band3') == "save"){
 			$data = array(
-      		'nombre_personaci' => mb_strtoupper($this->input->post('nombre_personaci')),
+      'nombre_personaci' => mb_strtoupper($this->input->post('nombre_personaci')),
 			'apellido_personaci' => mb_strtoupper($this->input->post('apellido_personaci')),
 			'telefono_personaci' => $this->input->post('telefono_personaci'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion_personaci'),
 			'sexo_personaci' => $this->input->post('sexo'),
 			'id_empresaci' => $this->input->post('id_empresaci'),
-			'discapacidad_personaci' => $this->input->post('discapacidad')
+			'discapacidad_personaci' => $this->input->post('discapacidad'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 			echo $this->solicitud_juridica_model->insertar_solicitado($data);
 
@@ -137,7 +139,9 @@ class Solicitud_juridica extends CI_Controller {
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => mb_strtoupper($this->input->post('direccion_personaci')),
 			'sexo_personaci' => $this->input->post('sexo_personaci'),
-			'discapacidad_personaci' => $this->input->post('discapacidad_personaci')
+			'discapacidad_personaci' => $this->input->post('discapacidad_personaci'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 			echo $this->solicitud_juridica_model->editar_solicitado($data);
 
@@ -153,22 +157,25 @@ class Solicitud_juridica extends CI_Controller {
 	public function gestionar_expediente(){
 		if($this->input->post('band4') == "save"){
 			$data = array(
-      		'id_empresaci' => $this->input->post('id_empresaci'),
+      'id_empresaci' => $this->input->post('id_empresaci'),
 			'id_personal' => $this->input->post('id_personal'),
 			'id_personaci' => $this->input->post('id_personaci'),
 			'causa_expedienteci' => $this->input->post('causa_expedienteci'),
 			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
-			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))
+			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci')),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 			echo $id_expedienteci = $this->solicitud_juridica_model->insertar_expediente($data);
 			$id_expedienteci = explode(',',$id_expedienteci);
 			$delegado = array(
-				'id_expedienteci' => $id_expedienteci[1],
+				'id_expedienteci' => $id_expedienteci,
 				'id_personal' => $data['id_personal'],
 				'fecha_cambio_delegado' => date('Y-m-d'),
 				'id_rol_guarda' => $this->session->userdata('id_rol'),
-				'id_usuario_guarda' => $this->session->userdata('id_usuario')
+				'id_usuario_guarda' => $this->session->userdata('id_usuario'),
+				'cambios' => "Asignación de expediente"
 			);
 			$this->delegados_model->insertar_delegado_exp($delegado);
 
@@ -181,7 +188,9 @@ class Solicitud_juridica extends CI_Controller {
 			'causa_expedienteci' => $this->input->post('causa_expedienteci'),
 			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
-			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))
+			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci')),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 			echo $this->solicitud_juridica_model->editar_expediente($data);
 

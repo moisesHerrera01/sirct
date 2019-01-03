@@ -75,16 +75,19 @@ class Retiro_voluntario extends CI_Controller {
                 'numerocaso_expedienteci' =>10,
                 'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_preaviso'))),
                 'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),
-                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo')
+                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
+                'id_usuario' => $this->session->userdata('id_usuario'),
+                'fecha_modifica' => date('Y-m-d')
             );
 
               echo $id_expedienteci = $this->expedientes_model->insertar_expediente($data);
               $delegado = array(
-  							'id_expedienteci' => $id_expedienteci,
+                'id_expedienteci' => $id_expedienteci,
   							'id_personal' => $data['id_personal'],
   							'fecha_cambio_delegado' => date('Y-m-d'),
   							'id_rol_guarda' => $this->session->userdata('id_rol'),
-  							'id_usuario_guarda' => $this->session->userdata('id_usuario')
+  							'id_usuario_guarda' => $this->session->userdata('id_usuario'),
+  							'cambios' => "Asignación de expediente"
   						);
   						$this->delegados_model->insertar_delegado_exp($delegado);
 
@@ -103,11 +106,11 @@ class Retiro_voluntario extends CI_Controller {
                 'tiposolicitud_expedienteci' =>"2",
                 'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_preaviso'))),
                 'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),
-                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo')
+                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
+                'id_usuario' => $this->session->userdata('id_usuario'),
+                'fecha_modifica' => date('Y-m-d')
            );
-
             echo $this->expedientes_model->editar_expediente($data2);
-
        }
     }
 

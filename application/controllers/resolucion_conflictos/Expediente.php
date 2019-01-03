@@ -40,7 +40,9 @@ class Expediente extends CI_Controller {
 								'ocupacion' => $this->input->post('ocupacion'),
 								'embarazada' => $this->input->post('embarazada'),
 								'tipo_representante_menor' => $this->input->post('acompaniante'),
-								'nombre_representante_menor' => $this->input->post('nombre_acompaniante')
+								'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
+								'id_usuario' => $this->session->userdata('id_usuario'),
+								'fecha_modifica' => date('Y-m-d')
             );
 						if ($this->input->post('nombres_jefe')!='') {
 							$id_empleador = $this->empleadores_model->insertar_empleador($data3);
@@ -94,7 +96,9 @@ class Expediente extends CI_Controller {
 					'id_empleador' => $this->input->post('id_emplea'),
 					'embarazada' => $this->input->post('embarazada'),
 					'tipo_representante_menor' => $this->input->post('acompaniante'),
-					'nombre_representante_menor' => $this->input->post('nombre_acompaniante')
+					'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
+					'id_usuario' => $this->session->userdata('id_usuario'),
+					'fecha_modifica' => date('Y-m-d')
 			);
 
 			$data = array(
