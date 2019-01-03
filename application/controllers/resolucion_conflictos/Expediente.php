@@ -60,7 +60,8 @@ class Expediente extends CI_Controller {
 							'id_personal' => $data2['id_personal'],
 							'fecha_cambio_delegado' => date('Y-m-d'),
 							'id_rol_guarda' => $this->session->userdata('id_rol'),
-							'id_usuario_guarda' => $this->session->userdata('id_usuario')
+							'id_usuario_guarda' => $this->session->userdata('id_usuario'),
+							'cambios' => "Asignación de expediente"
 						);
 						$this->delegados_model->insertar_delegado_exp($delegado);
 
@@ -282,7 +283,8 @@ class Expediente extends CI_Controller {
 					'id_personal' => $this->input->post('id_personal'),
 					'fecha_cambio_delegado' => date("Y-m-d"),
 					'id_rol_guarda' => $this->session->userdata('id_rol'),
-					'id_usuario_guarda' => $this->session->userdata('id_usuario')
+					'id_usuario_guarda' => $this->session->userdata('id_usuario'),
+					'cambios' => "Reasignación de expediente"
 				);
 				echo $this->delegados_model->insertar_delegado_exp($data);
 			}
@@ -374,7 +376,7 @@ class Expediente extends CI_Controller {
 						<td>
 							<b>Teléfono: </b>$expediente->telefono_personaci
 						</td>
-						
+
 						<td>
 							<b>Fecha de nacimiento: </b>".fecha_ESP($expediente->fnacimiento_personaci)."
 						</td>
@@ -444,7 +446,7 @@ class Expediente extends CI_Controller {
 						<td>
 							<b>Teléfono: </b>$empresa->telefono_empresa
 						</td>
-						
+
 						<td>
 							<b>Persona representante: </b>$empresa->nombres_representante
 						</td>
@@ -488,7 +490,7 @@ class Expediente extends CI_Controller {
 						<td>
 							<b>Funciones laborales: </b>$expediente->funciones_personaci
 						</td>
-						
+
 						<td>
 							<b>Salario: </b>$ $expediente->salario_personaci
 						</td>

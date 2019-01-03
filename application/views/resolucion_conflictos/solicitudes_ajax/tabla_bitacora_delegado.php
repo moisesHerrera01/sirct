@@ -16,7 +16,7 @@
                           echo "<tr>";
                             echo "<td>".$fila->nombre_rol."</td>";
                             echo "<td>".$fila->nombre_completo."</td>";
-                            echo "<td>Asignación o reasignación de expediente</td>";
+                            echo "<td>".$fila->cambios."</td>";
                             echo "<td>".$fila->nombre_delegado_actual."</td>";
                             echo "<td>".$fila->fecha_cambio_delegado."</td>";
 

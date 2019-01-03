@@ -17,7 +17,7 @@ class Delegados_model extends CI_Model {
 
 	public function obtener_delegados_expediente($id_expedienteci){
 		$this->db->select('CONCAT_WS(" ",e.primer_nombre,e.segundo_nombre,e.tercer_nombre,e.primer_apellido,e.segundo_apellido,e.apellido_casada) nombre_delegado_actual,
-											 DATE_FORMAT(fecha_cambio_delegado, "%d-%m-%Y") fecha_cambio_delegado,r.nombre_rol,u.nombre_completo')
+											 DATE_FORMAT(fecha_cambio_delegado, "%d-%m-%Y") fecha_cambio_delegado,r.nombre_rol,u.nombre_completo, d.cambios')
 						 ->from('sct_delegado_exp d')
 						 ->join('org_usuario u','u.id_usuario=d.id_usuario_guarda')
 						 ->join('org_rol r','r.id_rol=d.id_rol_guarda')
