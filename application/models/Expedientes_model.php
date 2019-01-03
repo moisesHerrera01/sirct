@@ -90,6 +90,7 @@ class Expedientes_model extends CI_Model {
 														 WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 																												 FROM sct_delegado_exp de2
 																												 WHERE de2.id_expedienteci=de.id_expedienteci
+																												 AND de2.id_personal <> 0
 																												)
 													 ) d" , "d.id_expedienteci=e.id_expedienteci")
 						 					 ->where('e.id_expedienteci', $id_expedienteci);
@@ -190,6 +191,7 @@ class Expedientes_model extends CI_Model {
 									 WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 																							 FROM sct_delegado_exp de2
 																							 WHERE de2.id_expedienteci=de.id_expedienteci
+																							 AND de2.id_personal <> 0
 																							)
 								 ) d" , "d.id_expedienteci=e.id_expedienteci")
 						 ->group_by('e.id_expedienteci')
@@ -215,7 +217,7 @@ class Expedientes_model extends CI_Model {
 
 	public function obtener_registro_expediente_retiro($id) {
 
-		$this->db->select('e.*,p.*,n.*,m.*,em.*,ep.*,e.id_expedienteci,m.id_municipio,d.nombre_delegado_actual')
+		$this->db->select('e.*,p.*,n.*,m.*,em.*,ep.*,e.id_expedienteci,m.id_municipio,d.nombre_delegado_actual, e.fechaconflicto_personaci')
 					 ->from('sct_expedienteci e')
 					 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 					 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
@@ -230,6 +232,7 @@ class Expedientes_model extends CI_Model {
 								 WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 																						 FROM sct_delegado_exp de2
 																						 WHERE de2.id_expedienteci=de.id_expedienteci
+																						 AND de2.id_personal <> 0
 																						)
 							 ) d" , "d.id_expedienteci=e.id_expedienteci")
 					 ->where('e.id_expedienteci', $id);
