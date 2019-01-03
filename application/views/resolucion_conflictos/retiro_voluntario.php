@@ -8,7 +8,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 <script type="text/javascript">
     function iniciar() {
-
         <?php if(isset($tipo_solicitud)){ ?>
             $("#motivo_expedienteci").val('<?=$tipo_solicitud?>');
             <?php if($band_mantto == "save"){ ?>
@@ -242,7 +241,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
             }else{
                 $("#alert_empresa").html('');
-                $.toast({ heading: 'DATOS COMPLETOS', text: 'Los datos de la parte empleadora están completos', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
             }
         });
     }
@@ -412,13 +410,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#telefono").val('');
         $("#municipio").val('').trigger('change.select2');
         $("#direccion").val('');
-        $("#fecha_nacimiento").val('');
+        $("#fecha_nacimiento").datepicker("setDate", '');
         $("#sexo").val('');
         $("#estudios").val('');
         $("#nacionalidad").val('');
         $("#discapacidad").val('');
-        $("#fecha_preaviso").val('');
-        $("#fecha_conflicto").val('');
+        $("#fecha_preaviso").datepicker("setDate", '');
+        $("#fecha_conflicto").datepicker("setDate", '');
         $("#descripcion_motivo").val('');
         $("#id_representanteci").val('');
         $("#causa_expedienteci").val('').trigger('change.select2');
@@ -475,12 +473,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     $("#telefono").val(result.telefono_personaci);
                     $("#municipio").val(result.id_municipio.padStart(5, "00000")).trigger('change.select2');
                     $("#direccion").val(result.direccion_personaci);
-                    $("#fecha_nacimiento").val(result.fnacimiento_personaci);
+                    $("#fecha_nacimiento").datepicker("setDate", moment(result.fnacimiento_personaci).format("DD-MM-YYYY"));
                     $("#sexo").val(result.sexo_personaci);
                     $("#estudios").val(result.estudios_personaci);
                     $("#discapacidad").val(result.discapacidad_personaci);
-                    $("#fecha_preaviso").val(result.fechaconflicto_personaci);
-                    $("#fecha_renuncia").val(result.fecha_renuncia);
+                    $("#fecha_preaviso").datepicker("setDate", moment(result.fechaconflicto_personaci).format("DD-MM-YYYY"));
+                    $("#fecha_renuncia").datepicker("setDate", moment(result.fecha_renuncia).format("DD-MM-YYYY"));
                     $("#descripcion_motivo").val(result.descripmotivo_expedienteci);
                     $("#id_representanteci").val(result.id_representanteci);
                     $("#causa_expedienteci").val(result.causa_expedienteci).trigger('change.select2');
@@ -916,7 +914,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#acreditacion_representante").val('');
             $("#tipo_representante").val('');
             $("#estado_representante").val('1');
-            $("#f_nacimiento_representante").val('');
+            $("#f_nacimiento_representante").datepicker("setDate", '');
             combo_estados_civiles('');
             combo_profesiones('');
             combo_municipio2('');
@@ -974,7 +972,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#acreditacion_representante").val(acreditacion_representante);
       $("#tipo_representante").val(tipo_representante);
       $("#estado_representante").val(estado_representante);
-      $("#f_nacimiento_representante").val(f_nacimiento_representante);
+      $("#fecha_nacimiento").datepicker("setDate", moment(f_nacimiento_representante).format("DD-MM-YYYY"));
       combo_estados_civiles(id_estado_civil);
       combo_profesiones(id_titulo_academico);
       combo_municipio2(id_municipio);
@@ -1089,8 +1087,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
                                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
-                                            id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy"
-                                            readonly="">
+                                            id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy">
                                         <div class="help-block"></div>
                                     </div>
                                 </div>
@@ -1215,15 +1212,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <div class="form-group col-lg-3 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Fecha de preaviso: <span class="text-danger">*</span></h5>
                                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
-                                            id="fecha_preaviso" name="fecha_preaviso" placeholder="dd/mm/yyyy"
-                                            readonly="">
+                                            id="fecha_preaviso" name="fecha_preaviso" placeholder="dd/mm/yyyy">
                                         <div class="help-block"></div>
                                     </div>
                                     <div class="form-group col-lg-3 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Fecha de renuncia: <span class="text-danger">*</span></h5>
                                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
-                                            id="fecha_renuncia" name="fecha_renuncia" placeholder="dd/mm/yyyy"
-                                            readonly="">
+                                            id="fecha_renuncia" name="fecha_renuncia" placeholder="dd/mm/yyyy">
                                         <div class="help-block"></div>
                                     </div>
                                 </div>
@@ -1427,7 +1422,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                     <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy" readonly="">
+                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
                         <div class="help-block"></div>
                     </div>
 

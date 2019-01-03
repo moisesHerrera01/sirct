@@ -901,7 +901,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
             }else{
                 $("#alert_empresa").html('');
-                $.toast({ heading: 'DATOS COMPLETOS', text: 'Los datos de la parte empleadora están completos', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
             }
         });
     }
@@ -1252,7 +1251,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                     <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                    <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy" readonly="">
+                    <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
                     <div class="help-block"></div>
                 </div>
 
