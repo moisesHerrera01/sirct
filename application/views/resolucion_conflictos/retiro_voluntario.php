@@ -1111,9 +1111,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <div class="form-group col-lg-2" style="height: 83px;">
                                         <h5>Sexo:</h5>
                                         <input name="sexo" type="radio" id="masculino" checked="" value="M">
-                                        <label for="masculino">Masculino</label>
+                                        <label for="masculino">Hombre</label>
                                         <input name="sexo" type="radio" id="femenino" value="F">
-                                        <label for="femenino">Femenino</label>
+                                        <label for="femenino">Mujer</label>
                                         <div class="help-block"></div>
                                     </div>
                                 </div>
