@@ -1,4 +1,4 @@
-<h5>Tipo directivo/a: <span class="text-danger">*</span></h5>
+<h5>Tipo de directivo/a: <span class="text-danger">*</span></h5>
 <select id="tipo_directivo" name="tipo_directivo" required class="select2" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php

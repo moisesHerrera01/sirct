@@ -44,7 +44,7 @@
 
           <!--Datos del solicitante !-->
 
-            <span class="label label-success" style="font-size: 16px;">Datos del solicitante</span>
+            <span class="label label-success" style="font-size: 16px;">Datos de la persona solicitante</span>
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>

@@ -81,7 +81,7 @@ function combo_establecimiento(seleccion){
       
       'language': {
         noResults: function () {
-          return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" onClick="cerrar_combo_establecimiento()">Agregar uno nuevo</a>';
+          return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevo registro" onClick="cerrar_combo_establecimiento()">Agregar nuevo registro</a>';
         }
       },
       'escapeMarkup': function (markup) {
@@ -385,7 +385,7 @@ function cambiar_nuevo2(){
     $("#cnt_tabla").hide(0);
     $("#cnt_form_main2").show(0);
 
-    $("#ttl_form2").children("h4").html("<span class='mdi mdi-plus'></span> Nuevo establecimiento");
+    $("#ttl_form2").children("h4").html("<span class='mdi mdi-plus'></span> Nueva parte empleadora");
 }
 
 
@@ -658,7 +658,7 @@ function volver(num) {
                         <div id="cnt_form1" class="cnt_form">
                           <h3 class="box-title" style="margin: 0px;">
                               <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
-                              Información del solicitante
+                              Información de la persona solicitante
                             </h3><hr class="m-t-0 m-b-30">
                             <input type="hidden" id="band" name="band" value="save">
                             <input type="hidden" id="band1" name="band1" value="save">
@@ -886,7 +886,7 @@ function volver(num) {
                             <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                                 <h3 class="box-title" style="margin: 0px;">
                                     <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
-                                    Datos del establecimiento
+                                    Datos de la parte empleadora
                                 </h3><hr class="m-t-0 m-b-30">
                                 <input type="hidden" id="band2" name="band2" value="save">
                                 <input type="hidden" id="id_empresa" name="id_empresa" value="">
@@ -918,17 +918,17 @@ function volver(num) {
                                   </div>
                                 </blockquote>
 
-                                <span class="etiqueta">Establecimiento</span>
+                                <span class="etiqueta">Parte empleadora</span>
                                 <blockquote class="m-t-0">
                                   <div class="row">
                                     <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
-                                        <textarea type="text" id="nombre_empresa" name="nombre_empresa" class="form-control" placeholder="Nombre del establecimiento" required=""></textarea>
+                                        <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
+                                        <textarea type="text" id="nombre_empresa" name="nombre_empresa" class="form-control" placeholder="Nombre de la parte empleadora" required=""></textarea>
                                     </div>
                                   </div>
                                   <div class="row">
                                     <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Abreviatura del establecimiento: <span class="text-danger">*</span></h5>
+                                        <h5>Abreviatura: <span class="text-danger">*</span></h5>
                                         <div class="controls">
                                             <input type="text" id="abreviatura_empresa" name="abreviatura_empresa" class="form-control" required="">
                                         </div>
@@ -1034,7 +1034,7 @@ function volver(num) {
                             <div class="form-group">
                                 <h5>Persona delegada:</h5>
                                 <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablasolicitudes(1);">
-                                    <option value="">[Todos los empleados]</option>
+                                    <option value="">[Todos las personas delegadas]</option>
                                 <?php
                                     $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
                                     if($otro_empleado->num_rows() > 0){
@@ -1108,13 +1108,13 @@ function volver(num) {
           <input type="hidden" id="band3" name="band3" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de personas representantes</h4>
+                <h4 class="modal-title">Gestión de parte empleadora</h4>
             </div>
             <div class="modal-body" id="">
 
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
+                      <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required="">
                       </div>
@@ -1123,7 +1123,7 @@ function volver(num) {
 
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Abreviatura del establecimiento: <span class="text-danger">*</span></h5>
+                      <h5>Abreviatura: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control" required="">
                       </div>

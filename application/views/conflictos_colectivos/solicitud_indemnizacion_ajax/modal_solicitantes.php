@@ -41,7 +41,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Solicitante</h4>
+                <h4 class="modal-title">Nuevo persona solicitante</h4>
             </div>
 
             <div class="modal-body" id="">
@@ -51,7 +51,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <input type="hidden" name="id_persona" id="id_persona1">
                     <input type="hidden" id="band4" name="band4" value="save">
 
-                    <span class="etiqueta">Datos del Solicitante</span>
+                    <span class="etiqueta">Datos de la persona solicitante</span>
                     <blockquote class="m-t-0">
 
                         <div class="row">
@@ -59,14 +59,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <div class="form-group col-lg-6" style="height: 83px;">
                                 <h5>Nombres: <span class="text-danger">*</span></h5>
                                 <input type="text" id="nombre_solicitante" name="nombre_solicitante" class="form-control"
-                                    placeholder="Nombre Persona del Solicitante" required>
+                                    placeholder="Nombre de la persona solicitante" required>
                                 <div class="help-block"></div>
                             </div>
 
                             <div class="form-group col-lg-6" style="height: 83px;">
                                 <h5>Apellidos: <span class="text-danger">*</span></h5>
                                 <input type="text" id="apellido_solicitante" name="apellido_solicitante" class="form-control"
-                                    placeholder="Apellido Persona del Solicitante" required>
+                                    placeholder="Apellido de la persona solicitante" required>
                                 <div class="help-block"></div>
                             </div>
 
@@ -244,7 +244,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Solicitante</h4>
+                <h4 class="modal-title">Nueva persona solicitante</h4>
             </div>
             <div class="modal-body" id="">
                 <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
@@ -436,12 +436,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         showConfirmButton: true
                     });
                 } else if($("#band5").val() == "save") {
-                    swal({ title: "¡El solicitante se ingresó con éxito!", type: "success", showConfirmButton: true });
+                    swal({ title: "¡Se registró la persona solicitante con éxito!", type: "success", showConfirmButton: true });
                     tabla_solicitantes();
                     $('#modal_representante_motivo').modal('hide');
                     $('.modal-backdrop').remove();
                 }else {
-                  swal({ title: "¡El solicitante editó con éxito!", type: "success", showConfirmButton: true });
+                  swal({ title: "¡Se editó la persona solicitante con éxito!", type: "success", showConfirmButton: true });
                   tabla_solicitantes();
                   $('#modal_representante_motivo').modal('hide');
                   $('.modal-backdrop').remove();
@@ -630,7 +630,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function desactivar(id_solicitante) {
         swal({
             title: "Confirmar Dar de Baja",
-            text: "¿Está seguro que desea dar de baja al solicitante?",
+            text: "¿Está seguro que desea dar de baja a la persona solicitante?",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn-success2",
@@ -650,7 +650,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 if (res == "exito") {
                     tabla_solicitantes();
                     swal({
-                        title: "¡Solicitante desactivado exitosamente!",
+                        title: "Persona solicitante desactivada exitosamente!",
                         type: "success",
                         showConfirmButton: true
                     });
@@ -669,7 +669,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function activar(id_solicitante) {
         swal({
             title: "Confirmar Activación",
-            text: "¿Está seguro que desea activar al solicitante?",
+            text: "¿Está seguro que desea activar a la persona solicitante?",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn-success2",
@@ -689,7 +689,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 if (res == "exito") {
                     tabla_solicitantes();
                     swal({
-                        title: "¡Solicitante activado exitosamente!",
+                        title: "Persona solicitante activada exitosamente!",
                         type: "success",
                         showConfirmButton: true
                     });

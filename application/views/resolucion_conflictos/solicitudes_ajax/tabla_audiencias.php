@@ -22,6 +22,10 @@
                 <?php
                   $contador=0;
                     if($audiencia!=FALSE){
+                        /*********** Si hay registros consulta los permisos **********************/
+                        $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+                        $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
+                        /*********** Fin de consulta de permisos *********************************/
                         foreach ($audiencia->result() as $fila) {
                           $fila->fecha_fechasaudienciasci = date("d-m-Y",strtotime($fila->fecha_fechasaudienciasci));
                           $contador++;
@@ -38,8 +42,7 @@
                               echo '<td><span class="label label-danger">Inactiva</span></td>';
                           }elseif ($fila->estado_audiencia == 2) {
                               echo '<td><span class="label label-success">Con resultado</span></td>';
-                          }
-                          else{
+                          }else{
                               echo '<td><span class="label label-success">Activa</span></td>';
                           }
 
@@ -54,23 +57,23 @@
 
                           switch ($fila->estado_audiencia) {
                             case '1':
-                              if(tiene_permiso($segmentos=2,$permiso=4)){
+                              if($puede_editar){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar5","btn-info","fa fa-wrench","Editar");
                               }
-                              if(tiene_permiso($segmentos=2,$permiso=1)){
+                              if($puede_consultar){
                                 unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
                                 array_push($array, "delete");
                                   echo generar_boton($array,"cambiar_editar5","btn-danger","fa fa-times","Eliminar");
                               }
-                              if(tiene_permiso($segmentos=2,$permiso=4)){
+                              if($puede_editar){
                                 array_push($resultado,"");
                                 echo generar_boton($resultado,"resolucion","btn-success2","fa fa-check","Resultado");
                               }
                             break;
                             case '2':
                               if ($tipo==1) {
-                                if(tiene_permiso($segmentos=2,$permiso=4)){
+                                if($puede_editar){
                                   array_push($actas,"");
                                   echo generar_boton($actas,"modal_actas_tipo","btn-success2","fa fa-file","Generar actas");
                                 }

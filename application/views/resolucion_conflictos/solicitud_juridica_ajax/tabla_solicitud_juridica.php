@@ -72,12 +72,19 @@
                                                     WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
                                                                                 FROM sct_delegado_exp de2
                                                                                 WHERE de2.id_expedienteci=de.id_expedienteci
+                                                                                AND de2.id_personal <> 0
                                                                                )
                                                   ) d ON d.id_expedienteci=e.id_expedienteci
                                               JOIN sir_empleado l on l.id_empleado=d.delegado_actual
                                               ".$add." AND tiposolicitud_expedienteci = '3' ORDER BY e.id_expedienteci DESC");
 
                     if($solicitudes->num_rows() > 0){
+
+                        /*********** Si hay registros consulta los permisos **********************/
+                        $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+                        $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
+                        /*********** Fin de consulta de permisos *********************************/
+
                         foreach ($solicitudes->result() as $fila) {
                           echo "<tr>";
                             echo "<td>".$fila->numero."</td>";
@@ -104,11 +111,11 @@
 
                             echo "<td>";
                             $array = array($fila->id_empresaci, $fila->id_personaci, $fila->nombre_personaci, $fila->apellido_personaci, $fila->sexo_personaci, $fila->direccion_personaci, $fila->discapacidad_personaci, $fila->telefono_personaci, $fila->id_municipio, $fila->ocupacion, $fila->salario_personaci, $fila->horarios_personaci, $fila->id_expedienteci, $fila->motivo_expedienteci, $fila->descripmotivo_expedienteci, $fila->id_personal,$fila->id_representanteci,$fila->causa_expedienteci);
-                            if(tiene_permiso($segmentos=2,$permiso=4)){
+                            if($puede_editar){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
                             }
-                            if(tiene_permiso($segmentos=2,$permiso=1)){
+                            if($puede_consultar){
                                 ?>
                               <div class="btn-group">
                                   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"

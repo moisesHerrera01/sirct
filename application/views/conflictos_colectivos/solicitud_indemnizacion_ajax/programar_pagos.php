@@ -46,7 +46,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </div>
                       <div class="row">
                         <div class="form-group col-lg-5" style="height: 20px;">
-                          Nombre de solicitante:
+                          Nombre de la persona solicitante:
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
                           <h5>

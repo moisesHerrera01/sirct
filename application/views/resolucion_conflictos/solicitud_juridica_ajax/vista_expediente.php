@@ -45,13 +45,13 @@
 
           <!--Datos del solicitante !-->
 
-            <span class="label label-success" style="font-size: 16px;">Datos del solicitante</span>
+            <span class="label label-success" style="font-size: 16px;">Datos de la persona solicitante</span>
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Nombre del establecimiento:
+                      Nombre de la parte empleadora:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->nombre_empresa ?></h5>

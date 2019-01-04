@@ -213,7 +213,7 @@ function tablasolicitudes(){
                         <div class="card-actions text-white">
                             <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
                         </div>
-                        <h4 class="card-title m-b-0 text-white">Listado de Solicitudes</h4>
+                        <h4 class="card-title m-b-0 text-white">Listado de solicitudes</h4>
                     </div>
                     <div class="card-body b-t">
                     </div>
@@ -225,7 +225,7 @@ function tablasolicitudes(){
               <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title m-b-0 ">Filtrar por delegado/a</h4>
+                        <h4 class="card-title m-b-0 ">Filtrar por persona delegada</h4>
                     </div>
                     <div class="card-body b-t" style="padding-top: 7px;">
                     <div>

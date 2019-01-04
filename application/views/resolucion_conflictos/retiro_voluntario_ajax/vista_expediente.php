@@ -48,7 +48,7 @@
 
         <!--Datos del solicitante !-->
 
-        <span class="label label-success" style="font-size: 16px;">Datos del solicitante</span>
+        <span class="label label-success" style="font-size: 16px;">Datos de la persona solicitante</span>
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>
@@ -223,7 +223,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-5" style="height: 20px;">
-                            Telefono:
+                            Tel&eacoute;fono:
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
                             <h5>
@@ -233,7 +233,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-5" style="height: 20px;">
-                            Representante:
+                            Persona representante:
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
                             <h5>
@@ -259,7 +259,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-5" style="height: 20px;">
-                            Delegado asignado:
+                            Persona delegada asignada:
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
                           <h5>

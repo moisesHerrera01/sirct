@@ -20,6 +20,10 @@
                 <?php
                   $contador=0;
                     if($pago!=FALSE){
+                        /*********** Si hay registros consulta los permisos **********************/
+                        $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+                        $puede_eliminar = tiene_permiso($segmentos=2,$permiso=3);
+                        /*********** Fin de consulta de permisos *********************************/
                         foreach ($pago->result() as $fila) {
                             $contador++;
                             echo "<tr>";
@@ -30,12 +34,12 @@
                             $array = array($fila->id_fechaspagosci, date("Y-m-d\TH:i", strtotime($fila->fechapago_fechaspagosci)),
                             $fila->montopago_fechaspagosci, $fila->id_persona);
 
-                            if(tiene_permiso($segmentos=2,$permiso=4)){
+                            if($puede_editar){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar6","btn-info","fa fa-wrench","Editar");
                             }
 
-                            if(tiene_permiso($segmentos=2,$permiso=3)){
+                            if($puede_eliminar){
                                 unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
                                 array_push($array, "delete");
                                 echo generar_boton($array,"cambiar_editar6","btn-danger","fa fa-times","Eliminar");

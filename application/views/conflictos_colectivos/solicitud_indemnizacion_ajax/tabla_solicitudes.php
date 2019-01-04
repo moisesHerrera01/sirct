@@ -65,6 +65,10 @@
                                         ".$add." AND e.tiposolicitud_expedienteci = '5' ORDER BY e.id_expedienteci DESC");
 
             if($solicitudes->num_rows() > 0){
+                /*********** Si hay registros consulta los permisos **********************/
+                $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+                $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
+                /*********** Fin de consulta de permisos *********************************/
                 foreach ($solicitudes->result() as $fila) {
                     echo "<tr>";
                     echo "<td>".$fila->numero."</td>";
@@ -92,13 +96,13 @@
 
 
                     $array = array($fila->id_expedienteci);
-                    if(tiene_permiso($segmentos=2,$permiso=4)){
+                    if($puede_editar){
                         array_push($array, "edit");
                         echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
                         array_pop($array);
                         echo generar_boton($array,"gestionar_solicitantes","btn-info","mdi mdi-account-plus","Editar");
                     }
-                    if(tiene_permiso($segmentos=2,$permiso=1)){
+                    if($puede_consultar){
                         if ($fila->estado != "4") {
                             ?>
                             <div class="btn-group">

@@ -217,7 +217,7 @@ function cambiar_delegado() {
       if(res != "fracaso"){
         cerrar_mantenimiento()
         tablasolicitudes();
-        swal({ title: "¡Delegado/a modificado exitosamente!", type: "success", showConfirmButton: true });
+        swal({ title: "¡Persona delegada modificada exitosamente!", type: "success", showConfirmButton: true });
       }else{
           swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
       }
@@ -517,7 +517,7 @@ function combo_establecimiento(seleccion){
 
       'language': {
         noResults: function () {
-          return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
+          return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
         }
       },
       'escapeMarkup': function (markup) {
@@ -817,7 +817,7 @@ function volver(num) {
                         <div id="cnt_form1" class="cnt_form">
                           <h3 class="box-title" style="margin: 0px;">
                               <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
-                              Información del solicitante
+                              Información de la persona solicitante
                             </h3><hr class="m-t-0 m-b-30">
                             <input type="hidden" id="band" name="band" value="save">
                             <input type="hidden" id="band1" name="band1" value="save">
@@ -1093,7 +1093,7 @@ function volver(num) {
           <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
           <input type="hidden" id="id_empresaci" name="id_empresaci" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de establecimiento</h4>
+                <h4 class="modal-title">Gestión de parte empleadora</h4>
             </div>
             <div class="modal-body" id="">
 
@@ -1110,7 +1110,7 @@ function volver(num) {
                 </div>
 
                 <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Nombre del establecimiento:</h5>
+                    <h5>Nombre de la parte empleadora:</h5>
                     <div class="controls">
                         <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control">
                     </div>
@@ -1119,14 +1119,14 @@ function volver(num) {
 
                 <div class="row" id="ocultar_pn">
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Razon social del establecimiento:</h5>
+                      <h5>Razon social:</h5>
                       <div class="controls">
                           <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control" required="">
                       </div>
                   </div>
 
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Abreviatura del establecimiento: <span class="text-danger">*</span></h5>
+                      <h5>Abreviatura: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control" required>
                       </div>
@@ -1281,7 +1281,7 @@ function volver(num) {
                   </div>
 
                   <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Tipo del directivo: <span class="text-danger">*</span></h5>
+                      <h5>Tipo de persona directiva: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="tipo_directivo" name="tipo_directivo" class="form-control">
                       </div>
@@ -1317,7 +1317,7 @@ function volver(num) {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Cambiar asignación de delegado/a:</h4>
+        <h4 class="modal-title">Cambiar asignación de persona delegada:</h4>
       </div>
 
       <div class="modal-body" id="">
@@ -1326,9 +1326,9 @@ function volver(num) {
             <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_cambiar_delegado"></div>
             <!-- <div class="form-group col-lg-12 col-sm-12">
                 <div class="form-group">
-                    <h5>Delegado/a:<span class="text-danger">*</h5>
+                    <h5>Persona delegada:<span class="text-danger">*</h5>
                     <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%" required="">
-                    <option value="">[Todos los empleados]</option>
+                    <option value="">[Todas las personas empleadas]</option>
                     <?php
                         $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre,
                                                                   e.segundo_nombre, e.tercer_nombre, e.primer_apellido,
@@ -1507,7 +1507,7 @@ $(function(){
                 if($("#band3").val() == "save"){
                     //$("#id_empresa").val(res[1])
                     $("#modal_establecimiento").modal('hide');
-                    $.toast({ heading: 'Registro exitoso', text: 'Registro de establecimiento exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                    $.toast({ heading: 'Registro exitoso', text: 'Registro exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                     combo_establecimiento(res[1]);
                 }else if($("#band3").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
@@ -1566,7 +1566,7 @@ $(function(){
 function desactivar(id_directivo) {
     swal({
         title: "Confirmar Dar de Baja",
-        text: "¿Está seguro que desea dar de baja al solicitante?",
+        text: "¿Está seguro que desea dar de baja a la persona solicitante?",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-success2",
@@ -1586,7 +1586,7 @@ function desactivar(id_directivo) {
             if (res == "exito") {
                 tabla_directivos();
                 swal({
-                    title: "¡Directivo desactivado exitosamente!",
+                    title: "¡Persona directiva desactivada exitosamente!",
                     type: "success",
                     showConfirmButton: true
                 });
@@ -1605,7 +1605,7 @@ function desactivar(id_directivo) {
 function activar(id_directivo) {
     swal({
         title: "Confirmar Activación",
-        text: "¿Está seguro que desea activar al solicitante?",
+        text: "¿Está seguro que desea activar a la persona solicitante?",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-success2",

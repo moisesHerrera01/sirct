@@ -396,7 +396,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                     'language': {
                         noResults: function () {
-                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
                         }
                     }, 'escapeMarkup': function (markup) { return markup; }
                 });
@@ -407,7 +407,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function cambiar_nuevo2(){
         if($("#establecimiento").val() == ''){
-            swal({ title: "Seleccione un establecimiento", type: "warning", showConfirmButton: true });
+            swal({ title: "Seleccione la parte empleadora", type: "warning", showConfirmButton: true });
         }else{
             $("#id_representante").val('');
             $("#nombres_representante").val('');
@@ -489,7 +489,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
         if(establecimiento == "" || registros.length == 0){
             if(establecimiento == ""){
-                swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
+                swal({ title: "Seleccione la parte empleadora", text: "No se ha seleccionado la parte empleadora.", type: "warning", showConfirmButton: true });
             }else{
                 swal({ title: "Seleccione una persona representante", text: "Agregue o seleccione una persona representante de la lista.", type: "warning", showConfirmButton: true });
             }
@@ -603,7 +603,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         .done(function (res) {
           if(res != "fracaso"){
             tablasolicitudes();
-            swal({ title: "¡Delegado/a modificado exitosamente!", type: "success", showConfirmButton: true });
+            swal({ title: "¡Persona delegada modificado exitosamente!", type: "success", showConfirmButton: true });
           }else{
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
           }
@@ -950,9 +950,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <div id="cnt_form1" class="cnt_form">
                           <h3 class="box-title" style="margin: 0px;">
                               <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 1</button>&emsp;
-                              Información del solicitante
+                              Información de la persona solicitante
                             </h3><hr class="m-t-0 m-b-30">
-                            <span class="etiqueta">Datos del establecimiento solicitante</span>
+                            <span class="etiqueta">Datos de la parte empleadora solicitante</span>
                             <blockquote class="m-t-0">
                                 <div class="row">
                                     <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento">
@@ -1118,13 +1118,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     </div>
                                 </div>
                             </blockquote>
-                            <span class="etiqueta">Asignación de delegado/a</span>
+                            <span class="etiqueta">Asignación de persona delegada</span>
                             <blockquote class="m-t-0">
                                 <div class="row">
                                     <div class="form-group col-lg-6">
-                                        <h5>Delegado/a:<span class="text-danger">*</h5>
+                                        <h5>Persona delegada:<span class="text-danger">*</h5>
                                         <select id="id_personal" name="id_personal" class="select2" style="width: 100%" required="">
-                                        <option value="">[Todos los empleados]</option>
+                                        <option value="">[Todas las personas empleadas]</option>
                                         <?php
                                             $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
                                             if($otro_empleado->num_rows() > 0){
@@ -1423,9 +1423,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_cambiar_delegado"></div>
             <!-- <div class="form-group col-lg-12 col-sm-12">
                 <div class="form-group">
-                    <h5>Delegado/a:<span class="text-danger">*</h5>
+                    <h5>Persona delegada:<span class="text-danger">*</h5>
                     <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%" required="">
-                    <option value="">[Todos los empleados]</option>
+                    <option value="">[Todas las personas empleadas]</option>
                     <?php
                         $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
                         if($otro_empleado->num_rows() > 0){
@@ -1527,7 +1527,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                     <h5>Tel&eacute;fono de la persona: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono de la persona representante" required>
+                        <input data-mask="9999-9999" type="text" id="teléfono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono de la persona representante" required>
                     </div>
                 </div>
               </div>
@@ -1602,7 +1602,7 @@ $(function(){
                 if($("#band").val() == "save"){
                     //$("#id_empresa").val(res[1])
                     $("#modal_establecimiento").modal('hide');
-                    $.toast({ heading: 'Registro exitoso', text: 'Registro de establecimiento exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                    $.toast({ heading: 'Registro exitoso', text: 'Registro de la parte empleadora exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                     combo_establecimiento(res[1]);
                 }else if($("#band").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });

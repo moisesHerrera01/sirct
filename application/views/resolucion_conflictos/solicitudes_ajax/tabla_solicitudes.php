@@ -73,6 +73,13 @@
                                               AND RIGHT(e.numerocaso_expedienteci,2)='".$abreviatura->pre."'
                                               ORDER BY e.id_expedienteci DESC");
                     if($solicitudes->num_rows() > 0){
+
+                        /*********** Si hay registros consulta los permisos **********************/
+                        $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+                        $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
+                        $rango_consulta = obtener_rango($segmentos=2, $permiso=1);
+                        /*********** Fin de consulta de permisos *********************************/
+
                         foreach ($solicitudes->result() as $fila) {
                           echo "<tr>";
                             echo "<td>".$fila->numero."</td>";
@@ -100,11 +107,11 @@
                             echo "<td>";
 
                             $array = array($fila->id_expedienteci);
-                            if(tiene_permiso($segmentos=2,$permiso=4)){
+                            if($puede_editar){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
                             }
-                            if(tiene_permiso($segmentos=2,$permiso=1)){
+                            if($puede_consultar){
                                 ?>
                               <div class="btn-group">
                                   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -117,7 +124,7 @@
                                       <!-- <?php if ($fila->id_estadosci=="2") {?>
                                         <a class="dropdown-item" href="javascript:;" onClick="pagos(<?=$fila->id_expedienteci?>)">Gestionar pagos</a>
                                       <?php } ?> -->
-                                      <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
+                                      <?php if ($rango_consulta > 1) { ?>
                                         <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado/a</a>
                                         <?php  } ?>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/'.$fila->id_expedienteci)?>">Acta de solicitud</a>

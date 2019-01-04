@@ -183,7 +183,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                     'language': {
                         noResults: function () {
-                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo establecimiento</a></div>';
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
                         }
                     }, 'escapeMarkup': function (markup) { return markup; }
                 });
@@ -657,7 +657,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         if(res != "fracaso"){
             cerrar_mantenimiento()
             tablasolicitudes();
-            swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+            swal({ title: "¡Persona delegada modificada exitosamente!", type: "success", showConfirmButton: true });
         }else{
             swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
         }
@@ -802,7 +802,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                     'language': {
                         noResults: function () {
-                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo defensor" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo defensor</a></div>';
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
                         }
                     }, 'escapeMarkup': function (markup) { return markup; }
                 });
@@ -895,9 +895,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
         if(establecimiento == "" || registros.length == 0){
             if(establecimiento == ""){
-                swal({ title: "Seleccione establecimiento", text: "No se ha seleccionado ningún establecimiento.", type: "warning", showConfirmButton: true });
+                swal({ title: "Seleccione la parte empleadora", text: "No se ha seleccionado la parte empleadora.", type: "warning", showConfirmButton: true });
             }else{
-                swal({ title: "Seleccione representante", text: "Agregue o seleccione un representante de la lista.", type: "warning", showConfirmButton: true });
+                swal({ title: "Seleccione la persona representante", text: "Agregue o seleccione una persona representante de la lista.", type: "warning", showConfirmButton: true });
             }
         }else{
             open_form(3);
@@ -906,7 +906,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function cambiar_nuevo2(){
         if($("#establecimiento").val() == ''){
-            swal({ title: "Seleccione un establecimiento", type: "warning", showConfirmButton: true });
+            swal({ title: "Seleccione la parte empleadora", type: "warning", showConfirmButton: true });
         }else{
             $("#id_representante").val('');
             $("#nombres_representante").val('');
@@ -1016,7 +1016,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <div class="card-actions text-white">
                             <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
                         </div>
-                        <h4 class="card-title m-b-0 text-white">Listado de Solicitudes</h4>
+                        <h4 class="card-title m-b-0 text-white">Listado de las personas solicitudes</h4>
                     </div>
                     <div class="card-body b-t">
 
@@ -1025,7 +1025,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso
                                     1</button>&emsp;
-                                Información del solicitante
+                                Información de la persona solicitante
                             </h3>
                             <hr class="m-t-0 m-b-30">
                             <input type="hidden" id="band" name="band" value="save">
@@ -1161,9 +1161,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <div id="cnt_form2" class="cnt_form" style="display: none;">
                           <h3 class="box-title" style="margin: 0px;">
                               <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 2</button>&emsp;
-                              Información del solicitante
+                              Información de la persona solicitada
                             </h3><hr class="m-t-0 m-b-30">
-                            <span class="etiqueta">Datos del solicitado</span>
+                            <span class="etiqueta">Datos de la persona solicitada</span>
                             <blockquote class="m-t-0">
                                 <div class="row">
                                     <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
@@ -1171,7 +1171,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 </div>
                             </blockquote>
 
-                            <span class="etiqueta">Representante</span>
+                            <span class="etiqueta">Persona representante</span>
                             <blockquote class="m-t-0">
                                 <div id="cnt_tabla_representantes"></div>
                             </blockquote>
@@ -1374,7 +1374,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
                     <option id="inasistencia" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Acta segunda audiencia</option>
                     <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option>
-                    <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor público</option>
+                    <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor/a público</option>
                      -->
                     <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
                     <option id="rv_ambas_partes" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Acta renuncia volunataria</option>
@@ -1382,8 +1382,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <option id="rv_ncnp" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/9/')?>">Acta renuncia volunataria</option>
                     <option id="esquela" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
                     <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
-                    <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor</option>
-                    <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor</option> -->
+                    <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor/a</option>
+                    <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor/a</option> -->
                     <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Desistimiento de persona natural a persona juridica</option> -->
                   </select>
                 </div>
@@ -1409,7 +1409,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <input type="hidden" id="band4" name="band4" value="save">
               <input type="hidden" id="id_representante" name="id_representante" value="">
                 <div class="modal-header">
-                    <h4 class="modal-title">Gestión de representantes</h4>
+                    <h4 class="modal-title">Gestión de personas representantes</h4>
                 </div>
                 <div class="modal-body" id="">
                     <div class="row">
@@ -1494,7 +1494,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="id_empresaci" name="id_empresaci" value="">
           <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de establecimientos</h4>
+                <h4 class="modal-title">Gestión de parte empleadora</h4>
             </div>
             <div class="modal-body" id="">
               <div id="alert_empresa"></div>
@@ -1574,7 +1574,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Cambiar asignación de delegado:</h4>
+                <h4 class="modal-title">Cambiar asignación de persona delegada:</h4>
             </div>
 
             <div class="modal-body" id="">
@@ -1586,7 +1586,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <h5>Delegado/a:<span class="text-danger">*</h5>
                             <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%"
                                 required="">
-                                <option value="">[Todos los empleados]</option>
+                                <option value="">[Todas las personas empleadas]</option>
                                 <?php
                             $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre,
                                                                       e.segundo_nombre, e.tercer_nombre, e.primer_apellido,
@@ -1770,7 +1770,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             if($("#band3").val() == "save"){
                                 //$("#id_empresa").val(res[1])
                                 $("#modal_establecimiento").modal('hide');
-                                $.toast({ heading: 'Registro exitoso', text: 'Registro de establecimiento exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                                $.toast({ heading: 'Registro exitoso', text: 'Registro de parte empleadora exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                                 combo_establecimiento(res[1]);
                             }else if($("#band3").val() == "edit"){
                                 swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });

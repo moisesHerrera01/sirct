@@ -29,6 +29,11 @@
                 	$representantes = $this->db->query("SELECT * FROM sge_representante WHERE id_empresa = '".$id_empresa."'");
                   $contador=0;
                     if($representantes->num_rows() > 0){
+
+                        /*********** Si hay registros consulta los permisos **********************/
+                        $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+                        /*********** Fin de consulta de permisos *********************************/
+
                         foreach ($representantes->result() as $fila) {
                           $contador++;
                           if($fila->id_representante == $id_representanteci){
@@ -52,7 +57,7 @@
                           echo "<td>";
                           $array = array($fila->id_representante, $fila->dui_representante, $fila->nombres_representante, $fila->acreditacion_representante, $fila->tipo_representante, $fila->estado_representante);
 
-                          if(tiene_permiso($segmentos=2,$permiso=4)){
+                          if($puede_editar){
                             array_push($array, "edit");
                             echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
                           }

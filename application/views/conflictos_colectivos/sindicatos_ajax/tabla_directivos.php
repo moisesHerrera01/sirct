@@ -16,16 +16,19 @@
             <table id="myTable2" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
-                      <th>Nombre directivo/a</th>
-                      <th>Apellido directivo/a</th>
-                      <th>Tipo directivo/a</th>
-                      <th>Acreditación directivo/a</th>
+                      <th>Nombre</th>
+                      <th>Apellido</th>
+                      <th>Tipo</th>
+                      <th>Acreditación</th>
                         <th width="150px">(*)</th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php
                     if($directivos!=NULL){
+                        /*********** Si hay registros consulta los permisos **********************/
+                        $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+                        /*********** Fin de consulta de permisos *********************************/
                         foreach ($directivos->result() as $fila) {
                           echo "<tr>";
                             echo "<td>".$fila->nombre_directivo."</td>";
@@ -35,7 +38,7 @@
                             echo "<td>";
 
                             $array = array($fila->id_directivo);
-                            if(tiene_permiso($segmentos=2,$permiso=4)){
+                            if($puede_editar){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
                             }
