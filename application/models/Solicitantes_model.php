@@ -10,18 +10,24 @@ class Solicitantes_model extends CI_Model {
     public function obtener_solicitantes_expediente($expediente) {
 
         $this->db->select('
-													a.id_personaci,
-													b.tipo_representantepersonaci,
-													a.nombre_personaci,
-													a.apellido_personaci,
-													a.estado_persona,
-													b.nombre_representantepersonaci,
-													b.apellido_representantepersonaci'
-												 )
+                    a.id_personaci,
+                    a.nombre_personaci,
+                    a.apellido_personaci,
+                    a.estado_persona,
+										a.sexo_personaci,
+										a.estudios_personaci,
+										(SELECT COUNT(f.id_fechasaudienciasci)
+										 FROM sct_fechasaudienciasci f
+										 WHERE f.id_expedienteci=a.id_expedienteci
+										 AND f.resultado=10)  conciliado,
+										 (SELECT COUNT(f.id_fechasaudienciasci)
+ 										 FROM sct_fechasaudienciasci f
+ 										 WHERE f.id_expedienteci=a.id_expedienteci
+ 										 AND f.estado_audiencia=1) activas'
+                )
                 ->from('sct_personaci a')
-                ->join('sct_representantepersonaci b', 'a.id_personaci = b.id_personaci', 'left')
                 ->where('a.id_expedienteci', $expediente)
-								->group_by('a.id_personaci');
+                ->group_by('a.id_personaci');
         $query=$this->db->get();
 
         if ($query->num_rows() > 0) {
@@ -38,13 +44,12 @@ class Solicitantes_model extends CI_Model {
         $this->db->select('
                     CONCAT_WS(" ", a.nombre_personaci, a.apellido_personaci) nombre_solicitante,
                     TIMESTAMPDIFF( YEAR,a.fnacimiento_personaci,CURDATE() ) AS edad,
-                    b.primarios_catalogociuo,
+                    a.ocupacion,
                     a.direccion_personaci,
                     d.departamento,
                     a.dui_personaci
                 ')
                 ->from('sct_personaci a')
-                ->join('sge_catalogociuo b', 'a.id_catalogociuo = b.id_catalogociuo')
                 ->join('org_municipio c', 'c.id_municipio = a.id_municipio')
                 ->join('org_departamento d', 'd.id_departamento = c.id_departamento_pais')
                 ->where('a.id_expedienteci', $expediente);
@@ -61,10 +66,9 @@ class Solicitantes_model extends CI_Model {
 
     public function obtener_solicitante($id) {
 
-        $this->db->select('')
+        $this->db->select('a.*, c.*, a.ocupacion, a.formapago_personaci, a.funciones_personaci, a.salario_personaci, a.horarios_personaci')
                 ->from('sct_personaci a')
-                ->join('sct_representantepersonaci b', 'a.id_personaci = b.id_personaci', 'left')
-                ->join('sct_expedienteci c', 'a.id_expedienteci = c.id_expedienteci', 'left')
+                ->join('sct_expedienteci c', 'a.id_expedienteci = c.id_expedienteci')
                 ->where('a.id_personaci', $id);
         $query=$this->db->get();
 

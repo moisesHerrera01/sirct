@@ -171,6 +171,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
     .modal-body { max-height:450px; overflow-y:scroll; }
 
+    #cnt_tabla_solicitudes .table-responsive{
+        min-height: 400px;
+    }
+
     <?php if($navegatorless){ ?>
         .form-control{padding: 0rem 0.75rem;}
         .input-group .form-control{ width: 85%; }
@@ -203,6 +207,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         .col-lg-8{ width: 63%;}
         .col-lg-9{ width: 70%;}
         .col-lg-12{ width: 93%;}
+
     <?php } ?>
 </style>
 <body class="fix-header fix-sidebar card-no-border mini-sidebar" onload="iniciar();">
@@ -291,7 +296,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             <div class="u-text">
                                                 <h4><?php echo $this->session->userdata('nombre_usuario'); ?></h4>
 
-                                                <p align="right"><a href="#!" class="btn btn-rounded btn-info waves-effect waves-light">Activo</a></p>
+                                                <p align="right"><a href="#!" class="btn btn-rounded btn-info waves-effect waves-light"><?=$this->session->userdata('nombre_rol') ?> </a></p>
+
                                             </div>
                                         </div>
                                     </li>

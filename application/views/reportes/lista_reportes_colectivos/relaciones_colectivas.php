@@ -4,6 +4,7 @@
 		var value = "";
 		var value2 = "";
        	anio = $("#anio_actual").val();
+        id_delegado = $("#id_delegado").val().toString();
 	    if(document.getElementById('radio_mensual').checked==true){
 	    	value = $("#mes").val();
 	    	type = "mensual";
@@ -22,24 +23,24 @@
        		value2 = $("#fecha_fin").val();
        		type = "periodo";
        	}
-        
-        if(anio!="" &&  (($("#mes").val()!="0" && document.getElementById('radio_mensual').checked==true)	
-        	|| ($("#trimestre").val()!="0" && document.getElementById('radio_trimestral').checked==true)	
-        	|| ($("#semestre").val()!="0" && document.getElementById('radio_semestral').checked==true)	
+
+        if(anio!="" &&  (($("#mes").val()!="0" && document.getElementById('radio_mensual').checked==true)
+        	|| ($("#trimestre").val()!="0" && document.getElementById('radio_trimestral').checked==true)
+        	|| ($("#semestre").val()!="0" && document.getElementById('radio_semestral').checked==true)
         	|| document.getElementById('radio_anual').checked==true
         	|| ($("#fecha_inicio").val()!="" && $("#fecha_fin").val()!="" && document.getElementById('radio_periodo').checked==true)
         )){
-          
+
           	var url = "<?php echo site_url()?>"+"/reportes/reportes_colectivos/relaciones_colectivas_report";
 
           	if(document.getElementById('radio_pdf').checked==true && tipo==""){
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2 , 'report_type' : 'pdf' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'id_delegado' : id_delegado, 'report_type' : 'pdf' };
         		OpenWindowWithPost(url, param, "_blank");
           	}else if(document.getElementById('radio_excel').checked==true && tipo==""){
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'report_type' : 'excel' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'id_delegado' : id_delegado, 'report_type' : 'excel' };
         		OpenWindowWithPost(url, param, "_blank");
           	}else{
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'report_type' : 'html' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'id_delegado' : id_delegado, 'report_type' : 'html' };
         		embed_html(url, param);
           	}
         }else{
@@ -105,7 +106,7 @@
      		document.getElementById("input_periodo").style.display="block";
      	}
     }
-     
+
     function iniciar() {
      	$("#mes").val(moment().format("M")).trigger('change.select2');
     }
@@ -115,7 +116,7 @@
     	$("#minimizar").show(0);
 
     	$("#cnt_form").hide(0);
-    	
+
     	var preview = $("#cnt_preview");
     	$(preview).removeClass("col-lg-8");
     	$(preview).addClass("col-lg-12");
@@ -135,9 +136,10 @@
 <div class="page-wrapper">
     <div class="container-fluid">
         <div class="row page-titles">
-            <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Reporte de relaciones colectivas</h3>
-            </div>
+					<div class="align-self-center" align="left" style="width: 100%">
+								<h3 class="text-themecolor m-b-0 m-t-0">Reporte de relaciones colectivas
+										<div class="pull-right"><small><a href="<?=site_url()?>/reportes/reportes_colectivos"><span class="mdi mdi-arrow-left"></span> Volver</a></small></div></h3>
+						</div>
         </div>
         <div class="row">
             <div class="col-lg-4" style="display: block;" id="cnt_form">
@@ -146,6 +148,27 @@
                         <h4 class="card-title m-b-0 text-white">Datos</h4>
                     </div>
                     <div class="card-body b-t">
+                        <div class="form-group">
+                            <h5>Persona delegada: <span class="text-danger"></span></h5>
+                            <select id="id_delegado" name="id_delegado" class="select2" onchange="" style="width: 100%">
+                                <?php
+                                    $ids_delegados = array();
+                                    $content = "";
+                                    if($colaborador->num_rows() > 0){
+                                        foreach ($colaborador->result() as $fila) {
+                                            array_push($ids_delegados, $fila->id_empleado);
+                                            if($fila->id_empleado==$id){ 
+                                                $content .= "<option value='".$fila->id_empleado."' selected>".$fila->nombre_completo."</option>";
+                                            }else{
+                                                $content .= "<option value='".$fila->id_empleado."'>".$fila->nombre_completo."</option>";
+                                            }
+                                        }
+                                    }
+                                    $ids_delegados = implode(",", $ids_delegados);
+                                    echo "<option value='".$ids_delegados."'>[Seleccione]</option>".$content;
+                                ?>
+                            </select>
+                        </div>
                         <div class="demo-radio-button">
                         	<h5>Periodo: <span class="text-danger"></span></h5>
                         	<div class="d-flex flex-row">

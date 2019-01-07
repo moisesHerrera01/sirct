@@ -55,8 +55,13 @@ function redireccionar_despido_hecho(tipo){
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
     }else{
         var param = { 'tipo_solicitud' : '1', 'band_mantto' : 'save' };
-        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);  
+        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);
     }
+}
+
+function redireccionar_colectivo(tipo){
+        var param = { 'band_mantto' : 'save' };
+        OpenWindowWithPost("<?php echo site_url(); ?>/conflictos_colectivos/"+tipo, param);
 }
 
 function redireccionar_diferencia_laboral(tipo){
@@ -65,7 +70,7 @@ function redireccionar_diferencia_laboral(tipo){
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
     }else{
         var param = { 'tipo_solicitud' : '2', 'band_mantto' : 'save' };
-        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);  
+        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);
     }
 }
 
@@ -85,7 +90,7 @@ function redireccionar_retiro_voluntario(tipo){
             <div class="container-fluid">
                 <div class="row page-titles">
                     <div class="col-lg-12 align-self-center">
-                        <h3 class="text-themecolor pull-left">INICIO</h3>
+                        <h3 class="text-themecolor pull-left">INICIO </h3>
 
                         <div class="pull-right">
                         <div id="btn_indicador" style="display: none;"><button class="btn btn-info" onclick="toogle_Options(500);"><span class="mdi mdi-chart-bar"></span> Indicadores</button></div>
@@ -100,6 +105,8 @@ function redireccionar_retiro_voluntario(tipo){
                 <!-- ============================================================== -->
         <div id="cnt_options">
             <div class="row">
+                <?php if($tipo_rol == 1){ //MEDIACIÓN INDIVIDUAL ?>
+
                 <div class="col-lg-4 col-xlg-3 col-md-5">
                     <div class="card blog-widget">
                         <div class="card-body text-center">
@@ -115,7 +122,7 @@ function redireccionar_retiro_voluntario(tipo){
                     <div class="card blog-widget">
                         <div class="card-body text-center">
                             <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/diferencia_laboral.jpg'?>" alt="img" class="img-responsive"></div>
-                            <h3>Diferencia laboral</h3>
+                            <h3>Conflicto laboral</h3>
                             <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(1)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
                             <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2)" class="m-t-10 waves-effect waves-dark btn btn-warning btn-md btn-rounded">Persona jurídica</a>
                             <br><br>
@@ -126,16 +133,48 @@ function redireccionar_retiro_voluntario(tipo){
                     <div class="card blog-widget">
                         <div class="card-body text-center">
                             <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/renuncia_voluntaria.png'?>" alt="img" class="img-responsive"></div>
-                            <h3>Retiro voluntario</h3>
+                            <h3>Notificación de renuncia voluntaria</h3>
                             <div>
                             <br>
                             <a href="javascript:void(0)" onclick="redireccionar_retiro_voluntario(3)" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Persona natural</a>
+                            <br>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <?php }else{ //MEDIACIÓN COLECTIVA ?>
+                <div class="col-lg-2 col-md-1"></div>
+                <div class="col-lg-4 col-xlg-3 col-md-5">
+                    <div class="card blog-widget">
+                        <div class="card-body text-center">
+                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/sindicato_cc.jpg'?>" alt="img" class="img-responsive"></div>
+                            <h3>Conflicto Laboral</h3>
+                            <div>
+                            <br>
+                            <a href="javascript:void(0)" onclick="redireccionar_colectivo('sindicato')" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Nueva solicitud</a>
                             <br><br>
                             </div>
                             <br>
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-4 col-xlg-3 col-md-5">
+                    <div class="card blog-widget">
+                        <div class="card-body text-center">
+                            <div class="blog-image"><img src="<?=base_url().'/assets/images/portadas/diferencia_laboral_cc.jpg'?>" alt="img" class="img-responsive"></div>
+                            <h3>Indenmización y Prestaciones Laborales</h3>
+                            <div>
+
+                            <a href="javascript:void(0)" onclick="redireccionar_colectivo('solicitud_indemnizacion')" class="m-t-10 waves-effect waves-dark btn btn-info btn-md btn-rounded">Nueva solicitud</a>
+                            <br><br>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-1"></div>
+                <?php } ?>
             </div>
         </div>
 
@@ -192,7 +231,7 @@ function redireccionar_retiro_voluntario(tipo){
         										<li>
 			                                        <h6 style="color: <?=$color[$cont]?>;">
 			                                        	<i class="fa fa-circle font-10 m-r-10 "></i><?=$arrayName[$cont]?>
-			                                        </h6> 
+			                                        </h6>
 		                                        </li>
         									<?php $cont++;}  ?>
 		                                </ul>
@@ -200,7 +239,7 @@ function redireccionar_retiro_voluntario(tipo){
 		                        </div>
 		                    </div>
 
-						
+
 
 						</div>
                     </div>
@@ -219,7 +258,7 @@ function redireccionar_retiro_voluntario(tipo){
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
-            
+
         </div>
         <!-- ============================================================== -->
         <!-- End Page wrapper  -->
@@ -245,7 +284,7 @@ chart2 = new Chart(ctx2, {
         labels: [<?php
 	$contador = 0;
 	if($tipo_asociacion->num_rows() > 0){
-        foreach ($tipo_asociacion->result() as $fila_sa) { 
+        foreach ($tipo_asociacion->result() as $fila_sa) {
         	$contador++;
         	if($tipo_asociacion->num_rows() == $contador){echo '"'.mb_substr($fila_sa->nombre, 0, 25).'.."';}else{echo '"'.mb_substr($fila_sa->nombre, 0, 25).'..",';} }
     }
@@ -256,7 +295,7 @@ chart2 = new Chart(ctx2, {
             backgroundColor: "<?php echo $color[0]; ?>",
             data: [
                 <?php if($tipo_asociacion->num_rows() > 0){
-                    foreach ($tipo_asociacion->result() as $fila_sa) { 
+                    foreach ($tipo_asociacion->result() as $fila_sa) {
                         echo $fila_sa->estado1.", ";
                         }
                     }
@@ -268,7 +307,7 @@ chart2 = new Chart(ctx2, {
             backgroundColor: "<?php echo $color[1]; ?>",
             data: [
                 <?php if($tipo_asociacion->num_rows() > 0){
-                    foreach ($tipo_asociacion->result() as $fila_sa) { 
+                    foreach ($tipo_asociacion->result() as $fila_sa) {
                         echo $fila_sa->estado2.", ";
                         }
                     }
@@ -280,7 +319,7 @@ chart2 = new Chart(ctx2, {
             backgroundColor: "<?php echo $color[2]; ?>",
             data: [
                 <?php if($tipo_asociacion->num_rows() > 0){
-                    foreach ($tipo_asociacion->result() as $fila_sa) { 
+                    foreach ($tipo_asociacion->result() as $fila_sa) {
                         echo $fila_sa->estado3.", ";
                         }
                     }
@@ -292,7 +331,7 @@ chart2 = new Chart(ctx2, {
             backgroundColor: "<?php echo $color[3]; ?>",
             data: [
                 <?php if($tipo_asociacion->num_rows() > 0){
-                    foreach ($tipo_asociacion->result() as $fila_sa) { 
+                    foreach ($tipo_asociacion->result() as $fila_sa) {
                         echo $fila_sa->estado4.", ";
                         }
                     }

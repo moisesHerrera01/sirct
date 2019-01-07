@@ -138,17 +138,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	function table_header($titles){
 
-		$cabecera_vista = '<div class="table table-responsive">
-			<table border="1" style="width:100%; border-collapse: collapse;">
+		$cabecera_vista = '<div class="table table-responsive" style="margin: 0; padding: 0;">
+			<table border="1" style="width:100%; border-collapse: collapse; font-size: 12px;">
 				<thead>
 					<tr>';
 		
 		for($i=0; $i < count($titles); $i++){
-			$cabecera_vista .= '<th align="center">'.mb_strtoupper($titles[$i])."</th>";
+			$cabecera_vista .= '<th align="center" style="text-align: center;">'.mb_strtoupper($titles[$i])."</th>";
 		}
 	 	
 		$cabecera_vista .= '</tr>
 				</thead>
+				<tbody>';
+	 	return $cabecera_vista;
+	}
+
+	function table_no_header(){
+
+		$cabecera_vista = '<div class="table table-responsive" style="margin: 0; padding: 0;">
+			<table border="1" style="width:100%; border-collapse: collapse;">
 				<tbody>';
 	 	return $cabecera_vista;
 	}
@@ -166,6 +174,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	function table_footer(){
 		$cabecera_vista = '</tbody>
 			</table></div>';	
+	 	return $cabecera_vista;
+	}
+
+	function no_rows($cant){
+		$cabecera_vista = '<tr>';
+		$cabecera_vista .= '<td colspan="'.$cant.'" align="center">NO HAY REGISTROS DISPONIBLES...</td>';
+		$cabecera_vista .= '</tr>';
+
 	 	return $cabecera_vista;
 	}
 

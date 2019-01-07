@@ -5,7 +5,7 @@
             if(!empty($municipio)){
             foreach ($municipio->result() as $fila) {
         ?>
-            <option  value="<?php echo $fila->id_municipio ?>" <?php if($fila->id_municipio==$id){?> selected  <?php }?>>
+            <option  value="<?php echo intval($fila->id_municipio); ?>" <?php if($fila->id_municipio==$id){?> selected  <?php }?>>
         <?php
             echo $fila->municipio;
         ?>

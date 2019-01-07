@@ -41,7 +41,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Solicitante</h4>
+                <h4 class="modal-title">Nuevo persona solicitante</h4>
             </div>
 
             <div class="modal-body" id="">
@@ -51,7 +51,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <input type="hidden" name="id_persona" id="id_persona1">
                     <input type="hidden" id="band4" name="band4" value="save">
 
-                    <span class="etiqueta">Datos del Solicitante</span>
+                    <span class="etiqueta">Datos de la persona solicitante</span>
                     <blockquote class="m-t-0">
 
                         <div class="row">
@@ -59,14 +59,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <div class="form-group col-lg-6" style="height: 83px;">
                                 <h5>Nombres: <span class="text-danger">*</span></h5>
                                 <input type="text" id="nombre_solicitante" name="nombre_solicitante" class="form-control"
-                                    placeholder="Nombre Persona del Solicitante" required>
+                                    placeholder="Nombre de la persona solicitante" required>
                                 <div class="help-block"></div>
                             </div>
 
                             <div class="form-group col-lg-6" style="height: 83px;">
                                 <h5>Apellidos: <span class="text-danger">*</span></h5>
                                 <input type="text" id="apellido_solicitante" name="apellido_solicitante" class="form-control"
-                                    placeholder="Apellido Persona del Solicitante" required>
+                                    placeholder="Apellido de la persona solicitante" required>
                                 <div class="help-block"></div>
                             </div>
 
@@ -180,9 +180,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <div class="form-group col-lg-2" style="height: 83px;">
                                 <h5>Sexo:</h5>
                                 <input name="sexo_solicitante" type="radio" id="masculino" checked="" value="M">
-                                <label for="masculino">Masculino</label>
+                                <label for="masculino">Hombre</label>
                                 <input name="sexo_solicitante" type="radio" id="femenino" value="F">
-                                <label for="femenino">Femenino</label>
+                                <label for="femenino">Mujer</label>
                                 <div class="help-block"></div>
                           </div>
 
@@ -244,7 +244,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Solicitante</h4>
+                <h4 class="modal-title">Nueva persona solicitante</h4>
             </div>
             <div class="modal-body" id="">
                 <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
@@ -254,44 +254,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <input type="hidden" name="id_persona" id="id_persona2">
                         <input type="hidden" name="id_representante" id="id_representante_solicitante">
 
-                        <span class="etiqueta">Informaci&oacute;n del Solicitante</span>
-                        <blockquote class="m-t-0">
-                            <div class="row">
-                                <div class="form-group col-lg-6" style="height: 83px;">
-                                    <h5>Nombres de Representante: <span class="text-danger">*</span></h5>
-                                    <input type="text" id="nombre_representacion_solicitante" name="nombre_representacion_solicitante"
-                                        class="form-control" placeholder="Nombre de Representante" required>
-                                    <div class="help-block"></div>
-                                </div>
-                                <div class="form-group col-lg-6" style="height: 83px;">
-                                    <h5>Apellidos de Representante: <span class="text-danger">*</span></h5>
-                                    <input type="text" id="apellido_representacion_solicitante" name="apellido_representacion_solicitante"
-                                        class="form-control" placeholder="Apellidos de Representante" required>
-                                    <div class="help-block"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6" style="height: 83px;">
-                                    <h5>Tipo de Representación: <span class="text-danger">*</span></h5>
-                                    <input type="text" id="tipo_representacion_solicitante" name="tipo_representacion_solicitante"
-                                        class="form-control" placeholder="Tipo de Representación" required>
-                                    <div class="help-block"></div>
-                                </div>
-                            </div>
-                        </blockquote>
-
                         <span class="etiqueta">Motivo de la solicitud</span>
                         <blockquote class="m-t-0">
                             <div class="row">
-                                <div class="form-group col-lg-4" style="height: 83px;">
-                                    <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
-                                            <option value="">[Seleccione]</option>
-                                            <option value="1">Indemnización</option>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="form-group col-lg-8" style="height: 83px;">
                                     <h5>Ocupación: <span class="text-danger">*</span></h5>
                                     <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI"></textarea>
@@ -315,10 +280,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <div class="help-block"></div>
                                 </div>
 
-                                <div class="form-group col-lg-6" style="height: 83px;">
-                                    <h5>Forma de pago:<span class="text-danger">*</h5>
-                                    <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Forma de pago">
-                                    <div class="help-block"></div>
+                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <h5>Forma de pago: <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                    <select id="forma_pago" name="forma_pago" class="custom-select col-4" onchange="" required>
+                                        <option value="">[Seleccione]</option>
+                                        <option value="Diario">Diario</option>
+                                        <option value="Semanal">Semanal</option>
+                                        <option value="Catorcenal">Catorcenal</option>
+                                        <option value="Quincenal">Quincenal</option>
+                                        <option value="Mensual">Mensual</option>
+                                    </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -343,58 +316,66 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </div>
 
 <div class="modal fade" id="modal_resolucion" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Registrar Resultado del Expediente</h4>
-      </div>
-
-      <div class="modal-body" id="">
-        <div id="cnt_form6" class="cnt_form">
-          <?php echo form_open('', array('id' => 'formajax6', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-
-          <input type="hidden" id="id_persona3" name="id_persona" value="">
-
-          <div class="row">
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Resoluci&oacute;n de intervenci&oacute;n: <span class="text-danger">*</span></h5>
-              <div class="controls">
-                <select id="resolucion" name="resolucion" class="form-control" required>
-                  <option value="">[Seleccione]</option>
-                  <option value="">[Seleccione]</option>
-                  <option value="Conciliado">Conciliado</option>
-                  <option value="Sin conciliar">Sin conciliar</option>
-                  <option value="Inasistencia">Inasistencia</option>
-                  <option value="Desistida">Desistida</option>
-                  <option value="A multas">A multas</option>
-                  <option value="No notificada">No notificada</option>
-                  <option value="Reinstalo">Reinstalo</option>
-                </select>
-              </div>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Registrar Resultado del Expediente</h4>
             </div>
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Tipo de Conciliaci&oacute;n: </h5>
-              <div class="controls">
-                <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
-                  <option value="">[Seleccione]</option>
-                  <option value="Pago en el momento">Pago en el momento</option>
-                  <option value="Pago diferido">Pago diferido</option>
-                </select>
-              </div>
-            </div>
-          </div>
 
-          <div align="right" id="btnadd1">
-            <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn waves-effect waves-light btn-success2">
-              Guardar <i class="mdi mdi-chevron-right"></i>
-            </button>
-          </div>
-          <?php echo form_close(); ?>
+            <div class="modal-body" id="">
+                <div id="cnt_form6" class="cnt_form">
+                    <?php echo form_open('', array('id' => 'formajax6', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+
+                    <input type="hidden" id="id_persona3" name="id_persona" value="">
+
+                    <div class="row">
+                        <div id="div_combo_resultados">
+                        </div>
+
+                        <div id="tipo_conciliacion_div" style="display:none;" class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "
+                            pull-left"; } ?>">
+                            <h5>Tipo de Mediaci&oacute;n: </h5>
+                            <div class="controls">
+                                <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
+                                    <option value="">[Seleccione]</option>
+                                    <option value="1">Pago en el momento</option>
+                                    <option value="2">Pago diferido</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id='tipo_pago' style="display:none;">
+                        <div id="mpago" class="form-group col-lg-4" style="height: 83px;">
+                            <h5>Monto de pago($):<span class="text-danger">*</h5>
+                            <input type="number" id="monto_pago" name="monto_pago" class="form-control" placeholder="Monto total de pago"
+                                step="0.01">
+                        </div>
+
+                        <div id="fhpago" class="form-group col-lg-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                            <h5>Fecha y hora de pago: <span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                <input type="datetime-local" class="form-control" id="fecha_pago" nombre="fecha_pago">
+                            </div>
+                        </div>
+
+                        <div id="p_pago" class="form-group col-lg-6" style="height: 83px;">
+                            <h5>Monto de primer pago:<span class="text-danger">*</h5>
+                            <input type="number" id="primer_pago" name="primer_pago" class="form-control" placeholder="Monto de primer pago"
+                                step="0.01">
+                        </div>
+                    </div>
+                    <div align="right" id="btnadd1">
+                        <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn waves-effect waves-light btn-success2">
+                            Guardar <i class="mdi mdi-chevron-right"></i>
+                        </button>
+                    </div>
+                    <?php echo form_close(); ?>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <script>
@@ -454,11 +435,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         type: "error",
                         showConfirmButton: true
                     });
-                } else {
-                    swal({ title: "¡El solicitante se ingreso con exito!", type: "success", showConfirmButton: true });
+                } else if($("#band5").val() == "save") {
+                    swal({ title: "¡Se registró la persona solicitante con éxito!", type: "success", showConfirmButton: true });
                     tabla_solicitantes();
                     $('#modal_representante_motivo').modal('hide');
                     $('.modal-backdrop').remove();
+                }else {
+                  swal({ title: "¡Se editó la persona solicitante con éxito!", type: "success", showConfirmButton: true });
+                  tabla_solicitantes();
+                  $('#modal_representante_motivo').modal('hide');
+                  $('.modal-backdrop').remove();
                 }
             });
         });
@@ -498,7 +484,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
 
     function cambiar_nuevo_solicitante() {
-        open_form(1);
 
         $('#band4').val('save');
         $('#band5').val('save');
@@ -521,7 +506,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#apellido_representacion_solicitante').val('');
         $('#tipo_representacion_solicitante').val('');
         $('#motivo').val('').trigger('change.select2');
-        $('#ocupacion').val('').trigger('change.select2');
+        $('#ocupacion').val('');
         $('#funciones').val('');
         $('#salario').val('');
         $('#forma_pago').val('');
@@ -564,8 +549,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $('#band5').val('edit');
 
             $('#id_expediente3').val(result.id_expedienteci);
-            $('#id_persona1').val(result.id_personaci);
-            $('#id_persona2').val(result.id_personaci);
+            $('#id_persona1').val(id_solicitante);
+            $('#id_persona2').val(id_solicitante);
             $('#id_representante_solicitante').val(result.id_representantepersonaci);
 
             $('#nombre_solicitante').val(result.nombre_personaci);
@@ -582,7 +567,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $('#apellido_representacion_solicitante').val(result.apellido_representantepersonaci);
             $('#tipo_representacion_solicitante').val(result.tipo_representantepersonaci);
             $('#motivo').val(result.tipopeticion_personaci).trigger('change.select2');
-            $('#ocupacion').val(result.id_catalogociuo).trigger('change.select2');
+            $('#ocupacion').val(result.ocupacion);
             $('#funciones').val(result.funciones_personaci);
             $('#salario').val(result.salario_personaci);
             $('#forma_pago').val(result.formapago_personaci);
@@ -618,13 +603,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     $(function () {
         $(document).ready(function () {
-              $("input[name=discapacidad_solicitante]").click(function(evento){
-                    var valor = $(this).val();
-                    if(valor == 0){
-                        $("#ocultar_div").hide(500);
-                    }else{
-                        $("#ocultar_div").show(500);
-                    }
+            $("input[name=discapacidad_solicitante]").click(function(evento){
+                var valor = $(this).val();
+                if(valor == 0){
+                    $("#ocultar_div").hide(500);
+                }else{
+                    $("#ocultar_div").show(500);
+                }
             });
 
             $('#fecha_nacimiento').datepicker({
@@ -645,7 +630,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function desactivar(id_solicitante) {
         swal({
             title: "Confirmar Dar de Baja",
-            text: "¿Está seguro que desea dar de baja al solicitante?",
+            text: "¿Está seguro que desea dar de baja a la persona solicitante?",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn-success2",
@@ -665,7 +650,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 if (res == "exito") {
                     tabla_solicitantes();
                     swal({
-                        title: "¡Solicitante desactivado exitosamente!",
+                        title: "Persona solicitante desactivada exitosamente!",
                         type: "success",
                         showConfirmButton: true
                     });
@@ -684,7 +669,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function activar(id_solicitante) {
         swal({
             title: "Confirmar Activación",
-            text: "¿Está seguro que desea activar al solicitante?",
+            text: "¿Está seguro que desea activar a la persona solicitante?",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn-success2",
@@ -704,7 +689,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 if (res == "exito") {
                     tabla_solicitantes();
                     swal({
-                        title: "¡Solicitante activado exitosamente!",
+                        title: "Persona solicitante activada exitosamente!",
                         type: "success",
                         showConfirmButton: true
                     });
@@ -745,5 +730,61 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
          $('#div_numero_doc_identidad').show(500);
          $("#dui").attr("required",'required');
       }
+    }
+
+    function mostrar() {
+        // $("#especifique").hide(0);
+        $("#p_pago").hide(0);
+        $("#fhpago").hide(0);
+        $("#mpago").hide(0);
+        $("#tipo_pago").hide(0);
+        // $("#det_resultado").show(0);
+        $("#tipo_conciliacion").removeAttr("required");
+        $("#monto_pago").removeAttr("required");
+        // $("#inasistencia").removeAttr("required");
+        $("#primer_pago").removeAttr("required");
+        $("#fecha_pago").removeAttr("required");
+        // $("#detalle_resultado").attr("required", "required");
+        var value = $("#resolucion").val();
+
+        if (value == "") {
+            $("#tipo_pago").hide(0);
+        } else {
+            $("#tipo_pago").show(1000);
+        }
+
+        switch (value) {
+            case '1':
+                $("#fhpago").show(0);
+                $("#mpago").show(0);
+                $("#tipo_conciliacion_div").show(500);
+                $("#tipo_conciliacion").attr("required", 'required');
+                $("#tipo_conciliacion").change(
+                    function () {
+                        $("#primer_pago").removeAttr("required");
+                        var tipo = $("#tipo_conciliacion").val();
+                        if (tipo == '2') {
+                            $("#primer_pago").attr("required", 'required');
+                            $("#p_pago").show(500);
+                        } else {
+                            $("#primer_pago").removeAttr("required");
+                            $("#p_pago").hide(0);
+                        }
+                    });
+                $("#monto_pago").attr("required", 'required');
+                $("#fecha_pago").attr("required", 'required');
+                break;
+            // case '3':
+            //     $("#det_resultado").hide(0);
+            //     $("#detalle_resultado").removeAttr("required");
+            //     $("#especifique").show(500);
+            //     $("#inasistencia").attr("required", 'required');
+            //     break;
+            // case '5':
+            //     $("#det_resultado").hide(0);
+            //     $("#detalle_resultado").removeAttr("required");
+            //     break;
+            default:
+        }
     }
 </script>

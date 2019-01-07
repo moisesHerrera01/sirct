@@ -30,33 +30,55 @@ class Establecimiento extends CI_Controller {
 
 	}
 
+	public function combo_municipio2() {
+
+	$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_municipio2',
+		array(
+			'id' => $this->input->post('id'),
+			'municipio' => $this->db->get('org_municipio')
+		)
+	);
+
+}
+
 	public function gestionar_establecimiento() {
 		if($this->input->post('band3') == "save"){
-
 			$data = array(
                 'numinscripcion_empresa' => '1-2018 SS',
-                'nombre_empresa' => $this->input->post('nombre_establecimiento'),
-								'razon_social' => $this->input->post('razon_social'),
-                'abreviatura_empresa' => $this->input->post('abre_establecimiento'),
-                'direccion_empresa'  => $this->input->post('dir_establecimiento'),
+                'nombre_empresa' => mb_strtoupper($this->input->post('nombre_establecimiento')),
+				'razon_social' => mb_strtoupper($this->input->post('razon_social')),
+                'abreviatura_empresa' => mb_strtoupper($this->input->post('abre_establecimiento')),
+                'direccion_empresa'  => mb_strtoupper($this->input->post('dir_establecimiento')),
                 'telefono_empresa' => $this->input->post('telefono_establecimiento'),
                 'id_catalogociiu' => $this->input->post('act_economica'),
                 'id_municipio' => $this->input->post('municipio2'),
-								'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
+				'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
             );
-
-			$id_establecimiento = $this->establecimiento_model->insertar_empresa($data);
-
-			$data = array(
-				'nombres_representante' => $this->input->post('nombre_representante'),
-				'id_empresa' => $id_establecimiento
+			echo $this->establecimiento_model->insertar_establecimiento($data);
+		}else if($this->input->post('band3') == "edit"){
+      		$data = array(
+	      		'id_empresa' => $this->input->post('id_empresaci'),
+	      		'nombre_empresa' => mb_strtoupper($this->input->post('nombre_establecimiento')),
+				'razon_social' => mb_strtoupper($this->input->post('razon_social')),
+                'abreviatura_empresa' => mb_strtoupper($this->input->post('abre_establecimiento')),
+                'direccion_empresa'  => mb_strtoupper($this->input->post('dir_establecimiento')),
+                'telefono_empresa' => $this->input->post('telefono_establecimiento'),
+                'id_catalogociiu' => $this->input->post('act_economica'),
+                'id_municipio' => $this->input->post('municipio2'),
+				'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
 			);
-
-			$this->representante_model->insertar_representante($data);
-
-			echo $id_establecimiento;
-
+			echo $this->establecimiento_model->upgrade_establecimiento($data);
 		}
+	}
+
+	public function combo_representante_empresa() {
+		$data = $this->establecimiento_model->obtener_representantes($this->input->get('id_empresaci'));
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_representante_empresa',
+			array(
+				'id' => $this->input->post('id'),
+				'rep_empresa' => $data
+			)
+		);
 	}
 }
 ?>

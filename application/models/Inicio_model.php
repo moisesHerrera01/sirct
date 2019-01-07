@@ -2,19 +2,19 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Inicio_model extends CI_Model {
-	
+
 	function __construct(){
 		parent::__construct();
 	}
 
 	public function obtener_estadistica_clase_asociacion(){
 		$query=$this->db->query("
-			SELECT 'Persona Natural con Rep.' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Conciliación' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 1) > 0 UNION 
-			SELECT 'Persona Natural sin Rep.' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Conciliación' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 0) > 0 UNION 
-			SELECT 'Persona Jurídica' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'conciliacion juridica' UNION 
-			SELECT 'Renuncia Voluntaria' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Renuncia Voluntaria' UNION 
-			SELECT 'Indemnización y Prestaciones Laborales' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Indemnización y Prestaciones Laborales' UNION
-			SELECT 'Diferencia Laboral' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Diferencia Laboral'
+			SELECT 'Persona Natural con Rep.' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '1' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 1) > 0 UNION
+			SELECT 'Persona Natural sin Rep.' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '1' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 0) > 0 UNION
+			SELECT 'Persona Jurídica' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '3' UNION
+			SELECT 'Renuncia Voluntaria' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '2' UNION
+			SELECT 'Indemnización y Prestaciones Laborales' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '5' UNION
+			SELECT 'Diferencia Laboral' AS nombre, COUNT(*) AS cantidad FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '4'
 			");
 		if ($query->num_rows() > 0) { return $query;
 		}else{ return FALSE; }
@@ -27,12 +27,12 @@ class Inicio_model extends CI_Model {
 		$estados .= ", SUM(CASE WHEN a.id_estadosci = 4 THEN 1 ELSE 0 END) AS estado4";
 
 		$query=$this->db->query("
-			SELECT 'Persona Natural con Rep.' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Conciliación' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 1) > 0 UNION 
-			SELECT 'Persona Natural sin Rep.' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Conciliación' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 0) > 0 UNION 
-			SELECT 'Persona Jurídica' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'conciliacion juridica' UNION 
-			SELECT 'Renuncia Voluntaria' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Renuncia Voluntaria' UNION 
-			SELECT 'Indemnización y Prestaciones Laborales' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Indemnización y Prestaciones Laborales' UNION
-			SELECT 'Diferencia Laboral' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = 'Diferencia Laboral'
+			SELECT 'Persona Natural con Rep.' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '1' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 1) > 0 UNION
+			SELECT 'Persona Natural sin Rep.' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '1' AND (SELECT count(*) FROM sct_personaci WHERE id_personaci = a.id_personaci AND posee_representante = 0) > 0 UNION
+			SELECT 'Persona Jurídica' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '3' UNION
+			SELECT 'Renuncia Voluntaria' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '2' UNION
+			SELECT 'Indemnización y Prestaciones Laborales' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '5' UNION
+			SELECT 'Diferencia Laboral' AS nombre, COUNT(*) AS cantidad $estados FROM sct_expedienteci AS a WHERE a.tiposolicitud_expedienteci = '4'
 			");
 		if ($query->num_rows() > 0) { return $query;
 		}else{ return FALSE; }

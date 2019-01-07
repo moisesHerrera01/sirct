@@ -7,11 +7,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 
+<script>
+  function abrir_resolucion(){
+    $('#modal_pagos').modal('hide');
+    $('#modal_resolucion').modal('show');
+  }
+</script>
+
 <div class="modal fade" id="modal_resolucion" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Registrar Resultado del Expediente</h4>
+        <h4 class="modal-title">Registrar resultado de la cita</h4>
       </div>
 
       <div class="modal-body" id="">
@@ -19,78 +26,74 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <?php echo form_open('', array('id' => 'formajax4', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
 
           <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="<?= $id?>">
+          <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value="<?= $id_audiencia?>">
 
           <div class="row">
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Resulado de intervenci&oacute;n conciliator&iacute;a: <span class="text-danger">*</span></h5>
-              <div class="controls">
-                <select onchange="mostrar()" id="resolucion" name="resolucion" class="form-control" required>
-                  <option value="">[Seleccione]</option>
-                  <option value="Conciliado">Conciliado</option>
-                  <option value="Sin conciliar">Sin conciliar</option>
-                  <option value="Inasistencia">Inasistencia</option>
-                  <option value="Desistida">Desistida</option>
-                  <option value="A multas">A multas</option>
-                  <option value="No notificada">No notificada</option>
-                  <option value="Reinstalo">Reinstalo</option>
-                </select>
-              </div>
-            </div>
+            <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_resultados"></div>
 
-            <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                 <h5>Fecha del resultado: <span class="text-danger">*</span></h5>
                 <input type="text" required="" class="form-control" id="fecha_resultado" name="fecha_resultado" placeholder="dd/mm/yyyy" readonly="">
                 <div class="help-block"></div>
             </div>
 
-            <div class="form-group col-lg-12 col-sm-12" style="height: 83px;">
+              <div id="asist" class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                <h5>Parte solicitante : </h5>
+                <div class="controls">
+                  <select id="asistieron" name="asistieron" class="form-control">
+                    <option value="">[Seleccione]</option>
+                    <option value="1">Persona defensora pública</option>
+                    <option value="2">Persona defensora pública y trabajadora</option>
+                    <option value="3">Persona trabajadora</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_defensores"></div>
+
+              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_representante_empresa"></div>
+
+              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div>
+
+            <div id="det_resultado" class="form-group col-lg-12 col-sm-12" style="height: 83px;">
                 <h5>Detalle del resultado:<span class="text-danger">*</span></h5>
                 <textarea type="text" id="detalle_resultado" name="detalle_resultado" class="form-control" placeholder="Detalles del resultado" required=""></textarea>
                 <div class="help-block"></div>
             </div>
           </div>
 
-          <div class="row" style="display: none;" id='tipo_pago'>
-            <div  class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Tipo de conciliación: <span class="text-danger">*</span></h5>
+          <div class="row" id='tipo_pago'>
+
+          <div id="num_folios" class="form-group col-lg-4" style="height: 83px;">
+              <h5>Número folios:<span class="text-danger">*</h5>
+              <input type="number" id="numero_folios" name="numero_folios" class="form-control" placeholder="Número folios" step="1">
+              <div class="help-block"></div>
+          </div>
+
+            <div id='tipo_cc' class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <h5>Tipo de pago: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select id="tipo_conciliacion" name="tipo_conciliacion" class="form-control">
                   <option value="">[Seleccione]</option>
-                  <option value="Pago en el momento">Pago en el momento</option>
-                  <option value="Pago diferido">Pago diferido</option>
+                  <option value="1">Pago en el momento</option>
+                  <option value="2">Pago diferido</option>
                 </select>
               </div>
             </div>
 
-            <div class="form-group col-lg-6" style="height: 83px;">
-                <h5>Monto de pago($):<span class="text-danger">*</h5>
-                <input type="number" id="monto_pago" name="monto_pago" class="form-control" placeholder="Monto total de pago " step="0.01">
-                <div class="help-block"></div>
+          <div id="registrar" class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+            <h5>Registrar fechas de pagos:<span class="text-danger">*</h5>
+                  <button type="button" onclick="pagos(<?= $id ?>);" class="btn waves-effect waves-light btn-info">Registrar</button>
             </div>
 
-            <div class="form-group col-lg-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Fecha y hora de pago: <span class="text-danger">*</span></h5>
-              <div class="controls">
-                <input type="datetime-local" class="form-control" id="fecha_pago" nombre="fecha_pago">
-              </div>
-            </div>
-
-            <div style="display: none" id="p_pago" class="form-group col-lg-6" style="height: 83px;">
-                <h5>Monto de primer pago:<span class="text-danger">*</h5>
-                <input type="number" id="primer_pago" name="primer_pago" class="form-control" placeholder="Monto de primer pago" step="0.01">
-                <div class="help-block"></div>
-            </div>
-          </div>
-
-          <div style="display:none;" id="especifique" class="row">
-            <div  class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+            <div  id="especifique" class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Especifique : <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select id="inasistencia" name="inasistencia" class="form-control" required>
                   <option value="">[Seleccione]</option>
-                  <option value="1">Parte solicitada</option>
-                  <option value="2">Parte solictante</option>
-                  <option value="3">Ambas partes</option>
+                  <option value="1">Parte empleadora</option>
+                  <option value="2">Parte trabajadora</option>
+                  <option value="3">Parte empleadora y trabajadora</option>
                 </select>
               </div>
             </div>
@@ -120,7 +123,7 @@ $(function(){
         $('#modal_resolucion').modal('hide');
 
         $.ajax({
-            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/gestionar_resolucion_expediente",
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/gestionar_resolucion_audiencia",
             type: "post",
             dataType: "html",
             data: formData,
@@ -130,7 +133,8 @@ $(function(){
         })
         .done(function(res){
             if(res != "fracaso"){
-                swal({ title: "¡La resolucion se aplicó con exito!", type: "success", showConfirmButton: true });
+                swal({ title: "¡La resolucion se aplicó con éxito!", type: "success", showConfirmButton: true });
+                tabla_audiencias(formData.get('id_expedienteci'));
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
@@ -138,44 +142,124 @@ $(function(){
       $('#modal_resolucion').remove();
       $('.modal-backdrop').remove();
       $('body').removeClass('modal-open');
-      tablasolicitudes();
+      // tablasolicitudes();
     });
 });
 
 function mostrar(){
-  $("#tipo_pago").hide(0);
+
+  var divs = $("#tipo_pago").children(".form-group");
+  $(divs[0]).show(0); $(divs[1]).hide(0); $(divs[2]).hide(0);
+  $("#num_folios").show(0);
+  $("#numero_folios").attr("required","required");
+  $("#div_combo_defensores").show(0);
+  $("#defensor").attr("required","required");
+  $("#representante_empresa").attr("required","required");
+  $("#div_combo_delegado2").show(0);
+  $("#delegado").attr("required","required");
+  $("#div_combo_representante_empresa").show(0);
+  $("#representante_empresa").attr("required","required");
   $("#especifique").hide(0);
   $("#p_pago").hide(0);
   $("#f_pago").hide(0);
+  $("#fhpago").hide(0);
+  $("#det_resultado").show(0);
+  $("#asist").show(0);
   $("#tipo_conciliacion").removeAttr("required");
   $("#monto_pago").removeAttr("required");
   $("#inasistencia").removeAttr("required");
   $("#primer_pago").removeAttr("required");
   $("#fecha_pago").removeAttr("required");
+  $("#detalle_resultado").attr("required","required");
+  $("#asistieron").attr("required","required");
   var value = $("#resolucion").val();
+
+  $("#asistieron").change(
+      function(){
+        var esp = $("#asistieron").val();
+        if (esp==3) {
+          $("#defensor").removeAttr("required");
+        }else {
+          $("#asistieron").attr("required","required");
+        }
+    });
+
+  if(value == ""){ $("#tipo_pago").hide(0); }else{ $("#tipo_pago").show(0); }
+
   switch (value) {
-    case 'Conciliado':
-      $("#tipo_pago").show(500);
+    case '1':
+    $(divs[1]).show(0); $(divs[2]).show(0);
+      $("#registrar").hide(0);
       $("#f_pago").show(500);
+      $("#fhpago").show(0);
       $("#tipo_conciliacion").attr("required",'required');
       $("#tipo_conciliacion").change(
           function(){
           $("#primer_pago").removeAttr("required");
           var tipo = $("#tipo_conciliacion").val();
-          if (tipo=='Pago diferido'){
+          if (tipo=='2'){
             $("#primer_pago").attr("required",'required');
             $("#p_pago").show(500);
-          }else {
+            $("#registrar").show(500);
+          }else if(tipo=='1') {
             $("#primer_pago").removeAttr("required");
             $("#p_pago").hide(0);
+            $("#registrar").show(500);
+          }else {
+            $("#registrar").hide(0);
           }
         });
       $("#monto_pago").attr("required",'required');
       $("#fecha_pago").attr("required",'required');
       break;
-    case 'Inasistencia':
+    case '3':
+      $("#det_resultado").hide(0);
+      $("#detalle_resultado").removeAttr("required");
       $("#especifique").show(500);
       $("#inasistencia").attr("required",'required');
+      $("#inasistencia").change(
+          function(){
+            var esp = $("#inasistencia").val();
+            if (esp==2 || esp==3) {
+              $("#asist").hide(500);
+              $("#asistieron").removeAttr("required");
+            }else {
+              $("#asist").show(500);
+              $("#asistieron").attr("required","required");
+            }
+        });
+      break;
+    case '5':
+      $("#det_resultado").hide(0);
+      $("#detalle_resultado").removeAttr("required");
+      break;
+    case '9':
+      $("#det_resultado").hide(0);
+      $("#detalle_resultado").removeAttr("required");
+      $("#num_folios").hide(0);
+      $("#numero_folios").removeAttr("required");
+      $("#div_combo_representante_empresa").hide(0);
+      $("#representante_empresa").removeAttr("required");
+      $("#div_combo_delegado2").hide(0);
+      $("#delegado").removeAttr("required");
+      $("#div_combo_defensores").hide(0);
+      $("#defensor").removeAttr("required");
+      $("#asist").hide(500);
+      $("#asistieron").removeAttr("required");
+      break;
+    case '10':
+        $("#tipo_conciliacion").attr("required",'required');
+        $("#tipo_cc").show();
+      break;
+    case '6':
+        $("#representante_empresa").removeAttr("required");
+        $("#asistieron").removeAttr("required");
+        $("#defensor").removeAttr("required");
+      break;
+    case '8':
+        $("#representante_empresa").removeAttr("required");
+        $("#asistieron").removeAttr("required");
+        $("#defensor").removeAttr("required");
       break;
     default:
   }
@@ -183,6 +267,7 @@ function mostrar(){
 
 $(function(){
     $(document).ready(function(){
+      $("#tipo_pago").hide(0);
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_resultado').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true}).datepicker("setDate", new Date());
     });

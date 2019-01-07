@@ -1,0 +1,27 @@
+
+* Motivos:_________________________________________
+	- Despido por descanso postnatal
+	-por aumento al salio minimo
+	-por iniciar diligencias de renuncias voluntarias
+	-Otros
+
+
+* Todos (defensor, patronal, delegado) deben ir en el resultado, no en la audiencia
+
+Otro estado - Pendiente para la segunda cita
+Meter los pagos en la resoluci�n
+
+En el acta de audiencia si es hora exacta, se debe quitar lo de cero minutos
+
+Cambiar "Gestionar acta" por "Escanear acta"
+
+Diferencia laboral
+
+En la parte de delegado, deben ir todos los delegados del expediente.
+
+/****************************************************************************************/
+Retiro voluntario change to "Renuncia voluntaria"
+	- Notificada
+	- No notificada
+
+Resultado de la cita no "Resutado del Expediente"

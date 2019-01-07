@@ -16,7 +16,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
    <div class="container-fluid">
        <div class="row page-titles">
            <div class="align-self-center" align="center">
-               <h3 class="text-themecolor m-b-0 m-t-0">Reportes conciliación indivial</h3>
+               <h3 class="text-themecolor m-b-0 m-t-0">Reportes mediación indivial</h3>
            </div>
        </div>
        <div class="row">
@@ -41,21 +41,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                         <a href="<?=site_url()?>/reportes/reportes_colectivos/registro_edades">
                                             <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status online pull-right"></span> </div>
                                             <div class="mail-contnet">
-                                                <h5>Reporte de registro de edades</h5> 
+                                                <h5>Reporte de registro de edades</h5>
                                                 <span class="mail-desc">Muestra los expedientes con el conteo de edades segregados por sexo</span></div>
                                         </a>
-                                        <!-- Message -->
-                                        <a href="#">
-                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status away pull-right"></span> </div>
+                                        <a href="<?=site_url()?>/reportes/reportes_colectivos/tipo_pago">
+                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status online pull-right"></span> </div>
                                             <div class="mail-contnet">
-                                                <h5>Arijit Sinh</h5> <span class="mail-desc">cruise1298.fiplip@gmail.com</span></div>
+                                                <h5>Reporte por tipo de pago</h5>
+                                                <span class="mail-desc">Reporte por tipo de pago</span></div>
                                         </a>
-                                        <!-- Message -->
-                                        <a href="#">
-                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status offline pull-right"></span> </div>
+                                        <a href="<?=site_url()?>/reportes/reportes_colectivos/consolidado">
+                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span> <span class="profile-status online pull-right"></span> </div>
                                             <div class="mail-contnet">
-                                                <h5>Pavan kumar</h5> <span class="mail-desc">kat@gmail.com</span></div>
-                                        </a>
+                                                <h5>Reporte consolidado</h5>
+                                                <span class="mail-desc">Reporte consolidado</span></div>
+                                        </a>                    
                                     </div>
                                 </div>
                             </div>

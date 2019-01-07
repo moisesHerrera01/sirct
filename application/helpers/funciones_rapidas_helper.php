@@ -236,10 +236,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	}
 
 	function fecha_ESP($fecha){
-		return date("d-m-Y",strtotime($fecha));
+		if($fecha == "N/A"){
+			return $fecha;
+		}else{
+			return date("d-m-Y",strtotime($fecha));
+		}
 	}
 
-		function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtolower($mesesarray[($mes-1)]); }
+		function get_fecha($date = 0){ if($date == 0){$date = date('Y-m-d');} $date = explode("-", $date); return $date[2]." DE ".mes($date[1])." DE ".$date[0]; }
+
+		function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtoupper($mesesarray[($mes-1)]); }
 
 		function hora($hora) {
 			$arrayHoras = array('CERO','UNA','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
@@ -254,7 +260,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								'TREINTA Y CUATRO','TREINTA Y CINCO','TREINTA Y SEIS','TREINTA Y SIETE','TREINTA Y OCHO','TREINTA Y NUEVE','CUARENTA','CUARENTA Y UNO',
 								'CUARENTA Y DOS','CUARENTA Y TRES','CUARENTA Y CUATRO','CUARENTA Y CINCO','CUARENTA Y SEIS','CUARENTA Y SIETE','CUARENTA Y OCHO','CUARENTA Y NUEVE',
 								'CINCUENTA','CINCUENTA Y UNO',' CINCUENTA Y DOS','CINCUENTA Y TRES','CINCUENTA Y CUATRO','CINCUENTA Y CINCO','CINCUENTA Y SEIS','CINCUENTA Y SIETE','CINCUENTA Y OCHO','CINCUENTA Y NUEVE','SESENTA');
-			return $arrayMinutos[$minutos];
+			if ($arrayMinutos[$minutos]=='CERO') {
+				return "";
+			}else {
+				return 'con '.$arrayMinutos[$minutos].' minutos';
+			}
 		}
 
 		function dia($dia) {
@@ -326,8 +336,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 		/* Ej: calcular_edad("1945-11-22")*/
 		function calcular_edad( $fecha ) {
-	    list($Y,$m,$d) = explode("-",$fecha);
-	    return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
+			$fecha = explode("-",$fecha);
+			if(count($fecha) == 3){
+				list($Y,$m,$d) = $fecha;
+				return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
+			}else{
+				return "N/A";
+			}
+
 		}
 
 		function convertir_dui($dui_numeros){

@@ -7,6 +7,7 @@ class Acta_colectivos extends CI_Controller {
         parent::__construct();
         $this->load->model( array('expediente_cc_model','expedientes_model','directivos_model','audiencias_model', 'persona_cc_model',
                                 'solicitantes_model'));
+        $this->load->library("CifrasEnLetras");
     }
 
     public function generar_acta($id_expedienteci) {
@@ -19,12 +20,18 @@ class Acta_colectivos extends CI_Controller {
         $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/FichaSolicitud_DifL.docx');
         $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
         $templateWord->setValue('fecha_actual', date('d/m/Y'));
+
+        $templateWord->setValue('dia', dia(date('d')));
+        $templateWord->setValue('mes', mb_strtoupper(mes(date('m'))));
+        $templateWord->setValue('anio', anio(date('Y')));
+
         $templateWord->setValue('direccion_empresa', $empresa->direccion_empresa);
         $templateWord->setValue('representante_legal', $empresa->nombres_representante);
         $templateWord->setValue('especificacion', $empresa->actividad_catalogociiu);
         $templateWord->setValue('actividad', $empresa->grupo_catalogociiu);
         $templateWord->setValue('nombre_sindicato', $expediente->nombre_sindicato);
-        $templateWord->setValue('telefono_sindicato', $expediente->telefono_sindicato);
+        $templateWord->setValue('telefono_sindicato', mb_strtoupper(convertir_dui($expediente->telefono_sindicato)));
+
         $templateWord->setValue('direccion_sindicato', $expediente->direccion_sindicato);
         $templateWord->setValue('nombre_delegado',$expediente->delegado);
 
@@ -105,7 +112,7 @@ class Acta_colectivos extends CI_Controller {
 
     }
 
-    public function generar_acta_indemnizacion($id_expedienteci, $info_adicional) {
+  public function generar_acta_indemnizacion($id_expedienteci/*, $info_adicional*/) {
         $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];
         $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci);
         $primera= $audiencias->result()[0];
@@ -115,7 +122,7 @@ class Acta_colectivos extends CI_Controller {
 
         $concat_solicitantes='';
         foreach ($solicitantes->result() as $d) {
-            $concat_solicitantes .=  $d->nombre_solicitante .', de '. $d->edad .' años de edad, '. $d->primarios_catalogociuo
+            $concat_solicitantes .=  $d->nombre_solicitante .', de '. mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras( $d->edad)) .' años de edad, '. $d->ocupacion
                 . ', del domicilio de '. $d->direccion_personaci .', departamento de '. $d->departamento
                 . ', con documento Único de Identidad Número: '. convertir_dui($d->dui_personaci);
         }
@@ -131,28 +138,28 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->setValue('nombre_representante', $expediente->nombres_representante);
         $templateWord->setValue('persona_conflicto',$expediente->nombre_personaci .' '. $expediente->apellido_personaci);
         $templateWord->setValue('direccion_solicitante', $expediente->direccion_solicitante);
-        $templateWord->setValue('horario_solicitante',$expediente->horarios_solicitante);
+        $templateWord->setValue('horario_solicitante',convertir_numeros_cadena($expediente->horarios_solicitante));
         $templateWord->setValue('nombre_delegado',$expediente->delegado);
         $templateWord->setValue('solicitantes',$concat_solicitantes);
-        $templateWord->setValue('info_adicional', urldecode($info_adicional));
+      $templateWord->setValue('info_adicional','' /*urldecode($info_adicional)*/);
 
         $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
         $templateWord->setValue('mes_conflicto', strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
         $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
 
         $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
-        $templateWord->setValue('minuto_expediente', minuto(date('i', strtotime($expediente->fechacrea_expedienteci))));
+        $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($expediente->fechacrea_expedienteci)))));
         $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
         $templateWord->setValue('mes_expediente', strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
         $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
 
         $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($primera->hora_fechasaudienciasci))));
-        $templateWord->setValue('minuto_audiencia', minuto(date('i', strtotime($primera->hora_fechasaudienciasci))));
+        $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($primera->hora_fechasaudienciasci)))));
         $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($primera->fecha_fechasaudienciasci))));
         $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($primera->fecha_fechasaudienciasci)))));
         $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($primera->fecha_fechasaudienciasci))));
         $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
-        $templateWord->setValue('minuto_audiencia2', minuto(date('i', strtotime($segunda->hora_fechasaudienciasci))));
+        $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
         $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
         $templateWord->setValue('mes_audiencia2', strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
         $templateWord->setValue('anio_audiencia2', anio(date('Y', strtotime($segunda->fecha_fechasaudienciasci))));
@@ -200,7 +207,7 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->setValue('salario_solicitante',$expediente->salario_solicitante);
         $templateWord->setValue('forma_pago',$expediente->formapago_solicitante);
         $templateWord->setValue('cargo_solicitante',$expediente->funciones_solicitante);
-        $templateWord->setValue('horario_solicitante',$expediente->horarios_solicitante);
+        $templateWord->setValue('horario_solicitante',convertir_numeros_cadena($expediente->horarios_solicitante));
         $templateWord->setValue('fecha_conflicto',$expediente->fechaconflicto_personaci);
         $templateWord->setValue('persona_conflicto',$expediente->nombre_personaci .' '. $expediente->apellido_personaci);
 

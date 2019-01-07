@@ -20,7 +20,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <i class="mdi mdi-window-close"></i>
               </a>
             </div>
-            <h4 class="card-title m-b-0 text-white">Programar audiencias</h4>
+            <h4 class="card-title m-b-0 text-white">Programar pagos</h4>
           </div>
           <div class="card-body b-t">
             <blockquote class="m-t-0">
@@ -36,7 +36,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </div>
                       <div class="row">
                         <div class="form-group col-lg-5" style="height: 20px;">
-                          Nombre delegado(a) actual:
+                          Nombre delegado/a actual:
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
                               <h5><?= $expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.
@@ -46,11 +46,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </div>
                       <div class="row">
                         <div class="form-group col-lg-5" style="height: 20px;">
-                          Nombre de solicitante:
+                          Nombre de la persona solicitante:
                         </div>
                         <div class="form-group col-lg-5" style="height: 20px;">
                           <h5>
-                          <?php if($expediente->tiposolicitud_expedienteci != "conciliacion juridica"){
+                          <?php if($expediente->tiposolicitud_expedienteci != "3"){
                               echo $expediente->nombre_personaci.' '.$expediente->apellido_personaci;
                           }else{
                               echo $expediente->nombre_empresa;

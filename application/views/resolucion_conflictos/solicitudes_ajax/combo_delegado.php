@@ -1,5 +1,5 @@
-<h5>Asignar delegado: <span class="text-danger">*</span></h5>
-<select id="id_personal" name="id_personal" class="select2" onchange="" style="width: 100%">
+<h5>Asignar delegado/a: <span class="text-danger">*</span></h5>
+<select id="id_personal" name="id_personal" class="select2" onchange="" <?= $tipo ?> style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php
             if(!empty($colaborador)){
@@ -7,7 +7,7 @@
         ?>
             <option  value="<?php echo $fila->id_empleado ?>" <?php if($fila->id_empleado==$id){?> selected  <?php }?>>
         <?php
-            echo $fila->nombre_empleado;
+            echo $fila->nombre_completo;
         ?>
             </option>;
         <?php
