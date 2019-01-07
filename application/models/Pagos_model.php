@@ -24,9 +24,16 @@ class Pagos_model extends CI_Model {
 			}
 	}
 
-	public function obtener_pagos_delegado($id_delegado) {
+	public function obtener_pagos_delegado($id_delegado,$tipo=FALSE,$fecha=FALSE) {
 	  	$this->db->select('s.nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
-			e.tiposolicitud_expedienteci,CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
+			e.tiposolicitud_expedienteci,
+			(CASE WHEN e.tiposolicitud_expedienteci=1 THEN "Persona natural"
+				WHEN e.tiposolicitud_expedienteci=2 THEN "Retiro voluntario"
+				WHEN e.tiposolicitud_expedienteci=3 THEN "Persona jurídica"
+				WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
+				WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
+				ELSE e.tiposolicitud_expedienteci END) AS tipo,
+			CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
 			CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
 				->from('sct_fechaspagosci f')
 				->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
@@ -37,11 +44,26 @@ class Pagos_model extends CI_Model {
 				if ($id_delegado) {
 				$this->db->where('em.nr', $id_delegado);
 				}
+				if ($fecha) {
+				$this->db->where("DATE_FORMAT(f.fechapago_fechaspagosci, '%Y-%m-%d') = ", $fecha);
+				}
+				if ($tipo==1) {
+					$this->db->where('e.id_personaci<>0');
+				}else {
+					$this->db->where('e.id_personaci=0');
+				}
 
 		$sql[] = '('.$this->db->get_compiled_select().')';
 
 		$this->db->select('p.apellido_personaci nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
-			e.tiposolicitud_expedienteci,CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
+			e.tiposolicitud_expedienteci,
+			(CASE WHEN e.tiposolicitud_expedienteci=1 THEN "Persona natural"
+				WHEN e.tiposolicitud_expedienteci=2 THEN "Retiro voluntario"
+				WHEN e.tiposolicitud_expedienteci=3 THEN "Persona jurídica"
+				WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
+				WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
+				ELSE e.tiposolicitud_expedienteci END) AS tipo,
+			CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
 			CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
 				->from('sct_fechaspagosci f')
 				->join('sct_personaci p', 'p.id_personaci = f.id_persona')
@@ -51,10 +73,15 @@ class Pagos_model extends CI_Model {
 		if ($id_delegado) {
 			$this->db->where('em.nr', $id_delegado);
 		}
+		if ($fecha) {
+			$this->db->where("DATE_FORMAT(f.fechapago_fechaspagosci, '%Y-%m-%d') = ", $fecha);
+		}
 
 		$sql[] = '('.$this->db->get_compiled_select().')';
 
 		$sql = implode(' UNION ', $sql);
+
+
 
 		$query=$this->db->query($sql);
 		if ($query->num_rows() > 0) {

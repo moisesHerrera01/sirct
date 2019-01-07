@@ -18,9 +18,20 @@ class Representante_persona_model extends CI_Model {
 
   public function insertar_representante($data){
     if ($this->db->insert('sct_representantepersonaci', $data)) {
-      return $this->db->insert_id();
+      return "exito,".$this->db->insert_id();
     }else {
       return "fracaso";
     }
   }
+
+	public function obtener_defensores(){
+		$this->db->select("id_representantepersonaci, CONCAT_WS(' ',nombre_representantepersonaci,apellido_representantepersonaci) nombre_completo")
+						 ->from('sct_representantepersonaci');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query;
+		}else {
+			return FALSE;
+		}
+	}
 }

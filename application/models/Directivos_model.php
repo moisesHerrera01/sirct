@@ -41,7 +41,8 @@ class Directivos_model extends CI_Model {
 											 d.apellido_directivo,
 											 d.tipo_directivo,
 											 d.acreditacion_directivo,
-											 d.estado_directivo'
+											 d.estado_directivo,
+											 d.sexo_directivo'
 										 )
 						 ->from('sge_directivo d')
 		         ->where('d.id_sindicato',$id_sindicato);

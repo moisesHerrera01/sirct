@@ -42,4 +42,14 @@ class Representante_persona extends CI_Controller {
 			echo $this->solicitudes_model->eliminar_estado($data);
 		}*/
 	}
+
+	public function combo_defensores() {
+		$data = $this->representante_persona_model->obtener_defensores();
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_defensores',
+			array(
+				'id' => $this->input->post('id'),
+				'defensor' => $data
+			)
+		);
+	}
 }

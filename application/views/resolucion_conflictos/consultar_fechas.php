@@ -10,7 +10,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <script>
 function iniciar(){
     <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-    //tabla_calendario();
+    // tabla_calendario();
+    combo_delegado_tabla();
     <?php }else{ ?>
         $("#cnt_calendario").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
@@ -18,6 +19,7 @@ function iniciar(){
 
 function tabla_calendario(){
   var id_delegado = $("#nr_search").val();
+  // alert(id_delegado)
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttpB=new XMLHttpRequest();
     }else{// code for IE6, IE5
@@ -40,23 +42,154 @@ function tabla_calendario(){
               $('#modalBody').html(event.description);
               $('#eventUrl').attr('href',event.url);
               $('#calendarModal').modal();
-          },
+          },dayClick: function(date, jsEvent, view) {
+            imprimir_citas_del_dia(date, "html")
+        },
         header: {
             left: 'prev,next today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay,listMonth'
         },
+        eventLimit: true,
         events: {
         url: "<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/calendario?nr="+id_delegado,
         cache: true
     },
+  timeFormat: 'h:mm a',
         defaultView: 'month',
         defaultDate: date,
+        selectable: true,
         editable:true
     })
 }
-</script>
 
+function combo_delegado_tabla(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado_tabla",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_delegado_tabla').html(res);
+    <?php if(obtener_rango($segmentos=2, $permiso=1)>1){?>
+            $("#nr_search").select2();
+      <?php } ?>
+    tablasolicitudes();
+  });
+}
+
+function tablasolicitudes(){
+  tabla_calendario();
+}
+
+  function imprimir_citas_del_dia(end, tipo){
+    var id_delegado = $("#nr_search").val();
+    var fecha_seleccionada = getDateEnd(end);
+    $("#fecha").val(fecha_seleccionada);
+    $("#titulo_vista_previa").text("Citas para la fecha: "+castDate(fecha_seleccionada));
+
+    var param = {id_delegado: id_delegado, fecha: fecha_seleccionada, report_type: tipo};
+
+    if(tipo == "html"){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/imprimir_citas_del_dia_pdf",
+        type: "post",
+        dataType: "html",
+        data: param
+      })
+      .done(function(res){
+        $("#modal_vista_previa").modal('show');
+        $("#cnt_vista_previa").html(res);
+      });
+    }else{
+      OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/imprimir_citas_del_dia_pdf", param, "_blank");
+    }
+
+    
+  }
+
+  function castDate(date){
+    var fecha = date.split("-");
+    return fecha[2]+"/"+fecha[1]+"/"+fecha[0];
+  }
+
+  function getDateEnd(date){
+    return moment(date).format('YYYY-MM-DD');
+  }
+
+  function OpenWindowWithPost(url, params, target){
+      var form = document.createElement("form");
+      form.setAttribute("method", "post");
+      form.setAttribute("action", url);
+      form.setAttribute("target", target);
+
+      for (var i in params) {
+          if (params.hasOwnProperty(i)) {
+              var input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = i;
+              input.value = params[i];
+              form.appendChild(input);
+          }
+      }
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+  }
+
+</script>
+<style type="text/css">
+  .fc-button {
+      background: #ffffff;
+      border: 1px solid rgba(120, 130, 140, 0.13);
+      color: #67757c;
+      text-transform: capitalize;
+  }
+  .fc-event {
+      border-radius: 0px;
+      border: none;
+      cursor: move;
+      color: #ffffff !important;
+      font-size: 13px;
+      padding: 5px 5px;
+      margin: 1px;
+      text-align: center;
+      background: #1e88e5;
+  }
+
+  a.fc-day-grid-event.fc-draggable:hover { 
+    width: 160px;
+    position: relative;
+    z-index: 3;
+  }
+
+  .fc-list-item .fc-widget-content{
+    color: white;
+  }
+
+  .bg-success.bg-opacity{
+        background-color: #989898a8 !important;
+  }
+
+  .bg-success.bg-opacity:hover{
+        background-color: #40afaa !important;
+  }
+ 
+  .bg-success2.bg-opacity{
+        background-color: #989898a8 !important;
+  }
+
+  .bg-success2.bg-opacity:hover{
+        background-color: #56ad61 !important;
+  }
+
+  .bg-success:hover {
+    background-color: #26c6da !important;
+  }
+
+</style>
 <input type="hidden" id="address" name="">
 <div class="page-wrapper">
     <div class="container-fluid">
@@ -80,7 +213,7 @@ function tabla_calendario(){
                         <div class="card-actions text-white">
                             <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
                         </div>
-                        <h4 class="card-title m-b-0 text-white">Listado de Solicitudes</h4>
+                        <h4 class="card-title m-b-0 text-white">Listado de solicitudes</h4>
                     </div>
                     <div class="card-body b-t">
                     </div>
@@ -89,35 +222,23 @@ function tabla_calendario(){
             <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
+              <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title m-b-0 ">Filtrar por delegado</h4>
+                        <h4 class="card-title m-b-0 ">Filtrar por persona delegada</h4>
                     </div>
                     <div class="card-body b-t" style="padding-top: 7px;">
                     <div>
                         <div class="pull-left">
-                            <div class="form-group" style="width: 400px;">
-                                <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tabla_calendario();">
-                                    <option value="">[Todos los empleados]</option>
-                                <?php
-                                    $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
-                                    if($otro_empleado->num_rows() > 0){
-                                        foreach ($otro_empleado->result() as $fila) {
-                                            if($nr_usuario == $fila->nr){
-                                               echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }else{
-                                                echo '<option class="m-l-50" value="'.$fila->nr.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }
-                                        }
-                                    }
-                                ?>
-                                </select>
-                            </div>
+                            <div class="form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado_tabla" style="width: 400px;"></div>
                         </div>
-                    </div>
                     <div class="row" style="width: 100%"></div>
                     </div>
                 </div>
+              <?php }else{ ?>
+                <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
+              <?php } ?>
+            </div>
                 <div id="cnt_calendario">
                 <div class="row">
                   <div class="col-md-2"></div>
@@ -175,7 +296,7 @@ function tabla_calendario(){
           </div>
           <div class="row">
             <div class="form-group col-lg-6" style="height: 20px;">
-              Nombre delegado(a):
+              Nombre delegado/a:
             </div>
             <div class="form-group col-lg-6" style="height: 20px;">
                   <h5 id="delegado"></h5>
@@ -216,6 +337,33 @@ function tabla_calendario(){
 <!--FIN MODAL DE EVENTO CALENDARIO -->
 <!-- ============================================================== -->
 
+<!-- ============================================================== -->
+<!--INICIO MODAL DE EVENTO CALENDARIO -->
+<!-- ============================================================== -->
+<div id="modal_vista_previa" class="modal fade">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="titulo_vista_previa"></h4>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">Cerrar</span></button>
+        </div>
+        <div id="modalBody" class="modal-body">
+          <input type="hidden" id="fecha" name="fecha">
+          <div class="row">
+            <div class="col-lg-12" id="cnt_vista_previa">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" onclick="imprimir_citas_del_dia($('#fecha').val(),'pdf')"><span class="mdi mdi-file-pdf"></span> Imprimir</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+</div>
+</div>
+<!-- ============================================================== -->
+<!--FIN MODAL DE EVENTO CALENDARIO -->
+<!-- ============================================================== -->
 
 <script>
 $(document).ready(function () {
@@ -229,6 +377,7 @@ $(document).ready(function () {
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
         // put your options and callbacks here
+        selectable: true,
         eventClick:  function(event, jsEvent, view) {
               $('#numero_caso_exp').html(event.title);
               $('#tipo_sol').html(event.tipo);
@@ -240,6 +389,7 @@ $(document).ready(function () {
               $('#eventUrl').attr('href',event.url);
               $('#calendarModal').modal();
           },
+          
         header: {
             left: 'prev,next today',
             center: 'title',

@@ -28,6 +28,12 @@
                     $correlativo = 0;
 
                     if($estados->num_rows() > 0){
+
+                        /*********** Si hay registros consulta los permisos **********************/
+                        $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+                        $puede_eliminar = tiene_permiso($segmentos=2,$permiso=3);
+                        /*********** Fin de consulta de permisos *********************************/
+
                         foreach ($estados->result() as $fila) {
                             $correlativo++;
                           echo "<tr>";
@@ -37,11 +43,11 @@
                             echo ($fila->estado == "1") ? '<td><span class="label label-success">Activo</span></td>' : '<td><span class="label label-danger">Inactivo</span></td>';
                             echo "<td>";
                             $array = array($fila->id_estadosci,$fila->nombre_estadosci, $fila->descripcion_estadosci, $fila->estado);
-                                if(tiene_permiso($segmentos=2,$permiso=4)){
+                                if($puede_editar){
                                     array_push($array, "edit");
                                     echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
                                 }
-                                if(tiene_permiso($segmentos=2,$permiso=3)){
+                                if($puede_eliminar){
                                     unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
                                     array_push($array, "delete");
                                     if($fila->estado == "1"){

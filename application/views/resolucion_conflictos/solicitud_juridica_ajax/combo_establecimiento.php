@@ -1,6 +1,6 @@
-<label for="establecimiento" >Nombre del establecimiento: <span class="text-danger">*</span></label>
+<label for="establecimiento" >Persona solicitada: <span class="text-danger">*</span></label>
 <select id="establecimiento" name="establecimiento" required class="select2" onchange="tabla_representantes();"  style="width: 100%">
-    <option value="">[Seleccione un establecimiento]</option>
+    <option value="">[Seleccione persona solicitada]</option>
     <?php
         if(!empty($establecimiento)){ foreach ($establecimiento->result() as $fila) {
     ?>

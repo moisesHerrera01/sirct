@@ -92,4 +92,42 @@ class Pagos extends CI_Controller {
 		}
 	}
 
+	public function pagos() {
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/modal_pagos',
+		array(
+			'id' => $this->input->post('id')
+		));
+	}
+
+	public function gestionar_pagos_modal(){
+		$monto_total = $this->input->post('monto_pago');
+
+		$data = array(
+			'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'))),
+			// 'montopago_fechaspagosci' => $this->input->post('primer_pago'),
+			// 'indemnizacion_fechaspagosci' => $monto_total = $monto_total - $this->input->post('primer_pago'),
+			'id_expedienteci' => $this->input->post('id_expedienteci')
+		 );
+		 if ($this->input->post('tipo_conciliacion')==1) {
+			 $data['montopago_fechaspagosci'] = $this->input->post('monto_pago');
+			 $data['indemnizacion_fechaspagosci'] = 0;
+		 }else {
+			 $data['montopago_fechaspagosci'] = $this->input->post('primer_pago');
+			 $data['indemnizacion_fechaspagosci'] = $monto_total = $monto_total - $this->input->post('primer_pago');
+		 }
+
+		 $this->pagos_model->insertar_pago($data);
+		 $i=1;
+		 while (!empty($this->input->post('fecha_pago'.$i))) {
+			 $data = array(
+				 'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'.$i))),
+				 'montopago_fechaspagosci' => $this->input->post('primer_pago'.$i),
+				 'indemnizacion_fechaspagosci' => $monto_total = $monto_total - $this->input->post('primer_pago'.$i),
+				 'id_expedienteci' => $this->input->post('id_expedienteci')
+				);
+				$this->pagos_model->insertar_pago($data);
+				$i++;
+		 }
+	}
+
 }

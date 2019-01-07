@@ -1,5 +1,5 @@
-<label for="act_economica" class="font-weight-bold">Actividad Economica: <span class="text-danger">*</span></label>
-<select id="act_economica" name="act_economica" class="select2" required onchange="" style="width: 100%">
+<h5>Actividad Economica: <span class="text-danger">*</span></h5>
+<select id="act_economica" name="act_economica" class="select2" required onchange="" style="width: 100%" required>
     <option value="">[Seleccione]</option>
         <?php
             if(!empty($catalogo)){

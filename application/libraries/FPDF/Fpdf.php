@@ -212,7 +212,7 @@ function NbLines($w,$txt)
     return $nl;
 }
 
-function __construct($orientation='P', $unit='mm', $size='A4')
+function __construct($orientation='P', $unit='mm', $size='letter')
 {
 	// Some checks
 	$this->_dochecks();

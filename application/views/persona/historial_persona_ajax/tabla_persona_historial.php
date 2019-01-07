@@ -4,7 +4,7 @@
             <tr>
               <th>#</th>
               <th>Documento identidad</th>
-              <th>Nombre Solicitante</th>
+              <th>Nombre solicitante</th>
               <th>Teléfono</th>
               <th>Edad (años)</th>
               <th>Sexo</th>
@@ -25,6 +25,12 @@
            
             $correlativo = 0;
             if($solicitudes->num_rows() > 0){
+
+                /*********** Si hay registros consulta los permisos **********************/
+                $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+                $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
+                /*********** Fin de consulta de permisos *********************************/
+
                 foreach ($solicitudes->result() as $fila) {
                   $correlativo++;
                   echo "<tr>";
@@ -49,12 +55,12 @@
 
                     echo "<td>";
                     $array = array($fila->id_personaci);
-                    if(tiene_permiso($segmentos=2,$permiso=4)){
+                    if($puede_editar){
                         array_push($array, "edit");
                         echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
                     }
 
-                    if(tiene_permiso($segmentos=2,$permiso=4)){
+                    if($puede_consultar){
                         unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
                         echo generar_boton($array,"visualizar","btn-secondary","mdi mdi-magnify","Visualizar");
                     }

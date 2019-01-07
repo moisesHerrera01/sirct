@@ -6,6 +6,8 @@ class Solicitudes extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('solicitudes_model');
+		$this->load->model('expedientes_model');
+		$this->load->model('solicitud_juridica_model');
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -19,15 +21,20 @@ class Solicitudes extends CI_Controller {
 	}
 
 	public function tabla_solicitudes(){
-		$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_solicitudes');
+		$data['abreviatura'] = $this->expedientes_model->obtener_abreviatura_depto($this->session->userdata('nr'));
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_solicitudes',$data);
 	}
+
+	public function tabla_representantes(){
+	$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_representantes');
+}
 
 	public function gestionar_solicitudes(){
 
 
 		if($this->input->post('band1') == "save"){
 			$data = array(
-		'nombre_personaci' => $this->input->post('nombres'),
+			'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
 			'conocido_por' => $this->input->post('conocido_por'),
 			'dui_personaci' => $this->input->post('dui'),
@@ -40,10 +47,12 @@ class Solicitudes extends CI_Controller {
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
-			'posee_representante' => $this->input->post('posee_representante'),
+			'posee_representante' => 0,
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 			'id_doc_identidad' => $this->input->post('id_doc_identidad'),
 			'discapacidad' => $this->input->post('discapacidad_desc'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 
 			$data2  = array(
@@ -53,9 +62,11 @@ class Solicitudes extends CI_Controller {
 				'asiento_partida' =>$this->input->post('asiento_partida'),
 				'anio_partida' =>$this->input->post('numero_partida')
 			 );
+			if ($this->input->post('numero_partida')!='') {
+				$id_partida = $this->solicitudes_model->insertar_partida($data2);
+				$data['id_partida'] = $id_partida;
+			}
 
-			$id_partida = $this->solicitudes_model->insertar_partida($data2);
-			$data['id_partida'] = $id_partida;
 
 			echo $this->solicitudes_model->insertar_solicitud($data);
 
@@ -77,10 +88,12 @@ class Solicitudes extends CI_Controller {
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
-			'posee_representante' => $this->input->post('posee_representante'),
+			'posee_representante' => 0,
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 			'discapacidad' => $this->input->post('discapacidad_desc'),
-			'id_partida' =>$this->input->post('id_partida')
+			'id_partida' =>$this->input->post('id_partida'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 
 			$data2  = array(
@@ -95,6 +108,43 @@ class Solicitudes extends CI_Controller {
 			$this->solicitudes_model->editar_partida($data2);
 			echo $this->solicitudes_model->editar_solicitud($data);
 
+		}
+	}
+
+	public function gestionar_representante(){
+		if($this->input->post('band4') == "save"){
+			$data = array(
+			'id_empresa' => $this->input->post('id_empresa'),
+			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
+			'dui_representante' => ($this->input->post('dui_representante')),
+			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
+			'tipo_representante' => $this->input->post('tipo_representante'),
+			'id_municipio' => $this->input->post('municipio_representante'),
+			'id_estado_civil' => $this->input->post('estado_civil'),
+			'id_titulo_academico' => $this->input->post('profesion'),
+			'f_nacimiento_representante' => date("Y-m-d",strtotime($this->input->post('f_nacimiento_representante'))),
+			);
+      		echo $this->solicitud_juridica_model->insertar_representante($data);
+		}else if($this->input->post('band4') == "edit"){
+      		$data = array(
+	    'id_representante' => $this->input->post('id_representante'),
+	    'id_empresa' => $this->input->post('id_empresa'),
+			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
+			'dui_representante' => ($this->input->post('dui_representante')),
+			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
+			'tipo_representante' => $this->input->post('tipo_representante'),
+			'id_municipio' => $this->input->post('municipio_representante'),
+			'id_estado_civil' => $this->input->post('estado_civil'),
+			'id_titulo_academico' => $this->input->post('profesion'),
+			'f_nacimiento_representante' => date("Y-m-d",strtotime($this->input->post('f_nacimiento_representante'))),
+			);
+			echo $this->solicitud_juridica_model->editar_representante($data);
+		}else if($this->input->post('band4') == "delete"){
+			$data = array(
+			'id_representante' => $this->input->post('id_representante'),
+			'estado_representante' => $this->input->post('estado_representante')
+			);
+			echo $this->solicitud_juridica_model->eliminar_representante($data);
 		}
 	}
 

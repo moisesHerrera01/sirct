@@ -37,11 +37,16 @@ class Login_model extends CI_Model {
 	function get_data_user($data){
 		// $query = $this->db->query("SELECT * FROM org_usuario WHERE usuario = '".$data['usuario']."' AND estado = 1");
 
-		$this->db->select('')
+		$this->db->select('o.id_usuario,o.usuario,o.nombre_completo,e.nr,r.nombre_rol,r.id_rol')
 						 ->from('org_usuario o')
+						 ->join('org_usuario_rol ur','ur.id_usuario=o.id_usuario')
+						 ->join('org_rol r','r.id_rol=ur.id_rol')
+						 ->join('org_rol_modulo_permiso rmp','rmp.id_rol=r.id_rol')
+						 ->join('org_modulo m','m.id_modulo=rmp.id_modulo')
 						 ->join('sir_empleado e','e.nr=o.nr')
 						 ->where('o.usuario',$data['usuario'])
-						 ->where('o.estado','1');
+						 ->where('o.estado','1')
+						 ->where('m.id_sistema',$this->config->item('id_sistema'));
 		$query = $this->db->get();
 		return $query;
 	}
@@ -101,5 +106,22 @@ class Login_model extends CI_Model {
         else {
             return FALSE;
         }
+	}
+
+	public function obtener_rol_usuario($id_usuario){
+		$this->db->select('r.nombre_rol,r.id_rol')
+						 ->from('org_usuario u')
+						 ->join('org_usuario_rol ur','ur.id_usuario=u.id_usuario')
+						 ->join('org_rol r','r.id_rol=ur.id_rol')
+						 ->join('org_rol_modulo_permiso rmp','rmp.id_rol=r.id_rol')
+						 ->join('org_modulo m','m.id_modulo=rmp.id_modulo')
+						 ->where('u.id_usuario',$id_usuario)
+						 ->where('m.id_sistema',$this->config->item('id_sistema'));
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->row();
+		}else {
+			return FALSE;
+		}
 	}
 }

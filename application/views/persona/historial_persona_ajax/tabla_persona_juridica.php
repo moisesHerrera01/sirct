@@ -12,6 +12,10 @@
         </thead>
         <tbody>
         <?php
+          /*********** Si hay registros consulta los permisos **********************/
+          $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
+          $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
+          /*********** Fin de consulta de permisos *********************************/
         	$actividad = $this->db->query("SELECT * FROM sge_empresa ORDER BY fechacrea_empresa");
           $contador=0;
             if($actividad->num_rows() > 0){
@@ -26,13 +30,13 @@
                   echo "<td>";
                   $array = array($fila->id_empresa);
                    
-                  if(tiene_permiso($segmentos=2,$permiso=4)){
+                  if($puede_editar){
                     array_push($array, "edit");
                     echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
                     unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
                   }
 
-                  if(tiene_permiso($segmentos=2,$permiso=1)){
+                  if($puede_consultar){
                         echo generar_boton($array,"visualizar_empresa","btn-secondary","mdi mdi-magnify","Visualizar");
                     }
                    

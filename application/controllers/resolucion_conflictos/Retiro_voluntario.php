@@ -5,7 +5,7 @@ class Retiro_voluntario extends CI_Controller {
 
     function __construct(){
         parent::__construct();
-        $this->load->model( array('expedientes_model', 'solicitudes_model','empleadores_model'));
+        $this->load->model( array('expedientes_model', 'solicitudes_model','empleadores_model','delegados_model'));
     }
 
     public function index() {
@@ -47,7 +47,7 @@ class Retiro_voluntario extends CI_Controller {
 			'telefono_personaci' => $this->input->post('telefono'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion'),
-			'fnacimiento_personaci' => $this->input->post('fecha_nacimiento'),
+			'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
 			'sexo_personaci' => $this->input->post('sexo'),
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
@@ -66,17 +66,30 @@ class Retiro_voluntario extends CI_Controller {
                 'descripmotivo_expedienteci' => '',
                 'id_personaci' => $this->input->post('id_persona'),
                 'id_personal' => $this->input->post('id_personal'),
+                'causa_expedienteci' => $this->input->post('causa_expedienteci'),
                 'id_empresaci' => $this->input->post('establecimiento'),
+                'id_representanteci' => $this->input->post('id_representanteci'),
                 'id_estadosci' => 1,
                 'fechacrea_expedienteci' => $fecha_actual,
-                'tiposolicitud_expedienteci' => "Renuncia Voluntaria",
+                'tiposolicitud_expedienteci' => "2",
                 'numerocaso_expedienteci' =>10,
                 'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_preaviso'))),
                 'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),
-                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo')
+                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
+                'id_usuario' => $this->session->userdata('id_usuario'),
+                'fecha_modifica' => date('Y-m-d')
             );
 
-              echo $this->expedientes_model->insertar_expediente($data);
+              echo $id_expedienteci = $this->expedientes_model->insertar_expediente($data);
+              $delegado = array(
+                'id_expedienteci' => $id_expedienteci,
+  							'id_personal' => $data['id_personal'],
+  							'fecha_cambio_delegado' => date('Y-m-d'),
+  							'id_rol_guarda' => $this->session->userdata('id_rol'),
+  							'id_usuario_guarda' => $this->session->userdata('id_usuario'),
+  							'cambios' => "Asignación de expediente"
+  						);
+  						$this->delegados_model->insertar_delegado_exp($delegado);
 
 
        } else if($this->input->post('band2') == "edit"){
@@ -86,16 +99,18 @@ class Retiro_voluntario extends CI_Controller {
                 'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
                 'id_personaci' => $this->input->post('id_persona'),
                 'id_personal' => $this->input->post('id_personal'),
+                'causa_expedienteci' => $this->input->post('causa_expedienteci'),
                 'id_empresaci' => $this->input->post('establecimiento'),
+                'id_representanteci' => $this->input->post('id_representanteci'),
                 'fechacrea_expedienteci' => $fecha_actual,
-                'tiposolicitud_expedienteci' =>"Renuncia Voluntaria",
+                'tiposolicitud_expedienteci' =>"2",
                 'fechaconflicto_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_preaviso'))),
-                'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),   
-                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo')
+                'fecha_renuncia' => date("Y-m-d",strtotime($this->input->post('fecha_renuncia'))),
+                'descripmotivo_expedienteci' => $this->input->post('descripcion_motivo'),
+                'id_usuario' => $this->session->userdata('id_usuario'),
+                'fecha_modifica' => date('Y-m-d')
            );
-
             echo $this->expedientes_model->editar_expediente($data2);
-
        }
     }
 
@@ -115,6 +130,17 @@ class Retiro_voluntario extends CI_Controller {
         $data['expediente'] = $this->expedientes_model->obtener_registro_expediente_retiro( $this->input->post('id') );
 
         $this->load->view('resolucion_conflictos/retiro_voluntario_ajax/vista_expediente', $data);
+    }
+
+    public function combo_resultados() {
+      $resultados = $this->expedientes_model->obtener_resultados_rv();
+      $this->load->view('resolucion_conflictos/solicitudes_ajax/combo_resultados',
+        array(
+          'id' => $this->input->post('id'),
+          'resultados' => $resultados
+        )
+      );
+
     }
 
 }

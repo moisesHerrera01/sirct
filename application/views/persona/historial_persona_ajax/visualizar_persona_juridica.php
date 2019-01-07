@@ -51,8 +51,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                         <div class="profiletimeline">
                         	<div align="center">
-	                        	<a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2,'<?=$row->id_empresa?>','save');" class="m-t-10 m-r-20 waves-effect waves-dark btn btn-success btn-rounded">Concialiatorio por despido <br>de hecho o injustificado</a>
-	                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2,'<?=$row->id_empresa?>','save');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Conciliatorio por <br>diferencia laboral</a>
+	                        	<a href="javascript:void(0)" onclick="redireccionar_despido_hecho(2,'<?=$row->id_empresa?>','save');" class="m-t-10 m-r-20 waves-effect waves-dark btn btn-success btn-rounded">Mediación por despido <br>de hecho o injustificado</a>
+	                            <a href="javascript:void(0)" onclick="redireccionar_diferencia_laboral(2,'<?=$row->id_empresa?>','save');" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded">Mediación por <br>conflicto laboral</a>
 	                        </div>
                             <br><br>
                         	<?php
@@ -82,8 +82,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 		                                    	<a href="#" class="link"><?=$fila->numerocaso_expedienteci?></a> <span class="sl-date"><?=$fila->fechacrea_expedienteci?></span>
 		                                    </div>
 		                                    <div class="row">
-		                                    	<div class="col-lg-6"><p class="m-b-0"><b>Solicitado:</b> <?php echo implode(" ", array($fila->nombre_personaci, $fila->apellido_personaci)); ?></p></div>
-		                                    	<div class="col-lg-6"><p class="m-b-0"><b>Delegado:</b> <?php echo implode(" ", array($fila->primer_nombre, $fila->segundo_nombre, $fila->tercer_nombre, $fila->primer_apellido, $fila->segundo_apellido, $fila->apellido_casada)); ?></p></div>
+		                                    	<div class="col-lg-6"><p class="m-b-0"><b>Persona solicitada:</b> <?php echo implode(" ", array($fila->nombre_personaci, $fila->apellido_personaci)); ?></p></div>
+		                                    	<div class="col-lg-6"><p class="m-b-0"><b>Persona delegada:</b> <?php echo implode(" ", array($fila->primer_nombre, $fila->segundo_nombre, $fila->tercer_nombre, $fila->primer_apellido, $fila->segundo_apellido, $fila->apellido_casada)); ?></p></div>
 		                                    </div>
 	                                        <div class="row">
 		                                    	<div class="col-lg-6"><p class="m-b-0"><b>Motivo:</b> <?=$fila->motivo_expedienteci?></p></div>

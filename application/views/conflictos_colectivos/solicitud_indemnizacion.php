@@ -8,8 +8,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 <script type="text/javascript">
     function iniciar() {
+        <?php if(isset($band_mantto)){ ?>
+          cambiar_nuevo();
+        <?php } ?>
         <?php if(tiene_permiso($segmentos=2,$permiso=1)){ ?>
-        tablasolicitudes();
+        combo_delegado_tabla();
         <?php }else{ ?>
         $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
         <?php } ?>
@@ -27,31 +30,51 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         tablasolicitudes();
     }
 
-    function combo_establecimiento(seleccion) {
+    function cerrar_combo_establecimiento() {
+        var select2 = $('.select2-search__field').val();
+        $("#nombre_establecimiento").val(select2);
+        $("#establecimiento").select2('close');
+    }
 
-        $.ajax({
-                url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
-                type: "post",
-                dataType: "html",
-                data: {
-                    id: seleccion
-                }
-            })
-            .done(function (res) {
-                $('#div_combo_establecimiento').html(res);
-                $(".est").select2({
-                    'minimumInputLength': 3,
-                    'language': {
-                        noResults: function () {
-                            return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" onClick="cerrar_combo_establecimiento()">Agregar uno nuevo</a>';
-                        }
-                    },
-                    'escapeMarkup': function (markup) {
-                        return markup;
-                    }
-                });
-            });
+    function combo_delegado_tabla(seleccion){
 
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado_tabla",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_delegado_tabla').html(res);
+        <?php if(obtener_rango($segmentos=2, $permiso=1)>1){?>
+                $("#nr_search").select2();
+          <?php } ?>
+        tablasolicitudes();
+      });
+    }
+
+    function combo_establecimiento(seleccion){
+      $.ajax({
+        async: true,
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_establecimiento').html(res);
+        $("#establecimiento").select2({
+
+          'language': {
+            noResults: function () {
+              return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
+            }
+          },
+          'escapeMarkup': function (markup) {
+            return markup;
+          }
+        });
+      });
     }
 
     function combo_actividad_economica() {
@@ -66,6 +89,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $(".select2").select2();
             });
 
+    }
+
+    function combo_motivos(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/combo_motivo_solicitud",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_motivos').html(res);
+        $("#motivo").select2();
+      });
     }
 
     function combo_municipio() {
@@ -212,9 +249,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Inicio establecimiento*/
         combo_actividad_economica();
         combo_municipio();
+        combo_motivos();
         $("#id_expediente").val('');
         /*Fin establecimiento*/
-        
+
         $("#band").val("save");
         $("#band1").val("save");
         $("#band2").val("save");
@@ -254,7 +292,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     result = JSON.parse(res)[0];
 
                     var fecha = new Date(result.fechaconflicto_personaci);
-                    
+
                     /*Inicio Expediente*/
                     $("#fecha_conflicto").val( `${fecha.getDate()}-${fecha.getMonth() + 1}-${fecha.getFullYear()}` );
                     $("#nombre_persona").val(result.nombre_personaci);
@@ -267,6 +305,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     /*Inicio establecimiento*/
                     combo_actividad_economica();
                     combo_municipio();
+                    combo_motivos(result.causa_expedienteci);
                     $("#id_expediente").val(id_expediente);
                     /*Fin establecimiento*/
 
@@ -363,26 +402,34 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         type: "success",
                         showConfirmButton: true
                     });
-                    tabla_acta(id_expediente);                    
+                    tabla_acta(id_expediente);
                 }
             });
         });
     }
 
-    function audiencias(id_expedienteci) {
+    function audiencias(id_expedienteci,id_empresa,codigo) {
+
+        var codigo = codigo || false;
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
             type: "post",
             dataType: "html",
             data: {id : id_expedienteci}
-        })
-        .done(function(res){
-            console.log(res)
+        }).done(function(res){
             $('#cnt_actions').html(res);
             $("#cnt_actions").show(0);
             $("#cnt_tabla").hide(0);
             $("#cnt_tabla_solicitudes").hide(0);
             $("#cnt_form_main").hide(0);
+            combo_defensores();
+            combo_representante_empresa(null, id_empresa);
+            combo_establecimiento(id_empresa);
+            combo_delega2();
+            if (codigo) {
+                $("#paso4").show();
+                $("#div_finalizar").show(0);
+            }
             tabla_audiencias(id_expedienteci);
         });
     }
@@ -404,10 +451,60 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         xmlhttpB.send();
     }
 
-    function modal_delegado(id_expedienteci, id_personal) {
+    function abrir_audiencia_paso() {
+        audiencias( $("#id_expediente").val(), $("#establecimiento").val(), true );
+    }
+
+    function modal_bitacora_delegados(id_expedienteci) {
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/bitacora_delegados",
+        type: "post",
+        dataType: "html",
+        data: {id : id_expedienteci}
+      })
+      .done(function(res){
+        $('#cnt_modal_bitacora_delegado').html(res);
+        $('#modal_bitacora_delegados').modal('show');
+        tabla_delegados(id_expedienteci);
+      });
+    }
+
+    function tabla_delegados(id_expedienteci){
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla_delegados").innerHTML=xmlhttpB.responseText;
+                //$('[data-toggle="tooltip"]').tooltip();
+                $('#myTable').DataTable();
+            }
+        }
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/expediente/tabla_delegados?id="+id_expedienteci,true);
+        xmlhttpB.send();
+    }
+
+    function modal_delegado(id_expedienteci,id_personal) {
         $("#id_expedienteci_copia").val(id_expedienteci);
-        $("#id_personal_copia").val(id_personal).trigger('change.select2');
+        // $("#id_personal_copia").val(id_personal).trigger('change.select2');
         $("#modal_delegado").modal("show");
+        combo_cambiar_delegado(id_personal);
+    }
+
+    function combo_cambiar_delegado(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_cambiar_delegado",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_cambiar_delegado').html(res);
+        $("#id_personal_copia").select2();
+      });
     }
 
     function cambiar_delegado() {
@@ -423,10 +520,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         }
         })
         .done(function (res) {
-        if(res == "exito"){
+        if(res != "fracaso"){
             cerrar_mantenimiento()
             tablasolicitudes();
-            swal({ title: "¡Delegado modificado exitosamente!", type: "success", showConfirmButton: true });
+            swal({ title: "¡Persona delegada modificada exitosamente!", type: "success", showConfirmButton: true });
         }else{
             swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
         }
@@ -590,26 +687,118 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function generar_acta(id_expedienteci) {
-        swal({
-            title: "Información Adicional para Generar Acta",
-            text: " Especifique el período que se detalla en las correspondientes hojas de calculos que se agregan a las presentes diligencias: *",
-            type: "input",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            inputPlaceholder: "Agregar información adicional para generar acta"
-        }, function (inputValue) {
-            if (inputValue === false) return false;
-            if (inputValue === "") {
-                swal.showInputError("Se necesita información adicional para generar el acta.");
-                return false
-            }
-            location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci + "/" + inputValue;
-            
+        // swal({
+        //     title: "Información Adicional para Generar Acta",
+        //     text: " Especifique el período que se detalla en las correspondientes hojas de calculos que se agregan a las presentes diligencias: *",
+        //     type: "input",
+        //     showCancelButton: true,
+        //     closeOnConfirm: false,
+        //     inputPlaceholder: "Agregar información adicional para generar acta"
+        // },
+        // function (inputValue) {
+            // if (inputValue === false) return false;
+            // if (inputValue === "") {
+            //     swal.showInputError("Se necesita información adicional para generar el acta.");
+            //     return false
+            // }
+            location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci/* + "/" + inputValue*/;
+
             swal({
                 title: "¡Acta generada exitosmente!",
                 type: "success",
                 showConfirmButton: true
             });
+        // });
+    }
+
+    function combo_representante_empresa(seleccion,id_emp){
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_representante_empresa?id_empresaci="+id_emp,
+            type: "post",
+            dataType: "html",
+            data: {id : seleccion}
+        })
+        .done(function(res){
+            $.when($('#div_combo_representante_empresa').html(res)).then(function( data, textStatus, jqXHR ) {
+                $("#representante_empresa").select2({
+
+                    'language': {
+                        noResults: function () {
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_representante()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
+                        }
+                    }, 'escapeMarkup': function (markup) { return markup; }
+                });
+            });
+        });
+    }
+
+    function combo_defensores(seleccion){
+        $.ajax({
+            async: true,
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/combo_defensores",
+            type: "post",
+            dataType: "html",
+            data: {id : seleccion}
+        })
+        .done(function(res){
+            $.when($('#div_combo_defensores').html(res) ).then(function( data, textStatus, jqXHR ) {
+                $("#defensor").select2({
+
+                    'language': {
+                        noResults: function () {
+                            return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_defensores" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_defensores()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
+                        }
+                    }, 'escapeMarkup': function (markup) { return markup; }
+                });
+            });
+        });
+    }
+
+    function combo_delega2(seleccion){
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delega2",
+            type: "post",
+            dataType: "html",
+            data: {id : seleccion}
+        }) .done(function(res){
+            $('#div_combo_delegado2').html(res);
+            $("#delegado").select2();
+            // $('#dui_representante').inputmask('99999999-9');
+        });
+    }
+
+    function cerrar_combo_defensores() {
+        $("#defensor").select2('close');
+    }
+
+    function cerrar_combo_representante() {
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_representante",
+            type: "post",
+            dataType: "html"
+        }) .done(function(res){
+            $('#cnt_modal_acciones').html(res);
+            combo_profesiones();
+            combo_municipio2();
+            combo_estados_civiles();
+            $('#modal_representante').modal('show');
+        });
+
+        $("#representante_empresa").select2('close');
+    }
+
+    function combo_resultados(seleccion){
+        $.ajax({
+            url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/combo_resultados",
+            type: "post",
+            dataType: "html",
+            data: {id : seleccion}
+        })
+        .done(function(res){
+            $('#div_combo_resultados').html(res);
+            $("#resolucion").select2();
         });
     }
 
@@ -706,24 +895,24 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso
                                     2</button>&emsp;
-                                Detalle del Expediente    
+                                Detalle del Expediente
                             </h3>
 
                             <input type="hidden" id="band2" name="band2" value="save">
                             <input type="hidden" id="id_persona" name="id_persona" value="">
                             <input type="hidden" id="id_expediente2" name="id_expediente" value="">
-                            
+
                             <hr class="m-t-0 m-b-30">
-                            
+
                             <span class="etiqueta">Expediente</span>
                             <blockquote class="m-t-0">
 
                                 <div class="row">
-                                   
+
                                     <div class="form-group col-lg-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Fecha del Conflicto: <span class="text-danger">*</span></h5>
                                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control"
-                                            id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy">
+                                            id="fecha_conflicto" name="fecha_conflicto" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <div class="help-block"></div>
                                     </div>
 
@@ -750,6 +939,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             placeholder="Cargo de la Persona"></textarea>
                                         <div class="help-block"></div>
                                     </div>
+                                    <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_motivos"></div>
                                 </div>
                             </blockquote>
 
@@ -782,8 +972,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <div id="cnt_form3" class="cnt_form" style="display: none;">
                             <h3 class="box-title" style="margin: 0px;">
                                 <button type="button" id="title_paso3" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
-                                Gestionar Solicitantes:
-                            </h3><hr class="m-t-0 m-b-30">                            
+                                Gestionar personas solicitantes:
+                            </h3><hr class="m-t-0 m-b-30">
 
                             <div id="cnt_tabla_solicitantes"></div>
 
@@ -791,10 +981,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <button id="btn_volver" type="button" class="btn waves-effect waves-light btn-default" onclick="volver(2)"><i class="mdi mdi-chevron-left"></i> Volver</button>
                             </div>
                             <div align="right" id="btnadd2" class="pull-right">
-                                <button type="button" onclick="cerrar_mantenimiento();" class="btn waves-effect waves-light btn-success2">Finalizar <i class="mdi mdi-chevron-right"></i></button>
+                                <button type="button" onclick="abrir_audiencia_paso();" class="btn waves-effect waves-light btn-success2">Siguiente <i class="mdi mdi-chevron-right"></i></button>
                             </div>
                             <div align="right" id="btnedit2" style="display: none;" class="pull-right">
-                                <button type="button" onclick="cerrar_mantenimiento();" class="btn waves-effect waves-light btn-info">Finalizar <i class="mdi mdi-chevron-right"></i></button>
+                                <button type="button" onclick="abrir_audiencia_paso();" class="btn waves-effect waves-light btn-info">Siguiente <i class="mdi mdi-chevron-right"></i></button>
                             </div>
 
                         </div>
@@ -806,7 +996,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
             </div>
 
-            <div class="col-lg-10" id="cnt_actions" style="display:none;"></div>
+            <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
                 <div class="card">
@@ -815,26 +1005,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     </div>
                     <div class="card-body b-t" style="padding-top: 7px;">
                         <div>
+                          <?php if (obtener_rango($segmentos=2, $permiso=1) > 1) { ?>
                             <div class="pull-left">
-                                <div class="form-group" style="width: 400px;">
-                                    <select id="nr_search" name="nr_search" class="select2" style="width: 100%"
-                                        required="" onchange="tablasolicitudes();">
-                                        <option value="">[Todos los empleados]</option>
-                                        <?php
-                                    $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
-                                    if($otro_empleado->num_rows() > 0){
-                                        foreach ($otro_empleado->result() as $fila) {
-                                            if($nr_usuario == $fila->nr){
-                                               echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }else{
-                                                echo '<option class="m-l-50" value="'.$fila->nr.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
-                                            }
-                                        }
-                                    }
-                                ?>
-                                    </select>
-                                </div>
+                                <div class="form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado_tabla" style="width: 400px;"></div>
                             </div>
+                            <?php }else{ ?>
+                              <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
+                            <?php } ?>
                             <div class="pull-right">
                                 <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
                                 <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2"
@@ -894,83 +1071,86 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </div>
 
 <!--INICIA MODAL DE ESTABLECIMIENTOS -->
-<div class="modal fade" id="modal_establecimiento" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-            <input type="hidden" id="band3" name="band3" value="save">
-            <input type="hidden" id="id_representante" name="id_representante" value="">
+  <div class="modal fade" id="modal_establecimiento" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band3" name="band3" value="save">
+          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
+          <input type="hidden" id="id_empresaci" name="id_empresaci" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de representantes</h4>
+                <h4 class="modal-title">Gestión de parte empleadora</h4>
             </div>
             <div class="modal-body" id="">
 
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento"
-                                class="form-control" required="">
-                        </div>
+              <div class="row">
+                <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Tipo: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="tipo_establecimiento" name="tipo_establecimiento" class="custom-select col-4" onchange="ocultar_pn()" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="1">Persona natural</option>
+                        <option value="2">Persona jurídica</option>
+                      </select>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Abreviatura del establecimiento: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento"
-                                class="form-control" required="">
-                        </div>
+                <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Nombre de la parte empleadora:</h5>
+                    <div class="controls">
+                        <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control">
                     </div>
                 </div>
+              </div>
 
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Direcci&oacute;n: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <textarea type="text" id="dir_establecimiento" name="dir_establecimiento" class="form-control"
-                                required=""></textarea>
-                        </div>
-                    </div>
+                <div class="row" id="ocultar_pn">
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Razon social:</h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control" required="">
+                      </div>
+                  </div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Abreviatura: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control" required>
+                      </div>
+                  </div>
                 </div>
 
                 <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Telefono: </h5>
-                        <div class="controls">
-                            <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento"
-                                class="form-control" data-mask="9999-9999">
-                            <div class="help-block"></div>
-                        </div>
-                    </div>
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Direcci&oacute;n: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <textarea type="text" id="dir_establecimiento" name="dir_establecimiento" class="form-control" required=""></textarea>
+                      </div>
+                  </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_actividad_economica"></div>
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Tel&eacute;fono: </h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento" class="form-control" data-mask="9999-9999" required>
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                        <h5>Nombre del representante: <span class="text-danger">*</span></h5>
-                        <div class="controls">
-                            <input type="text" id="nombre_representante" name="nombre_representante" class="form-control"
-                                required>
-                        </div>
-                    </div>
+                  <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_actividad_economica"></div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
                 <button type="submit" id="submit2" class="btn btn-info waves-effect text-white">Aceptar</button>
             </div>
-            <?php echo form_close(); ?>
-        </div>
+          <?php echo form_close(); ?>
     </div>
+  </div>
 </div>
 <!--FIN MODAL DE ESTABLECIMIENTOS -->
 
@@ -979,18 +1159,19 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Cambiar asignación de delegado:</h4>
+                <h4 class="modal-title">Cambiar asignación de persona delegada:</h4>
             </div>
 
             <div class="modal-body" id="">
                 <input type="hidden" id="id_expedienteci_copia" name="id_expedienteci_copia" value="">
                 <div class="row">
-                    <div class="form-group col-lg-12 col-sm-12">
+                  <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_cambiar_delegado"></div>
+                    <!-- <div class="form-group col-lg-12 col-sm-12">
                         <div class="form-group">
-                            <h5>Delegado/a:<span class="text-danger">*</h5>
+                            <h5>Persona delegada:<span class="text-danger">*</h5>
                             <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%"
                                 required="">
-                                <option value="">[Todos los empleados]</option>
+                                <option value="">[Todas las personas empleadas]</option>
                                 <?php
                             $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre,
                                                                       e.segundo_nombre, e.tercer_nombre, e.primer_apellido,
@@ -1006,7 +1187,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         ?>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div align="right">
                     <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
@@ -1061,9 +1242,89 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </div>
 <!--FIN MODAL DE ESTADO -->
 
+<!--INICIA MODAL DE PROCURADOR -->
+<div class="modal fade" id="modal_defensores" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <?php echo form_open('', array('id' => 'formajax8', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band6" name="band6" value="save">
+          <input type="hidden" id="id_procuradorci" name="id_procuradorci" value="">
+          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
+            <div class="modal-header">
+                <h4 class="modal-title">Gestión de personas defensoras legales</h4>
+            </div>
+            <div class="modal-body" id="">
+              <div class="row">
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Nombres de la persona: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="nombre_representante_persona" name="nombre_representante_persona" class="form-control" placeholder="Nombres de la persona representante" required>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Apellidos de la persona: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="apellido_representante_persona" name="apellido_representante_persona" class="form-control" placeholder="Apellidos de la persona representante" required>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>DUI de la persona: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input data-mask="99999999-9" type="text" id="dui_representante_persona" name="dui_representante_persona" class="form-control" placeholder="Dui de la persona representante" required>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Tel&eacute;fono de la persona: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input data-mask="9999-9999" type="text" id="telefono_representante_persona" name="telefono_representante_persona" class="form-control" placeholder="telefono de la persona representante" required>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_representante"></div>
+
+                <div class="form-group col-lg-8 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Acreditaci&oacute;n: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <textarea type="text" id="acreditacion_representante_persona" name="acreditacion_representante_persona" class="form-control" required></textarea>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="submit" id="submit4" class="btn btn-info waves-effect text-white">Aceptar</button>
+            </div>
+          <?php echo form_close(); ?>
+    </div>
+  </div>
+</div>
+<!--FIN MODAL DE PROCURADOR -->
+
 <div id="cnt_modal_acciones"></div>
+<div id="cnt_modal_bitacora_delegado"></div>
 
 <script>
+
+function ocultar_pn(){
+  var value = $("#tipo_establecimiento").val();
+  if (value==1) {
+    $("#razon_social").removeAttr("required");
+    $("#abre_establecimiento").removeAttr("required");
+    $('#ocultar_pn').hide(500);
+  }else {
+     $('#ocultar_pn').show(500);
+     $("#razon_social").attr("required",'required');
+     $("#abre_establecimiento").attr("required",'required');
+  }
+}
     $(function () {
         $("#formajax").on("submit", function (e) {
             e.preventDefault();
@@ -1132,47 +1393,38 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     });
 
-    $(function () {
-        $("#formajax3").on("submit", function (e) {
+    $(function(){
+        $("#formajax3").on("submit", function(e){
             e.preventDefault();
             var f = $(this);
             var formData = new FormData(document.getElementById("formajax3"));
 
             $.ajax({
-                    url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/gestionar_establecimiento",
-                    type: "post",
-                    dataType: "html",
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false
-                })
-                .done(function (res) {
-                    if (res == "fracaso") {
-                        swal({
-                            title: "¡Ups! Error",
-                            text: "Intentalo nuevamente.",
-                            type: "error",
-                            showConfirmButton: true
-                        });
-                    } else {
-                        swal({
-                            title: "¡Registro exitoso!",
-                            type: "success",
-                            showConfirmButton: true
-                        });
-
-                        var data = {
-                            id: res,
-                            text: $("#nombre_establecimiento").val()
-                        };
-
-                        var newOption = new Option(data.text, data.id, false, false);
-                        $('#establecimiento').append(newOption).trigger('change');
-                        $('#establecimiento').val(data.id).trigger("change");
-                        $('#modal_establecimiento').modal('toggle');
+              url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/gestionar_establecimiento",
+              type: "post",
+              dataType: "html",
+              data: formData,
+              cache: false,
+              contentType: false,
+              processData: false
+            })
+            .done(function(res){
+              console.log(res)
+              res = res.split(",");
+                if(res[0] == "exito"){
+                    if($("#band3").val() == "save"){
+                        //$("#id_empresa").val(res[1])
+                        $("#modal_establecimiento").modal('hide');
+                        $.toast({ heading: 'Registro exitoso', text: 'Registro exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+                        combo_establecimiento(res[1]);
+                    }else if($("#band3").val() == "edit"){
+                        swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                        //tabla_representantes();
                     }
-                });
+                }else{
+                    swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+                }
+            });
 
         });
     });

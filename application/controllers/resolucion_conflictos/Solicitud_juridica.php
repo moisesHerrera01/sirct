@@ -7,6 +7,7 @@ class Solicitud_juridica extends CI_Controller {
 		parent::__construct();
 		$this->load->model('solicitud_juridica_model');
 		$this->load->model('expedientes_model');
+		$this->load->model('delegados_model');
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -21,7 +22,7 @@ class Solicitud_juridica extends CI_Controller {
 
   	public function obtener_expediente_juridico() {
         print json_encode(
-            $this->solicitud_juridica_model->obtener_registros_expedientes(61)->result()
+            $this->solicitud_juridica_model->obtener_registros_expedientes($this->input->post('id'))->result()
         );
     }
 
@@ -41,7 +42,7 @@ class Solicitud_juridica extends CI_Controller {
 	}
 
   	public function combo_establecimiento() {
-		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento', 
+		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento',
 			array(
 				'id' => $this->input->post('id'),
 				'establecimiento' => $this->db->get('sge_empresa')
@@ -93,6 +94,7 @@ class Solicitud_juridica extends CI_Controller {
       		echo $this->solicitud_juridica_model->insertar_establecimiento($data);
 		}else if($this->input->post('band') == "edit"){
       		$data = array(
+      		'id_empresa' => $this->input->post('id_empresa'),
       		'tiposolicitud_empresa' => ($this->input->post('tiposolicitud_empresa')),
 			'razon_social' => mb_strtoupper($this->input->post('razon_social')),
 			'abreviatura_empresa' => mb_strtoupper($this->input->post('abreviatura_empresa')),
@@ -102,7 +104,7 @@ class Solicitud_juridica extends CI_Controller {
 			'id_municipio' => $this->input->post('id_municipio'),
 			'direccion_empresa' => mb_strtoupper($this->input->post('direccion_empresa'))
 			);
-			echo $this->solicitud_juridica_model->editar_establecimiento($data);
+			echo $this->solicitud_juridica_model->upgrade_establecimiento($data);
 		}else if($this->input->post('band') == "delete"){
 			$data = array(
 			'id_empresa' => $this->input->post('id_empresa'),
@@ -115,14 +117,16 @@ class Solicitud_juridica extends CI_Controller {
 	public function gestionar_solicitado(){
 		if($this->input->post('band3') == "save"){
 			$data = array(
-      		'nombre_personaci' => mb_strtoupper($this->input->post('nombre_personaci')),
+      'nombre_personaci' => mb_strtoupper($this->input->post('nombre_personaci')),
 			'apellido_personaci' => mb_strtoupper($this->input->post('apellido_personaci')),
 			'telefono_personaci' => $this->input->post('telefono_personaci'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion_personaci'),
 			'sexo_personaci' => $this->input->post('sexo'),
 			'id_empresaci' => $this->input->post('id_empresaci'),
-			'discapacidad_personaci' => $this->input->post('discapacidad')
+			'discapacidad_personaci' => $this->input->post('discapacidad'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 			echo $this->solicitud_juridica_model->insertar_solicitado($data);
 
@@ -135,7 +139,9 @@ class Solicitud_juridica extends CI_Controller {
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => mb_strtoupper($this->input->post('direccion_personaci')),
 			'sexo_personaci' => $this->input->post('sexo_personaci'),
-			'discapacidad_personaci' => $this->input->post('discapacidad_personaci')
+			'discapacidad_personaci' => $this->input->post('discapacidad_personaci'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 			echo $this->solicitud_juridica_model->editar_solicitado($data);
 
@@ -151,14 +157,27 @@ class Solicitud_juridica extends CI_Controller {
 	public function gestionar_expediente(){
 		if($this->input->post('band4') == "save"){
 			$data = array(
-      		'id_empresaci' => $this->input->post('id_empresaci'),
+      'id_empresaci' => $this->input->post('id_empresaci'),
 			'id_personal' => $this->input->post('id_personal'),
 			'id_personaci' => $this->input->post('id_personaci'),
+			'causa_expedienteci' => $this->input->post('causa_expedienteci'),
 			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
-			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))
+			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci')),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
-			echo $this->solicitud_juridica_model->insertar_expediente($data);
+			echo $id_expedienteci = $this->solicitud_juridica_model->insertar_expediente($data);
+			$id_expedienteci = explode(',',$id_expedienteci);
+			$delegado = array(
+				'id_expedienteci' => $id_expedienteci,
+				'id_personal' => $data['id_personal'],
+				'fecha_cambio_delegado' => date('Y-m-d'),
+				'id_rol_guarda' => $this->session->userdata('id_rol'),
+				'id_usuario_guarda' => $this->session->userdata('id_usuario'),
+				'cambios' => "Asignación de expediente"
+			);
+			$this->delegados_model->insertar_delegado_exp($delegado);
 
 		}else if($this->input->post('band4') == "edit"){
 			$data = array(
@@ -166,9 +185,12 @@ class Solicitud_juridica extends CI_Controller {
 			'id_empresaci' => $this->input->post('id_empresaci'),
 			'id_personal' => $this->input->post('id_personal'),
 			'id_personaci' => $this->input->post('id_personaci'),
+			'causa_expedienteci' => $this->input->post('causa_expedienteci'),
 			'id_representanteci' => $this->input->post('id_representanteci'),
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
-			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci'))
+			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci')),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
 			echo $this->solicitud_juridica_model->editar_expediente($data);
 
@@ -192,7 +214,7 @@ class Solicitud_juridica extends CI_Controller {
 	}
 
 	public function emitir_ficha($id_expedienteci) {
-        
+
         $this->load->library("phpword");
         $PHPWord = new PHPWord();
         $titulo = 'FichaSolicitud_PJPN';
@@ -206,7 +228,7 @@ class Solicitud_juridica extends CI_Controller {
         $get = array ('AAAA', 'BBBB', 'CCCC', 'DDDD', 'EEEE', 'FFFF', 'GGGG', 'HHHH', 'IIII', 'JJJJ', 'KKKK');
         $set = array ($expediente->numerocaso_expedienteci, $expediente->fechacrea_expedienteci, $personaci->direccion_personaci, $personaci->nombre_personaci." ".$personaci->apellido_personaci, $personaci->primarios_catalogociuo, $expediente->nombre_empresa, $expediente->telefono_empresa, $expediente->direccion_empresa, $expediente->primer_nombre." ".$expediente->segundo_nombre." ".$expediente->tercer_nombre." ".$expediente->primer_apellido." ".$expediente->segundo_apellido." ".$expediente->apellido_casada);
 
-        $templateWord->setValue($get,$set);        
+        $templateWord->setValue($get,$set);
 
         $nombreWord = $this->random();
 

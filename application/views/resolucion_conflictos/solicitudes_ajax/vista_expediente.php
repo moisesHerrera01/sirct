@@ -19,6 +19,9 @@
     </div>
 
     <div class="card-body b-t" style="padding-top: 7px;">
+        <div align="right">
+          <button class="btn btn-secondary" onclick="imprimir_ficha_pdf('<?= $expediente->id_expedienteci ?>', '<?= $empresa->id_empresa ?>')"><span class="mdi mdi-file-pdf"></span> Imprimir ficha</button>
+        </div><br>
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>
@@ -35,7 +38,7 @@
                       Fecha y Hora de Creaci&oacute;n del expediente:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= date("d-M-Y g:i:s A", strtotime($expediente->fechacrea_expedienteci)) ?></h5>
+                          <h5><?= date("d-M-Y h:i:s A", strtotime($expediente->fechacrea_expedienteci)) ?></h5>
                     </div>
                   </div>
                 </tbody>
@@ -44,7 +47,7 @@
 
           <!--Datos del solicitante !-->
 
-            <span class="label label-success" style="font-size: 16px;">Datos del solicitante</span>
+            <span class="label label-success" style="font-size: 16px;">Datos de la persona solicitante</span>
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>
@@ -82,7 +85,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Tel&eacute;fono:
+                      Municipio:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->municipio ?></h5>
@@ -101,7 +104,7 @@
                       Fecha de nacimiento:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->fnacimiento_personaci ?></h5>
+                          <h5><?= fecha_ESP($expediente->fnacimiento_personaci) ?></h5>
                     </div>
                   </div>
                   <div class="row">
@@ -109,7 +112,7 @@
                       Sexo:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= ($expediente->sexo_personaci == "M") ? "Masculino" : "Femenino" ; ?></h5>
+                          <h5><?= ($expediente->sexo_personaci == "M") ? "Hombre" : "Mujer" ; ?></h5>
                     </div>
                   </div>
                   <div class="row">
@@ -195,7 +198,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Representante:
+                      Persona representante:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $empresa->nombres_representante ?></h5>
@@ -214,7 +217,7 @@
                       Motivo de la solicitud:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= ($expediente->motivo_expedienteci==1) ? "Despido de hecho o injustificado" : "Diferencias laborales" ;  ?></h5>
+                          <h5><?= ($expediente->motivo_expedienteci==1) ? "Despido de hecho o injustificado" : "Conflictos laborales" ;  ?></h5>
                     </div>
                   </div>
                   <div class="row">
@@ -230,7 +233,7 @@
                       Fecha del conflicto:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->fechaconflicto_personaci ?></h5>
+                          <h5><?= fecha_ESP($expediente->fechaconflicto_personaci) ?></h5>
                     </div>
                   </div>
                   <div class="row">
@@ -275,17 +278,18 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Delegado asignado:
+                      Persona delegada asignada:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.
+                      <h5><?= $expediente->nombre_delegado_actual ?></h5>
+                          <!-- <h5><?= $expediente->primer_nombre.' '.$expediente->segundo_nombre.' '.
                           $expediente->primer_apellido.' '.$expediente->segundo_apellido.' '.
-                          (($expediente->apellido_casada) ? $expediente->apellido_casada : ' ') ?></h5>
+                          (($expediente->apellido_casada) ? $expediente->apellido_casada : ' ') ?></h5> -->
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Nombres de jefe inmediato:
+                      Nombres de jefatura inmediato:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->nombre_empleador ?></h5>
@@ -293,7 +297,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Apellidos de jefe inmediato:
+                      Apellidos de jefatura inmediato:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->apellido_empleador ?></h5>
@@ -301,7 +305,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
-                      Cargo de jefe inmediato:
+                      Cargo de jefatura inmediato:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
                           <h5><?= $expediente->cargo_empleador ?></h5>
