@@ -23,6 +23,7 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 		if($this->input->post('band1') == "save"){
 			$data = array(
+				'motivo_expedienteci' => 3,
         'numerocaso_expedienteci' => 'N/A',
         'id_empresaci' => $this->input->post('establecimiento'),
         'id_personal' => $this->input->post('id_personal'),
