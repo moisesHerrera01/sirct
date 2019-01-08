@@ -91,5 +91,8 @@ define('DELEGADO', 72); //id del rol colaborador
 
 /*Conciliación de conflictos colectivos*/
 define('JEFE_C', 79);      //id del rol administrador o jefe de unidad
+
+/*Conciliación de conflictos colectivos*/
+define('JEFE_C', 79);      //id del rol administrador o jefe de unidad
 define('FILTRO_C', 80);     //id del rol filtro
 define('DELEGADO_C', 78); //id del rol colaborador

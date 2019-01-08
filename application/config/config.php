@@ -32,6 +32,11 @@ $config['id_sistema'] = "18"; //Id del sistema en la base de datos
 |--------------------------------------------------------------------------
 | Index File
 |--------------------------------------------------------------------------
+
+/*
+|--------------------------------------------------------------------------
+| Index File
+|--------------------------------------------------------------------------
 |
 | Typically this will be your index.php file, unless you've renamed it to
 | something else. If you are using mod_rewrite to remove the page set this
