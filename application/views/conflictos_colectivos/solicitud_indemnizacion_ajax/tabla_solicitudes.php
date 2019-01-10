@@ -114,7 +114,7 @@
                                     <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci?>)">Visualizar</a>
                                     <a class="dropdown-item" href="javascript:;" onClick="audiencias(<?=$fila->id_expedienteci?>,<?=$fila->id_empresaci?>)">Gestionar audiencias</a>
                                     <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado/a</a>
-                                    <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci?>)">Cambios de delegados/as</a>
+                                    <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci?>)">Bitacora de cambios</a>
                                     <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->estado?>)">Cambiar estado</a> -->
                                     <?php if ($fila->personas > 0 ) { ?>
                                         <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_ficha_indemnizacion/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>

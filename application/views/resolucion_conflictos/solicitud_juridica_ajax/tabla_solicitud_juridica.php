@@ -126,7 +126,7 @@
                                       <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci.','.$fila->id_empresaci.','.$fila->id_personaci?>)">Visualizar</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="audiencias('<?=$fila->id_empresaci?>',<?=$fila->id_expedienteci?>, 2)">Gestionar audiencias</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar Delegado</a>
-                                      <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci?>)">Cambios de delegados/as</a>
+                                      <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci?>)">Bitacora de cambios</a>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/solicitud_juridica/emitir_ficha/'.$fila->id_expedienteci.'/')?>">Emitir Ficha</a>
                                       <!-- <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedienteci?>)">Registrar resolución</a> -->
                                       <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a> -->

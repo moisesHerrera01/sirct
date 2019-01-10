@@ -397,12 +397,12 @@ function modal_estado(id_expedienteci, id_estadosci) {
 }
 
 
-function modal_bitacora_delegados(id_expedienteci) {
+function modal_bitacora_delegados(id_expedienteci,numero) {
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/bitacora_delegados",
     type: "post",
     dataType: "html",
-    data: {id : id_expedienteci}
+    data: {id : id_expedienteci, num_exp : numero}
   })
   .done(function(res){
     $('#cnt_modal_bitacora_delegado').html(res);
@@ -505,7 +505,7 @@ function cambiar_eliminar3(estado){
 function cerrar_combo_establecimiento() {
     //var select2 = $('.select2-search__field').val();
     //$("#nombre_establecimiento").val(select2);
-    
+
     $("#id_empresaci").val('');
     $("#tipo_establecimiento").val('');
     $("#razon_social").val('');
@@ -2245,7 +2245,7 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax"));
         formData.append("dato", "valor");
-        
+
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_solicitudes",
             type: "post",
