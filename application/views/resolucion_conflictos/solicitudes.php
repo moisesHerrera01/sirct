@@ -1068,7 +1068,6 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#nombres").val(result.nombre_personaci);
       $("#conocido_por").val(result.conocido_por);
       $("#apellidos").val(result.apellido_personaci);
-      $("#dui").val(result.dui_personaci);
       $("#telefono").val(result.telefono_personaci);
       $("#telefono2").val(result.telefono2_personaci);
       $("#municipio").val(result.id_municipio).trigger('change.select2');
@@ -1089,8 +1088,11 @@ function cambiar_editar(id_expedienteci,bandera){
         if (result.id_doc_identidad==4) {
           $('#partida_div').show();
           $('#tipo_aco').show(500);
-          $('#div_numero_doc_identidad').hide();
-          $("#dui").removeAttr("required");
+          // $('#div_numero_doc_identidad').hide();
+          // $("#dui").removeAttr("required");
+          $('#dui').mask('99999999-9', {reverse: true});
+          $('#div_numero_doc_identidad').show();
+          $("#dui").attr("required",'required');
         }else {
           $('#partida_div').hide();
           $('#tipo_aco').hide(500);
@@ -1104,6 +1106,7 @@ function cambiar_editar(id_expedienteci,bandera){
          $('#div_numero_doc_identidad').show();
          $("#dui").attr("required",'required');
       }
+      $("#dui").val(result.dui_personaci);
       $("#id_partida").val(result.id_partida);
       $("#numero_partida").val(result.numero_partida);
       $("#folio_partida").val(result.folio_partida);
@@ -1300,7 +1303,7 @@ function volver(num) {
                             <input type="hidden" id="id_personaci" name="id_personaci" value="">
                             <input type="hidden" id="id_partida" name="id_partida" value="">
 
-                            <span class="etiqueta">Expediente</span>
+                            <span class="etiqueta">Datos de la persona</span>
                             <blockquote class="m-t-0">
 
                             <div class="row">
@@ -1322,11 +1325,6 @@ function volver(num) {
                             </div>
 
                             <div class="row">
-                              <div class="form-group col-lg-4" style="height: 83px;">
-                                  <h5>Teléfono 1: </h5>
-                                  <input data-mask="9999-9999" type="text" id="telefono" name="telefono" class="form-control" placeholder="Número de Telefóno">
-                                  <div class="help-block"></div>
-                              </div>
 
                               <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
 
@@ -1350,58 +1348,16 @@ function volver(num) {
                                 </div>
                             </div>
 
-                            <div id="partida_div" style="display: none;">
-                              <div class="row">
-                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Persona representante del menor: </h5>
-                                    <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre representante del menor">
-                                    <div class="help-block"></div>
-                                </div>
-
-                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Número:</h5>
-                                    <div class="controls">
-                                        <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Folio:</h5>
-                                    <div class="controls">
-                                        <input type="text" placeholder="Folio partida nacimiento" id="folio_partida" name="folio_partida" class="form-control">
-                                    </div>
-                                </div>
-                              </div>
-
-                              <div class="row">
-                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Libro: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <input type="text" placeholder="Libro partida nacimiento" id="libro_partida" name="libro_partida" class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Asiento: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <input type="text" placeholder="Asiento partida nacimiento" id="asiento_partida" name="asiento_partida" class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                    <h5>Año: </h5>
-                                    <div class="controls">
-                                        <input type="text" placeholder="Año partida nacimiento" id="anio_partida" name="anio_partida" class="form-control">
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                              </div>
-                            </div>
-
                             <div class="row">
-                              <div class="form-group col-lg-4" style="height: 83px;">
+                              <div class="form-group col-lg-2" style="height: 83px;">
+                                  <h5>Teléfono 1: </h5>
+                                  <input data-mask="9999-9999" type="text" id="telefono" name="telefono" class="form-control" placeholder="Teléfono 1">
+                                  <div class="help-block"></div>
+                              </div>
+
+                              <div class="form-group col-lg-2" style="height: 83px;">
                                   <h5>Teléfono 2: </h5>
-                                  <input data-mask="9999-9999" type="text" id="telefono2" name="telefono2" class="form-control" placeholder="Número de Telefóno casa">
+                                  <input data-mask="9999-9999" type="text" id="telefono2" name="telefono2" class="form-control" placeholder="Teléfono 2">
                                   <div class="help-block"></div>
                               </div>
 
@@ -1497,16 +1453,64 @@ function volver(num) {
 
                         </div>
                         <div class="row">
-
-
                        <div id="ocultar_div" class="form-group col-lg-8" style="height: 83px; display: none;">
                            <h5>Discapacidad:</h5>
                            <textarea type="text" id="discapacidad_desc" name="discapacidad_desc" class="form-control" placeholder="Ingrese la discapacidad"></textarea>
                            <div class="help-block"></div>
                        </div>
-
                         </div>
-                            </blockquote>
+                        </blockquote>
+
+                        <div id="partida_div" style="display: none;">
+                        <span class="etiqueta">Datos del menor</span>
+                        <blockquote class="m-t-0">
+                          <div class="row">
+                            <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <h5>Nombre del menor: </h5>
+                                <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre del menor">
+                                <div class="help-block"></div>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <h5>Número partida:</h5>
+                                <div class="controls">
+                                    <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <h5>Folio partida:</h5>
+                                <div class="controls">
+                                    <input type="text" placeholder="Folio partida nacimiento" id="folio_partida" name="folio_partida" class="form-control">
+                                </div>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <h5>Libro partida: <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" placeholder="Libro partida nacimiento" id="libro_partida" name="libro_partida" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <h5>Asiento partida: <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" placeholder="Asiento partida nacimiento" id="asiento_partida" name="asiento_partida" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                <h5>Año exp. partida: </h5>
+                                <div class="controls">
+                                    <input type="text" placeholder="Año partida nacimiento" id="anio_partida" name="anio_partida" class="form-control">
+                                    <div class="help-block"></div>
+                                </div>
+                            </div>
+                          </div>
+                        </blockquote>
+                      </div>
 
                           <div class="pull-left">
                               <button type="button" class="btn waves-effect waves-light btn-default" onclick="cerrar_mantenimiento();"><i class="mdi mdi-chevron-left"></i> Salir</button>
@@ -1544,7 +1548,7 @@ function volver(num) {
                               <input type="hidden" id="id_representante_persona" name="id_representante_persona" value="">
 
 
-                              <span class="etiqueta">Expediente</span>
+                              <span class="etiqueta">Datos de la persona</span>
                               <blockquote class="m-t-0">
                             </blockquote>
 
@@ -1701,6 +1705,7 @@ function volver(num) {
                                           <option value="Catorcenal">Catorcenal</option>
                                           <option value="Quincenal">Quincenal</option>
                                           <option value="Mensual">Mensual</option>
+                                          <option value="Otra">Otra</option>
                                         </select>
                                       </div>
                                   </div>
@@ -2570,8 +2575,11 @@ function ocultar(){
     if (value==4) {
       $('#partida_div').show(500);
       $('#tipo_aco').show(500);
-      $('#div_numero_doc_identidad').hide(500);
-      $("#dui").removeAttr("required");
+      // $('#div_numero_doc_identidad').hide(500);
+      // $("#dui").removeAttr("required");
+      $('#dui').mask('99999999-9', {reverse: true});
+      $('#div_numero_doc_identidad').show(500);
+      $("#dui").attr("required",'required');
     }else {
       $('#partida_div').hide(500);
       $('#tipo_aco').hide(500);

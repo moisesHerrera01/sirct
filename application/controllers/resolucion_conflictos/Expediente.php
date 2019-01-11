@@ -63,7 +63,7 @@ class Expediente extends CI_Controller {
 							'fecha_cambio_delegado' => date('Y-m-d'),
 							'id_rol_guarda' => $this->session->userdata('id_rol'),
 							'id_usuario_guarda' => $this->session->userdata('id_usuario'),
-							'cambios' => "Asignación de expediente"
+							'cambios' => "Asignación de expediente a"
 						);
 						$this->delegados_model->insertar_delegado_exp($delegado);
 
