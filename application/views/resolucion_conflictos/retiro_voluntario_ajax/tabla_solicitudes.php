@@ -121,7 +121,7 @@
                                               <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado</a>
                                               <?php  } ?>
                                             <!-- <a class="dropdown-item" href="javascript:;" onClick="modal_estado(<?=$fila->id_expedienteci.','.$fila->id_estadosci?>)">Cambiar estado</a> -->
-                                            <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci?>)">Cambios de delegados/as</a>
+                                            <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci?>)">Bitacora de cambios</a>
                                             <a class="dropdown-item" href="javascript:;" onClick="adjuntar_actas(<?=$fila->id_expedienteci?>)">Subir actas escaneadas</a>
                                             <!-- <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a> -->
                                             <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>

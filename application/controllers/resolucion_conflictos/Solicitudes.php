@@ -7,7 +7,7 @@ class Solicitudes extends CI_Controller {
 		parent::__construct();
 		$this->load->model('solicitudes_model');
 		$this->load->model('expedientes_model');
-		$this->load->model('solicitud_juridica_model');
+		$this->load->model('expedientes_model');
 		$this->load->library('FPDF/fpdf');
 	}
 

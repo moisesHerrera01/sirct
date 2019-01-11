@@ -290,6 +290,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                         <option value="Catorcenal">Catorcenal</option>
                                         <option value="Quincenal">Quincenal</option>
                                         <option value="Mensual">Mensual</option>
+                                        <option value="Otra">Otra</option>
                                     </select>
                                     </div>
                                 </div>

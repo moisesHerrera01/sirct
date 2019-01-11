@@ -63,7 +63,7 @@ class Expediente extends CI_Controller {
 							'fecha_cambio_delegado' => date('Y-m-d'),
 							'id_rol_guarda' => $this->session->userdata('id_rol'),
 							'id_usuario_guarda' => $this->session->userdata('id_usuario'),
-							'cambios' => "Asignación de expediente"
+							'cambios' => "Asignación de expediente a"
 						);
 						$this->delegados_model->insertar_delegado_exp($delegado);
 
@@ -282,13 +282,15 @@ class Expediente extends CI_Controller {
 			}
 
 			public function cambiar_delegado() {
+				$delegado_actual = $this->delegados_model->obtener_delegado_actual($this->input->post('id_expedienteci'))->nombre_empleado;
+
 				$data = array(
 					'id_expedienteci' => $this->input->post('id_expedienteci'),
 					'id_personal' => $this->input->post('id_personal'),
 					'fecha_cambio_delegado' => date("Y-m-d"),
 					'id_rol_guarda' => $this->session->userdata('id_rol'),
 					'id_usuario_guarda' => $this->session->userdata('id_usuario'),
-					'cambios' => "Reasignación de expediente"
+					'cambios' => "SE REASIGNA EXPEDIENTE DE $delegado_actual A"
 				);
 				echo $this->delegados_model->insertar_delegado_exp($data);
 			}
@@ -333,7 +335,8 @@ class Expediente extends CI_Controller {
 		public function bitacora_delegados() {
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/modal_bitacora_delegado',
 			array(
-				'id' => $this->input->post('id')
+				'id' => $this->input->post('id'),
+				'num_exp' => $this->input->post('num_exp')
 			));
 		}
 

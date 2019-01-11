@@ -11,7 +11,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Bitacora de reasignación de personas delegadas</h4>
+        <h4 class="modal-title">Bitacora de cambios realizados al expediente: <?= $num_exp ?></h4>
         <button type="button" class="close" data-dismiss="modal" ><span aria-hidden="true">×</span> <span class="sr-only">Cerrar</span></button>
       </div>
       <div class="modal-body" id="">
@@ -19,7 +19,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
-      </div>      
+      </div>
     </div>
   </div>
 </div>
