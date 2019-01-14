@@ -72,12 +72,12 @@
                               }
                             break;
                             case '2':
-                              if ($tipo==1) {
+                              // if ($tipo==1) {
                                 if($puede_editar){
                                   array_push($actas,"");
                                   echo generar_boton($actas,"modal_actas_tipo","btn-success2","fa fa-file","Generar actas");
                                 }
-                              }
+                              // }
                               break;
                             default:
                               break;

@@ -107,6 +107,7 @@ class Expediente_cc_model extends CI_Model {
     public function obtener_expediente_indemnizacion($id) {
       $this->db->select('
                   a.id_expedienteci,
+                  a.id_personal,
                   a.numerocaso_expedienteci,
                   a.fechacrea_expedienteci,
                   a.fechaconflicto_personaci,
