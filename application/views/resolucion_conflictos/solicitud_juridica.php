@@ -910,7 +910,30 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#establecimiento").val('').trigger('change.select2');
     }
 
+    function imprimir_ficha_pdf(id_expedienteci, id_personaci){
+        var params = { 'id_expedienteci': id_expedienteci, 'id_personaci': id_personaci };
+        var url = "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/imprimir_ficha_pdf"
+        OpenWindowWithPost(url, params, "_BLANK")
+    }
 
+    function OpenWindowWithPost(url, params, target){
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", url);
+        form.setAttribute("target", target);
+        for (var i in params) {
+            if (params.hasOwnProperty(i)) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = i;
+                input.value = params[i];
+                form.appendChild(input);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+    }
 </script>
 <input type="hidden" id="id_empresaci" name="id_empresaci">
 <input type="hidden" id="address" name="">
@@ -922,7 +945,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de mediación de Conflictos persona jurídica </h3>
+                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de mediación de conflictos persona jurídica </h3>
             </div>
         </div>
 
@@ -944,7 +967,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <div class="card-actions text-white">
                             <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
                         </div>
-                        <h4 class="card-title m-b-0 text-white">Listado de Solicitudes</h4>
+                        <h4 class="card-title m-b-0 text-white">Listado de solicitudes</h4>
                     </div>
                     <div class="card-body b-t">
                         <div id="cnt_form1" class="cnt_form">

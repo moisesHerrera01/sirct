@@ -188,9 +188,10 @@ class Solicitud_juridica_model extends CI_Model {
 
 	public function obtener_registros_expedientes($id) {
 
-		$this->db->select('e.id_personaci AS id_personacie, p.*, e.*, ep.*, em.*, r.*, m.*,d.nombre_delegado_actual')
+		$this->db->select('e.id_personaci AS id_personacie, p.*, e.*, ep.*, em.*, r.*, m.*,d.nombre_delegado_actual, cat.actividad_catalogociiu')
 			->from('sct_expedienteci e')
 			->join('sge_empresa em','em.id_empresa = e.id_empresaci')
+			->join('sge_catalogociiu cat','cat.id_catalogociiu=em.id_catalogociiu')
 			->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 			->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 			->join('sge_representante r ', ' r.id_representante = e.id_representanteci')
@@ -205,7 +206,7 @@ class Solicitud_juridica_model extends CI_Model {
 																				WHERE de2.id_expedienteci=de.id_expedienteci
 																			 )
 					) d" , "d.id_expedienteci=e.id_expedienteci")
-			/*->join('sge_catalogociuo cat','cat.id_catalogociuo=p.id_catalogociuo')
+			/*
 			->join('org_municipio m','m.id_municipio=p.id_municipio')
 			->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
 			*/

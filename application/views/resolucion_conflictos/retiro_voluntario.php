@@ -986,6 +986,31 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         }
     }
 
+    function imprimir_ficha_pdf(id_expediente, id_empresa){
+        var params = { 'id_expediente': id_expediente, 'id_empresa': id_empresa };
+        var url = "<?php echo site_url(); ?>/resolucion_conflictos/expediente/imprimir_ficha_pdf"
+        OpenWindowWithPost(url, params, "_BLANK")
+    }
+
+    function OpenWindowWithPost(url, params, target){
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", url);
+        form.setAttribute("target", target);
+        for (var i in params) {
+            if (params.hasOwnProperty(i)) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = i;
+                input.value = params[i];
+                form.appendChild(input);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+    }
+
 
 </script>
 <input type="hidden" id="bandx" name="bandx">

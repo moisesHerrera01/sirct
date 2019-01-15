@@ -354,7 +354,7 @@ class Expediente extends CI_Controller {
 				<tr>
 					<td align='right'>
 					<p style='font-size: 18px;'><small>N&uacute;mero de caso:</small> <b>$expediente->numerocaso_expedienteci</b><br></p>
-					<b>Fecha y hora de creaci&oacute;n del expediente:</b> ".date("d-M-Y h:i:s A", strtotime($expediente->fechacrea_expedienteci))."</td>
+					<b>Fecha y hora de creaci&oacute;n del expediente:</b> ".date("d-m-Y h:i:s A", strtotime($expediente->fechacrea_expedienteci))."</td>
 				</tr>
 		</tbody></table><br>";
 

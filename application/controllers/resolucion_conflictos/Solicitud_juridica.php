@@ -41,6 +41,159 @@ class Solicitud_juridica extends CI_Controller {
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/vista_expediente', $data);
 	}
 
+	public function imprimir_ficha_pdf() {
+		$persona = $this->solicitud_juridica_model->obtener_personaci($this->input->post('id_personaci'));
+		$expediente = $this->solicitud_juridica_model->obtener_registros_expedientes( $this->input->post('id_expedienteci') );
+		$expediente = $expediente->result()[0];
+
+		$html = "<table width='100%' style='border-outline: 1px; border-collapse: collapse;'><tbody>
+				<tr>
+					<td align='right'>
+					<p style='font-size: 18px;'><small>N&uacute;mero de caso:</small> <b>$expediente->numerocaso_expedienteci</b><br></p>
+					<b>Fecha y hora de creaci&oacute;n del expediente:</b> ".date("d-m-Y h:i:s A", strtotime($expediente->fechacrea_expedienteci))."</td>
+				</tr>
+		</tbody></table><br>";
+
+		$html .= "
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td align='center'><span style='font-weight: bold; font-size: 14px;'>Información de la persona solicitante</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td colspan='3'>
+							<b>N&uacute;mero de Inscripci&oacute;n de empresa: </b>$expediente->numinscripcion_empresa
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Nombre de la empresa: </b>$expediente->nombre_empresa
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Actividad: </b>$expediente->actividad_catalogociiu
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Dirección: </b>$expediente->direccion_empresa
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Municipio: </b>$expediente->municipio
+						</td>
+						<td>
+							<b>Teléfono: </b>$expediente->telefono_empresa
+						</td>
+
+						<td>
+							<b>Persona representante: </b>$expediente->nombres_representante
+						</td>
+					</tr>
+				</tbody>
+			</table><br>";
+
+		$html .= "
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td align='center'><span style='font-weight: bold; font-size: 14px;'>Información de la persona solicitada</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td>
+							<b>N&uacute;mero de DUI: </b>$expediente->dui_personaci
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Nombre de la persona solicitante: </b>$expediente->nombre_personaci $expediente->apellido_personaci
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Teléfono: </b>$expediente->telefono_personaci
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Municipio: </b>$expediente->municipio
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Dirección: </b>$expediente->direccion_personaci
+						</td>
+					</tr>
+				</tbody>
+			</table><br>";
+
+		$html .= "
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td align='center'><span style='font-weight: bold; font-size: 14px;'>Información de la solicitud</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td>
+							<b>Persona delegada asignada: </b>$expediente->nombre_delegado_actual
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Motivo de la solicitud: </b>".(($expediente->motivo_expedienteci==1) ? "Despido de hecho o injustificado" : "Conflictos laborales")."
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Descripción del motivo: </b>$expediente->descripmotivo_expedienteci
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>";
+
+		$titles = array(
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',
+				'DIRECCIÓN GENERAL DE TRABAJO',
+				'FICHA DE EXPEDIENTE');
+
+		$this->load->library('mpdf');
+		$this->mpdf=new mPDF('c','letter','10','Arial',10,10,30,17,3,9);
+
+	 	$header = head_table_html($titles, $data, 'pdf');
+
+	 	$this->mpdf->SetHTMLHeader($header);
+
+	 	$pie = piePagina($this->session->userdata('usuario'));
+		$this->mpdf->setFooter($pie);
+
+		$stylesheet = file_get_contents(base_url().'assets/css/bootstrap.min.css');
+		$this->mpdf->AddPage('P','','','','',10,10,30,17,5,10);
+		$this->mpdf->SetTitle($titles[2]);
+		$this->mpdf->WriteHTML($stylesheet,1);  // The parameter 1 tells that this iscss/style only and no body/html/
+		$this->mpdf->WriteHTML($html);
+		$this->mpdf->Output($titles[2].date(" - Ymd_His").'.pdf','I');
+
+		//$this->load->view('resolucion_conflictos/solicitudes_ajax/vista_expediente', $data);
+	}
+
   	public function combo_establecimiento() {
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento',
 			array(
