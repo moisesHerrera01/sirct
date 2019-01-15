@@ -6,7 +6,7 @@ class Historial_persona extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('solicitudes_model');
-		$this->load->model('historial_persona_model');
+		$this->load->model(array('historial_persona_model', 'solicitudes_model'));
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -44,6 +44,7 @@ class Historial_persona extends CI_Controller {
 
 	public function gestionar_solicitudes(){
 
+
 		if($this->input->post('band1') == "save"){
 			$data = array(
 			'nombre_personaci' => $this->input->post('nombres'),
@@ -59,10 +60,14 @@ class Historial_persona extends CI_Controller {
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
-			'posee_representante' => $this->input->post('posee_representante'),
+			'posee_representante' => 0,
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
-			'id_doc_identidad' => $this->input->post('id_doc_identidad')
+			'id_doc_identidad' => $this->input->post('id_doc_identidad'),
+			'discapacidad' => $this->input->post('discapacidad_desc'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
+			
 			echo $this->solicitudes_model->insertar_solicitud($data);
 
 		}else if($this->input->post('band1') == "edit"){
@@ -78,24 +83,21 @@ class Historial_persona extends CI_Controller {
 			'telefono2_personaci' => $this->input->post('telefono2'),
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_personaci' => $this->input->post('direccion'),
-			'fnacimiento_personaci' => $this->input->post('fecha_nacimiento'),
+			'fnacimiento_personaci' => date("Y-m-d",strtotime($this->input->post('fecha_nacimiento'))),
 			'sexo_personaci' => $this->input->post('sexo'),
 			'estudios_personaci' => $this->input->post('estudios'),
 			'nacionalidad_personaci' => $this->input->post('nacionalidad'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
-			'id_empleador' => $this->input->post('id_empleador'),
-			'posee_representante' => $this->input->post('posee_representante'),
+			'posee_representante' => 0,
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
+			'discapacidad' => $this->input->post('discapacidad_desc'),
+			'id_usuario' => $this->session->userdata('id_usuario'),
+			'fecha_modifica' => date('Y-m-d')
 			);
+
 			echo $this->solicitudes_model->editar_solicitud($data);
 
-		}/*else if($this->input->post('band') == "delete"){
-			$data = array(
-			'id_personaci' => $this->input->post('id_personaci'),
-			'id_estadosci' => $this->input->post('id_estadosci')
-			);
-			echo $this->solicitudes_model->eliminar_estado($data);
-		}*/
+		}
 	}
 
 	public function gestionar_establecimiento(){
