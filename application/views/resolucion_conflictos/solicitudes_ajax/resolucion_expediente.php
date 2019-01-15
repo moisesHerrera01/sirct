@@ -213,6 +213,7 @@ function mostrar(){
       $("#fecha_pago").attr("required",'required');
       break;
     case '3':
+    case '23':
       $("#det_resultado").hide(0);
       $("#detalle_resultado").removeAttr("required");
       $("#especifique").show(500);
@@ -260,6 +261,10 @@ function mostrar(){
         $("#representante_empresa").removeAttr("required");
         $("#asistieron").removeAttr("required");
         $("#defensor").removeAttr("required");
+      break;
+    case '12':
+        $("#numero_folios").removeAttr("required");
+        $("#num_folios").hide(0);
       break;
     default:
   }

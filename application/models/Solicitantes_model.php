@@ -42,7 +42,7 @@ class Solicitantes_model extends CI_Model {
     public function obtener_solicitantes_expediente_acta($expediente) {
 
         $this->db->select('
-                    CONCAT_WS(" ", a.nombre_personaci, a.apellido_personaci) nombre_solicitante,
+                    UPPER(CONCAT_WS(" ", a.nombre_personaci, a.apellido_personaci)) nombre_solicitante,
                     TIMESTAMPDIFF( YEAR,a.fnacimiento_personaci,CURDATE() ) AS edad,
                     a.ocupacion,
                     a.direccion_personaci,
