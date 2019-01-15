@@ -114,7 +114,7 @@ class Expediente_cc_model extends CI_Model {
                   b.nombre_personaci,
                   b.apellido_personaci,
                   b.funciones_personaci,
-                  c.nombre_empresa,
+                  UPPER(c.nombre_empresa) nombre_empresa,
                   c.numinscripcion_empresa,
                   c.direccion_empresa,
                   c.telefono_empresa,
@@ -138,7 +138,7 @@ class Expediente_cc_model extends CI_Model {
                ->join('sge_empresa c', 'a.id_empresaci = c.id_empresa')
                ->join('org_municipio d', 'c.id_municipio = d.id_municipio')
                ->join('sge_catalogociiu e', 'c.id_catalogociiu = e.id_catalogociiu', 'left')
-               ->join('sge_representante f', 'c.id_empresa = f.id_empresa', 'left')
+               ->Join('sge_representante f ', 'c.id_empresa = f.id_empresa AND f.tipo_representante=1','left')
                ->join('sir_empleado g','g.id_empleado = a.id_personal')
                ->join('sct_personaci h', 'a.id_expedienteci = h.id_expedienteci')
                ->join("(
