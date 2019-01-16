@@ -305,7 +305,7 @@ function cambiar_nuevo(){
     $("#telefono2").val('');
     $("#municipio").val('').trigger('change.select2');
     $("#direccion").val('');
-    $("#fecha_nacimiento").val('');
+    $("#fecha_nacimiento").datepicker("setDate", '');
     $("#sexo").val('');
     $("#estudios").val('');
     $("#nacionalidad").val('');
@@ -412,7 +412,8 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#telefono2").val(result.telefono2_personaci);
       $("#municipio").val(result.id_municipio).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
-      $("#fecha_nacimiento").val(result.fnacimiento_personaci);
+      var fecha_nacimiento = result.fnacimiento_personaci.split("-");
+      $("#fecha_nacimiento").datepicker("setDate", fecha_nacimiento[2]+"-"+fecha_nacimiento[1]+"-"+fecha_nacimiento[0]);
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
       $("#discapacidad_desc").val(result.discapacidad);
@@ -1037,12 +1038,12 @@ function volver(num) {
                             <li class="nav-item <?php if($navegatorless){ echo "pull-left"; } ?>">
                                 <a class="nav-link active" onclick="tablasolicitudes('1');" data-toggle="tab" href="#tab_persona_natural">
                                     <span class="hidden-sm-up"><i class="ti-home"></i></span>
-                                    <span class="hidden-xs-down">Persona natural</span></a>
+                                    <span class="hidden-xs-down">Persona trabajadora</span></a>
                             </li>
                             <li class="nav-item <?php if($navegatorless){ echo "pull-left"; } ?>">
                                 <a class="nav-link" onclick="tablasolicitudes('2');" data-toggle="tab" href="#tab_persona_juridica">
                                     <span class="hidden-sm-up"><i class="ti-home"></i></span>
-                                    <span class="hidden-xs-down">Persona jurídica</span></a>
+                                    <span class="hidden-xs-down">Parte empleadora</span></a>
                             </li>
                         </ul>
                     </div>
@@ -1146,17 +1147,17 @@ $("#formajax2").on("submit", function(e){
 $(function(){
     $(document).ready(function(){
       $("input[name=discapacidad]").click(function(evento){
-            var valor = $(this).val();
-            if(valor == 0){
-                $("#ocultar_div").hide(500);
-            }else{
-                $("#ocultar_div").show(500);
-            }
-    });
+          var valor = $(this).val();
+          if(valor == 0){
+              $("#ocultar_div").hide(500);
+          }else{
+              $("#ocultar_div").show(500);
+          }
+      });
 
-        var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
-        $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
-        $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
+      var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
+      $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
+      $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")}).datepicker("setDate", new Date());
     });
 });
 </script>

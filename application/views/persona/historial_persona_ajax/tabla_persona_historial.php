@@ -8,7 +8,6 @@
               <th>Teléfono</th>
               <th>Edad (años)</th>
               <th>Sexo</th>
-              <th>Repres.</th>
               <th>Estado Actual</th>
                 <th width="150px">(*)</th>
             </tr>
@@ -18,9 +17,10 @@
 
             $this->db->select('')
              ->from('sct_personaci p')
-             ->join('sct_doc_identidad di', 'di.id_doc_identidad = p.id_doc_identidad')
-             ->join('org_municipio m','m.id_municipio=p.id_municipio')
-             ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci');
+             ->join('sct_doc_identidad di', 'di.id_doc_identidad = p.id_doc_identidad', 'left')
+             ->join('org_municipio m','m.id_municipio=p.id_municipio', 'left')
+             ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci', 'left')
+             ->order_by('p.nombre_personaci, p.apellido_personaci');
             $solicitudes=$this->db->get();
            
             $correlativo = 0;
@@ -36,16 +36,10 @@
                   echo "<tr>";
                     echo "<td>".$correlativo."</td>";
                     echo "<td>".$fila->dui_personaci."</td>";
-                    echo "<td>".$fila->nombre_personaci."</td>";
+                    echo "<td>".$fila->nombre_personaci." ".$fila->apellido_personaci."</td>";
                     echo "<td>".$fila->telefono_personaci."</td>";
-
                     echo "<td>".calcular_edad(date("Y-m-d", strtotime($fila->fnacimiento_personaci)))."</td>";
                     echo "<td>".$fila->sexo_personaci."</td>";
-                    if($fila->posee_representante == 0){
-                        echo '<td>NO</td>';
-                    }else if($fila->posee_representante == 1){
-                        echo '<td>SI</td>';
-                    }
 
                     if($fila->estado_persona == 0){
                         echo '<td><span class="label label-success">Activo</span></td>';
