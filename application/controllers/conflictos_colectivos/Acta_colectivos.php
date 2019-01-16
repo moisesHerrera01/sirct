@@ -305,6 +305,71 @@ class Acta_colectivos extends CI_Controller {
 
         }
 
+        public function acta_sc_conciliada_pago($id_expedienteci,$id_audiencia=FALSE) {
+              $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];
+              $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,FALSE,$id_audiencia);
+              $audiencia= $audiencias->result()[0];
+
+              $solicitantes = $this->solicitantes_model->obtener_solicitantes_expediente_acta( $id_expedienteci );
+
+              $concat_solicitantes='';
+              foreach ($solicitantes->result() as $d) {
+                  $concat_solicitantes .=  $d->nombre_solicitante.', ';
+              }
+
+              $this->load->library("phpword");
+
+              $PHPWord = new PHPWord();
+
+              $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/acta_sc_conciliada_pago.docx');
+
+              if ($audiencia->id_delegado == $expediente->id_personal) {
+                  $templateWord->setValue('nombre_delegado',"");
+                  $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                  $templateWord->setValue('delegado_titulo', $audiencia->delegado_audiencia);
+              }else {
+                $templateWord->setValue('nombre_delegado',$expediente->delegado);
+                $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                $templateWord->setValue('delegado_titulo', mb_strtoupper("(Atendió: ".$audiencia->delegado_audiencia.")"));
+              }
+              $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
+              $templateWord->setValue('departamento', departamento($expediente->numerocaso_expedienteci));
+              $templateWord->setValue('hora_expediente', hora(date('G', strtotime($audiencia->hora_fechasaudienciasci))));
+              $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($audiencia->hora_fechasaudienciasci)))));
+              $templateWord->setValue('dia_expediente', dia(date('d', strtotime($audiencia->fecha_fechasaudienciasci))));
+              $templateWord->setValue('mes_expediente', strtoupper(mes(date('m', strtotime($audiencia->fecha_fechasaudienciasci)))));
+              $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($audiencia->fecha_fechasaudienciasci))));
+              $templateWord->setValue('nombre_empresa',$expediente->nombre_empresa);
+              $templateWord->setValue('representante_legal', $expediente->nombres_representante);
+              $templateWord->setValue('solicitantes', substr($concat_solicitantes,0,-2)  );
+              $templateWord->setValue('defensor', $audiencia->defensor);
+              $templateWord->setValue('dui_defensor', mb_strtoupper(convertir_dui($audiencia->dui_defensor)));
+              $templateWord->setValue('acreditacion_defensor', $audiencia->acreditacion_defensor);
+              $templateWord->setValue('representante_asiste', $audiencia->representante_asiste);
+              $templateWord->setValue('representante_asiste_profesion', $audiencia->representante_asiste_profesion);
+              $templateWord->setValue('representante_asiste_municipio', $audiencia->representante_asiste_municipio);
+              $templateWord->setValue('representante_asiste_depto', $audiencia->representante_asiste_depto);
+              $templateWord->setValue('representante_asiste_dui', mb_strtoupper(convertir_dui($audiencia->representante_asiste_dui)));
+              $templateWord->setValue('representante_asiste_acreditacion', $audiencia->representante_asiste_acreditacion);
+              $templateWord->setValue('resultado_audiencia', $audiencia->detalle_resultado);
+
+              $nombreWord = $this->random();
+
+              $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+              $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+              header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+              header("Content-Disposition: attachment; filename='acta_sc_conciliada_pago_".date('dmy_His').".docx'");
+              header('Cache-Control: max-age=0');
+
+              $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
+              $objWriter->save('php://output');
+
+              unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+
+          }
+
 
     public function generar_ficha_indemnizacion($id_expedienteci) {
         $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];

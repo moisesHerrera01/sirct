@@ -65,8 +65,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
           // alert(posee_trabajador)
           $("#solicitud_pn_pj").hide();
-          $("#pf_st").hide();
-          $("#multa").hide();
+          $("#sc_conciliada_pago").hide();
+          $("#pc_sin_conciliar").hide();
           $("#inasistencia").hide();
 
         if (cuenta_audiencias>1) {
@@ -78,10 +78,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#pf_st").show();
           }else if (resultado=="12") {
             $("#pc_sin_conciliar").show();
-          }else if (resultado=="23") {
+          }else if (resultado=="10") {
+            $("#sc_conciliada_pago").show();
+          }else if (resultado=="23"){
             $("#inasistencia").show();
-          }else if (resultado=="4"){
-            $("#desistimiento").show();
           }
         }
         $("#id_expedienteci_copia2").val(id_expedienteci);
@@ -1129,6 +1129,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <option value="">[Seleccione]</option>
                     <option id="inasistencia" style="display: none;" value="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/acta_pc_pendiente/')?>">Pendiente segunda audiencia</option>
                     <option id="pc_sin_conciliar" style="display: none;" value="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/acta_pc_noconciliada_ct/')?>">No conciliada</option>
+                    <option id="sc_conciliada_pago" style="display: none;" value="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/acta_sc_conciliada_pago/')?>">Conciliada pago diferido</option>
                     <!-- <option id="pf_st" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Acta de audiencia</option>
                     <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
                     <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option> -->
