@@ -140,10 +140,14 @@ class Audiencias extends CI_Controller {
 		$resultado = $this->audiencias_model->editar_audiencia($data);
 		echo $resultado;
 		if ($resultado == "exito") {
-			$this->expedientes_model->editar_expediente(array(
+			$exp= array(
 			'id_expedienteci' => $this->input->post('id_expedienteci'),
 			'id_estadosci' => "2"
-		));
+			);
+			if ($this->input->post('resolucion')=="10") {
+				$exp['forma_pago'] = $this->input->post('modalidad_pago');
+			}
+			$this->expedientes_model->editar_expediente($exp);
 		}
 		$data2 = array(
 						'id_expedienteci' => $data['id_expedienteci'],

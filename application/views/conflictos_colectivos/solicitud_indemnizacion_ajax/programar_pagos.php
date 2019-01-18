@@ -16,7 +16,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <div class="card">
           <div class="card-header bg-success2" id="ttl_form">
             <div class="card-actions text-white">
-              <a style="font-size: 16px;" onclick="cerrar_mantenimiento();">
+              <a style="font-size: 16px;" onclick="abrir_solicitantes(<?= $expediente->id_expedienteci ?>);">
                 <i class="mdi mdi-window-close"></i>
               </a>
             </div>

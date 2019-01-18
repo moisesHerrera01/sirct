@@ -57,6 +57,7 @@ class Expediente_cc_model extends CI_Model {
     public function expedientes_diferencia_laboral($id_expedienteci){
       $this->db->select(
                         'e.id_expedienteci,
+                         e.forma_pago,
                          e.numerocaso_expedienteci,
                          e.id_empresaci,
                          e.id_estadosci,
@@ -107,6 +108,7 @@ class Expediente_cc_model extends CI_Model {
     public function obtener_expediente_indemnizacion($id) {
       $this->db->select('
                   a.id_expedienteci,
+                  UPPER(a.forma_pago) forma_pago,
                   a.id_personal,
                   a.numerocaso_expedienteci,
                   a.fechacrea_expedienteci,
@@ -119,6 +121,7 @@ class Expediente_cc_model extends CI_Model {
                   c.direccion_empresa,
                   c.telefono_empresa,
                   c.direccion_empresa,
+                  UPPER(c.abreviatura_empresa) abreviatura_empresa,
                   d.municipio,
                   e.actividad_catalogociiu,
                   e.grupo_catalogociiu,
@@ -156,7 +159,7 @@ class Expediente_cc_model extends CI_Model {
                ->limit(1)
                ->order_by('h.id_personaci', 'DESC');
 
-      $query=$this->db->get();
+      $query = $this->db->get();
 
 			if ($query->num_rows() > 0) {
 					return  $query;

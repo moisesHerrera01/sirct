@@ -86,6 +86,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <button type="button" onclick="pagos(<?= $id ?>);" class="btn waves-effect waves-light btn-info">Registrar</button>
             </div>
 
+            <div id="mod_pago" class="form-group col-lg-8 col-sm-8" style="height: 83px; display:none;*/">
+                <h5>Modalidad pago:</h5>
+                <textarea type="text" id="modalidad_pago" name="modalidad_pago" class="form-control" placeholder="Especifique banco y/o forma"></textarea>
+                <div class="help-block"></div>
+            </div>
+
             <div  id="especifique" class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Especifique : <span class="text-danger">*</span></h5>
               <div class="controls">
@@ -163,9 +169,11 @@ function mostrar(){
   $("#p_pago").hide(0);
   $("#f_pago").hide(0);
   $("#fhpago").hide(0);
+  $("#mod_pago").hide(0);
   $("#det_resultado").show(0);
   $("#asist").show(0);
   $("#tipo_conciliacion").removeAttr("required");
+  $("#modalidad_pago").removeAttr("required");
   $("#monto_pago").removeAttr("required");
   $("#inasistencia").removeAttr("required");
   $("#primer_pago").removeAttr("required");
@@ -251,6 +259,10 @@ function mostrar(){
     case '10':
         $("#tipo_conciliacion").attr("required",'required');
         $("#tipo_cc").show();
+        $("#numero_folios").removeAttr("required");
+        $("#num_folios").hide(0);
+        //$("#modalidad_pago").attr("required",'required');
+        $("#mod_pago").show();
       break;
     case '6':
         $("#representante_empresa").removeAttr("required");

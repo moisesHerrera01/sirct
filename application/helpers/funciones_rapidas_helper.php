@@ -461,4 +461,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		return $depto;
 	}
 
+	function convertir_a_ordinal($numero) {
+		$listaUnidadesOrdinales = array ( // Letras de los ordinales entre 0º y 19º
+			"ningún", "primera", "segunda", "tercera", "cuarta", "quinta", "sexta", "séptima", "octava", "novena",
+			"décima", "undécima", "duodécima", "decimotercera", "decimocuarta", "decimoquinta", "decimosexta", "decimoséptima", "decimoctava", "decimonovena"
+		);
+		return $listaUnidadesOrdinales[$numero];
+	}
+
 ?>

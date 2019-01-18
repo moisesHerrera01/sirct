@@ -9,6 +9,7 @@ class Pagos extends CI_Controller {
 	}
 
   public function programar_pagos(){
+		var_dump($this->pagos_model->obtener_numero_pagos(112));
     $data['expediente'] = $this->expedientes_model->obtener_expediente( $this->input->post('id') );
 		$data['pagos'] = $this->pagos_model->obtener_pagos( $this->input->post('id'),1 );
     $this->load->view('resolucion_conflictos/solicitudes_ajax/programar_pagos', $data);
@@ -67,12 +68,14 @@ class Pagos extends CI_Controller {
   }
 
 	public function gestionar_pago_indemnizacion() {
+		$cuenta = $this->pagos_model->obtener_numero_pagos($this->input->post('id_persona4'));
 		if($this->input->post('band6') == "save"){
 			$data = array(
 			'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'))),
 			'montopago_fechaspagosci' => $this->input->post('monto'),
 			'id_persona' => $this->input->post('id_persona4'),
-			'id_expedienteci' => null
+			'id_expedienteci' => null,
+			'numero_pago' => $cuenta->cantidad + 1
 			);
 			echo $this->pagos_model->insertar_pago($data);
 

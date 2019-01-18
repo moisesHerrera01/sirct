@@ -298,7 +298,7 @@ class CifrasEnLetras {
   */
   public static function convertirEurosEnLetras($euros, $numeroDecimales=2) {
     return self::convertirNumeroEnLetras($euros, $numeroDecimales,
-      "dolar", "dolares", false, "centavo", "centavos", false);
+      "dolar de los Estados Unidos de America", "DOLARES DE LOS ESTADOS UNIDOS DE AMERICA ", false, "centavo de dolar", "CENTAVOS DE DOLAR", false);
   }
 
   /*

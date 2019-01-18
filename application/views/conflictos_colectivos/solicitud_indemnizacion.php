@@ -62,33 +62,72 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       });
     }
 
-    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
-          // alert(posee_trabajador)
-          $("#solicitud_pn_pj").hide();
-          $("#sc_conciliada_pago").hide();
-          $("#pc_sin_conciliar").hide();
-          $("#inasistencia").hide();
 
-        if (cuenta_audiencias>1) {
-          $("#solicitud_pn_pj").show();
-          $("#esquela").show();
+    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
+      $.ajax({
+        url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_actas",
+        type: "post",
+        dataType: "html",
+        data: {id : id_expedienteci,res:resultado }
+      })
+      .done(function(res){
+        $('#cnt_modal_actas').html(res);
+        $('#modal_actas').modal('show');
+        $("#solicitud_pn_pj").hide();
+        $("#sc_conciliada_pago").hide();
+        $("#pc_sin_conciliar").hide();
+        $("#inasistencia").hide();
+
+      if (cuenta_audiencias>1) {
+        $("#solicitud_pn_pj").show();
+        $("#esquela").show();
+      }
+      if (estado=="2") {
+        if (resultado=="1" || resultado=="2" || resultado=="7") {
+          $("#pf_st").show();
+        }else if (resultado=="12") {
+          $("#pc_sin_conciliar").show();
+        }else if (resultado=="10") {
+          $("#sc_conciliada_pago").show();
+        }else if (resultado=="23"){
+          $("#inasistencia").show();
         }
-        if (estado=="2") {
-          if (resultado=="1" || resultado=="2" || resultado=="7") {
-            $("#pf_st").show();
-          }else if (resultado=="12") {
-            $("#pc_sin_conciliar").show();
-          }else if (resultado=="10") {
-            $("#sc_conciliada_pago").show();
-          }else if (resultado=="23"){
-            $("#inasistencia").show();
-          }
-        }
-        $("#id_expedienteci_copia2").val(id_expedienteci);
-        $("#id_audiencia").val(id_audiencia);
-        $("#tipo_acta").val('').trigger('');
-        $("#modal_actas_tipo").modal("show");
+      }
+      $("#id_expedienteci_copia2").val(id_expedienteci);
+      $("#id_audiencia").val(id_audiencia);
+      $("#tipo_acta").val('').trigger('');
+      $("#modal_actas_tipo").modal("show");
+      });
     }
+
+
+    // function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
+    //       // alert(posee_trabajador)
+    //       $("#solicitud_pn_pj").hide();
+    //       $("#sc_conciliada_pago").hide();
+    //       $("#pc_sin_conciliar").hide();
+    //       $("#inasistencia").hide();
+    //
+    //     if (cuenta_audiencias>1) {
+    //       $("#solicitud_pn_pj").show();
+    //       $("#esquela").show();
+    //     }
+    //     if (estado=="2") {
+    //       if (resultado=="1" || resultado=="2" || resultado=="7") {
+    //         $("#pf_st").show();
+    //       }else if (resultado=="12") {
+    //         $("#pc_sin_conciliar").show();
+    //       }else if (resultado=="10") {
+    //         $("#sc_conciliada_pago").show();
+    //       }else if (resultado=="23"){
+    //         $("#inasistencia").show();
+    //       }
+    //     }
+    //     $("#id_expedienteci_copia2").val(id_expedienteci);
+    //     $("#id_audiencia").val(id_audiencia);
+    //     $("#tipo_acta").val('').trigger('');
+    //     $("#modal_actas_tipo").modal("show");
+    // }
 
     function combo_establecimiento(seleccion){
       $.ajax({
@@ -193,7 +232,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#cnt_form_main").hide(0);
         $("#cnt_actions").hide(0);
         $("#cnt_actions").remove('.card');
-        $("#cnt_tabla_solicitantes").remove('.card')
+        $("#cnt_tabla_solicitantes").remove('.card');
         $("#modal_delegado").modal('hide');
         $("#modal_estado").modal('hide');
         $('#title_paso3').show();
@@ -697,15 +736,28 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             data: {id : id_persona}
         })
         .done(function(res){
-            console.log(res)
-            $('#cnt_actions').html(res);
-            $("#cnt_actions").show(0);
+            //console.log(res)
+            $('#cnt_actions_pagos').html(res);
+            $("#cnt_actions_pagos").show(0);
             $("#cnt_tabla").hide(0);
             $("#cnt_tabla_solicitudes").hide(0);
             $("#cnt_form_main").hide(0);
             tabla_pagos(id_persona);
         });
     }
+
+    function abrir_solicitantes(id_expediente) {
+        $("#modal_actas_tipo").modal('hide');
+        $("#cnt_form_main").hide(0);
+        $("#cnt_actions").hide(0);
+        $("#cnt_actions").remove('.card');
+        $("#cnt_tabla_solicitantes").remove('.card');
+        $("#modal_delegado").modal('hide');
+        $("#modal_estado").modal('hide');
+        $("#cnt_actions_pagos").hide(0);
+        $("#cnt_actions_pagos").remove('.card');
+        gestionar_solicitantes(id_expediente);
+    };
 
     function tabla_pagos(id_persona){
         if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -1035,6 +1087,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             </div>
 
             <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
+            <div class="col-lg-12" id="cnt_actions_pagos" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
                 <div class="card">
@@ -1108,53 +1161,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <button id="submit_ubi" name="submit_ubi" type="button">clicks</button>
 </div>
 
-<!--INICIO MODAL GENERAR ACTA -->
-<div class="modal fade" id="modal_actas_tipo" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Emitir acta:</h4>
-      </div>
-
-      <div class="modal-body" id="">
-          <input type="hidden" id="id_expedienteci_copia2" name="id_expedienteci_copia2" value="">
-          <input type="hidden" id="id_audiencia" name="id_audiencia" value="">
-          <input type="hidden" id="cuenta_audiencias" name="cuenta_audiencias" value="">
-          <div class="row">
-            <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                <h5>Seleccione el tipo de acta: <span class="text-danger">*</span></h5>
-                <div class="controls">
-                  <!-- Tipo 1: Engloba 4 posibilidades primera y segunda fecha, con presencia del trabajador y sin el trabajador -->
-                  <select id="tipo_acta" name="tipo_acta" class="custom-select col-4" onchange="nav(this.value)" required>
-                    <option value="">[Seleccione]</option>
-                    <option id="inasistencia" style="display: none;" value="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/acta_pc_pendiente/')?>">Pendiente segunda audiencia</option>
-                    <option id="pc_sin_conciliar" style="display: none;" value="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/acta_pc_noconciliada_ct/')?>">No conciliada</option>
-                    <option id="sc_conciliada_pago" style="display: none;" value="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/acta_sc_conciliada_pago/')?>">Conciliada pago diferido</option>
-                    <!-- <option id="pf_st" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Acta de audiencia</option>
-                    <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
-                    <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option> -->
-                    <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor/a público</option>
-                     -->
-                    <!-- <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
-                    <option id="esquela" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option> -->
-                    <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
-                    <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor/a</option>
-                    <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor/a</option> -->
-                    <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Desistimiento de persona natural a persona juridica</option> -->
-                  </select>
-                </div>
-            </div>
-          </div>
-          <div align="right">
-            <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
-          <!--  <button type="button" onclick="generar_actas_tipo();" class="btn waves-effect waves-light btn-success2"> Generar
-          </button> !-->
-          </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!--FIN MODAL GENERAR ACTA -->
+<div id="cnt_modal_actas"></div>
 
 <!--INICIA MODAL DE ESTABLECIMIENTOS -->
   <div class="modal fade" id="modal_establecimiento" role="dialog">

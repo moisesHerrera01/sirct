@@ -103,9 +103,9 @@ $(function(){
             //     swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             // }
         });
-      // $('#modal_resolucion').remove();
-      // $('.modal-backdrop').remove();
-      // $('body').removeClass('modal-open');
+      $('#modal_resolucion').remove();
+      $('.modal-backdrop').remove();
+      $('body').removeClass('modal-open');
       // tablasolicitudes();
     });
 });
