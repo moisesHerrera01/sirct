@@ -336,9 +336,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 		/* Ej: calcular_edad("1945-11-22")*/
 		function calcular_edad( $fecha ) {
-			$fecha = explode("-",$fecha);
-			if(count($fecha) == 3){
-				list($Y,$m,$d) = $fecha;
+			$fecha2 = explode("-",$fecha);
+			if(count($fecha2) == 3 && $fecha != "0000-00-00" && $fecha != "1969-12-31"){
+				list($Y,$m,$d) = $fecha2;
 				return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
 			}else{
 				return "N/A";

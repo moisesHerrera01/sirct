@@ -103,6 +103,8 @@ function combo_nacionalidades(seleccion){
   })
   .done(function(res){
     $('#div_combo_nacionalidad').html(res);
+    $("#div_combo_nacionalidad").children('h5').html("Nacionalidad:");
+    document.getElementById("nacionalidad").required = false;
     $(".select2").select2();
   });
 }
@@ -117,6 +119,8 @@ function combo_doc_identidad(seleccion){
   })
   .done(function(res){
     $('#div_combo_tipo_doc').html(res);
+    $("#div_combo_tipo_doc").children('h5').html("Tipo documento identidad:");
+    document.getElementById("id_doc_identidad").required = false;
     $(".select2").select2();
   });
 }
@@ -412,8 +416,14 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#telefono2").val(result.telefono2_personaci);
       $("#municipio").val(result.id_municipio).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
-      var fecha_nacimiento = result.fnacimiento_personaci.split("-");
-      $("#fecha_nacimiento").datepicker("setDate", fecha_nacimiento[2]+"-"+fecha_nacimiento[1]+"-"+fecha_nacimiento[0]);
+
+      if(result.fnacimiento_personaci === undefined || result.fnacimiento_personaci == null || result.fnacimiento_personaci.length <= 0){
+        $("#fecha_nacimiento").datepicker("setDate", "");
+      }else{
+        var fecha_nacimiento = result.fnacimiento_personaci.split("-");
+        $("#fecha_nacimiento").datepicker("setDate", fecha_nacimiento[2]+"-"+fecha_nacimiento[1]+"-"+fecha_nacimiento[0]);
+      }
+      
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
       $("#discapacidad_desc").val(result.discapacidad);
@@ -429,15 +439,12 @@ function cambiar_editar(id_expedienteci,bandera){
         if (result.id_doc_identidad==4) {
           $('#dui').mask('99999999-9', {reverse: true});
           $('#div_numero_doc_identidad').show();
-          $("#dui").attr("required",'required');
         }else {
           $('#div_numero_doc_identidad').show();
-          $("#dui").attr("required",'required');
         }
       }else {
          $('#dui').mask('99999999-9', {reverse: true});
          $('#div_numero_doc_identidad').show();
-         $("#dui").attr("required",'required');
       }
       $("#dui").val(result.dui_personaci);
      
@@ -509,17 +516,14 @@ function ocultar(){
       // $("#dui").removeAttr("required");
       $('#dui').mask('99999999-9', {reverse: true});
       $('#div_numero_doc_identidad').show(500);
-      $("#dui").attr("required",'required');
     }else {
       $('#partida_div').hide(500);
       $('#div_numero_doc_identidad').show(500);
-      $("#dui").attr("required",'required');
     }
   }else {
      $('#dui').mask('99999999-9', {reverse: true});
      $('#partida_div').hide(500);
      $('#div_numero_doc_identidad').show(500);
-     $("#dui").attr("required",'required');
   }
 }
 
@@ -699,9 +703,8 @@ function volver(num) {
                               <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
 
                                 <div id="div_numero_doc_identidad" class="form-group col-lg-4" style="height: 83px;">
-                                    <h5>Número de documento identidad: <span class="text-danger">*</span></h5>
-                                    <input data-mask="99999999-9" data-mask-reverse="true" type="text" id="dui" name="dui" class="form-control" placeholder="Documento Unico de Identidad" required="">
-                                    <div class="help-block"></div>
+                                    <h5>Número de documento identidad: </h5>
+                                    <input data-mask="99999999-9" data-mask-reverse="true" type="text" id="dui" name="dui" class="form-control" placeholder="Documento Unico de Identidad">
                                 </div>
                             </div>
 
@@ -733,8 +736,8 @@ function volver(num) {
                                   </select>
                               </div>
                               <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                  <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy" readonly="">
+                                  <h5>Fecha de nacimiento:</h5>
+                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy">
                                   <div class="help-block"></div>
                               </div>
                         </div>
@@ -749,9 +752,9 @@ function volver(num) {
                         </div>
                         <div class="row">
                           <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                              <h5>Estudios realizados: <span class="text-danger">*</span></h5>
+                              <h5>Estudios realizados:</h5>
                               <div class="controls">
-                                <select id="estudios" name="estudios" class="custom-select col-4" onchange="" required>
+                                <select id="estudios" name="estudios" class="custom-select col-4">
                                   <option value="">[Seleccione]</option>
                                   <option value="Sin estudio">Sin estudio</option>
                                   <option value="Educacion Básica">Educacion Básica</option>
