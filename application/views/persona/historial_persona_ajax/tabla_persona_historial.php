@@ -35,9 +35,9 @@
                   $correlativo++;
                   echo "<tr>";
                     echo "<td>".$correlativo."</td>";
-                    echo "<td>".$fila->dui_personaci."</td>";
+                    echo "<td>".(!empty($fila->dui_personaci) ? $fila->dui_personaci : "N/A")."</td>";
                     echo "<td>".$fila->nombre_personaci." ".$fila->apellido_personaci."</td>";
-                    echo "<td>".$fila->telefono_personaci."</td>";
+                    echo "<td>".(!empty($fila->telefono_personaci) ? $fila->telefono_personaci : "N/A")."</td>";
                     echo "<td>".calcular_edad(date("Y-m-d", strtotime($fila->fnacimiento_personaci)))."</td>";
                     echo "<td>".$fila->sexo_personaci."</td>";
 
