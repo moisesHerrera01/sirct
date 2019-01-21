@@ -77,9 +77,11 @@ class Expediente_cc_model extends CI_Model {
                          mu.id_municipio municipio_empresa,
                          cat.id_catalogociiu,
                          e.causa_expedienteci,
-                         d.nombre_delegado_actual'
+                         d.nombre_delegado_actual,
+                         ms.nombre_motivo'
                        )
                ->from('sct_expedienteci e')
+               ->join('sct_motivo_solicitud ms','ms.id_motivo_solicitud=e.motivo_expedienteci')
                ->join('sge_empresa es','es.id_empresa=e.id_empresaci')
                ->join('sge_catalogociiu cat','cat.id_catalogociiu=es.id_catalogociiu')
                ->join('org_municipio mu','mu.id_municipio=es.id_municipio')
@@ -94,6 +96,7 @@ class Expediente_cc_model extends CI_Model {
                     WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
                                                 FROM sct_delegado_exp de2
                                                 WHERE de2.id_expedienteci=de.id_expedienteci
+                                                AND de2.id_personal <> 0
                                                )
                   ) d" , "d.id_expedienteci=e.id_expedienteci")
                ->where('e.id_expedienteci',$id_expedienteci);

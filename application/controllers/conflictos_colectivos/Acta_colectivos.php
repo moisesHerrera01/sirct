@@ -46,11 +46,12 @@ class Acta_colectivos extends CI_Controller {
         $concat_directivos='';
         foreach ($directivos->result() as $d) {
           $concat_directivos.= $d->nombre_directivo.', identificándose por medio de su respectivo Documento Único de Identidad número '.
-          convertir_dui($d->dui_directivo).', actuando en su calidad de '.$d->tipo_directivo.', ';
+          convertir_dui($d->dui_directivo).', actuando en su calidad de '.$d->tipo.', ';
         }
         $this->load->library("phpword");
         $PHPWord = new PHPWord();
         $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/ActaSolicitudDifL.docx');
+        $templateWord->setValue('depto', departamento($expediente->numerocaso_expedienteci));
         $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
         $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($expediente->fechacrea_expedienteci)))));
         $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
@@ -72,7 +73,7 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->setValue('nombre_sindicato', $expediente->nombre_sindicato);
         $templateWord->setValue('direccion_sindicato', $expediente->direccion_sindicato);
         $templateWord->setValue('nombre_delegado',$expediente->delegado);
-        $templateWord->setValue('motivo',$expediente->motivo_expedienteci);
+        $templateWord->setValue('motivo',$expediente->descripmotivo_expedienteci);
         $nombreWord = $this->random();
         $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');

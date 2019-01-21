@@ -166,14 +166,14 @@
                       Motivo de la solicitud:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                          <h5><?= $expediente->motivo_expedienteci ?></h5>
+                          <h5><?= $expediente->nombre_motivo ?></h5>
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-lg-5" style="height: 20px;">
                       Descripción del motivo:
                     </div>
-                    <div class="form-group col-lg-5" style="height: 20px;">
+                    <div class="form-group col-lg-5">
                           <h5><?= $expediente->descripmotivo_expedienteci ?></h5>
                     </div>
                   </div>

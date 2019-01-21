@@ -10,6 +10,7 @@ class Directivos extends CI_Controller {
 
   public function tabla_directivos(){
 		$data['directivos'] = $this->directivos_model->obtener_directivos_sindicato($this->input->get('id_sindicato'));
+		$data['sindicato'] = $this->input->get('id_sindicato');
     $this->load->view('conflictos_colectivos/sindicatos_ajax/tabla_directivos',$data);
   }
 
@@ -66,5 +67,31 @@ class Directivos extends CI_Controller {
 		);
 			echo $this->directivos_model->editar_directivo($data);
 	}
+
+	public function combo_directivos() {
+		$directivos = $this->directivos_model->obtener_directivos_sindicato($this->input->post('id_sindicato'));
+		$this->load->view('conflictos_colectivos/sindicatos_ajax/combo_directivos',
+			array(
+				'id' => $this->input->post('id'),
+				'id_sindicato' => $this->input->post('id_sindicato'),
+				'directivos' => $directivos
+			)
+		);
+	}
+
+	public function modal_directivos(){
+		$this->load->view('conflictos_colectivos/sindicatos_ajax/modal_directivo',
+			array(
+				'id_directivo' => $this->input->post('id_directivo')
+			));
+	}
+
+	// public function bitacora_delegados() {
+	// 	$this->load->view('resolucion_conflictos/solicitudes_ajax/modal_bitacora_delegado',
+	// 	array(
+	// 		'id' => $this->input->post('id'),
+	// 		'num_exp' => $this->input->post('num_exp')
+	// 	));
+	// }
 }
 ?>

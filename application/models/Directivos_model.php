@@ -42,9 +42,11 @@ class Directivos_model extends CI_Model {
 											 d.tipo_directivo,
 											 d.acreditacion_directivo,
 											 d.estado_directivo,
-											 d.sexo_directivo'
+											 d.sexo_directivo,
+											 td.tipo_directivo tipo'
 										 )
 						 ->from('sge_directivo d')
+						 ->join('sge_tipo_directivo td','td.id_tipo_directivo=d.tipo_directivo')
 		         ->where('d.id_sindicato',$id_sindicato);
 		if ($estado_directivo) {
 			$this->db->where('d.estado_directivo',1);

@@ -53,7 +53,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_representante_empresa"></div>
 
-              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div>
+              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_directivos"></div>
+              <!-- <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div> -->
 
             <div id="det_resultado" class="form-group col-lg-12 col-sm-12" style="height: 83px;">
                 <h5>Detalle del resultado:<span class="text-danger">*</span></h5>
@@ -103,6 +104,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </select>
               </div>
             </div>
+
           </div>
 
           <div align="right" id="btnadd1">

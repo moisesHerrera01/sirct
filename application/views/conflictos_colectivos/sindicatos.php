@@ -43,6 +43,24 @@ function combo_delegado_tabla(seleccion){
   });
 }
 
+function modal_directivo(id_sindicato) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/modal_directivos",
+    type: "post",
+    dataType: "html",
+    data: {id_sindicato : id_sindicato}
+  })
+  .done(function(res){
+    $('#cnt_modal_directivo').html(res);
+    combo_tipo_directivos();
+    $('#modal_directivo').modal('show');
+    // $("#solicitud_pn_pj").hide();
+    // $("#sc_conciliada_pago").hide();
+    // $("#pc_sin_conciliar").hide();
+    // $("#inasistencia").hide();
+  });
+}
+
 function combo_resultados(seleccion){
   $.ajax({
     url: "<?php echo site_url(); ?>/conflictos_colectivos/sindicato/combo_resultados",
@@ -406,13 +424,13 @@ function gestionar_directivos(id_sindicato) {
 //   });
 // }
 
-function audiencias(id_empresaci, id_expedienteci, origen) {
+function audiencias(id_empresaci, id_expedienteci, origen, id_sindicato) {
   $("#id_empresaci").val(id_empresaci);
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/programar_audiencias",
     type: "post",
     dataType: "html",
-    data: {id : id_expedienteci}
+    data: {id : id_expedienteci,id_sindicato:id_sindicato}
   })
   .done(function(res){
     //console.log(res)
@@ -422,14 +440,15 @@ function audiencias(id_empresaci, id_expedienteci, origen) {
     $("#cnt_tabla_solicitudes").hide(0);
     $("#cnt_form_main").hide(0);
     combo_defensores();
+    combo_directivos(id_sindicato);
     combo_representante_empresa();
     combo_delega2();
     if (origen==1) {
         $("#paso4").show(0);
-        tabla_audiencias(id_expedienteci);
+        tabla_audiencias(id_expedienteci, id_sindicato);
         $("#div_finalizar").show(0);
     }else {
-      tabla_audiencias(id_expedienteci);
+      tabla_audiencias(id_expedienteci, id_sindicato);
     }
 
   });
@@ -527,6 +546,28 @@ function combo_establecimiento(seleccion){
   });
 }
 
+function combo_directivos(seleccion,id_sindicato){
+    $.ajax({
+      async: true,
+      url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/combo_directivos",
+      type: "post",
+      dataType: "html",
+      data: {id : seleccion, id_sindicato: id_sindicato}
+    })
+    .done(function(res){
+        $.when($('#div_combo_directivos').html(res) ).then(function( data, textStatus, jqXHR ) {
+            $("#directivo").select2({
+
+                'language': {
+                    noResults: function () {
+                        return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_directivo" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_directivo()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
+                    }
+                }, 'escapeMarkup': function (markup) { return markup; }
+            });
+        });
+    });
+}
+
 function open_form(num){
     $(".cnt_form").hide(0);
     $("#cnt_form"+num).show(0);
@@ -583,8 +624,8 @@ function tablasolicitudes(){
     xmlhttpB.send();
 }
 
-function tabla_audiencias(id_expedienteci){
-  //alert(id_expedienteci);
+function tabla_audiencias(id_expedienteci, id_sindicato){
+  alert(id_sindicato);
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttpB=new XMLHttpRequest();
     }else{// code for IE6, IE5
@@ -597,7 +638,7 @@ function tabla_audiencias(id_expedienteci){
             $('#myTable2').DataTable();
         }
     }
-    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/audiencias/tabla_audiencias?id_expedienteci="+id_expedienteci,true);
+    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/audiencias/tabla_audiencias?id_expedienteci="+id_expedienteci+"&id_sindicato="+id_sindicato,true);
     xmlhttpB.send();
 }
 
@@ -666,8 +707,8 @@ function cambiar_nuevo(){
     combo_establecimiento('');
 }
 
-function cambiar_nuevo2(){
-  combo_tipo_directivos();
+function cambiar_nuevo2(sindicato){
+
   $("#id_directivo").val('');
   $("#nombre_directivo").val('');
   $("#apellido_directivo").val('');
@@ -676,7 +717,8 @@ function cambiar_nuevo2(){
   $("#acreditacion_directivo").val('');
   $("#band2").val('save');
 
-  $("#modal_directivo").modal('show');
+  // $("#modal_directivo").modal('show');
+  modal_directivo(sindicato);
 }
 
 
@@ -960,34 +1002,19 @@ function volver(num) {
                               <blockquote class="m-t-0">
 
                                 <div class="row">
-                                  <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
-                                </div>
+                                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
 
-                                <div class="row">
-                                  <div class="form-group col-lg-12" style="height: 83px;">
-                                      <h5>Descripción del motivo:<span class="text-danger">*</h5>
-                                      <textarea type="text" id="descripcion_motivo" name="descripcion_motivo" class="form-control" placeholder="Descipción del motivo"></textarea>
-                                      <div class="help-block"></div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <!-- <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                      <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
-                                      <div class="controls">
-                                        <select id="motivo" name="motivo" class="custom-select col-4" onchange="" required>
-                                          <option value="">[Seleccione]</option>
-                                          <option value="Despidos">Despidos</option>
-                                          <option value="Horas extra no canceladas">Horas extra no canceladas</option>
-                                          <option value="No da vacaciones de ley">No da vacaciones de ley</option>
-                                          <option value="Malas condiciones de trabajo">Malas condiciones de trabajo</option>
-                                          <option value="Incumplimiento de aumento salarial">Incumplimiento de aumento salarial</option>
-                                        </select>
-                                      </div>
-                                  </div> -->
                                   <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_motivos"></div>
 
-                                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
+                                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="form-group col-lg-12">
+                                      <h5>Puntos a tratar en la audiencia:<span class="text-danger">*</h5>
+                                      <textarea type="text" id="descripcion_motivo" name="descripcion_motivo" rows="8" class="form-control" placeholder="Descipción del motivo"></textarea>
+                                      <div class="help-block"></div>
+                                  </div>
                                 </div>
                             </blockquote>
 
@@ -1073,6 +1100,7 @@ function volver(num) {
                 </div>
             </div>
             <div id="cnt_modal_bitacora_delegado"></div>
+            <div id="cnt_modal_directivo"></div>
         </div>
         <!-- ============================================================== -->
         <!-- Fin CUERPO DE LA SECCIÓN -->
@@ -1233,85 +1261,6 @@ function volver(num) {
 </div>
 </div>
 <!--FIN MODAL DE PROCURADOR -->
-
-<!-- ============================================================== -->
-<!-- INICIO MODAL DIRECTIVOS -->
-<!-- ============================================================== -->
-<div id="modal_directivo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-          <input type="hidden" id="band2" name="band2" value="save">
-          <input type="hidden" id="id_directivo" name="id_directivo" value="">
-            <div class="modal-header">
-                <h4 class="modal-title">Gestión de personas directivas</h4>
-            </div>
-            <div class="modal-body" id="">
-                <div class="row">
-                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre de la persona: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="nombre_directivo" name="nombre_directivo" class="form-control" required="">
-                      </div>
-                  </div>
-
-                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Apellido de la persona: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="apellido_directivo" name="apellido_directivo" class="form-control">
-                      </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="form-group col-lg-4" style="height: 83px;">
-                      <h5>Sexo:</h5>
-                      <input name="sexo_directivo" type="radio" id="masculino" checked="" value="M">
-                      <label for="masculino">Hombre</label>
-                      <input name="sexo_directivo" type="radio" id="femenino" value="F">
-                      <label for="femenino">Mujer</label>
-                      <div class="help-block"></div>
-                </div>
-
-                  <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>DUI de la persona: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input data-mask="99999999-9" type="text" id="dui_directivo" name="dui_directivo" class="form-control">
-                      </div>
-                  </div>
-
-                  <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Tipo de persona directiva: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="tipo_directivo" name="tipo_directivo" class="form-control">
-                      </div>
-                  </div> -->
-                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_directivos"></div>
-                </div>
-
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Acreditación de la persona: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <textarea type="text" id="acreditacion_directivo" name="acreditacion_directivo" class="form-control"></textarea>
-                      </div>
-                  </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-info waves-effect text-white">Aceptar</button>
-            </div>
-          <?php echo form_close(); ?>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- ============================================================== -->
-<!-- FIN MODAL DIRECTIVOS -->
-<!-- ============================================================== -->
-
 <!--INICIO MODAL DE DELEGADO -->
 <div class="modal fade" id="modal_delegado" role="dialog">
   <div class="modal-dialog" role="document">
@@ -1449,41 +1398,7 @@ $(function(){
 
     });
 });
-/*AJAX DIRECTIVOS*/
-$(function(){
-    $("#formajax2").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax2"));
-        formData.append("id_sindicato", $('#id_sindicato').val());
-        formData.append("id_exp", $('#id_exp').val());
-        $.ajax({
-          url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/gestionar_directivos",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              if($("#band2").val() == "save"){
-                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-              }else if($("#band2").val() == "edit"){
-                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-              }else{
-                  swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-              }
-              $("#modal_directivo").modal('hide');
-              tabla_directivos();
-            }
-        });
 
-    });
-});
 /*AJAX ESTABLECIMIENTOS*/
 $(function(){
     $("#formajax4").on("submit", function(e){

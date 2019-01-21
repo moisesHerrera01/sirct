@@ -14,7 +14,8 @@ function abrir_resolucion(){
   $('#modal_resolucion').modal('hide');
 }
 
-function resolucion(id_expedienteci,id_fechasaudienciasci) {
+function resolucion(id_expedienteci,id_fechasaudienciasci, id_sindicato) {
+  alert(id_sindicato);
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/resolucion_audiencia",
     type: "post",
@@ -23,6 +24,9 @@ function resolucion(id_expedienteci,id_fechasaudienciasci) {
   })
   .done(function(res){
     combo_defensores();
+    if (id_sindicato!=false) {
+      combo_directivos(id_sindicato);
+    }
     combo_representante_empresa('', $("#id_empresa_audiencia").val());
     combo_delega2($("#id_empleado_audiencia").val());
     combo_resultados();

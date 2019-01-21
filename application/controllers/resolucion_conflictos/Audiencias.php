@@ -10,6 +10,7 @@ class Audiencias extends CI_Controller {
 
   public function programar_audiencias(){
     $data['expediente'] = $this->expedientes_model->obtener_expediente( $this->input->post('id') );
+		$data['id_sindicato'] = $this->input->post('id_sindicato');
     $this->load->view('resolucion_conflictos/solicitudes_ajax/programar_audiencias', $data);
   }
 
@@ -50,6 +51,9 @@ class Audiencias extends CI_Controller {
 		}
     $data['audiencia'] = $this->audiencias_model->obtener_audiencias( $this->input->get('id_expedienteci') );
 		$data['tipo'] = $tipo;
+		if ($this->input->get('id_sindicato')) {
+			$data['id_sindicato'] = $this->input->get('id_sindicato');
+		}
     $this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_audiencias',$data);
   }
 

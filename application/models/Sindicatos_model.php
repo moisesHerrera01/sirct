@@ -61,6 +61,7 @@ class Sindicatos_model extends CI_Model {
 									WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 																							FROM sct_delegado_exp de2
 																							WHERE de2.id_expedienteci=de.id_expedienteci
+																							AND de2.id_personal <> 0
 																						 )
 								) d" , "d.id_expedienteci=ex.id_expedienteci");
 		if ($nr) {
