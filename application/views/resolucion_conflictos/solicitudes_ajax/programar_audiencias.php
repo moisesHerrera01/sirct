@@ -15,20 +15,22 @@ function abrir_resolucion(){
 }
 
 function resolucion(id_expedienteci,id_fechasaudienciasci, id_sindicato) {
-  alert(id_sindicato);
+  // alert(id_sindicato);
+   $("#id_sindicato").val(id_sindicato);
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/resolucion_audiencia",
     type: "post",
     dataType: "html",
-    data: {id : id_expedienteci, id_audiencia:id_fechasaudienciasci}
+    data: {id : id_expedienteci, id_audiencia:id_fechasaudienciasci,id_sindicato:id_sindicato}
   })
   .done(function(res){
     combo_defensores();
     if (id_sindicato!=false) {
-      combo_directivos(id_sindicato);
+      combo_directivos(0,id_sindicato);
     }
     combo_representante_empresa('', $("#id_empresa_audiencia").val());
     combo_delega2($("#id_empleado_audiencia").val());
+    // combo_directivos(id_sindicato);
     combo_resultados();
     $('#cnt_modal_actions').html(res);
     $('#modal_resolucion').modal('show');
@@ -138,6 +140,7 @@ function agregar(){
             </blockquote>
             <input type="hidden" name="id_empleado_audiencia" id="id_empleado_audiencia" value="<?= $expediente->id_empleado ?>">
             <input type="hidden" name="id_empresa_audiencia" id="id_empresa_audiencia" value="<?= $expediente->id_empresa ?>">
+            <input type="hidden" name="id_empresa_audiencia" id="id_empresa_audiencia" value="<?= $id_sindicato ?>">
             <div id="cnt_form6" class="cnt_form">
               <?php echo form_open('', array('id' => 'formajax6', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
 

@@ -69,6 +69,7 @@ class Directivos extends CI_Controller {
 	}
 
 	public function combo_directivos() {
+		// var_dump($this->input->post('id_sindicato'));
 		$directivos = $this->directivos_model->obtener_directivos_sindicato($this->input->post('id_sindicato'));
 		$this->load->view('conflictos_colectivos/sindicatos_ajax/combo_directivos',
 			array(
@@ -82,7 +83,9 @@ class Directivos extends CI_Controller {
 	public function modal_directivos(){
 		$this->load->view('conflictos_colectivos/sindicatos_ajax/modal_directivo',
 			array(
-				'id_directivo' => $this->input->post('id_directivo')
+				'id_directivo' => $this->input->post('id_directivo'),
+				'tipo' => $this->input->post('tipo'),
+				'id_sindicato' => $this->input->post('id_sindicato')
 			));
 	}
 

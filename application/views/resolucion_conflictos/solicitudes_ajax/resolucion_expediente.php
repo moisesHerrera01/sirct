@@ -27,6 +27,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="<?= $id?>">
           <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value="<?= $id_audiencia?>">
+          <input type="hidden" id="id_sindicato" name="id_sindicato" value="<?php (isset($id_sindicato)) ? $id_sindicato : "" ; ?>">
 
           <div class="row">
             <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_resultados"></div>
@@ -53,8 +54,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_representante_empresa"></div>
 
-              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_directivos"></div>
-              <!-- <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div> -->
+              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div>
 
             <div id="det_resultado" class="form-group col-lg-12 col-sm-12" style="height: 83px;">
                 <h5>Detalle del resultado:<span class="text-danger">*</span></h5>
@@ -105,6 +105,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </div>
             </div>
 
+            <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_directivos"></div>
+
           </div>
 
           <div align="right" id="btnadd1">
@@ -128,6 +130,8 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax4"));
         formData.append("fecha_pago", $("#fecha_pago").val());
+        formData.append("directivos_audiencia", $("#directivo").val().toString());
+        formData.append("id_sindicato", $("#id_sindicato").val());
         $('#modal_resolucion').modal('hide');
 
         $.ajax({
