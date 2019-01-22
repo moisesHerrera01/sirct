@@ -943,9 +943,9 @@ function volver(num) {
                                   </div>
                                   <div class="row">
                                     <div class="form-group col-lg-3 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>NIT: <span class="text-danger">*</span></h5>
+                                        <h5>NIT:</h5>
                                         <div class="controls">
-                                            <input type="text" id="nit_empresa" name="nit_empresa" class="form-control" data-mask="9999-999999-999-9" required="">
+                                            <input type="text" id="nit_empresa" name="nit_empresa" class="form-control" data-mask="9999-999999-999-9">
                                         </div>
                                         <label for="nit_empresa"></label>
                                     </div>
@@ -964,9 +964,9 @@ function volver(num) {
                                         </select>
                                     </div>
                                     <div class="form-group col-lg-5 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Correo Electrónico: <span class="text-danger">*</span></h5>
+                                        <h5>Correo Electrónico:</h5>
                                         <div class="controls">
-                                            <input type="text" id="correoelectronico_empresa" name="correoelectronico_empresa" class="form-control" required="">
+                                            <input type="text" id="correoelectronico_empresa" name="correoelectronico_empresa" class="form-control">
                                         </div>
                                     </div>
                                   </div>
