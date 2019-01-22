@@ -16,6 +16,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
           <input type="hidden" id="band2" name="band2" value="save">
           <input type="hidden" id="id_directivo" name="id_directivo" value="<?=$id_directivo ?>">
+          <input type="hidden" id="id_sindicato" name="id_sindicato" value="<?=$id_sindicato ?>">
+          <input type="hidden" id="tipo" name="tipo" value="<?= $tipo ?>">
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de personas directivas</h4>
             </div>
@@ -72,7 +74,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="cerrar_directivos(<?= $id_sindicato ?>)" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-info waves-effect text-white">Aceptar</button>
             </div>
           <?php echo form_close(); ?>
@@ -113,11 +115,21 @@ $(function(){
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
-              $("#modal_directivo").modal('hide');
-              tabla_directivos();
+              cerrar_directivos($('#id_sindicato').val());
             }
         });
 
     });
 });
+
+function cerrar_directivos(id_sindicato){
+  if ($("#tipo").val()==2) {
+    $("#modal_directivo").modal('hide');
+    $("#modal_resolucion").modal('show');
+    combo_directivos(0,id_sindicato);
+  }else {
+    tabla_directivos();
+    $("#modal_directivo").modal('hide');
+  }
+}
 </script>

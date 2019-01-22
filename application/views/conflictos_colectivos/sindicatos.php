@@ -43,24 +43,6 @@ function combo_delegado_tabla(seleccion){
   });
 }
 
-function modal_directivo(id_sindicato) {
-  $.ajax({
-    url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/modal_directivos",
-    type: "post",
-    dataType: "html",
-    data: {id_sindicato : id_sindicato}
-  })
-  .done(function(res){
-    $('#cnt_modal_directivo').html(res);
-    combo_tipo_directivos();
-    $('#modal_directivo').modal('show');
-    // $("#solicitud_pn_pj").hide();
-    // $("#sc_conciliada_pago").hide();
-    // $("#pc_sin_conciliar").hide();
-    // $("#inasistencia").hide();
-  });
-}
-
 function combo_resultados(seleccion){
   $.ajax({
     url: "<?php echo site_url(); ?>/conflictos_colectivos/sindicato/combo_resultados",
@@ -440,7 +422,7 @@ function audiencias(id_empresaci, id_expedienteci, origen, id_sindicato) {
     $("#cnt_tabla_solicitudes").hide(0);
     $("#cnt_form_main").hide(0);
     combo_defensores();
-    combo_directivos(id_sindicato);
+    combo_directivos(0,id_sindicato);
     combo_representante_empresa();
     combo_delega2();
     if (origen==1) {
@@ -545,27 +527,85 @@ function combo_establecimiento(seleccion){
     });
   });
 }
+//
+// function combo_directivos(seleccion,id_sindicato){
+//    // alert(id_sindicato)
+//     $.ajax({
+//       async: true,
+//       url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/combo_directivos",
+//       type: "post",
+//       dataType: "html",
+//       data: {id : seleccion, id_sindicato: id_sindicato}
+//     })
+//     .done(function(res){
+//         $.when($('#div_combo_directivos').html(res) ).then(function( data, textStatus, jqXHR ) {
+//             $("#directivo").select2({
+//
+//                 'language': {
+//                     noResults: function () {
+//                         return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_directivo" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_directivo('+id_sindicato+')"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
+//                     }
+//                 }, 'escapeMarkup': function (markup) { return markup; }
+//             });
+//         });
+//     });
+// }
 
-function combo_directivos(seleccion,id_sindicato){
-    $.ajax({
-      async: true,
-      url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/combo_directivos",
-      type: "post",
-      dataType: "html",
-      data: {id : seleccion, id_sindicato: id_sindicato}
-    })
-    .done(function(res){
-        $.when($('#div_combo_directivos').html(res) ).then(function( data, textStatus, jqXHR ) {
-            $("#directivo").select2({
+function combo_directivos(seleccion, id_sindicato){
+  var id_emp = $("#id_empresaci").val();
 
-                'language': {
-                    noResults: function () {
-                        return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_directivo" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_directivo()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
-                    }
-                }, 'escapeMarkup': function (markup) { return markup; }
-            });
-        });
+  $("#establecimiento").val(id_emp);
+  $.ajax({
+    async: true,
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/combo_directivos",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion, id_sindicato: id_sindicato}
+  })
+  .done(function(res){
+    $('#div_combo_directivos').html(res);
+    if (id_ultimos_directivos!="") {
+      $('#directivo').val(id_ultimos_directivos);
+    }
+    $("#directivo").select2({
+
+        'language': {
+            noResults: function () {
+                return '<div align="right"><a href="javascript:;" data-toggle="modal" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_directivo('+id_sindicato+')"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
+            }
+        }, 'escapeMarkup': function (markup) { return markup; }
     });
+    // $('#representante_empresa').trigger('change.select2');
+  });
+}
+
+var id_ultimos_directivos = "";
+
+function modal_directivo(id_sindicato,tipo) {
+  // alert($('#directivo').val());
+  id_ultimos_directivos = $('#directivo').val();
+  $('#id_sindicato').val(id_sindicato);
+  $.ajax({
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/modal_directivos",
+    type: "post",
+    dataType: "html",
+    data: {id_sindicato : id_sindicato, tipo: tipo}
+  })
+  .done(function(res){
+    $('#cnt_modal_directivo').html(res);
+    combo_tipo_directivos();
+    $('#modal_directivo').modal('show');
+    // $("#solicitud_pn_pj").hide();
+    // $("#sc_conciliada_pago").hide();
+    // $("#pc_sin_conciliar").hide();
+    // $("#inasistencia").hide();
+  });
+}
+
+function cerrar_combo_directivo(id_sindicato) {
+    modal_directivo(id_sindicato,2);
+    $('#modal_resolucion').modal('hide');
+    $("#directivo").select2('close');
 }
 
 function open_form(num){
@@ -625,7 +665,7 @@ function tablasolicitudes(){
 }
 
 function tabla_audiencias(id_expedienteci, id_sindicato){
-  alert(id_sindicato);
+  // alert(id_sindicato);
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttpB=new XMLHttpRequest();
     }else{// code for IE6, IE5
@@ -718,7 +758,7 @@ function cambiar_nuevo2(sindicato){
   $("#band2").val('save');
 
   // $("#modal_directivo").modal('show');
-  modal_directivo(sindicato);
+  modal_directivo(sindicato,1);
 }
 
 
@@ -803,13 +843,16 @@ function cambiar_editar2(id_directivo,bandera){
       $("#acreditacion_directivo").val(result.acreditacion_directivo);
       if (result.sexo_directivo=='M') {
         document.getElementById('masculino').checked =true;
+        $("#masculino").attr('checked',result.sexo_directivo);
       }else {
-        document.getElementById('femenino').checked =true;
+        // document.getElementById('femenino').checked =true;
+        $("#femenino").attr('checked',result.sexo_directivo);
       }
       /*Fin directivo*/
       $("#band2").val("edit");
     });
-    $("#modal_directivo").modal('show');
+    // $("#modal_directivo").modal('show');
+    modal_directivo(result.id_sindicato,1);
   }
 }
 
