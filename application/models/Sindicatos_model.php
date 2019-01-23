@@ -34,6 +34,7 @@ class Sindicatos_model extends CI_Model {
 											 ex.id_estadosci,
 											 ex.numerocaso_expedienteci,
 											 s.nombre_sindicato,
+											 s.abreviatura_sindicato,
 											 em.nombre_empresa,
 											 CONCAT_WS(" ",e.primer_nombre,e.segundo_nombre,e.primer_apellido,e.segundo_apellido,e.apellido_casada) delegado,
 											 es.nombre_estadosci,
@@ -102,7 +103,7 @@ class Sindicatos_model extends CI_Model {
 	public function obtener_resultados(){
 		$this->db->select('*')
 						 ->from('sct_resultadosci')
-						 ->where('id_tipo_solicitud',4);
+						 ->where('id_tipo_solicitud>3');
 		$query = $this->db->get();
 		if ($query->num_rows() > 0) {
 			return $query;

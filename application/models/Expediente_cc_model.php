@@ -69,6 +69,7 @@ class Expediente_cc_model extends CI_Model {
                          s.id_sindicato,
                          s.id_municipio,
                          s.nombre_sindicato,
+                         s.abreviatura_sindicato,
                          s.direccion_sindicato,
                          s.telefono_sindicato,
                          s.totalafiliados_sindicato,

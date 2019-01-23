@@ -32,6 +32,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <option id="acta_pago" value="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/acta_pago/'.$p->numero_pago.'/')?>">Acta de pago <?=$p->numero_pago ?></option>
                     <?php } ?>
 
+                    <option id="inasistencia_scto" value="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/acta_pc_pendiente_scto/')?>">Pendiente segunda audiencia</option>
+
                     <!-- <option id="pf_st" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Acta de audiencia</option>
                     <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
                     <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option> -->

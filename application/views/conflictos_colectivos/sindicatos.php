@@ -141,6 +141,52 @@ function combo_representante_empresa(seleccion){
   });
 }
 
+function nav(value) {
+  var id_expedienteci = $("#id_expedienteci_copia2").val();
+  var id_audiencia = $("#id_audiencia").val();
+  if (value != "") { location.href = value+id_expedienteci+'/'+id_audiencia; }
+  swal({ title: "¡Acta generada éxitosamente!", type: "success", showConfirmButton: true });
+  $("#modal_actas_tipo").modal("hide");
+  tabla_audiencias($("#id_expedienteci_copia2").val());
+}
+
+function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
+  $.ajax({
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_actas",
+    type: "post",
+    dataType: "html",
+    data: {id : id_expedienteci,res:resultado }
+  })
+  .done(function(res){
+    $('#cnt_modal_actas').html(res);
+    $('#modal_actas').modal('show');
+    $("#solicitud_pn_pj").hide();
+    $("#sc_conciliada_pago").hide();
+    $("#pc_sin_conciliar").hide();
+    $("#inasistencia").hide();
+
+  if (cuenta_audiencias>1) {
+    $("#solicitud_pn_pj").show();
+    $("#esquela").show();
+  }
+  if (estado=="2") {
+    if (resultado=="1" || resultado=="2" || resultado=="7") {
+      $("#pf_st").show();
+    }else if (resultado=="12") {
+      $("#pc_sin_conciliar").show();
+    }else if (resultado=="10") {
+      $("#sc_conciliada_pago").show();
+    }else if (resultado=="23"){
+      $("#inasistencia").show();
+    }
+  }
+  $("#id_expedienteci_copia2").val(id_expedienteci);
+  $("#id_audiencia").val(id_audiencia);
+  $("#tipo_acta").val('').trigger('');
+  $("#modal_actas_tipo").modal("show");
+  });
+}
+
 function cerrar_combo_representante() {
 
     $.ajax({
@@ -470,6 +516,18 @@ function combo_municipio(){
   });
 }
 
+function combo_municipio_directivo(){
+  $.ajax({
+    url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/combo_municipio",
+    type: "post",
+    dataType: "html"
+  })
+  .done(function(res){
+    $('#div_combo_municipio_directivo').html(res);
+    $("#municipio_directivo").select2();
+  });
+}
+
 function combo_actividad_economica(){
 
   $.ajax({
@@ -708,6 +766,7 @@ function cambiar_nuevo(){
     $("#id_sindicato").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
     $("#nombre_sindicato").val('');
+    $("#abreviatura_sindicato").val('');
     $("#direccion_sindicato").val('');
     $("#telefono_sindicato").val('');
     $("#totalafiliados_sindicato").val('');
@@ -782,6 +841,7 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#municipio").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
       $("#nombre_sindicato").val(result.nombre_sindicato);
+      $("#abreviatura_sindicato").val(result.abreviatura_sindicato);
       $("#direccion_sindicato").val(result.direccion_sindicato);
       $("#telefono_sindicato").val(result.telefono_sindicato);
       $("#totalafiliados_sindicato").val(result.totalafiliados_sindicato);
@@ -915,13 +975,13 @@ function volver(num) {
                             <blockquote class="m-t-0">
 
                             <div class="row">
-                              <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                              <div class="form-group col-lg-8 col-sm-8 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                   <h5>Nombre del sindicato: <span class="text-danger">*</span></h5>
                                   <input type="text" id="nombre_sindicato" name="nombre_sindicato" class="form-control" placeholder="Nombres del sindicato" required="">
                                   <div class="help-block"></div>
                               </div>
 
-                              <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                              <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                   <h5>Municipio: <span class="text-danger">*</span></h5>
                                   <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
                                       <option value=''>[Seleccione el municipio]</option>
@@ -937,13 +997,19 @@ function volver(num) {
                             </div>
 
                               <div class="row">
-                                <div class="form-group col-lg-6" style="height: 83px;">
+                                <div class="form-group col-lg-6 col-sm-8 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <h5>Abreviatura del sindicato: <span class="text-danger">*</span></h5>
+                                    <input type="text" id="abreviatura_sindicato" name="abreviatura_sindicato" class="form-control" placeholder="Abreviatura del sindicato" required="">
+                                    <div class="help-block"></div>
+                                </div>
+
+                                <div class="form-group col-lg-3" style="height: 83px;">
                                     <h5>Teléfono del sindicato: </h5>
                                     <input data-mask="9999-9999" type="text" id="telefono_sindicato" name="telefono_sindicato" class="form-control" placeholder="Número de Telefóno">
                                     <div class="help-block"></div>
                                 </div>
 
-                              <div class="form-group col-lg-6" style="height: 83px;">
+                              <div class="form-group col-lg-3" style="height: 83px;">
                                   <h5>Total de afiliados:</h5>
                                   <input type="number" id="totalafiliados_sindicato" name="totalafiliados_sindicato" class="form-control" placeholder="Nacionalidad">
                                   <div class="help-block"></div>
@@ -1155,6 +1221,7 @@ function volver(num) {
 <!-- ============================================================== -->
 
 <div id="cnt_modal_acciones"></div>
+<div id="cnt_modal_actas"></div>
     <!--INICIA MODAL DE ESTABLECIMIENTOS -->
   <div class="modal fade" id="modal_establecimiento" role="dialog">
     <div class="modal-dialog modal-lg" role="document">

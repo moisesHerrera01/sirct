@@ -351,6 +351,64 @@ class Acta_colectivos extends CI_Controller {
                 $objWriter->save('php://output');
                 unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
             }
+
+            public function acta_pc_pendiente_scto($id_expedienteci, $id_audiencia=FALSE) {
+                $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,FALSE,$id_audiencia);
+                $audiencia= $audiencias->result()[0];
+
+                $expediente = $this->expediente_cc_model->expedientes_diferencia_laboral( $id_expedienteci )->result()[0];
+                $directivos = $this->directivos_model->obtener_directivos_asistencia($id_expedienteci);
+                $concat_directivos_sol='';
+                $concat_directivos_aud='';
+                foreach ($directivos->result() as $d) {
+                  if ($d->id_audiencia==NULL || $id_audiencia=="") {
+                    $concat_directivos_sol.=$d->nombre_directivo.', ';
+                  }else {
+                    $concat_directivos_aud.= $d->nombre_directivo.'mayor de edad, empleado(a), del domicilio de'.', identificándose por medio de su respectivo Documento Único de Identidad número '.
+                    convertir_dui($d->dui_directivo).', actuando en su calidad de '.$d->tipo.', ';
+                  }
+                }
+
+
+                // DORA ANGELICA RODRIGUEZ GARCIA, mayor de edad, Empleada, del domicilio de Tonacatepeque, Departamento de San Salvador, portadora de su Documento Único de Identidad número cero cero cero cuatro siete cero ocho seis- cinco, quien acredita la calidad en la que comparece por medio de carnet de Directivo Sindical número seis mil novecientos sesenta y seis, donde se establece que ostenta el cargo de SECRETARIA DE CULTURA Y PROPAGANDA de la Junta Directiva Seccional por Empresa IMPRESSION APPAREL GROUP, S.A. DE C.V., DEL SINDICATO DE LA INDUSTRIA TEXTIL SALVADOREÑA que se abrevia SITS, carnet que se presenta en original y copia y siendo conforme se anexa la copia a las presentes diligencias;
+
+                $this->load->library("phpword");
+                $PHPWord = new PHPWord();
+                $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/acta_pc_pendiente_scto.docx');
+                $templateWord->setValue('depto', departamento($expediente->numerocaso_expedienteci));
+                $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
+                $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($expediente->fechacrea_expedienteci)))));
+                $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
+                $templateWord->setValue('mes_expediente', strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
+                $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
+                $templateWord->setValue('directivos', $concat_directivos);
+                $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($primera->hora_fechasaudienciasci))));
+                $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($primera->hora_fechasaudienciasci)))));
+                $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($primera->fecha_fechasaudienciasci))));
+                $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($primera->fecha_fechasaudienciasci)))));
+                $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
+                $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
+                $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
+                $templateWord->setValue('mes_audiencia2', strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
+                $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
+                $templateWord->setValue('direccion_empresa', $empresa->direccion_empresa);
+                $templateWord->setValue('representante_legal', $empresa->nombres_representante);
+                $templateWord->setValue('nombre_empresa', $empresa->nombre_empresa);
+                $templateWord->setValue('nombre_sindicato', $expediente->nombre_sindicato);
+                $templateWord->setValue('direccion_sindicato', $expediente->direccion_sindicato);
+                $templateWord->setValue('nombre_delegado',$expediente->delegado);
+                $templateWord->setValue('motivo',$expediente->descripmotivo_expedienteci);
+                $nombreWord = $this->random();
+                $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+                $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+                header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                header("Content-Disposition: attachment; filename='acta_pc_pendiente_scto_".date('dmy_His').".docx'");
+                header('Cache-Control: max-age=0');
+                $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
+                $objWriter->save('php://output');
+                unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+            }
+
     public function generar_ficha_indemnizacion($id_expedienteci) {
         $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];
         $estadisticas = $this->persona_cc_model->obtener_estadisticas_ficha( $id_expedienteci )->result()[0];

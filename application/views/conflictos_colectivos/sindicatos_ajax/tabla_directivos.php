@@ -33,7 +33,7 @@
                           echo "<tr>";
                             echo "<td>".$fila->nombre_directivo."</td>";
                             echo "<td>".$fila->apellido_directivo."</td>";
-                            echo "<td>".$fila->tipo_directivo."</td>";
+                            echo "<td>".$fila->tipo."</td>";
                             echo "<td>".$fila->acreditacion_directivo."</td>";
                             echo "<td>";
 

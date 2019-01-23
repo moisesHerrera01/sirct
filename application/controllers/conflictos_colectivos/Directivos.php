@@ -23,10 +23,12 @@ class Directivos extends CI_Controller {
 			'dui_directivo' => $this->input->post('dui_directivo'),
 			'tipo_directivo' => $this->input->post('tipo_directivo'),
 			'acreditacion_directivo' => $this->input->post('acreditacion_directivo'),
-			'sexo_directivo' => $this->input->post('sexo_directivo')
+			'sexo_directivo' => $this->input->post('sexo_directivo'),
+			'estado_directivo' => 1
 			);
-			$this->directivos_model->insertar_directivo($data);
+			$id_directivo = $this->directivos_model->insertar_directivo($data);
 			echo $data['id_sindicato'];
+			$this->directivos_model->insertar_directivo_audiencia(array('id_directivo' => $id_directivo,'tipo_asistencia'=>1 ));
 
 		}else if($this->input->post('band2') == "edit"){
 

@@ -5,7 +5,7 @@ class Audiencias extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("expedientes_model","audiencias_model","pagos_model","login_model"));
+		$this->load->model(array("expedientes_model","audiencias_model","pagos_model","login_model","directivos_model"));
 	}
 
   public function programar_audiencias(){
@@ -128,6 +128,16 @@ class Audiencias extends CI_Controller {
 	}
 
 	public function gestionar_resolucion_audiencia() {
+		$directivos = explode(",", $this->input->post('directivos_audiencia'));
+		$sindicato = $this->input->post('id_sindicato');
+		foreach ($directivos as $d) {
+			$this->directivos_model->insertar_directivo_audiencia(
+				array(
+					'id_directivo' =>$d,
+					'id_audiencia'=> $this->input->post('id_fechasaudienciasci'),
+					'id_expedienteci' => $this->input->post('id_expedienteci'),
+					'tipo_asistencia' => 2));
+		}
 
 
 		$data['id_fechasaudienciasci'] = $this->input->post('id_fechasaudienciasci');

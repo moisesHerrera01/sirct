@@ -58,4 +58,23 @@ class Directivos_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	public function insertar_directivo_audiencia($data){
+    if ($this->db->insert('sct_directivos_audiencia', $data)) {
+      return $this->db->insert_id();
+    }else {
+      return "fracaso";
+    }
+  }
+
+	public function obtener_directivos_asistencia($id_expedienteci){
+		$this->db->select('CONCAT_WS(" ",d.nombre_directivo,d.apellido_directivo) nombre_directivo, d.acreditacion_directivo, d.dui_directivo, td.tipo_directivo')
+						 ->from('sct_directivos_audiencia da')
+						 ->join('sct_directivo d','d.id_directivo=da.id_directivo')
+						 ->join('sge_sindicato s','s.id_sindicato=d.id_sindicato')
+						 ->join('sge_tipo_directivo td','td.id_tipo_directivo=d.id_tipo_directivo')
+						 ->where('s.id_expedienteci',$id_expedienteci);
+		$query = $this->db->get();
+		return $query;
+	}
 }
