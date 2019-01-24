@@ -48,20 +48,32 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <div class="help-block"></div>
                 </div>
 
-                  <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>DUI de la persona: <span class="text-danger">*</span></h5>
                       <div class="controls">
-                          <input data-mask="99999999-9" type="text" id="dui_directivo" name="dui_directivo" class="form-control">
+                          <input type="text" id="dui_directivo" name="dui_directivo" class="form-control" required>
                       </div>
                   </div>
 
-                  <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Tipo de persona directiva: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="tipo_directivo" name="tipo_directivo" class="form-control">
-                      </div>
-                  </div> -->
                   <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_directivos"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio_directivo"></div>
+
+                  <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fnacimiento_directivo" name="fnacimiento_directivo" placeholder="dd/mm/yyyy" readonly="">
+                      <div class="help-block"></div>
+                  </div>
+
+                  <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Ocupación de directivo: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="ocupacion_directivo" name="ocupacion_directivo" class="form-control" required="">
+                      </div>
+                  </div>
+
                 </div>
 
                 <div class="row">
@@ -132,4 +144,6 @@ function cerrar_directivos(id_sindicato){
     $("#modal_directivo").modal('hide');
   }
 }
+
+$('#fnacimiento_directivo').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
 </script>

@@ -516,11 +516,12 @@ function combo_municipio(){
   });
 }
 
-function combo_municipio_directivo(){
+function combo_municipio_directivo(seleccion){
   $.ajax({
     url: "<?php echo site_url(); ?>/conflictos_colectivos/directivos/combo_municipio",
     type: "post",
-    dataType: "html"
+    dataType: "html",
+    data: {id : seleccion}
   })
   .done(function(res){
     $('#div_combo_municipio_directivo').html(res);
@@ -651,7 +652,9 @@ function modal_directivo(id_sindicato,tipo) {
   })
   .done(function(res){
     $('#cnt_modal_directivo').html(res);
+    $('#dui_directivo').mask('99999999-9');
     combo_tipo_directivos();
+    combo_municipio_directivo();
     $('#modal_directivo').modal('show');
     // $("#solicitud_pn_pj").hide();
     // $("#sc_conciliada_pago").hide();
@@ -811,8 +814,11 @@ function cambiar_nuevo2(sindicato){
   $("#id_directivo").val('');
   $("#nombre_directivo").val('');
   $("#apellido_directivo").val('');
+  $("#ocupacion_directivo").val('');
   $("#dui_directivo").val('');
-  $("#tipo_directivo").val('');
+  combo_tipo_directivos();
+  combo_municipio_directivo();
+  $("#fnacimiento_directivo").val('');
   $("#acreditacion_directivo").val('');
   $("#band2").val('save');
 
@@ -895,24 +901,30 @@ function cambiar_editar2(id_directivo,bandera){
     .done(function(res){
       result = JSON.parse(res)[0];
       /*Inicio directivo*/
-      $("#id_directivo").val(result.id_directivo);
-      $("#nombre_directivo").val(result.nombre_directivo);
-      $("#apellido_directivo").val(result.apellido_directivo);
-      $("#dui_directivo").val(result.dui_directivo);
-      combo_tipo_directivos(result.tipo_directivo);
-      $("#acreditacion_directivo").val(result.acreditacion_directivo);
-      if (result.sexo_directivo=='M') {
-        document.getElementById('masculino').checked =true;
-        $("#masculino").attr('checked',result.sexo_directivo);
-      }else {
-        // document.getElementById('femenino').checked =true;
-        $("#femenino").attr('checked',result.sexo_directivo);
-      }
-      /*Fin directivo*/
-      $("#band2").val("edit");
+      $("#id_sindicato").val(result.id_sindicato);
+      modal_directivo($("#id_sindicato").val(),1);
+      setTimeout(function () {
+        $("#id_directivo").val(result.id_directivo);
+        $("#ocupacion_directivo").val(result.ocupacion_directivo);
+        $("#nombre_directivo").val(result.nombre_directivo);
+        $("#apellido_directivo").val(result.apellido_directivo);
+        $("#dui_directivo").val(result.dui_directivo);
+        combo_tipo_directivos(result.tipo_directivo);
+        combo_municipio_directivo(result.municipio_directivo);
+        $("#fnacimiento_directivo").datepicker("setDate", moment(result.fnacimiento_directivo).format("DD-MM-YYYY"));
+        $("#acreditacion_directivo").val(result.acreditacion_directivo);
+        if (result.sexo_directivo=='M') {
+          document.getElementById('masculino').checked =true;
+          $("#masculino").attr('checked',result.sexo_directivo);
+        }else {
+          // document.getElementById('femenino').checked =true;
+          $("#femenino").attr('checked',result.sexo_directivo);
+        }
+        /*Fin directivo*/
+        $("#band2").val("edit");
+      }, 500);
     });
     // $("#modal_directivo").modal('show');
-    modal_directivo(result.id_sindicato,1);
   }
 }
 

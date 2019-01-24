@@ -79,11 +79,14 @@ class Expediente_cc_model extends CI_Model {
                          cat.id_catalogociiu,
                          e.causa_expedienteci,
                          d.nombre_delegado_actual,
-                         ms.nombre_motivo'
+                         ms.nombre_motivo,
+                         re.nombres_representante rlegal_empresa,
+                         es.nombre_empresa'
                        )
                ->from('sct_expedienteci e')
                ->join('sct_motivo_solicitud ms','ms.id_motivo_solicitud=e.motivo_expedienteci')
                ->join('sge_empresa es','es.id_empresa=e.id_empresaci')
+               ->Join('sge_representante re ', 're.id_empresa = es.id_empresa AND re.tipo_representante=1','left')
                ->join('sge_catalogociiu cat','cat.id_catalogociiu=es.id_catalogociiu')
                ->join('org_municipio mu','mu.id_municipio=es.id_municipio')
                ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci')

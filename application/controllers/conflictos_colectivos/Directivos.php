@@ -24,6 +24,9 @@ class Directivos extends CI_Controller {
 			'tipo_directivo' => $this->input->post('tipo_directivo'),
 			'acreditacion_directivo' => $this->input->post('acreditacion_directivo'),
 			'sexo_directivo' => $this->input->post('sexo_directivo'),
+			'ocupacion_directivo' => $this->input->post('ocupacion_directivo'),
+			'municipio_directivo' => $this->input->post('municipio_directivo'),
+			'fnacimiento_directivo' => date("Y-m-d",strtotime($this->input->post('fnacimiento_directivo'))),
 			'estado_directivo' => 1
 			);
 			$id_directivo = $this->directivos_model->insertar_directivo($data);
@@ -40,7 +43,10 @@ class Directivos extends CI_Controller {
 				'dui_directivo' => $this->input->post('dui_directivo'),
 				'tipo_directivo' => $this->input->post('tipo_directivo'),
 				'acreditacion_directivo' => $this->input->post('acreditacion_directivo'),
-				'sexo_directivo' => $this->input->post('sexo_directivo')
+				'sexo_directivo' => $this->input->post('sexo_directivo'),
+				'ocupacion_directivo' => $this->input->post('ocupacion_directivo'),
+				'municipio_directivo' => $this->input->post('municipio_directivo'),
+				'fnacimiento_directivo' => date("Y-m-d",strtotime($this->input->post('fnacimiento_directivo')))
 			);
 			$this->directivos_model->editar_directivo($data);
 			echo $data['id_sindicato'];
@@ -71,7 +77,6 @@ class Directivos extends CI_Controller {
 	}
 
 	public function combo_directivos() {
-		// var_dump($this->input->post('id_sindicato'));
 		$directivos = $this->directivos_model->obtener_directivos_sindicato($this->input->post('id_sindicato'));
 		$this->load->view('conflictos_colectivos/sindicatos_ajax/combo_directivos',
 			array(
@@ -91,12 +96,16 @@ class Directivos extends CI_Controller {
 			));
 	}
 
-	// public function bitacora_delegados() {
-	// 	$this->load->view('resolucion_conflictos/solicitudes_ajax/modal_bitacora_delegado',
-	// 	array(
-	// 		'id' => $this->input->post('id'),
-	// 		'num_exp' => $this->input->post('num_exp')
-	// 	));
-	// }
+	public function combo_municipio() {
+
+	$this->load->view('conflictos_colectivos/sindicatos_ajax/combo_municipio_directivo',
+		array(
+			'id' => $this->input->post('id'),
+			'municipio' => $this->db->get('org_municipio')
+		)
+	);
+
+}
+
 }
 ?>
