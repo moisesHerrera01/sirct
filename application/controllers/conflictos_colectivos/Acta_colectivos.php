@@ -361,7 +361,7 @@ class Acta_colectivos extends CI_Controller {
                 $concat_directivos_sol='';
                 $concat_directivos_aud='';
                 foreach ($directivos->result() as $d) {
-                  if ($d->id_audiencia==NULL || $d->id_audiencia=="") {
+                  if ($d->id_audiencia==NULL) {
                     $concat_directivos_sol.=$d->nombre_directivo.', ';
                   }else {
                     $concat_directivos_aud.= $d->nombre_directivo.' de '.mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($d->fnacimiento_directivo))))).' años de edad, '.$d->ocupacion_directivo.', del domicilio de '.$d->municipio.', departamento de '.$d->departamento.', portador(a) de su documento único de identidad número '.convertir_dui($d->dui_directivo).', quien acredita la calidad en la que comparece por medio de ' .$d->acreditacion_directivo. ', donde se establece que ostenta el cargo de '.$d->tipo_directivo.' de (el)la '.$d->nombre_sindicato.' que se abrevia '.$d->abreviatura_sindicato.', carnet que se presenta en original y copia y siendo conforme se anexa la copia a las presentes diligencias, ';
@@ -371,6 +371,16 @@ class Acta_colectivos extends CI_Controller {
                 $this->load->library("phpword");
                 $PHPWord = new PHPWord();
                 $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/acta_pc_pendiente_scto.docx');
+                if ($audiencia->id_delegado == $expediente->id_personal) {
+                    $templateWord->setValue('nombre_delegado',"");
+                    $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                    $templateWord->setValue('delegado_titulo', $audiencia->delegado_audiencia);
+                }else {
+                  $templateWord->setValue('nombre_delegado',$expediente->delegado);
+                  $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                  $templateWord->setValue('delegado_titulo', mb_strtoupper("(Atendió: ".$audiencia->delegado_audiencia.")"));
+                }
+                $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
                 $templateWord->setValue('depto', departamento($expediente->numerocaso_expedienteci));
                 $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($audiencia->hora_fechasaudienciasci))));
                 $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($audiencia->hora_fechasaudienciasci)))));
@@ -383,6 +393,14 @@ class Acta_colectivos extends CI_Controller {
                 $templateWord->setValue('representante_legal', $expediente->rlegal_empresa);
                 $templateWord->setValue('directivos_solicitud', $concat_directivos_sol);
                 $templateWord->setValue('directivos_audiencia', $concat_directivos_aud);
+
+                $templateWord->setValue('representante_asiste', $audiencia->representante_asiste);
+                $templateWord->setValue('representante_asiste_profesion', $audiencia->representante_asiste_profesion);
+                $templateWord->setValue('representante_asiste_municipio', $audiencia->representante_asiste_municipio);
+                $templateWord->setValue('representante_asiste_depto', $audiencia->representante_asiste_depto);
+                $templateWord->setValue('representante_asiste_dui', mb_strtoupper(convertir_dui($audiencia->representante_asiste_dui)));
+                $templateWord->setValue('representante_asiste_acreditacion', $audiencia->representante_asiste_acreditacion);
+
                 $nombreWord = $this->random();
                 $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');

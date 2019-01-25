@@ -469,4 +469,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		return $listaUnidadesOrdinales[$numero];
 	}
 
+	function AbreviaturaTitulo($titulo='', $genero) {
+		$grado = explode(" ", $titulo);
+		$abr_grd = '';
+		switch ($grado[0]) {
+			case 'LICENCIATURA':
+				$abr_grd = 'Lic';
+				if ('FEMENINO' == $genero) {
+					$abr_grd .= 'da';
+				}
+				$abr_grd .= '.';
+				return $abr_grd;
+				break;
+
+			default:
+				return '';
+				break;
+		}
+	}
+
 ?>

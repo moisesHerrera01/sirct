@@ -5,9 +5,7 @@ class Solicitudes extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('solicitudes_model');
-		$this->load->model('expedientes_model');
-		$this->load->model('expedientes_model');
+		$this->load->model(array('solicitudes_model','expedientes_model','expedientes_model','solicitud_juridica_model'));
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -123,6 +121,7 @@ class Solicitudes extends CI_Controller {
 			'id_estado_civil' => $this->input->post('estado_civil'),
 			'id_titulo_academico' => $this->input->post('profesion'),
 			'f_nacimiento_representante' => date("Y-m-d",strtotime($this->input->post('f_nacimiento_representante'))),
+			'sexo_representante' => $this->input->post('sexo')
 			);
       		echo $this->solicitud_juridica_model->insertar_representante($data);
 		}else if($this->input->post('band4') == "edit"){
@@ -137,6 +136,7 @@ class Solicitudes extends CI_Controller {
 			'id_estado_civil' => $this->input->post('estado_civil'),
 			'id_titulo_academico' => $this->input->post('profesion'),
 			'f_nacimiento_representante' => date("Y-m-d",strtotime($this->input->post('f_nacimiento_representante'))),
+			'sexo_representante' => $this->input->post('sexo')
 			);
 			echo $this->solicitud_juridica_model->editar_representante($data);
 		}else if($this->input->post('band4') == "delete"){

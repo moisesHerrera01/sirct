@@ -110,9 +110,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     </div>
 
                     <div class="row">
-                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
+                      <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
 
-                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
+                      <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
+
+                      <div class="form-group col-lg-4" style="height: 83px;">
+                          <h5>Sexo de la persona:</h5>
+                          <input name="sexo" type="radio" id="rmasculino" checked="" value="M">
+                          <label for="rmasculino">Hombre</label>
+                          <input name="sexo" type="radio" id="rfemenino" value="F">
+                          <label for="rfemenino">Mujer</label>
+                          <div class="help-block"></div>
+                    </div>
                     </div>
 
                     <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -142,6 +151,7 @@ $(function () {
         var formData = new FormData(document.getElementById("formajax9"));
         formData.append("id_empresa", $('#id_empresaci').val());
 
+
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_representante",
             type: "post",
@@ -169,7 +179,7 @@ $(function () {
                     url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/obtener_respresentante_mayor",
                     type: "post",
                     dataType: "html",
-                    data: {id : $('#establecimiento').val()}
+                    data: {id : $('#id_empresaci').val()}
                 }) .done(function(res){
                     result = JSON.parse(res);
                     var newOption = new Option(result.nombres_representante, result.id_representante, false, false);
