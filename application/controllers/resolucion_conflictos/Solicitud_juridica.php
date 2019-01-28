@@ -242,7 +242,8 @@ class Solicitud_juridica extends CI_Controller {
 			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
 			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
 			'id_municipio' => $this->input->post('id_municipio'),
-			'direccion_empresa' => mb_strtoupper($this->input->post('direccion_empresa'))
+			'direccion_empresa' => mb_strtoupper($this->input->post('direccion_empresa')),
+			'id_empleado' => $this->session->userdata('id_empleado')
 			);
       		echo $this->solicitud_juridica_model->insertar_establecimiento($data);
 		}else if($this->input->post('band') == "edit"){
