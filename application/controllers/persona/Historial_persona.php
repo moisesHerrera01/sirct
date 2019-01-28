@@ -118,7 +118,8 @@ class Historial_persona extends CI_Controller {
 			'capitalsocial_empresa' => $this->input->post('capitalsocial_empresa'),
 			'trabajadores_adomicilio_empresa' => $this->input->post('trabajadores_adomicilio_empresa'),
 			'tipo_empresa' => $this->input->post('tipo_empresa'),
-			'estado_empresa' => $this->input->post('estado_empresa')
+			'estado_empresa' => $this->input->post('estado_empresa'),
+			'id_empleado' => $this->session->userdata('id_empleado')
 			);
       		echo $this->historial_persona_model->insertar_establecimiento($data);
 		}else if($this->input->post('band2') == "edit"){
