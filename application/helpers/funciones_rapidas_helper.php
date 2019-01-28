@@ -469,21 +469,47 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		return $listaUnidadesOrdinales[$numero];
 	}
 
-	function AbreviaturaTitulo($titulo='', $genero) {
-		$grado = explode(" ", $titulo);
+	function AbreviaturaTitulo($titulo='', $sexo) {
 		$abr_grd = '';
-		switch ($grado[0]) {
-			case 'LICENCIATURA':
+		switch ($titulo) {
+			case 'LICENCIATURAS':
 				$abr_grd = 'Lic';
-				if ('FEMENINO' == $genero) {
+				if ('F' == $sexo) {
 					$abr_grd .= 'da';
 				}
 				$abr_grd .= '.';
 				return $abr_grd;
 				break;
 
-			default:
-				return '';
+			case 'INGENIERÍAS':
+				$abr_grd = 'Ing';
+				if ('F' == $sexo) {
+					$abr_grd .= 'a';
+				}
+				$abr_grd .= '.';
+				return $abr_grd;
+				break;
+
+			case 'ARQUITECTURA':
+				$abr_grd = 'Arq';
+				$abr_grd .= '.';
+				return $abr_grd;
+				break;
+			case 'DOCTORADOS':
+				$abr_grd = 'Lic';
+				if ('F' == $sexo) {
+					$abr_grd .= 'da';
+				}
+				$abr_grd .= '.';
+				return $abr_grd;
+
+				default:
+				$abr_grd = 'Lic';
+				if ('F' == $sexo) {
+					$abr_grd .= 'da';
+				}
+				$abr_grd .= '.';
+				return $abr_grd;
 				break;
 		}
 	}

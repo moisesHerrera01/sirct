@@ -412,6 +412,197 @@ class Acta_colectivos extends CI_Controller {
                 unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
             }
 
+            public function acta_pc_scto($id_expedienteci, $id_audiencia=FALSE) {
+                $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,FALSE,$id_audiencia);
+                $audiencia= $audiencias->result()[0];
+
+                $expediente = $this->expediente_cc_model->expedientes_diferencia_laboral( $id_expedienteci )->result()[0];
+                $directivos = $this->directivos_model->obtener_directivos_asistencia($id_expedienteci);
+                $concat_directivos_sol='';
+                $concat_directivos_aud='';
+                foreach ($directivos->result() as $d) {
+                  if ($d->id_audiencia==NULL) {
+                    $concat_directivos_sol.=$d->nombre_directivo.', ';
+                  }else {
+                    $concat_directivos_aud.= $d->nombre_directivo.' de '.mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($d->fnacimiento_directivo))))).' años de edad, '.$d->ocupacion_directivo.', del domicilio de '.$d->municipio.', departamento de '.$d->departamento.', portador(a) de su documento único de identidad número '.convertir_dui($d->dui_directivo).', quien acredita la calidad en la que comparece por medio de ' .$d->acreditacion_directivo. ', donde se establece que ostenta el cargo de '.$d->tipo_directivo.' de (el)la '.$d->nombre_sindicato.' que se abrevia '.$d->abreviatura_sindicato.', carnet que se presenta en original y copia y siendo conforme se anexa la copia a las presentes diligencias, ';
+                  }
+                }
+
+                $this->load->library("phpword");
+                $PHPWord = new PHPWord();
+                $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/acta_pc_scto.docx');
+                if ($audiencia->id_delegado == $expediente->id_personal) {
+                    $templateWord->setValue('nombre_delegado',"");
+                    $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                    $templateWord->setValue('delegado_titulo', $audiencia->delegado_audiencia);
+                }else {
+                  $templateWord->setValue('nombre_delegado',$expediente->delegado);
+                  $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                  $templateWord->setValue('delegado_titulo', mb_strtoupper("(Atendió: ".$audiencia->delegado_audiencia.")"));
+                }
+                $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
+                $templateWord->setValue('depto', departamento($expediente->numerocaso_expedienteci));
+                $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($audiencia->hora_fechasaudienciasci))));
+                $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($audiencia->hora_fechasaudienciasci)))));
+                $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($audiencia->fecha_fechasaudienciasci))));
+                $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($audiencia->fecha_fechasaudienciasci)))));
+                $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($audiencia->fecha_fechasaudienciasci))));
+                $templateWord->setValue('nombre_sindicato', $expediente->nombre_sindicato);
+                $templateWord->setValue('abreviatura_sindicato', $expediente->abreviatura_sindicato);
+                $templateWord->setValue('nombre_empresa', $expediente->nombre_empresa);
+                $templateWord->setValue('representante_legal', $expediente->rlegal_empresa);
+                $templateWord->setValue('prefijo_titulo_legal', AbreviaturaTitulo($expediente->rlegal_nivel_academico,$expediente->sexo_representante));
+                $templateWord->setValue('directivos_solicitud', $concat_directivos_sol);
+                $templateWord->setValue('directivos_audiencia', $concat_directivos_aud);
+                $templateWord->setValue('puntos_solicitud', $expediente->descripmotivo_expedienteci);
+                $templateWord->setValue('prefijo_titulo_legal', AbreviaturaTitulo($audiencia->representante_asiste_nacademico,$audiencia->sexo_representante));
+                $templateWord->setValue('representante_asiste', $audiencia->representante_asiste);
+                $templateWord->setValue('representante_asiste_profesion', $audiencia->representante_asiste_profesion);
+                $templateWord->setValue('representante_asiste_municipio', $audiencia->representante_asiste_municipio);
+                $templateWord->setValue('representante_asiste_depto', $audiencia->representante_asiste_depto);
+                $templateWord->setValue('representante_asiste_dui', mb_strtoupper(convertir_dui($audiencia->representante_asiste_dui)));
+                $templateWord->setValue('representante_asiste_acreditacion', $audiencia->representante_asiste_acreditacion);
+                $templateWord->setValue('resultado', mb_strtoupper($audiencia->detalle_resultado));
+
+                $nombreWord = $this->random();
+                $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+                $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+                header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                header("Content-Disposition: attachment; filename='acta_pc_scto_".date('dmy_His').".docx'");
+                header('Cache-Control: max-age=0');
+                $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
+                $objWriter->save('php://output');
+                unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+            }
+
+            public function acta_sc_scto($id_expedienteci, $id_audiencia=FALSE) {
+                $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,FALSE,$id_audiencia);
+                $audiencia= $audiencias->result()[0];
+
+                $expediente = $this->expediente_cc_model->expedientes_diferencia_laboral( $id_expedienteci )->result()[0];
+                $directivos = $this->directivos_model->obtener_directivos_asistencia($id_expedienteci);
+                $concat_directivos_sol='';
+                $concat_directivos_aud='';
+                foreach ($directivos->result() as $d) {
+                  if ($d->id_audiencia==NULL) {
+                    $concat_directivos_sol.=$d->nombre_directivo.', ';
+                  }else {
+                    $concat_directivos_aud.= $d->nombre_directivo.' de '.mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($d->fnacimiento_directivo))))).' años de edad, '.$d->ocupacion_directivo.', del domicilio de '.$d->municipio.', departamento de '.$d->departamento.', portador(a) de su documento único de identidad número '.convertir_dui($d->dui_directivo).', quien acredita la calidad en la que comparece por medio de ' .$d->acreditacion_directivo. ', donde se establece que ostenta el cargo de '.$d->tipo_directivo.' de (el)la '.$d->nombre_sindicato.' que se abrevia '.$d->abreviatura_sindicato.', carnet que se presenta en original y copia y siendo conforme se anexa la copia a las presentes diligencias, ';
+                  }
+                }
+
+                $this->load->library("phpword");
+                $PHPWord = new PHPWord();
+                $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/acta_sc_scto.docx');
+                if ($audiencia->id_delegado == $expediente->id_personal) {
+                    $templateWord->setValue('nombre_delegado',"");
+                    $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                    $templateWord->setValue('delegado_titulo', $audiencia->delegado_audiencia);
+                }else {
+                  $templateWord->setValue('nombre_delegado',$expediente->delegado);
+                  $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                  $templateWord->setValue('delegado_titulo', mb_strtoupper("(Atendió: ".$audiencia->delegado_audiencia.")"));
+                }
+                $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
+                $templateWord->setValue('depto', departamento($expediente->numerocaso_expedienteci));
+                $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($audiencia->hora_fechasaudienciasci))));
+                $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($audiencia->hora_fechasaudienciasci)))));
+                $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($audiencia->fecha_fechasaudienciasci))));
+                $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($audiencia->fecha_fechasaudienciasci)))));
+                $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($audiencia->fecha_fechasaudienciasci))));
+                $templateWord->setValue('nombre_sindicato', $expediente->nombre_sindicato);
+                $templateWord->setValue('abreviatura_sindicato', $expediente->abreviatura_sindicato);
+                $templateWord->setValue('nombre_empresa', $expediente->nombre_empresa);
+                $templateWord->setValue('representante_legal', $expediente->rlegal_empresa);
+                $templateWord->setValue('prefijo_titulo_legal', AbreviaturaTitulo($expediente->rlegal_nivel_academico,$expediente->sexo_representante));
+                $templateWord->setValue('directivos_solicitud', $concat_directivos_sol);
+                $templateWord->setValue('directivos_audiencia', $concat_directivos_aud);
+                $templateWord->setValue('puntos_solicitud', $expediente->descripmotivo_expedienteci);
+                $templateWord->setValue('prefijo_titulo_legal', AbreviaturaTitulo($audiencia->representante_asiste_nacademico,$audiencia->sexo_representante));
+                $templateWord->setValue('representante_asiste', $audiencia->representante_asiste);
+                $templateWord->setValue('representante_asiste_profesion', $audiencia->representante_asiste_profesion);
+                $templateWord->setValue('representante_asiste_municipio', $audiencia->representante_asiste_municipio);
+                $templateWord->setValue('representante_asiste_depto', $audiencia->representante_asiste_depto);
+                $templateWord->setValue('representante_asiste_dui', mb_strtoupper(convertir_dui($audiencia->representante_asiste_dui)));
+                $templateWord->setValue('representante_asiste_acreditacion', $audiencia->representante_asiste_acreditacion);
+                $templateWord->setValue('resultado', mb_strtoupper($audiencia->detalle_resultado));
+                $templateWord->setValue('defensor', $audiencia->defensor);
+
+                $nombreWord = $this->random();
+                $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+                $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+                header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                header("Content-Disposition: attachment; filename='acta_sc_scto_".date('dmy_His').".docx'");
+                header('Cache-Control: max-age=0');
+                $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
+                $objWriter->save('php://output');
+                unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+            }
+
+            public function acta_multa_scto($id_expedienteci, $id_audiencia=FALSE) {
+                $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,FALSE,$id_audiencia);
+                $audiencia= $audiencias->result()[0];
+
+                $expediente = $this->expediente_cc_model->expedientes_diferencia_laboral( $id_expedienteci )->result()[0];
+                $directivos = $this->directivos_model->obtener_directivos_asistencia($id_expedienteci);
+                $concat_directivos_sol='';
+                $concat_directivos_aud='';
+                foreach ($directivos->result() as $d) {
+                  if ($d->id_audiencia==NULL) {
+                    $concat_directivos_sol.=$d->nombre_directivo.', ';
+                  }else {
+                    $concat_directivos_aud.= $d->nombre_directivo.' de '.mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($d->fnacimiento_directivo))))).' años de edad, '.$d->ocupacion_directivo.', del domicilio de '.$d->municipio.', departamento de '.$d->departamento.', portador(a) de su documento único de identidad número '.convertir_dui($d->dui_directivo).', quien acredita la calidad en la que comparece por medio de ' .$d->acreditacion_directivo. ', donde se establece que ostenta el cargo de '.$d->tipo_directivo.' de (el)la '.$d->nombre_sindicato.' que se abrevia '.$d->abreviatura_sindicato.', carnet que se presenta en original y copia y siendo conforme se anexa la copia a las presentes diligencias, ';
+                  }
+                }
+
+                $this->load->library("phpword");
+                $PHPWord = new PHPWord();
+                $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/acta_multa_scto.docx');
+                if ($audiencia->id_delegado == $expediente->id_personal) {
+                    $templateWord->setValue('nombre_delegado',"");
+                    $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                    $templateWord->setValue('delegado_titulo', $audiencia->delegado_audiencia);
+                }else {
+                  $templateWord->setValue('nombre_delegado',$expediente->delegado);
+                  $templateWord->setValue('delegado_audiencia', mb_strtoupper($audiencia->delegado_audiencia));
+                  $templateWord->setValue('delegado_titulo', mb_strtoupper("(Atendió: ".$audiencia->delegado_audiencia.")"));
+                }
+                $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
+                $templateWord->setValue('depto', departamento($expediente->numerocaso_expedienteci));
+                $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($audiencia->hora_fechasaudienciasci))));
+                $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($audiencia->hora_fechasaudienciasci)))));
+                $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($audiencia->fecha_fechasaudienciasci))));
+                $templateWord->setValue('mes_audiencia', strtoupper(mes(date('m', strtotime($audiencia->fecha_fechasaudienciasci)))));
+                $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($audiencia->fecha_fechasaudienciasci))));
+                $templateWord->setValue('nombre_sindicato', $expediente->nombre_sindicato);
+                $templateWord->setValue('abreviatura_sindicato', $expediente->abreviatura_sindicato);
+                $templateWord->setValue('nombre_empresa', $expediente->nombre_empresa);
+                $templateWord->setValue('representante_legal', $expediente->rlegal_empresa);
+                $templateWord->setValue('prefijo_titulo_legal', AbreviaturaTitulo($expediente->rlegal_nivel_academico,$expediente->sexo_representante));
+                $templateWord->setValue('directivos_solicitud', $concat_directivos_sol);
+                $templateWord->setValue('directivos_audiencia', $concat_directivos_aud);
+                $templateWord->setValue('puntos_solicitud', $expediente->descripmotivo_expedienteci);
+                $templateWord->setValue('prefijo_titulo_legal', AbreviaturaTitulo($audiencia->representante_asiste_nacademico,$audiencia->sexo_representante));
+                $templateWord->setValue('representante_asiste', $audiencia->representante_asiste);
+                $templateWord->setValue('representante_asiste_profesion', $audiencia->representante_asiste_profesion);
+                $templateWord->setValue('representante_asiste_municipio', $audiencia->representante_asiste_municipio);
+                $templateWord->setValue('representante_asiste_depto', $audiencia->representante_asiste_depto);
+                $templateWord->setValue('representante_asiste_dui', mb_strtoupper(convertir_dui($audiencia->representante_asiste_dui)));
+                $templateWord->setValue('representante_asiste_acreditacion', $audiencia->representante_asiste_acreditacion);
+                $templateWord->setValue('resultado', mb_strtoupper($audiencia->detalle_resultado));
+                $templateWord->setValue('defensor', $audiencia->defensor);
+
+                $nombreWord = $this->random();
+                $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+                $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+                header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                header("Content-Disposition: attachment; filename='acta_multa_scto_".date('dmy_His').".docx'");
+                header('Cache-Control: max-age=0');
+                $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
+                $objWriter->save('php://output');
+                unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
+            }
+
     public function generar_ficha_indemnizacion($id_expedienteci) {
         $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];
         $estadisticas = $this->persona_cc_model->obtener_estadisticas_ficha( $id_expedienteci )->result()[0];

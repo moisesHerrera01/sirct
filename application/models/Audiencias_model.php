@@ -20,7 +20,7 @@ class Audiencias_model extends CI_Model {
 												 f.id_defensorlegal,
 												 UPPER(CONCAT_WS(" ",d.nombre_representantepersonaci,d.apellido_representantepersonaci)) defensor,
 												 UPPER(r.nombres_representante) representante_asiste,
-												 UPPER(r.dui_representante) representante_asiste_dui,
+												 r.dui_representante representante_asiste_dui,
 												 UPPER(dt.departamento) representante_asiste_depto,
 												 UPPER(m.municipio) representante_asiste_municipio,
 												 UPPER(ta.titulo_academico) representante_asiste_profesion,
@@ -34,11 +34,14 @@ class Audiencias_model extends CI_Model {
 												 f.resultado,
 												 CONCAT_WS(" ",e.primer_nombre,e.segundo_nombre,e.primer_apellido,e.segundo_apellido,e.apellido_casada) delegado_audiencia,
 												 (select count(*) from sct_fechasaudienciasci fe where fe.id_expedienteci=f.id_expedienteci) AS cuenta,
-												 (select e.id_estadosci from sct_expedienteci e where e.id_expedienteci=f.id_expedienteci) AS estado'
+												 (select e.id_estadosci from sct_expedienteci e where e.id_expedienteci=f.id_expedienteci) AS estado,
+												 na.nivel_academico representante_asiste_nacademico,
+												 r.sexo_representante'
 											  )
 						 ->from('sct_fechasaudienciasci f')
 						 ->join('sge_representante r','r.id_representante=f.id_representaci','left')
 						 ->join('sir_titulo_academico ta','ta.id_titulo_academico=r.id_titulo_academico','left')
+						 ->join('sir_nivel_academico na','na.id_nivel_academico=ta.id_nivel_academico','left')
 						 ->join('sir_empleado e','e.id_empleado=f.id_delegado','left')
 						 ->join('org_municipio m','m.id_municipio=e.id_muni_residencia','left')
 						 ->join('org_departamento dt','dt.id_departamento = m.id_departamento_pais','left')
