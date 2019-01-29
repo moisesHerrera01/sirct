@@ -63,7 +63,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
 
-    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
+    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
       $.ajax({
         url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_actas",
         type: "post",

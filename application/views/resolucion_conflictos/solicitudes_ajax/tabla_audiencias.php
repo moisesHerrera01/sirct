@@ -53,7 +53,7 @@
 
                           $resultado = array($fila->id_expedienteci, $fila->id_fechasaudienciasci, ((isset($id_sindicato)) ? $id_sindicato:false) );
 
-                          $actas = array($fila->id_expedienteci,$fila->cuenta,$fila->tipo_pago,$fila->asistieron,$fila->estado,$fila->id_fechasaudienciasci,$fila->resultado,$fila->id_representaci);
+                          $actas = array($fila->id_expedienteci,$fila->cuenta,$fila->tipo_pago,$fila->asistieron,$fila->estado,$fila->id_fechasaudienciasci,$fila->resultado,$fila->id_representaci,$fila->numero_fechasaudienciasci);
 
                           switch ($fila->estado_audiencia) {
                             case '1':

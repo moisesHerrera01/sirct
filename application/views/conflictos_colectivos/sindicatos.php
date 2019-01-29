@@ -150,7 +150,8 @@ function nav(value) {
   tabla_audiencias($("#id_expedienteci_copia2").val());
 }
 
-function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
+function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
+ alert(numero_audiencia)
   $.ajax({
     url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_actas",
     type: "post",
@@ -159,27 +160,29 @@ function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,p
   })
   .done(function(res){
     $('#cnt_modal_actas').html(res);
-    $('#modal_actas').modal('show');
-    $("#solicitud_pn_pj").hide();
-    $("#sc_conciliada_pago").hide();
-    $("#pc_sin_conciliar").hide();
-    $("#inasistencia").hide();
 
-  if (cuenta_audiencias>1) {
-    $("#solicitud_pn_pj").show();
-    $("#esquela").show();
-  }
-  if (estado=="2") {
-    if (resultado=="1" || resultado=="2" || resultado=="7") {
-      $("#pf_st").show();
-    }else if (resultado=="12") {
-      $("#pc_sin_conciliar").show();
-    }else if (resultado=="10") {
-      $("#sc_conciliada_pago").show();
-    }else if (resultado=="23"){
-      $("#inasistencia").show();
+    $("#primera_cita_scto").hide();
+    $("#segunda_cita_scto").hide();
+    $("#inasistencia_scto").hide();
+    $("#sc_conciliada_pago").hide();
+
+  if (numero_audiencia==1) {
+    if (resultado=="27" || resultado=="26") {//Sin conciliar
+      $("#primera_cita_scto").show();
+    }
+  }else {
+    if (resultado=="27" || resultado=="26") {//Sin conciliar
+      $("#segunda_cita_scto").show();
     }
   }
+  if (estado=="2") {
+    if (resultado=="24") {//Pendiente segunda cita
+      $("#inasistencia_scto").show();
+    }else if (resultado=="25") {//Expediente a multa
+      $("#sc_conciliada_pago").show();
+    }
+  }
+
   $("#id_expedienteci_copia2").val(id_expedienteci);
   $("#id_audiencia").val(id_audiencia);
   $("#tipo_acta").val('').trigger('');
