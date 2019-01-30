@@ -59,19 +59,7 @@ class Solicitud_juridica_model extends CI_Model {
 	}
 
 	function insertar_expediente($data){
-		if($this->db->insert('sct_expedienteci', array(
-			'id_empresaci' => $data['id_empresaci'],
-			'id_personal' => $data['id_personal'],
-			'numerocaso_expedienteci' => '11',
-			'id_personaci' => $data['id_personaci'],
-			'id_representanteci' => $data['id_representanteci'],
-			'causa_expedienteci' => $data['causa_expedienteci'],
-			'motivo_expedienteci' => $data['motivo_expedienteci'],
-			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
-			'tiposolicitud_expedienteci' => '3',
-			'id_estadosci' => '1',
-			'fechacrea_expedienteci' => date("Y-m-d H:i:s")
-		))){
+		if($this->db->insert('sct_expedienteci', $data)){
 			return "exito,".$this->db->insert_id();
 		}else{
 			return "fracaso";
@@ -204,12 +192,9 @@ class Solicitud_juridica_model extends CI_Model {
 						WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 																				FROM sct_delegado_exp de2
 																				WHERE de2.id_expedienteci=de.id_expedienteci
+																				AND de2.id_personal <> 0
 																			 )
 					) d" , "d.id_expedienteci=e.id_expedienteci")
-			/*
-			->join('org_municipio m','m.id_municipio=p.id_municipio')
-			->join('sge_representante r ', ' r.id_empresa = e.id_empresaci')
-			*/
 			->where('e.id_expedienteci', $id);
 		$query=$this->db->get();
 		if ($query->num_rows() > 0) {

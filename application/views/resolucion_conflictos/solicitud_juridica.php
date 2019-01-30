@@ -32,6 +32,44 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         combo_establecimiento('<?=$id_empresa?>');
     }
 
+    function nav(value) {
+      var id_expedienteci = $("#id_expedienteci_copia2").val();
+      var id_audiencia = $("#id_audiencia").val();
+      if (value != "") { location.href = value+id_expedienteci+'/'+id_audiencia; }
+      swal({ title: "¡Acta generada éxitosamente!", type: "success", showConfirmButton: true });
+      $("#modal_actas_tipo").modal("hide");
+      tabla_audiencias($("#id_expedienteci_copia2").val());
+      //cerrar_mantenimiento();
+    }
+
+    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
+          // alert(posee_trabajador)
+          $("#solicitud_pn_pj").hide();
+          $("#pf_st").hide();
+          $("#multa").hide();
+          $("#inasistencia").hide();
+
+        if (cuenta_audiencias>1) {
+          $("#solicitud_pn_pj").show();
+          $("#esquela").show();
+        }
+        if (estado=="2") {
+          if (resultado=="1" || resultado=="2" || resultado=="7") {
+            $("#pf_st").show();
+          }else if (resultado=="5") {
+            $("#multa").show();
+          }else if (resultado=="3") {
+            $("#inasistencia").show();
+          }else if (resultado=="4"){
+            $("#desistimiento").show();
+          }
+        }
+        $("#id_expedienteci_copia2").val(id_expedienteci);
+        $("#id_audiencia").val(id_audiencia);
+        $("#tipo_acta").val('').trigger('');
+        $("#modal_actas_tipo").modal("show");
+    }
+
     function convert_lim_text(lim){
         var tlim = "-"+lim+"d";
         return tlim;
@@ -133,6 +171,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function cerrar_mantenimiento(){
         $("#cnt_tabla").show(0);
+        $("#modal_actas_tipo").modal('hide');
         $("#cnt_actions").hide(0);
         $("#cnt_form_main").hide(0);
         open_form(1);
@@ -1106,10 +1145,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
                                 Información de la solicitud
                             </h3><hr class="m-t-0 m-b-30">
-                            <span class="etiqueta">Motivo de la solicitud</span>
+                            <span class="etiqueta">Datos de la solicitud</span>
                             <blockquote class="m-t-0">
                                 <div class="row">
-                                    <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
                                         <div class="controls">
                                             <select id="motivo_expedienteci" name="motivo_expedienteci" class="custom-select" required style="width: 100%">
@@ -1119,7 +1158,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                         <h5>Causa: <span class="text-danger">*</span></h5>
                                         <select id="causa_expedienteci" name="causa_expedienteci" class="select2" style="width: 100%" required>
                                             <option value=''>[Seleccione la causa]</option>
@@ -1133,18 +1172,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             ?>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-lg-12">
-                                        <h5>Descripción del motivo:<span class="text-danger">*</h5>
-                                        <textarea type="text" id="descripmotivo_expedienteci" name="descripmotivo_expedienteci" class="form-control" placeholder="Descipción del motivo"></textarea>
-                                    </div>
-                                </div>
-                            </blockquote>
-                            <span class="etiqueta">Asignación de persona delegada</span>
-                            <blockquote class="m-t-0">
-                                <div class="row">
-                                    <div class="form-group col-lg-6">
+                                    <div class="form-group col-lg-4">
                                         <h5>Persona delegada:<span class="text-danger">*</h5>
                                         <select id="id_personal" name="id_personal" class="select2" style="width: 100%" required="">
                                         <option value="">[Todas las personas empleadas]</option>
@@ -1157,6 +1185,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             }
                                         ?>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-12">
+                                        <h5>Descripción del motivo:<span class="text-danger">*</h5>
+                                        <textarea type="text" id="descripmotivo_expedienteci" rows="10" name="descripmotivo_expedienteci" class="form-control" placeholder="Descipción del motivo"></textarea>
                                     </div>
                                 </div>
                             </blockquote>
@@ -1252,6 +1286,52 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <div id="cnt_modal_acciones"></div>
 
+<!--INICIO MODAL GENERAR ACTA -->
+<div class="modal fade" id="modal_actas_tipo" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Emitir acta:</h4>
+      </div>
+
+      <div class="modal-body" id="">
+          <input type="hidden" id="id_expedienteci_copia2" name="id_expedienteci_copia2" value="">
+          <input type="hidden" id="id_audiencia" name="id_audiencia" value="">
+          <input type="hidden" id="cuenta_audiencias" name="cuenta_audiencias" value="">
+          <div class="row">
+            <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                <h5>Seleccione el tipo de acta: <span class="text-danger">*</span></h5>
+                <div class="controls">
+                  <!-- Tipo 1: Engloba 4 posibilidades primera y segunda fecha, con presencia del trabajador y sin el trabajador -->
+                  <select id="tipo_acta" name="tipo_acta" class="custom-select col-4" onchange="nav(this.value)" required>
+                    <option value="">[Seleccione]</option>
+                    <option id="pf_st" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Acta de audiencia</option>
+                    <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
+                    <option id="inasistencia" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Acta segunda audiencia</option>
+                    <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option>
+                    <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor/a público</option>
+                     -->
+                    <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
+                    <option id="esquela" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
+                    <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
+                    <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor/a</option>
+                    <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor/a</option> -->
+                    <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Desistimiento de persona natural a persona juridica</option> -->
+                  </select>
+                </div>
+            </div>
+          </div>
+          <div align="right">
+            <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+          <!--  <button type="button" onclick="generar_actas_tipo();" class="btn waves-effect waves-light btn-success2"> Generar
+          </button> !-->
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--FIN MODAL GENERAR ACTA -->
+
 <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
 <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
@@ -1318,7 +1398,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                     <h5>Estado: <span class="text-danger">*</span></h5>
-                    <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%" required="">
+                    <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%">
                         <option class="m-l-50" value="1">Activo</option>
                         <option class="m-l-50" value="0">Inactivo</option>
                     </select>

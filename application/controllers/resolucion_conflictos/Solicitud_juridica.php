@@ -165,7 +165,7 @@ class Solicitud_juridica extends CI_Controller {
 							<b>Descripción del motivo: </b>$expediente->descripmotivo_expedienteci
 						</td>
 					</tr>
-					
+
 				</tbody>
 			</table>";
 
@@ -319,12 +319,15 @@ class Solicitud_juridica extends CI_Controller {
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
 			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci')),
 			'id_usuario' => $this->session->userdata('id_usuario'),
-			'fecha_modifica' => date('Y-m-d')
+			'fechacrea_expedienteci' => date('Y-m-d H:i:s'),
+			'fecha_modifica' => date('Y-m-d'),
+			'tiposolicitud_expedienteci' => 3,
+			'id_estadosci' =>1
 			);
 			echo $id_expedienteci = $this->solicitud_juridica_model->insertar_expediente($data);
 			$id_expedienteci = explode(',',$id_expedienteci);
 			$delegado = array(
-				'id_expedienteci' => $id_expedienteci,
+				'id_expedienteci' => $id_expedienteci[1],
 				'id_personal' => $data['id_personal'],
 				'fecha_cambio_delegado' => date('Y-m-d'),
 				'id_rol_guarda' => $this->session->userdata('id_rol'),

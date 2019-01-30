@@ -121,7 +121,8 @@ class Solicitudes extends CI_Controller {
 			'id_estado_civil' => $this->input->post('estado_civil'),
 			'id_titulo_academico' => $this->input->post('profesion'),
 			'f_nacimiento_representante' => date("Y-m-d",strtotime($this->input->post('f_nacimiento_representante'))),
-			'sexo_representante' => $this->input->post('sexo')
+			'sexo_representante' => $this->input->post('sexo'),
+			'estado_representante' => 1
 			);
       		echo $this->solicitud_juridica_model->insertar_representante($data);
 		}else if($this->input->post('band4') == "edit"){
