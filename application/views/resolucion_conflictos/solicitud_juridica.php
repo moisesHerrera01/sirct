@@ -42,6 +42,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       //cerrar_mantenimiento();
     }
 
+    function combo_doc_identidad(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_tipo_doc",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_tipo_doc').html(res);
+        $("#rep_tipo_doc").select2();
+      });
+    }
+
     function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
           // alert(posee_trabajador)
           $("#solicitud_pn_pj").hide();
@@ -457,6 +471,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             combo_estados_civiles('');
             combo_profesiones('');
             combo_municipio2('');
+            combo_doc_identidad('');
             $("#band2").val('save');
             $("#modal_representante").modal('show');
         }
@@ -464,7 +479,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
-  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante, band){
+  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante,id_tipo_doc, band){
   $("#id_representante").val(id_representante);
   $("#dui_representante").val(dui_representante);
   $("#nombres_representante").val(nombres_representante);
@@ -475,6 +490,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   combo_estados_civiles(id_estado_civil);
   combo_profesiones(id_titulo_academico);
   combo_municipio2(id_municipio);
+  combo_doc_identidad(id_tipo_doc);
   // alert(id_municipio)
   $("#band4").val(band);
 
@@ -1360,14 +1376,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 </div>
                 <div class="row">
-                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>DUI: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
                       </div>
                   </div>
+                </div>
 
-                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                <div class="row">
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Tipo: <span class="text-danger">*</span></h5>
                       <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
                           <option value=''>[Seleccione el tipo]</option>
@@ -1377,11 +1397,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </select>
                   </div>
 
-                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
                 </div>
+
                 <div class="row">
-
-
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Acreditación: <span class="text-danger">*</span></h5>
                       <div class="controls">

@@ -5,7 +5,7 @@ class Acta extends CI_Controller {
 
     function __construct(){
         parent::__construct();
-        $this->load->model( array('expedientes_model', 'acta_model','audiencias_model'));
+        $this->load->model( array('expedientes_model', 'acta_model','audiencias_model','solicitud_juridica_model'));
     }
 
     public function index() {
@@ -412,63 +412,48 @@ class Acta extends CI_Controller {
 
     }
 
+
     public function generar_acta_juridico($caso,$id_expedienteci,$id_audiencia=FALSE){
-      $exp = $this->solicitud_juridica_model->obtener_registros_expedientes($id_expedienteci);
-      $sol = $exp[0];
+      $exp = $this->solicitud_juridica_model->obtener_registros_expedientes($id_expedienteci)->result()[0];
+
+      $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,1);
+      $primera= $audiencias->result()[0];
+      $segunda= $audiencias->result()[1];
 
       $this->load->library("phpword");
       $this->load->library("CifrasEnLetras");
 
       $PHPWord = new PHPWord();
-      $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_PJ.docx');
+      $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PJ.docx');
 
-      $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
-      $templateWord->setValue('departamento', departamento($expediente->numerocaso_expedienteci));
-      $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($expediente->hora_fechasaudienciasci))));
-      $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($expediente->hora_fechasaudienciasci)))));
-      $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($expediente->fecha_fechasaudienciasci))));
-      $templateWord->setValue('mes_audiencia', mb_strtoupper(mes(date('m', strtotime($expediente->fecha_fechasaudienciasci)))));
-      $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($expediente->fecha_fechasaudienciasci))));
-      $templateWord->setValue('nombre_solicitante', mb_strtoupper($expediente->nombre_personaci.' '.$expediente->apellido_personaci));
-      $templateWord->setValue('nombre_empresa', mb_strtoupper($expediente->nombre_empresa));
+      $templateWord->setValue('no_expediente', $exp->numerocaso_expedienteci);
+      $templateWord->setValue('departamento', departamento($exp->numerocaso_expedienteci));
 
-      $templateWord->setValue('direccion_empresa', mb_strtoupper($expediente->direccion_empresa));
-      $templateWord->setValue('direccion_solicitante', mb_strtoupper($expediente->direccion_personaci));
-      $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
-      $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($expediente->fechacrea_expedienteci)))));
-      $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
-      $templateWord->setValue('mes_expediente', mb_strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
-      $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
-      $templateWord->setValue('edad', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($expediente->fnacimiento_personaci))))));
-      $templateWord->setValue('dui_persona', convertir_dui($expediente->dui_personaci));
-      $templateWord->setValue('nacionalidad_persona', $expediente->nacionalidad);
-      $templateWord->setValue('nombre_empleador', $expediente->nombre_empleador.' '.$expediente->apellido_empleador);
-      $templateWord->setValue('funciones_persona', $expediente->funciones_personaci);
-      $templateWord->setValue('horario_persona', $expediente->horarios_personaci);
-      $templateWord->setValue('salario_solicitante', '$'.number_format( $expediente->salario_personaci,2));
-      $templateWord->setValue('forma_pago', $expediente->formapago_personaci);
-      $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
-      $templateWord->setValue('mes_conflicto', mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
-      $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
+      $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($primera->hora_fechasaudienciasci))));
+      $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($primera->hora_fechasaudienciasci)))));
+      $templateWord->setValue('dia_audiencia', dia(date('d', strtotime($primera->fecha_fechasaudienciasci))));
+      $templateWord->setValue('mes_audiencia', mb_strtoupper(mes(date('m', strtotime($primera->fecha_fechasaudienciasci)))));
+      $templateWord->setValue('anio_audiencia', anio(date('Y', strtotime($primera->fecha_fechasaudienciasci))));
+
       $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
-      $templateWord->setValue('tipo', $tipo_empresa);
-      $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
+      $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
+      $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
+      $templateWord->setValue('mes_audiencia2', mb_strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
+      $templateWord->setValue('anio_audiencia2', anio(date('Y', strtotime($segunda->fecha_fechasaudienciasci))));
 
-      $templateWord->setValue('representante_empresa', mb_strtoupper($expediente->nombres_representante));
-      $templateWord->setValue('representante_legal', mb_strtoupper($expediente->representante_legal));
-      $templateWord->setValue('tipo_representante_exp', mb_strtoupper($expediente->tipo_representante_exp));
-      $templateWord->setValue('resolucion', mb_strtoupper($expediente->resultado_expedienteci));
+      $templateWord->setValue('nombre_delegado',$exp->primer_nombre.' '.$exp->segundo_nombre.' '.$exp->primer_apellido.' '.$exp->segundo_apellido.' '.$exp->apellido_casada);
+      $templateWord->setValue('hora_expediente', hora(date('G', strtotime($exp->fechacrea_expedienteci))));
+      $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($exp->fechacrea_expedienteci)))));
+      $templateWord->setValue('dia_expediente', dia(date('d', strtotime($exp->fechacrea_expedienteci))));
+      $templateWord->setValue('mes_expediente', mb_strtoupper(mes(date('m', strtotime($exp->fechacrea_expedienteci)))));
+      $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($exp->fechacrea_expedienteci))));
+      $templateWord->setValue('nombre_rep_asiste', $exp->nombre_rep_asiste);
+      $templateWord->setValue('prefijo_profesion_rep_asiste', AbreviaturaTitulo($exp->nivel_academico_rep_asiste,$exp->sexo_rep_asiste));
+      $templateWord->setValue('profesion_rep_asiste', $exp->profesion_rep_asiste);
+      $templateWord->setValue('municipio_rep_asiste', $exp->municipio_rep_asiste);
+      $templateWord->setValue('depto_rep_asiste', $exp->depto_rep_asiste);
 
-      if ($id_audiencia) {
-        if ($expediente->id_delegado_audiencia == $expediente->id_delegado_expediente) {
-            $templateWord->setValue('nombre_delegado',"");
-            $templateWord->setValue('delegado_audiencia', mb_strtoupper($expediente->delegado_audiencia));
-            $templateWord->setValue('delegado_titulo', $expediente->delegado_audiencia);
-        }else {
-          $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
-          $templateWord->setValue('delegado_audiencia', mb_strtoupper($expediente->delegado_audiencia));
-          $templateWord->setValue('delegado_titulo', mb_strtoupper("(Atendió: ".$expediente->delegado_audiencia.")"));
-        }
+
 
       $nombreWord = $this->random();
 
@@ -485,6 +470,5 @@ class Acta extends CI_Controller {
 
       unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
     }
-  }
 }
 ?>

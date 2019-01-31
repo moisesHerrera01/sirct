@@ -176,8 +176,28 @@ class Solicitud_juridica_model extends CI_Model {
 
 	public function obtener_registros_expedientes($id) {
 
-		$this->db->select('e.id_personaci AS id_personacie, p.*, e.*, ep.*, em.*, r.*, m.*,d.nombre_delegado_actual, cat.actividad_catalogociiu')
+		$this->db->select('e.id_personaci AS id_personacie,
+		 									 p.*,
+											 e.*,
+											 ep.*,
+											 em.*,
+											 r.*,
+											 m.*,
+											 d.nombre_delegado_actual,
+											 cat.actividad_catalogociiu,
+											 UPPER(ra.nombres_representante) nombre_rep_asiste,
+											 ra.sexo_representante sexo_rep_asiste,
+											 na.nivel_academico nivel_academico_rep_asiste,
+											 ta.titulo_academico profesion_rep_asiste,
+											 mra.municipio municipio_rep_asiste,
+											 dra.departamento depto_rep_asiste
+											 ')
 			->from('sct_expedienteci e')
+			->join('sge_representante ra','ra.id_representante=e.id_representanteci','left')
+			->join('sir_titulo_academico ta','ta.id_titulo_academico=ra.id_titulo_academico','left')
+			->join('sir_nivel_academico na','na.id_nivel_academico=ta.id_nivel_academico','left')
+			->join('org_municipio mra','mra.id_municipio=ra.id_municipio','left')
+			->join('org_departamento dra','dra.id_departamento = mra.id_departamento_pais')
 			->join('sge_empresa em','em.id_empresa = e.id_empresaci')
 			->join('sge_catalogociiu cat','cat.id_catalogociiu=em.id_catalogociiu')
 			->join('sir_empleado ep','ep.id_empleado=e.id_personal')

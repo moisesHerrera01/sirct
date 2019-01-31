@@ -55,7 +55,7 @@
                           echo "<td style='cursor: pointer;' onclick='seleccionar_representante(this,".$fila->id_representante.");'>".$fila->dui_representante."</td>";
                           echo ($fila->estado_representante == "1") ? '<td style="cursor: pointer;" onclick="seleccionar_representante(this,'.$fila->id_representante.');"><span class="label label-success">Activo</span></td>' : '<td style="cursor: pointer;" onclick="seleccionar_representante(this, '.$fila->id_representante.');"><span class="label label-danger">Inactivo</span></td>';
                           echo "<td>";
-                          $array = array($fila->id_representante, $fila->dui_representante, $fila->nombres_representante, $fila->acreditacion_representante, $fila->tipo_representante, $fila->estado_representante);
+                          $array = array($fila->id_representante, $fila->dui_representante, $fila->nombres_representante, $fila->acreditacion_representante, $fila->tipo_representante, $fila->estado_representante,$fila->id_doc_identidad);
 
                           if($puede_editar){
                             array_push($array, "edit");

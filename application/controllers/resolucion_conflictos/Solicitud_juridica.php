@@ -5,9 +5,8 @@ class Solicitud_juridica extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('solicitud_juridica_model');
-		$this->load->model('expedientes_model');
-		$this->load->model('delegados_model');
+		$this->load->model(array('solicitud_juridica_model','expedientes_model','delegados_model','solicitudes_model'));
+
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -210,7 +209,8 @@ class Solicitud_juridica extends CI_Controller {
 			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
 			'dui_representante' => ($this->input->post('dui_representante')),
 			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
-			'tipo_representante' => $this->input->post('tipo_representante')
+			'tipo_representante' => $this->input->post('tipo_representante'),
+			'id_doc_identidad'=> $this->input->post('rep_tipo_doc')
 			);
       		echo $this->solicitud_juridica_model->insertar_representante($data);
 		}else if($this->input->post('band2') == "edit"){
@@ -220,7 +220,8 @@ class Solicitud_juridica extends CI_Controller {
 			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
 			'dui_representante' => ($this->input->post('dui_representante')),
 			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
-			'tipo_representante' => $this->input->post('tipo_representante')
+			'tipo_representante' => $this->input->post('tipo_representante'),
+			'id_doc_identidad'=> $this->input->post('rep_tipo_doc')
 			);
 			echo $this->solicitud_juridica_model->editar_representante($data);
 		}else if($this->input->post('band2') == "delete"){
@@ -403,6 +404,16 @@ class Solicitud_juridica extends CI_Controller {
         unlink($_SERVER['DOCUMENT_ROOT'].'/'.$this->config->item("nombre_base").'/files/generate/'.$nombreWord.'.docx');
 
     }
+
+		public function combo_tipo_doc() {
+			$data = $this->solicitudes_model->obtener_tipo_documentos();
+			$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_tipo_doc',
+				array(
+					'id' => $this->input->post('id'),
+					'doc_identidad' => $data
+				)
+			);
+		}
 
     private function random() {
         $alpha = "123qwertyuiopa456sdfghjklzxcvbnm789";
