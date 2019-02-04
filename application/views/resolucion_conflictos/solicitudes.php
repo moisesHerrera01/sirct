@@ -688,6 +688,20 @@ function combo_doc_identidad(seleccion){
   });
 }
 
+function combo_doc_identidad_rep(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_tipo_doc",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_tipo_doc_rep').html(res);
+    $("#rep_tipo_doc").select2();
+  });
+}
+
 function visualizar(id_expedienteci,id_empresaci) {
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/ver_expediente",
@@ -1045,6 +1059,7 @@ function cambiar_nuevo2(){
         combo_estados_civiles('');
         combo_profesiones('');
         combo_municipio2('');
+        combo_doc_identidad_rep('');
         $("#band4").val('save');
         $("#modal_representante").modal('show');
     }
@@ -1202,7 +1217,7 @@ function cambiar_editar(id_expedienteci,bandera){
 }
 
 function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
-  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante, band){
+  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante,tipo_doc, band){
   $("#id_representante").val(id_representante);
   $("#dui_representante").val(dui_representante);
   $("#nombres_representante").val(nombres_representante);
@@ -1213,6 +1228,7 @@ function cambiar_editar2(id_representante, dui_representante, nombres_representa
   combo_estados_civiles(id_estado_civil);
   combo_profesiones(id_titulo_academico);
   combo_municipio2(id_municipio);
+  combo_doc_identidad_rep(tipo_doc);
   // alert(id_municipio)
   $("#band4").val(band);
 
@@ -1990,7 +2006,7 @@ function volver(num) {
 </div>
     <!--FIN MODAL DE PROCURADOR -->
 
-  <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
+    <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
     <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -2012,20 +2028,24 @@ function volver(num) {
 
                     <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy" readonly="">
+                        <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
                         <div class="help-block"></div>
                     </div>
 
                     </div>
                     <div class="row">
-                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                          <h5>DUI: <span class="text-danger">*</span></h5>
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc_rep"></div>
+
+                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Número doc identidad: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
                           </div>
                       </div>
+                    </div>
 
-                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Tipo: <span class="text-danger">*</span></h5>
                           <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
                               <option value=''>[Seleccione el tipo]</option>
@@ -2035,11 +2055,10 @@ function volver(num) {
                           </select>
                       </div>
 
-                      <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
                     </div>
+
                     <div class="row">
-
-
                       <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Acreditación: <span class="text-danger">*</span></h5>
                           <div class="controls">
@@ -2049,14 +2068,14 @@ function volver(num) {
                     </div>
 
                     <div class="row">
-                      <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
 
-                      <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
                     </div>
 
-                    <div style="display: none;" class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Estado: <span class="text-danger">*</span></h5>
-                        <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%" required="">
+                        <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%">
                             <option class="m-l-50" value="1">Activo</option>
                             <option class="m-l-50" value="0">Inactivo</option>
                         </select>
@@ -2072,7 +2091,7 @@ function volver(num) {
         </div>
         <!-- /.modal-dialog -->
     </div>
-  <!--FIN MODAL REPRESENTANTE EMPRESA -->
+    <!--FIN MODAL REPRESENTANTE EMPRESA -->
 
     <!--INICIO MODAL DE DELEGADO -->
     <div class="modal fade" id="modal_delegado" role="dialog">
@@ -2592,6 +2611,23 @@ function ocultar(){
      $('#tipo_aco').hide(500);
      $('#div_numero_doc_identidad').show(500);
      $("#dui").attr("required",'required');
+  }
+}
+
+function ocultar_tipo_doc_rep(){
+  var value = $("#rep_tipo_doc").val();
+  if (value!=1) {
+    $('#dui_representante').mask('', {reverse: true});
+    $('#dui_representante').unmask();
+    if (value==4) {
+      $('#dui_representante').mask('99999999-9', {reverse: true});
+      $("#dui_representante").attr("required",'required');
+    }else {
+      $("#dui_representante").attr("required",'required');
+    }
+  }else {
+     $('#dui_representante').mask('99999999-9', {reverse: true});
+     $("#dui_representante").attr("required",'required');
   }
 }
 

@@ -452,7 +452,15 @@ class Acta extends CI_Controller {
       $templateWord->setValue('profesion_rep_asiste', $exp->profesion_rep_asiste);
       $templateWord->setValue('municipio_rep_asiste', $exp->municipio_rep_asiste);
       $templateWord->setValue('depto_rep_asiste', $exp->depto_rep_asiste);
+      $templateWord->setValue('tipo_documento_rep', $exp->tipo_documento_rep);
+      $templateWord->setValue('documento_identidad_rep', mb_strtoupper(convertir_dui($exp->documento_identidad_rep)));
+      $templateWord->setValue('tipo_representacion', $exp->tipo_representante_rep);
+      $templateWord->setValue('parte_empleadora', $exp->nombre_empresa);
+      $templateWord->setValue('abreviatura_parte_empleadora', $exp->abreviatura_empresa);
+      $templateWord->setValue('acreditacion_rep', $exp->acreditacion_representante);
+      $templateWord->setValue('nombre_solicitado', mb_strtoupper($exp->nombre_personaci.' '.$exp->apellido_personaci));
 
+      
 
 
       $nombreWord = $this->random();

@@ -42,6 +42,23 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       //cerrar_mantenimiento();
     }
 
+    function ocultar_tipo_doc_rep(){
+      var value = $("#rep_tipo_doc").val();
+      if (value!=1) {
+        $('#dui_representante').mask('', {reverse: true});
+        $('#dui_representante').unmask();
+        if (value==4) {
+          $('#dui_representante').mask('99999999-9', {reverse: true});
+          $("#dui_representante").attr("required",'required');
+        }else {
+          $("#dui_representante").attr("required",'required');
+        }
+      }else {
+         $('#dui_representante').mask('99999999-9', {reverse: true});
+         $("#dui_representante").attr("required",'required');
+      }
+    }
+
     function combo_doc_identidad(seleccion){
 
       $.ajax({
@@ -478,8 +495,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     }
 
-    function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
-  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante,id_tipo_doc, band){
+    function cambiar_editar2(
+      id_representante,
+      dui_representante,
+      nombres_representante,
+      acreditacion_representante,
+      tipo_representante,
+      estado_representante,
+      id_estado_civil,
+      id_titulo_academico,
+      id_municipio,
+      f_nacimiento_representante,
+      id_tipo_doc,
+      band
+      ){
   $("#id_representante").val(id_representante);
   $("#dui_representante").val(dui_representante);
   $("#nombres_representante").val(nombres_representante);
@@ -491,7 +520,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   combo_profesiones(id_titulo_academico);
   combo_municipio2(id_municipio);
   combo_doc_identidad(id_tipo_doc);
-  // alert(id_municipio)
   $("#band4").val(band);
 
   if(band == "edit"){
@@ -1114,7 +1142,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <h5>Teléfono: </h5>
                                     <input data-mask="9999-9999" type="text" id="telefono_personaci" name="telefono_personaci" class="form-control" placeholder="Número de Telefóno">
                                 </div>
-                                <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <div class="form-group col-lg-6 col-sm- <?php if($navegatorless){ echo "pull-left"; } ?>">
                                     <h5>Municipio: <span class="text-danger">*</span></h5>
                                     <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
                                         <option value=''>[Seleccione el municipio]</option>
@@ -1127,6 +1155,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             }
                                         ?>
                                     </select>
+                                </div>
+                                <div class="form-group col-lg-2">
+                                    <h5>Menor de edad: </h5>
+                                    <div class="switch">
+                                    <label>NO<input id="menor_edad" name="menor_edad" type="checkbox" value="0"><span class="lever"></span>SI</label>
+                                    </div>
                                 </div>
                             </div>
                             </blockquote>
@@ -1379,7 +1413,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
 
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>DUI: <span class="text-danger">*</span></h5>
+                      <h5>Número doc identidad: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
                       </div>
@@ -1808,6 +1842,14 @@ $(function(){
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
         });
+    });
+
+    $("#menor_edad").click(function(){
+      if (this.checked==true) {
+        this.value=1;
+      }else {
+        this.value=0;
+      }
     });
 
     $("#formajax4").on("submit", function(e){
