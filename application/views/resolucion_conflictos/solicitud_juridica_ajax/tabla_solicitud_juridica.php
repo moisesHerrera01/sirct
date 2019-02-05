@@ -46,6 +46,7 @@
                                               p.direccion_personaci,
                                               p.fnacimiento_personaci AS nacimiento,
                                               p.sexo_personaci,
+                                              p.menor_edad,
                                               p.estudios_personaci AS estudios,
                                               p.nacionalidad_personaci AS nacionalidad,
                                               p.discapacidad_personaci,
@@ -53,6 +54,7 @@
                                               e.id_expedienteci,
                                               es.id_estadosci AS estado,
                                               d.delegado_actual,
+                                              p.ecivil,
                                               (SELECT r.resultadoci
               																 FROM sct_fechasaudienciasci fea
               																 JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
@@ -110,7 +112,7 @@
                             }
 
                             echo "<td>";
-                            $array = array($fila->id_empresaci, $fila->id_personaci, $fila->nombre_personaci, $fila->apellido_personaci, $fila->sexo_personaci, $fila->direccion_personaci, $fila->discapacidad_personaci, $fila->telefono_personaci, $fila->id_municipio, $fila->ocupacion, $fila->salario_personaci, $fila->horarios_personaci, $fila->id_expedienteci, $fila->motivo_expedienteci, $fila->descripmotivo_expedienteci, $fila->id_personal,$fila->id_representanteci,$fila->causa_expedienteci);
+                            $array = array($fila->id_empresaci, $fila->id_personaci, $fila->nombre_personaci, $fila->apellido_personaci, $fila->sexo_personaci, $fila->direccion_personaci, $fila->discapacidad_personaci, $fila->telefono_personaci, $fila->id_municipio, $fila->ocupacion, $fila->salario_personaci, $fila->horarios_personaci, $fila->id_expedienteci, $fila->motivo_expedienteci, $fila->descripmotivo_expedienteci, $fila->id_personal,$fila->id_representanteci,$fila->causa_expedienteci, $fila->ecivil, $fila->nacionalidad,$fila->menor_edad);
                             if($puede_editar){
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");

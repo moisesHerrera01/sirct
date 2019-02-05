@@ -13,42 +13,59 @@ class Solicitud_juridica_model extends CI_Model {
 		else return false;
 	}
 
+	// function insertar_solicitado($data){
+	// 	if($this->db->insert('sct_personaci', array(
+	// 		'nombre_personaci' => $data['nombre_personaci'],
+	// 		'apellido_personaci' => $data['apellido_personaci'],
+	// 		'telefono_personaci' => $data['telefono_personaci'],
+	// 		'id_municipio' => $data['id_municipio'],
+	// 		'direccion_personaci' => $data['direccion_personaci'],
+	// 		'sexo_personaci' => $data['sexo_personaci'],
+	// 		'discapacidad_personaci' => $data['discapacidad_personaci'],
+	// 		'id_usuario' => $data['id_usuario'],
+	// 		'fecha_modifica' => $data['fecha_modifica']
+	// 	))){
+	// 		return "exito,".$this->db->insert_id();
+	// 	}else{
+	// 		return "fracaso";
+	// 	}
+	// }
+
 	function insertar_solicitado($data){
-		if($this->db->insert('sct_personaci', array(
-			'nombre_personaci' => $data['nombre_personaci'],
-			'apellido_personaci' => $data['apellido_personaci'],
-			'telefono_personaci' => $data['telefono_personaci'],
-			'id_municipio' => $data['id_municipio'],
-			'direccion_personaci' => $data['direccion_personaci'],
-			'sexo_personaci' => $data['sexo_personaci'],
-			'discapacidad_personaci' => $data['discapacidad_personaci'],
-			'id_usuario' => $data['id_usuario'],
-			'fecha_modifica' => $data['fecha_modifica']
-		))){
+		if($this->db->insert('sct_personaci', $data)){
 			return "exito,".$this->db->insert_id();
 		}else{
 			return "fracaso";
 		}
 	}
 
-	function editar_solicitado($data){
-		$this->db->where("id_personaci",$data["id_personaci"]);
-		if($this->db->update('sct_personaci', array(
-			'nombre_personaci' => $data['nombre_personaci'],
-			'apellido_personaci' => $data['apellido_personaci'],
-			'telefono_personaci' => $data['telefono_personaci'],
-			'id_municipio' => $data['id_municipio'],
-			'direccion_personaci' => $data['direccion_personaci'],
-			'sexo_personaci' => $data['sexo_personaci'],
-			'discapacidad_personaci' => $data['discapacidad_personaci'],
-			'id_usuario' => $data['id_usuario'],
-			'fecha_modifica' => $data['fecha_modifica']
-		))){
+	public function editar_solicitado($data){
+		$this->db->where("id_personaci", $data["id_personaci"]);
+		if ($this->db->update('sct_personaci', $data)) {
 			return "exito";
-		}else{
+		}else {
 			return "fracaso";
 		}
 	}
+
+	// function editar_solicitado($data){
+	// 	$this->db->where("id_personaci",$data["id_personaci"]);
+	// 	if($this->db->update('sct_personaci', array(
+	// 		'nombre_personaci' => $data['nombre_personaci'],
+	// 		'apellido_personaci' => $data['apellido_personaci'],
+	// 		'telefono_personaci' => $data['telefono_personaci'],
+	// 		'id_municipio' => $data['id_municipio'],
+	// 		'direccion_personaci' => $data['direccion_personaci'],
+	// 		'sexo_personaci' => $data['sexo_personaci'],
+	// 		'discapacidad_personaci' => $data['discapacidad_personaci'],
+	// 		'id_usuario' => $data['id_usuario'],
+	// 		'fecha_modifica' => $data['fecha_modifica']
+	// 	))){
+	// 		return "exito";
+	// 	}else{
+	// 		return "fracaso";
+	// 	}
+	// }
 
 	function eliminar_solicitud($data){
   		if($this->db->delete("sct_personaci",array('id_personaci' => $data['id_personaci']))){
@@ -176,7 +193,7 @@ class Solicitud_juridica_model extends CI_Model {
 
 	public function obtener_registros_expedientes($id) {
 
-		$this->db->select('e.id_personaci AS id_personacie,
+		$this->db->select("e.id_personaci AS id_personacie,
 		 									 p.*,
 											 e.*,
 											 ep.*,
@@ -195,8 +212,13 @@ class Solicitud_juridica_model extends CI_Model {
 											 ra.dui_representante documento_identidad_rep,
 											 tr.tipo_representante tipo_representante_rep,
 											 ra.acreditacion_representante,
-											 p.fnacimiento_personaci
-											 ')
+											 p.fnacimiento_personaci,
+											 ec.estado_civil solicitado_estado_civil,
+											 CASE
+												 WHEN p.menor_edad=1 THEN 'MENOR DE EDAD'
+												 ELSE 'MAYOR EDAD' END AS solicitado_tipo_edad,
+											 n.nacionalidad nacionalidad_solicitado
+											 ")
 			->from('sct_expedienteci e')
 			->join('sge_representante ra','ra.id_representante=e.id_representanteci','left')
 			->join('sir_titulo_academico ta','ta.id_titulo_academico=ra.id_titulo_academico','left')
@@ -209,6 +231,8 @@ class Solicitud_juridica_model extends CI_Model {
 			->join('sge_catalogociiu cat','cat.id_catalogociiu=em.id_catalogociiu')
 			->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 			->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
+			->join('sir_estado_civil ec','ec.id_estado_civil = p.ecivil','LEFT')
+			->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci','LEFT')
 			->join('sge_representante r ', ' r.id_representante = e.id_representanteci')
 			->join('org_municipio m','m.id_municipio=p.id_municipio')
 			->join("(

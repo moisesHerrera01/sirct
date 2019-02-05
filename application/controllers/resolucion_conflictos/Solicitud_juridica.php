@@ -281,7 +281,10 @@ class Solicitud_juridica extends CI_Controller {
 			'id_empresaci' => $this->input->post('id_empresaci'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
 			'id_usuario' => $this->session->userdata('id_usuario'),
-			'fecha_modifica' => date('Y-m-d')
+			'fecha_modifica' => date('Y-m-d'),
+			'menor_edad' => $this->input->post('menor_edad'),
+			'ecivil' => $this->input->post('ecivil'),
+			'nacionalidad_personaci' => $this->input->post('nacionalidad')
 			);
 			echo $this->solicitud_juridica_model->insertar_solicitado($data);
 
@@ -296,7 +299,10 @@ class Solicitud_juridica extends CI_Controller {
 			'sexo_personaci' => $this->input->post('sexo_personaci'),
 			'discapacidad_personaci' => $this->input->post('discapacidad_personaci'),
 			'id_usuario' => $this->session->userdata('id_usuario'),
-			'fecha_modifica' => date('Y-m-d')
+			'fecha_modifica' => date('Y-m-d'),
+			'menor_edad' => $this->input->post('menor_edad'),
+			'ecivil' => $this->input->post('ecivil'),
+			'nacionalidad_personaci' => $this->input->post('nacionalidad')
 			);
 			echo $this->solicitud_juridica_model->editar_solicitado($data);
 
@@ -413,6 +419,17 @@ class Solicitud_juridica extends CI_Controller {
 					'doc_identidad' => $data
 				)
 			);
+		}
+
+		public function combo_ecivil_solicitado() {
+			$estados = $this->expedientes_model->obtener_estados_civiles();
+			$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_ecivil_solicitado',
+				array(
+					'id' => $this->input->post('id'),
+					'estados' => $estados
+				)
+			);
+
 		}
 
     private function random() {

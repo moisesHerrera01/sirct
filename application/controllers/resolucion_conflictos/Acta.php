@@ -459,8 +459,9 @@ class Acta extends CI_Controller {
       $templateWord->setValue('abreviatura_parte_empleadora', $exp->abreviatura_empresa);
       $templateWord->setValue('acreditacion_rep', $exp->acreditacion_representante);
       $templateWord->setValue('nombre_solicitado', mb_strtoupper($exp->nombre_personaci.' '.$exp->apellido_personaci));
-
-      
+      $templateWord->setValue('solicitado_tipo_edad', $exp->solicitado_tipo_edad);
+      $templateWord->setValue('solicitado_estado_civil', $exp->solicitado_estado_civil);
+      $templateWord->setValue('nacionalidad_solicitado', $exp->nacionalidad_solicitado);
 
 
       $nombreWord = $this->random();
