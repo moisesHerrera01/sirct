@@ -420,11 +420,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         combo_ocupacion(id_catalogociuo, id_empresaci);
         combo_ecivil_solicitado(ecivil);
         combo_nacionalidades(nacionalidad);
-        $("#id_catalogociuo").val(id_catalogociuo);
+        //$("#id_catalogociuo").val(id_catalogociuo);
         $("#id_personaci").val(id_personaci);
         $("#id_representanteci").val(id_representanteci);
         $("#nombre_personaci").val(nombre_personaci);
         $("#apellido_personaci").val(apellido_personaci);
+        $("#ocupacion_solicitado").val(id_catalogociuo);
         if(sexo_personaci == 'M'){
             document.getElementById('masculino').checked = 1;
             document.getElementById('femenino').checked = 0;
@@ -442,7 +443,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         if(menor_edad == 0){
             document.getElementById('menor_edad').checked = 0;
         }else{
-            document.getElementById('menor_edad').checked = 1;            
+            document.getElementById('menor_edad').checked = 1;
         }
         $("#direccion_personaci").val(direccion_personaci);
         $("#discapacidad_personaci").val(discapacidad_personaci);
@@ -1201,6 +1202,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                              <div class="form-group col-lg-8" style="height: 83px;">
+                                  <h5>Ocupación según DUI:<span class="text-danger">*</span></h5>
+                                  <textarea type="text" id="ocupacion_solicitado" name="ocupacion_solicitado" class="form-control" placeholder="Ocupación según DUI" required=""></textarea>
+                                  <div class="help-block"></div>
+                              </div>
+                            </div>
                             </blockquote>
                             <div class="pull-left">
                                 <button type="button" class="btn waves-effect waves-light btn-default" onclick="open_form(1)"><i class="mdi mdi-chevron-left"></i> Volver</button>
@@ -1895,6 +1903,7 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax4"));
         formData.append("id_empresaci", $('#establecimiento').val());
+        formData.append("ocupacion_solicitado", $('#ocupacion_solicitado').val());
         formData.append("id_representanteci", $('#id_representanteci').val());
         formData.append("id_personaci", $('#id_personaci').val());
         formData.append("band4", $('#bandx').val());

@@ -329,7 +329,8 @@ class Solicitud_juridica extends CI_Controller {
 			'fechacrea_expedienteci' => date('Y-m-d H:i:s'),
 			'fecha_modifica' => date('Y-m-d'),
 			'tiposolicitud_expedienteci' => 3,
-			'id_estadosci' =>1
+			'id_estadosci' =>1,
+			'ocupacion' => $this->input->post('ocupacion_solicitado')
 			);
 			echo $id_expedienteci = $this->solicitud_juridica_model->insertar_expediente($data);
 			$id_expedienteci = explode(',',$id_expedienteci);
@@ -354,7 +355,8 @@ class Solicitud_juridica extends CI_Controller {
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
 			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci')),
 			'id_usuario' => $this->session->userdata('id_usuario'),
-			'fecha_modifica' => date('Y-m-d')
+			'fecha_modifica' => date('Y-m-d'),
+			'ocupacion' => $this->input->post('ocupacion_solicitado')
 			);
 			echo $this->solicitud_juridica_model->editar_expediente($data);
 

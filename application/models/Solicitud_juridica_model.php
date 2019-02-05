@@ -83,21 +83,30 @@ class Solicitud_juridica_model extends CI_Model {
 		}
 	}
 
-	function editar_expediente($data){
-		$this->db->where("id_expedienteci",$data["id_expedienteci"]);
-		if($this->db->update('sct_expedienteci', array(
-			'id_empresaci' => $data['id_empresaci'],
-			'id_personal' => $data['id_personal'],
-			'id_personaci' => $data['id_personaci'],
-			'causa_expedienteci' => $data['causa_expedienteci'],
-			'id_representanteci' => $data['id_representanteci'],
-			'motivo_expedienteci' => $data['motivo_expedienteci'],
-			'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
-			'id_usuario' => $data['id_usuario'],
-			'fecha_modifica' => $data['fecha_modifica']
-		))){
+	// function editar_expediente($data){
+	// 	$this->db->where("id_expedienteci",$data["id_expedienteci"]);
+	// 	if($this->db->update('sct_expedienteci', array(
+	// 		'id_empresaci' => $data['id_empresaci'],
+	// 		'id_personal' => $data['id_personal'],
+	// 		'id_personaci' => $data['id_personaci'],
+	// 		'causa_expedienteci' => $data['causa_expedienteci'],
+	// 		'id_representanteci' => $data['id_representanteci'],
+	// 		'motivo_expedienteci' => $data['motivo_expedienteci'],
+	// 		'descripmotivo_expedienteci' => $data['descripmotivo_expedienteci'],
+	// 		'id_usuario' => $data['id_usuario'],
+	// 		'fecha_modifica' => $data['fecha_modifica']
+	// 	))){
+	// 		return "exito,".$data["id_expedienteci"];
+	// 	}else{
+	// 		return "fracaso";
+	// 	}
+	// }
+
+	public function editar_expediente($data){
+		$this->db->where("id_expedienteci", $data["id_expedienteci"]);
+		if ($this->db->update('sct_expedienteci', $data)) {
 			return "exito,".$data["id_expedienteci"];
-		}else{
+		}else {
 			return "fracaso";
 		}
 	}
@@ -217,7 +226,15 @@ class Solicitud_juridica_model extends CI_Model {
 											 CASE
 												 WHEN p.menor_edad=1 THEN 'MENOR DE EDAD'
 												 ELSE 'MAYOR EDAD' END AS solicitado_tipo_edad,
-											 n.nacionalidad nacionalidad_solicitado
+											 n.nacionalidad nacionalidad_solicitado,
+											 mp.municipio municipio_solicitado,
+											 dp.departamento depto_solicitado,
+											 e.ocupacion profesion_solicitado,
+											 e.descripmotivo_expedienteci,
+											 rl.nombres_representante rep_legal,
+											 tal.titulo_academico profesion_rep_legal,
+											 nl.nivel_academico nivel_rep_legal,
+											 rl.sexo_representante sexo_rep_legal
 											 ")
 			->from('sct_expedienteci e')
 			->join('sge_representante ra','ra.id_representante=e.id_representanteci','left')
@@ -226,13 +243,20 @@ class Solicitud_juridica_model extends CI_Model {
 			->join('org_municipio mra','mra.id_municipio=ra.id_municipio','left')
 			->join('org_departamento dra','dra.id_departamento = mra.id_departamento_pais','left')
 			->join('sct_doc_identidad di','di.id_doc_identidad=ra.id_doc_identidad','left')
-			->join('sct_tipo_representante tr','tr.id_tipo_representante=ra.tipo_representante')
+			->join('sct_tipo_representante tr','tr.id_tipo_representante=ra.tipo_representante','left')
 			->join('sge_empresa em','em.id_empresa = e.id_empresaci')
+
+			->join('sge_representante rl','rl.id_empresa=em.id_empresa AND rl.tipo_representante=1','LEFT')
+			->join('sir_titulo_academico tal','tal.id_titulo_academico = rl.id_titulo_academico','LEFT')
+			->join('sir_nivel_academico nl','nl.id_nivel_academico=tal.id_nivel_academico','left')
+
 			->join('sge_catalogociiu cat','cat.id_catalogociiu=em.id_catalogociiu')
 			->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 			->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 			->join('sir_estado_civil ec','ec.id_estado_civil = p.ecivil','LEFT')
 			->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci','LEFT')
+			->join('org_municipio mp','mp.id_municipio=p.id_municipio','LEFT')
+			->join('org_departamento dp','dp.id_departamento=mp.id_departamento_pais','LEFT')
 			->join('sge_representante r ', ' r.id_representante = e.id_representanteci')
 			->join('org_municipio m','m.id_municipio=p.id_municipio')
 			->join("(

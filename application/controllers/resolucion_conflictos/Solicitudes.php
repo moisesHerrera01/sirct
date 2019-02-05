@@ -65,8 +65,7 @@ class Solicitudes extends CI_Controller {
 				$data['id_partida'] = $id_partida;
 			}
 
-
-			echo $this->solicitudes_model->insertar_solicitud($data);
+			echo json_encode(array('id_personaci' => $this->solicitudes_model->insertar_solicitud($data),'id_partida'=>$id_partida )) ;
 
 		}else if($this->input->post('band1') == "edit"){
 

@@ -61,7 +61,7 @@ class Expedientes_model extends CI_Model {
 					 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
 					 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 					 						 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
-					 						 ->join('sct_partida pa','pa.id_partida=p.id_partida','left')
+					 						 ->join('sct_partida pa','pa.id_partida=e.id_partida','left')
 
 					 						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')
 					 						 ->join('sir_empleado ea','ea.id_empleado=f.id_delegado','left')

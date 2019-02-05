@@ -1351,13 +1351,13 @@ function volver(num) {
                                 </div>
 
                                 <div id="tipo_aco" style="display: none;" class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                    <h5>Tipo de representante del menor: </h5>
+                                    <h5>Parentezco: </h5>
                                     <div class="controls">
                                       <select id="acompaniante" name="acompaniante" class="custom-select col-4">
                                         <option value="">[Seleccione el tipo]</option>
-                                        <option value="0">Papá</option>
-                                        <option value="1">Mamá</option>
-                                        <option value="2">Acurador</option>
+                                        <option value="0">hijo(a)</option>
+                                        <option value="1">nieto(a)</option>
+                                        <option value="2">sobrino(a)</option>
                                         <option value="3">Otro</option>
                                       </select>
                                     </div>
@@ -2231,7 +2231,7 @@ $("#formajax5").on("submit", function(e){
     var f = $(this);
     var formData = new FormData(document.getElementById("formajax5"));
     formData.append("id_empresa", $('#establecimiento').val());
-
+    formData.append("id_partida", $('#id_partida').val());
     $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_representante",
         type: "post",
@@ -2288,8 +2288,10 @@ $(function(){
               }else {
                 open_form(4);
               }
-              $("#id_personaci").val(res);
-              $("#id_persona").val(res);
+              res = JSON.parse(res);
+              $("#id_personaci").val(res.personaci);
+              $("#id_persona").val(res.id_personaci);
+              $("#id_partida").val(res.id_partida);
               // $("#band1").val( $("#band").val() );
               $("#band1").val('edit');
               // $("#band2").val( $("#band").val() );
@@ -2335,6 +2337,7 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax2"));
+        formData.append("id_partida", $('#id_partida').val());
         formData.append("id_personaci", $('#id_personaci').val());
         formData.append("id_empresaci", $('#establecimiento').val());
         formData.append("id_representante", $('#id_representante').val());
@@ -2413,6 +2416,7 @@ $("#formajax3").on("submit", function(e){
     var f = $(this);
     var formData = new FormData(document.getElementById("formajax3"));
     formData.append("dato", "valor");
+    formData.append("id_partida", $('#id_partida').val());
     $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/gestionar_establecimiento",
         type: "post",
