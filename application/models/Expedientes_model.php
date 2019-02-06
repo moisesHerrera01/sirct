@@ -17,7 +17,7 @@ class Expedientes_model extends CI_Model {
 
 	public function obtener_registros_expedientes($id_expedienteci,$id_audiencia=FALSE) {
 
-			$this->db->select('pa.*,n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,ep.*,p.*,
+			$this->db->select("n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,ep.*,p.*,
 												 p.discapacidad,
 												 e.id_expedienteci,
 												 e.ocupacion,
@@ -33,9 +33,9 @@ class Expedientes_model extends CI_Model {
 												 tre.tipo_representante tipo_representante_exp ,
 												 ec.estado_civil estado_civil_representante,
 												 ta.titulo_academico profesion_representante,
-												 CONCAT_WS(" ",ea.primer_nombre,ea.segundo_nombre,ea.tercer_nombre,ea.primer_apellido,ea.segundo_apellido,ea.apellido_casada) delegado_audiencia,
-												 CONCAT_WS(" ",ep.primer_nombre,ep.segundo_nombre,ep.tercer_nombre,ep.primer_apellido,ep.segundo_apellido,ep.apellido_casada) delegado_expediente,
-												 UPPER(CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci)) solicitante,
+												 CONCAT_WS(' ',ea.primer_nombre,ea.segundo_nombre,ea.tercer_nombre,ea.primer_apellido,ea.segundo_apellido,ea.apellido_casada) delegado_audiencia,
+												 CONCAT_WS(' ',ep.primer_nombre,ep.segundo_nombre,ep.tercer_nombre,ep.primer_apellido,ep.segundo_apellido,ep.apellido_casada) delegado_expediente,
+												 UPPER(CONCAT_WS(' ',p.nombre_personaci,p.apellido_personaci)) solicitante,
 												 ea.id_empleado id_delegado_audiencia,
 												 ep.id_empleado id_delegado_expediente,
 												 emp.id_empleador,
@@ -52,8 +52,25 @@ class Expedientes_model extends CI_Model {
 												 re.acreditacion_representante acreditacion_representante_exp,
 												 f.numero_folios,
 												 d.nombre_delegado_actual,
-												 d.delegado_actual
-												 '
+												 d.delegado_actual,
+												 pa.numero_partida,
+												 pa.id_municipio_menor,
+												 pa.id_municipio_partida,
+												 pa.fecha_partida,
+												 pa.libro_partida,
+												 TIMESTAMPDIFF(YEAR,pa.fnacimiento_menor,CURDATE()) edad_menor,
+												 TIMESTAMPDIFF(YEAR,p.fnacimiento_personaci,CURDATE()) edad_solicitante,
+												 CASE
+													 WHEN e.tipo_representante_menor=0 THEN 'Hijo(a)'
+													 WHEN e.tipo_representante_menor=1 THEN 'Nieto(a)'
+													 WHEN e.tipo_representante_menor=2 THEN 'Sobrino(a)'
+													 WHEN e.tipo_representante_menor=3 THEN 'Otro'
+													 ELSE 'Conflicto Laboral' END AS rep_parentesco,
+												 UPPER(e.nombre_representante_menor) nombres_menor,
+												 UPPER(mp.municipio) municipio_partida,
+												 UPPER(mm.municipio) municipio_menor,
+												 UPPER(em.nombre_empresa) nombre_empresa
+												 "
 											  )
 												->from('sct_expedienteci e')
 					 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
@@ -62,6 +79,8 @@ class Expedientes_model extends CI_Model {
 					 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
 					 						 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
 					 						 ->join('sct_partida pa','pa.id_partida=e.id_partida','left')
+											 ->join('org_municipio mp','mp.id_municipio=pa.id_municipio_partida','left')
+											 ->join('org_municipio mm','mm.id_municipio=pa.id_municipio_menor','left')
 
 					 						 ->join('sct_fechasaudienciasci f','f.id_expedienteci=e.id_expedienteci','left')
 					 						 ->join('sir_empleado ea','ea.id_empleado=f.id_delegado','left')
@@ -390,6 +409,12 @@ class Expedientes_model extends CI_Model {
 		}else {
 			return FALSE;
 		}
+	}
+
+	public function obtener_municipios(){
+		$this->db->select('id_municipio, municipio')->from('org_municipio');
+		$query = $this->db->get();
+		return $query;
 	}
 
 }

@@ -489,7 +489,6 @@ class Acta extends CI_Controller {
 
     public function generar_acta_menor($caso,$id_expedienteci,$id_audiencia=FALSE){
       $expediente = $this->expedientes_model->obtener_registros_expedientes($id_expedienteci)->result()[0];
-
       $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,1);
       $primera= $audiencias->result()[0];
       $segunda= $audiencias->result()[1];
@@ -498,10 +497,10 @@ class Acta extends CI_Controller {
       $this->load->library("CifrasEnLetras");
 
       $PHPWord = new PHPWord();
-      $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PJ_MENOR.docx');
+      $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_MENOR.docx');
 
-      $templateWord->setValue('no_expediente', $exp->numerocaso_expedienteci);
-      $templateWord->setValue('departamento', departamento($exp->numerocaso_expedienteci));
+      $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
+      $templateWord->setValue('departamento', departamento($expediente->numerocaso_expedienteci));
 
       $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($primera->hora_fechasaudienciasci))));
       $templateWord->setValue('minuto_audiencia', minuto(INTVAL(date('i', strtotime($primera->hora_fechasaudienciasci)))));
@@ -515,19 +514,46 @@ class Acta extends CI_Controller {
       $templateWord->setValue('mes_audiencia2', mb_strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
       $templateWord->setValue('anio_audiencia2', anio(date('Y', strtotime($segunda->fecha_fechasaudienciasci))));
 
+      $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
+      $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($expediente->fechacrea_expedienteci)))));
+      $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
+      $templateWord->setValue('mes_expediente', mb_strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
+      $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
+      $templateWord->setValue('rep_menor', $expediente->solicitante);
+      $templateWord->setValue('edad_rep_menor', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras($expediente->edad_solicitante)));
+      $templateWord->setValue('edad_menor', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras($expediente->edad_menor)));
+      $templateWord->setValue('municipio_menor', $expediente->municipio_menor);
+      $templateWord->setValue('municipio_partida', $expediente->municipio_partida);
+      $templateWord->setValue('libro_partida', $expediente->libro_partida);
+      $templateWord->setValue('dia_partida', dia(date('d', strtotime($expediente->fecha_partida))));
+      $templateWord->setValue('mes_partida', mb_strtoupper(mes(date('m', strtotime($expediente->fecha_partida)))));
+      $templateWord->setValue('anio_partida', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras((date('Y', strtotime($expediente->fecha_partida))))));
+      $templateWord->setValue('nacionalidad_rep_menor', $expediente->nacionalidad);
+      $templateWord->setValue('dui_rep_menor', convertir_dui($expediente->dui_personaci));
+      $templateWord->setValue('numero_partida', convertir_dui($expediente->numero_partida));
+      $templateWord->setValue('rep_parentesco', $expediente->rep_parentesco);
+      $templateWord->setValue('nombres_menor', $expediente->nombres_menor);
+      $templateWord->setValue('nombre_empresa', $expediente->nombre_empresa);
+      $templateWord->setValue('rep_legal_empresa', $expediente->representante_legal);
+      $templateWord->setValue('forma_pago_menor', $expediente->formapago_personaci);
+      if (substr($expediente->salario_personaci,-3)==".00") {
+        $pago = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($expediente->salario_personaci,0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
+      }else {
+        $pago = mb_strtoupper(CifrasEnLetras::convertirEurosEnLetras(number_format($expediente->salario_personaci,2,',','')));
+      }
+      $templateWord->setValue('salario_menor', $pago);
+
+
+
       $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));
       $mes_conflicto = mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci))));
       $anio_conflicto = anio(date('Y', strtotime($expediente->fechaconflicto_personaci)));
 
       $templateWord->setValue('direccion_empresa', mb_strtoupper($expediente->direccion_empresa));
       $templateWord->setValue('direccion_solicitante', mb_strtoupper($expediente->direccion_personaci));
-      $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));
-      $templateWord->setValue('minuto_expediente', minuto(INTVAL(date('i', strtotime($expediente->fechacrea_expedienteci)))));
-      $templateWord->setValue('dia_expediente', dia(date('d', strtotime($expediente->fechacrea_expedienteci))));
-      $templateWord->setValue('mes_expediente', mb_strtoupper(mes(date('m', strtotime($expediente->fechacrea_expedienteci)))));
-      $templateWord->setValue('anio_expediente', anio(date('Y', strtotime($expediente->fechacrea_expedienteci))));
+
       $templateWord->setValue('edad', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($expediente->fnacimiento_personaci))))));
-      $templateWord->setValue('dui_persona', convertir_dui($expediente->dui_personaci));
+
       $templateWord->setValue('nacionalidad_persona', $expediente->nacionalidad);
       $templateWord->setValue('nombre_empleador', $expediente->nombre_empleador.' '.$expediente->apellido_empleador);
       $templateWord->setValue('funciones_persona', $expediente->funciones_personaci);
@@ -537,8 +563,6 @@ class Acta extends CI_Controller {
       $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
       $templateWord->setValue('mes_conflicto', mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
       $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
-      $templateWord->setValue('hora_audiencia2', hora(date('G', strtotime($segunda->hora_fechasaudienciasci))));
-      $templateWord->setValue('tipo', $tipo_empresa);
       $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
 
       $nombreWord = $this->random();

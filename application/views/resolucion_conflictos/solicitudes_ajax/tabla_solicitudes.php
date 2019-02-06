@@ -32,6 +32,7 @@
                                               e.numerocaso_expedienteci AS numero,
                                               ep.nombre_empresa,
                                               e.id_empresaci,
+                                              e.id_partida,
                                               CASE
                                                 WHEN e.motivo_expedienteci=1 THEN 'Despido'
                                                 ELSE 'Conflicto Laboral' END AS tipo,
@@ -127,11 +128,11 @@
                                         <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado/a</a>
                                         <?php  } ?>
 
-                                      <?php if ($fila->id_doc_identidad !=4) { ?>
+                                      <?php if ($fila->id_partida !=NULL || $fila->id_partida !=" ") { ?>
+                                      <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_menor/1/'.$fila->id_expedienteci)?>">Solicitud menor edad</a>
+                                    <?php }else{ ?>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/'.$fila->id_expedienteci)?>">Acta de solicitud</a>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/'.$fila->id_expedienteci)?>">Acta de esquela</a>
-                                    <?php }else{ ?>
-                                      <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_menor/1/'.$fila->id_expedienteci)?>">Solicitud menor edad</a>
                                     <?php } ?>
 
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_bitacora_delegados(<?=$fila->id_expedienteci.',\''.$fila->numerocaso_expedienteci.'\''?>)">Bitacora de cambios</a>
