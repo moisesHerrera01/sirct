@@ -28,7 +28,8 @@ class Sindicato extends CI_Controller {
 			'id_municipio' => $this->input->post('municipio'),
 			'direccion_sindicato' => $this->input->post('direccion_sindicato'),
 			'telefono_sindicato' => $this->input->post('telefono_sindicato'),
-			'totalafiliados_sindicato' => $this->input->post('totalafiliados_sindicato')
+			'totalafiliados_sindicato' => $this->input->post('totalafiliados_sindicato'),
+			'abreviatura_sindicato' => $this->input->post('abreviatura_sindicato')
 			);
 			echo $this->sindicatos_model->insertar_sindicato($data);
 
@@ -40,7 +41,8 @@ class Sindicato extends CI_Controller {
   			'id_municipio' => $this->input->post('municipio'),
   			'direccion_sindicato' => $this->input->post('direccion_sindicato'),
   			'telefono_sindicato' => $this->input->post('telefono_sindicato'),
-  			'totalafiliados_sindicato' => $this->input->post('totalafiliados_sindicato')
+  			'totalafiliados_sindicato' => $this->input->post('totalafiliados_sindicato'),
+				'abreviatura_sindicato' => $this->input->post('abreviatura_sindicato')
 			);
 			echo $this->sindicatos_model->editar_sindicato($data);
 		}

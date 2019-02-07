@@ -51,9 +51,9 @@
                           $fila->hora_fechasaudienciasci, $fila->id_expedienteci, $fila->estado_audiencia, $fila->numero_fechasaudienciasci,
                           $fila->id_defensorlegal,$fila->id_representaci,$fila->id_delegado);
 
-                          $resultado = array($fila->id_expedienteci, $fila->id_fechasaudienciasci);
+                          $resultado = array($fila->id_expedienteci, $fila->id_fechasaudienciasci, ((isset($id_sindicato)) ? $id_sindicato:false) );
 
-                          $actas = array($fila->id_expedienteci,$fila->cuenta,$fila->tipo_pago,$fila->asistieron,$fila->estado,$fila->id_fechasaudienciasci,$fila->resultado,$fila->id_representaci);
+                          $actas = array($fila->id_expedienteci,$fila->cuenta,$fila->tipo_pago,$fila->asistieron,$fila->estado,$fila->id_fechasaudienciasci,$fila->resultado,$fila->id_representaci,$fila->numero_fechasaudienciasci);
 
                           switch ($fila->estado_audiencia) {
                             case '1':
@@ -72,12 +72,12 @@
                               }
                             break;
                             case '2':
-                              if ($tipo==1) {
+                              // if ($tipo==1) {
                                 if($puede_editar){
                                   array_push($actas,"");
                                   echo generar_boton($actas,"modal_actas_tipo","btn-success2","fa fa-file","Generar actas");
                                 }
-                              }
+                              // }
                               break;
                             default:
                               break;

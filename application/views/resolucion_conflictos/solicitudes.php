@@ -336,7 +336,7 @@ function cambiar_delegado() {
     });
 }
 
-function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
+function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
       // alert(posee_trabajador)
       $("#solicitud_pn_pj").hide();
       $("#pf_st").hide();
@@ -688,6 +688,20 @@ function combo_doc_identidad(seleccion){
   });
 }
 
+function combo_doc_identidad_rep(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_tipo_doc",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_tipo_doc_rep').html(res);
+    $("#rep_tipo_doc").select2();
+  });
+}
+
 function visualizar(id_expedienteci,id_empresaci) {
   $.ajax({
     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/ver_expediente",
@@ -730,6 +744,51 @@ function combo_municipio(seleccion){
   .done(function(res){
     $('#div_combo_municipio').html(res);
     $(".select2").select2();
+  });
+
+}
+
+function combo_municipio2(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_municipio2",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_municipio2').html(res);
+    $("#municipio_representante").select2();
+  });
+
+}
+
+function combo_municipio_menor(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_municipio_menor",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_municipio_menor').html(res);
+    $("#municipio_menor").select2();
+  });
+
+}
+
+function combo_municipio_partida(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_municipio_partida",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_municipio_partida').html(res);
+    $("#municipio_partida").select2();
   });
 
 }
@@ -961,6 +1020,8 @@ function cambiar_nuevo() {
     $("#municipio").val('').trigger('change.select2');
     $("#direccion").val('');
     $("#fecha_nacimiento").val('');
+    $("#fecha_partida").val('');
+    $("#fnacimiento_partida").val('');
     $("#sexo").val('');
     $("#estudios").val('');
     $("#nacionalidad").val('');
@@ -969,12 +1030,14 @@ function cambiar_nuevo() {
     $("#posee_representante").val('');
     $("#pertenece_lgbt").val('');
     //Partida de nacimiento
-    $("#id_partida").val('');
+    // $("#id_partida").val('');
     $("#numero_partida").val('');
-    $("#folio_partida").val('');
+    // $("#folio_partida").val('');
     $("#libro_partida").val('');
-    $("#asiento_partida").val('');
+    // $("#asiento_partida").val('');
     $("#anio_partida").val('');
+    combo_municipio_menor();
+    combo_municipio_partida();
     /*Fin Solicitante*/
 
     /*Inicio represnetante persona*/
@@ -1045,6 +1108,7 @@ function cambiar_nuevo2(){
         combo_estados_civiles('');
         combo_profesiones('');
         combo_municipio2('');
+        combo_doc_identidad_rep('');
         $("#band4").val('save');
         $("#modal_representante").modal('show');
     }
@@ -1073,6 +1137,8 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#municipio").val(result.id_municipio).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
       $("#fecha_nacimiento").datepicker("setDate", moment(result.fnacimiento_personaci).format("DD-MM-YYYY"));
+      $("#fecha_partida").datepicker("setDate", moment(result.fecha_partida).format("DD-MM-YYYY"));
+      $("#fnacimiento_menor").datepicker("setDate", moment(result.fnacimiento_menor).format("DD-MM-YYYY"));
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
       $("#discapacidad_desc").val(result.discapacidad);
@@ -1152,6 +1218,8 @@ function cambiar_editar(id_expedienteci,bandera){
 
       combo_actividad_economica(result.id_catalogociiu);
       combo_municipio(result.id_municipio1);
+      combo_municipio_menor(result.id_municipio_partida);
+      combo_municipio_partida(result.id_municipio_menor);
       $("#ocupacion").val(result.ocupacion);
       $("#fecha_creacion_exp").val(result.fechacrea_expedienteci);
       $("#id_empleador").val(result.id_empleador);
@@ -1202,7 +1270,7 @@ function cambiar_editar(id_expedienteci,bandera){
 }
 
 function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
-  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante, band){
+  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante,tipo_doc, band){
   $("#id_representante").val(id_representante);
   $("#dui_representante").val(dui_representante);
   $("#nombres_representante").val(nombres_representante);
@@ -1213,6 +1281,7 @@ function cambiar_editar2(id_representante, dui_representante, nombres_representa
   combo_estados_civiles(id_estado_civil);
   combo_profesiones(id_titulo_academico);
   combo_municipio2(id_municipio);
+  combo_doc_identidad_rep(tipo_doc);
   // alert(id_municipio)
   $("#band4").val(band);
 
@@ -1335,13 +1404,13 @@ function volver(num) {
                                 </div>
 
                                 <div id="tipo_aco" style="display: none;" class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                    <h5>Tipo de representante del menor: </h5>
+                                    <h5>Parentezco: </h5>
                                     <div class="controls">
                                       <select id="acompaniante" name="acompaniante" class="custom-select col-4">
                                         <option value="">[Seleccione el tipo]</option>
-                                        <option value="0">Papá</option>
-                                        <option value="1">Mamá</option>
-                                        <option value="2">Acurador</option>
+                                        <option value="0">hijo(a)</option>
+                                        <option value="1">nieto(a)</option>
+                                        <option value="2">sobrino(a)</option>
                                         <option value="3">Otro</option>
                                       </select>
                                     </div>
@@ -1471,42 +1540,59 @@ function volver(num) {
                                 <div class="help-block"></div>
                             </div>
 
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Número partida:</h5>
-                                <div class="controls">
-                                    <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
-                                </div>
-                            </div>
 
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+
+                            <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                 <h5>Folio partida:</h5>
                                 <div class="controls">
                                     <input type="text" placeholder="Folio partida nacimiento" id="folio_partida" name="folio_partida" class="form-control">
                                 </div>
+                            </div> -->
+                            <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio_menor"></div>
+
+                            <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <h5>Fecha nacimiento menor: <span class="text-danger">*</span></h5>
+                                <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" class="form-control" id="fnacimiento_menor" name="fnacimiento_menor" placeholder="dd/mm/yyyy" readonly="">
+                                <div class="help-block"></div>
                             </div>
                           </div>
 
                           <div class="row">
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                            <div class="form-group col-lg-2 col-sm-2 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                 <h5>Libro partida: <span class="text-danger">*</span></h5>
                                 <div class="controls">
                                     <input type="text" placeholder="Libro partida nacimiento" id="libro_partida" name="libro_partida" class="form-control">
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                            <div class="form-group col-lg-2 col-sm-2 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <h5>Número partida:</h5>
+                                <div class="controls">
+                                    <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
+                                </div>
+                            </div>
+
+                            <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                 <h5>Asiento partida: <span class="text-danger">*</span></h5>
                                 <div class="controls">
                                     <input type="text" placeholder="Asiento partida nacimiento" id="asiento_partida" name="asiento_partida" class="form-control">
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                            <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio_partida"></div>
+
+                            <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                 <h5>Año exp. partida: </h5>
                                 <div class="controls">
                                     <input type="text" placeholder="Año partida nacimiento" id="anio_partida" name="anio_partida" class="form-control">
                                     <div class="help-block"></div>
                                 </div>
+                            </div> -->
+
+                            <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <h5>Fecha exp. partida: <span class="text-danger">*</span></h5>
+                                <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_partida" name="fecha_partida" placeholder="dd/mm/yyyy" readonly="">
+                                <div class="help-block"></div>
                             </div>
                           </div>
                         </blockquote>
@@ -1990,7 +2076,7 @@ function volver(num) {
 </div>
     <!--FIN MODAL DE PROCURADOR -->
 
-  <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
+    <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
     <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -2012,20 +2098,24 @@ function volver(num) {
 
                     <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy" readonly="">
+                        <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
                         <div class="help-block"></div>
                     </div>
 
                     </div>
                     <div class="row">
-                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                          <h5>DUI: <span class="text-danger">*</span></h5>
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc_rep"></div>
+
+                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Número doc identidad: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
                           </div>
                       </div>
+                    </div>
 
-                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Tipo: <span class="text-danger">*</span></h5>
                           <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
                               <option value=''>[Seleccione el tipo]</option>
@@ -2035,11 +2125,10 @@ function volver(num) {
                           </select>
                       </div>
 
-                      <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
                     </div>
+
                     <div class="row">
-
-
                       <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Acreditación: <span class="text-danger">*</span></h5>
                           <div class="controls">
@@ -2054,9 +2143,9 @@ function volver(num) {
                       <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
                     </div>
 
-                    <div style="display: none;" class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Estado: <span class="text-danger">*</span></h5>
-                        <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%" required="">
+                        <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%">
                             <option class="m-l-50" value="1">Activo</option>
                             <option class="m-l-50" value="0">Inactivo</option>
                         </select>
@@ -2072,7 +2161,7 @@ function volver(num) {
         </div>
         <!-- /.modal-dialog -->
     </div>
-  <!--FIN MODAL REPRESENTANTE EMPRESA -->
+    <!--FIN MODAL REPRESENTANTE EMPRESA -->
 
     <!--INICIO MODAL DE DELEGADO -->
     <div class="modal fade" id="modal_delegado" role="dialog">
@@ -2212,7 +2301,7 @@ $("#formajax5").on("submit", function(e){
     var f = $(this);
     var formData = new FormData(document.getElementById("formajax5"));
     formData.append("id_empresa", $('#establecimiento').val());
-
+    formData.append("id_partida", $('#id_partida').val());
     $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_representante",
         type: "post",
@@ -2269,8 +2358,12 @@ $(function(){
               }else {
                 open_form(4);
               }
-              $("#id_personaci").val(res);
-              $("#id_persona").val(res);
+              res = JSON.parse(res);
+              $("#id_personaci").val(res.id_personaci);
+              $("#id_persona").val(res.id_personaci);
+              $("#id_partida").val(res.id_partida);
+              alert($("#id_personaci").val())
+              alert($("#id_partida").val())
               // $("#band1").val( $("#band").val() );
               $("#band1").val('edit');
               // $("#band2").val( $("#band").val() );
@@ -2316,6 +2409,7 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax2"));
+        formData.append("id_partida", $('#id_partida').val());
         formData.append("id_personaci", $('#id_personaci').val());
         formData.append("id_empresaci", $('#establecimiento').val());
         formData.append("id_representante", $('#id_representante').val());
@@ -2394,6 +2488,7 @@ $("#formajax3").on("submit", function(e){
     var f = $(this);
     var formData = new FormData(document.getElementById("formajax3"));
     formData.append("dato", "valor");
+    formData.append("id_partida", $('#id_partida').val());
     $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/gestionar_establecimiento",
         type: "post",
@@ -2595,6 +2690,23 @@ function ocultar(){
   }
 }
 
+function ocultar_tipo_doc_rep(){
+  var value = $("#rep_tipo_doc").val();
+  if (value!=1) {
+    $('#dui_representante').mask('', {reverse: true});
+    $('#dui_representante').unmask();
+    if (value==4) {
+      $('#dui_representante').mask('99999999-9', {reverse: true});
+      $("#dui_representante").attr("required",'required');
+    }else {
+      $("#dui_representante").attr("required",'required');
+    }
+  }else {
+     $('#dui_representante').mask('99999999-9', {reverse: true});
+     $("#dui_representante").attr("required",'required');
+  }
+}
+
 function ocultar_pn(){
   var value = $("#tipo_establecimiento").val();
   if (value==1) {
@@ -2630,6 +2742,8 @@ $(function(){
 
     	var date = new Date(); var currentMonth = date.getMonth(); var currentDate = date.getDate(); var currentYear = date.getFullYear();
         $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
+        $('#fnacimiento_menor').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
+        $('#fecha_partida').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
         $('#f_nacimiento_representante').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
         $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
     });

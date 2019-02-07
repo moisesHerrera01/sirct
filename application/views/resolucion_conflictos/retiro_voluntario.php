@@ -66,7 +66,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       });
     }
 
-    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
+    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
           // rv_ncnp
           // alert(posee_trabajador)
           $("#solicitud_pn_pj").hide();
@@ -195,7 +195,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function cerrar_combo_establecimiento() {
         //var select2 = $('.select2-search__field').val();
         //$("#nombre_establecimiento").val(select2);
-        
+
         $("#id_empresaci").val('');
         $("#tipo_establecimiento").val('');
         $("#razon_social").val('');
@@ -984,6 +984,31 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         }else{
             cambiar_eliminar3(estado_representante);
         }
+    }
+
+    function imprimir_ficha_pdf(id_expediente, id_empresa){
+        var params = { 'id_expediente': id_expediente, 'id_empresa': id_empresa };
+        var url = "<?php echo site_url(); ?>/resolucion_conflictos/expediente/imprimir_ficha_pdf"
+        OpenWindowWithPost(url, params, "_BLANK")
+    }
+
+    function OpenWindowWithPost(url, params, target){
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", url);
+        form.setAttribute("target", target);
+        for (var i in params) {
+            if (params.hasOwnProperty(i)) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = i;
+                input.value = params[i];
+                form.appendChild(input);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
     }
 
 

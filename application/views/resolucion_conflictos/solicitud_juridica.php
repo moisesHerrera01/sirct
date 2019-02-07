@@ -32,6 +32,102 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         combo_establecimiento('<?=$id_empresa?>');
     }
 
+    function nav(value) {
+      var id_expedienteci = $("#id_expedienteci_copia2").val();
+      var id_audiencia = $("#id_audiencia").val();
+      if (value != "") { location.href = value+id_expedienteci+'/'+id_audiencia; }
+      swal({ title: "¡Acta generada éxitosamente!", type: "success", showConfirmButton: true });
+      $("#modal_actas_tipo").modal("hide");
+      tabla_audiencias($("#id_expedienteci_copia2").val());
+      //cerrar_mantenimiento();
+    }
+
+    function ocultar_tipo_doc_rep(){
+      var value = $("#rep_tipo_doc").val();
+      if (value!=1) {
+        $('#dui_representante').mask('', {reverse: true});
+        $('#dui_representante').unmask();
+        if (value==4) {
+          $('#dui_representante').mask('99999999-9', {reverse: true});
+          $("#dui_representante").attr("required",'required');
+        }else {
+          $("#dui_representante").attr("required",'required');
+        }
+      }else {
+         $('#dui_representante').mask('99999999-9', {reverse: true});
+         $("#dui_representante").attr("required",'required');
+      }
+    }
+
+    function combo_ecivil_solicitado(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_ecivil_solicitado",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_ecivil_solicitado').html(res);
+        $("#ecivil").select2();
+      });
+    }
+
+    function combo_nacionalidades(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_nacionalidades",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_nacionalidad').html(res);
+        $("#nacionalidad").select2();
+      });
+    }
+
+    function combo_doc_identidad(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_tipo_doc",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_tipo_doc').html(res);
+        $("#rep_tipo_doc").select2();
+      });
+    }
+
+    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
+          // alert(posee_trabajador)
+          $("#solicitud_pn_pj").hide();
+          $("#pf_st").hide();
+          $("#multa").hide();
+          $("#inasistencia").hide();
+
+        if (cuenta_audiencias>1) {
+          $("#solicitud_pn_pj").show();
+          $("#esquela").show();
+        }
+        if (estado=="2") {
+          if (resultado=="1" || resultado=="2" || resultado=="7") {
+            $("#pf_st").show();
+          }else if (resultado=="5") {
+            $("#multa").show();
+          }else if (resultado=="3") {
+            $("#inasistencia").show();
+          }else if (resultado=="4"){
+            $("#desistimiento").show();
+          }
+        }
+        $("#id_expedienteci_copia2").val(id_expedienteci);
+        $("#id_audiencia").val(id_audiencia);
+        $("#tipo_acta").val('').trigger('');
+        $("#modal_actas_tipo").modal("show");
+    }
+
     function convert_lim_text(lim){
         var tlim = "-"+lim+"d";
         return tlim;
@@ -133,6 +229,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function cerrar_mantenimiento(){
         $("#cnt_tabla").show(0);
+        $("#modal_actas_tipo").modal('hide');
         $("#cnt_actions").hide(0);
         $("#cnt_form_main").hide(0);
         open_form(1);
@@ -222,7 +319,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         document.getElementById('si').checked = 0;
         document.getElementById('no').checked = 1;
         $("#estudios").val('');
-        $("#nacionalidad").val('');
+        // $("#nacionalidad").val('');
         $("#discapacidad").val('');
         /*Fin Solicitante*/
 
@@ -244,6 +341,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
         $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
         combo_ocupacion('');
+        combo_ecivil_solicitado();
+        combo_nacionalidades();
     }
 
     function cambiar_nuevo4(){
@@ -317,13 +416,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         });
     }
 
-    function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal, id_representanteci, causa_expedienteci,band){
+    function cambiar_editar(id_empresaci, id_personaci, nombre_personaci, apellido_personaci, sexo_personaci, direccion_personaci, discapacidad_personaci, telefono_personaci, id_municipio, id_catalogociuo, salario_personaci, horarios_personaci, id_expedienteci, motivo_expedienteci, descripmotivo_expedienteci, id_personal, id_representanteci, causa_expedienteci,ecivil,nacionalidad,menor_edad,band){
         combo_ocupacion(id_catalogociuo, id_empresaci);
-        $("#id_catalogociuo").val(id_catalogociuo);
+        combo_ecivil_solicitado(ecivil);
+        combo_nacionalidades(nacionalidad);
+        //$("#id_catalogociuo").val(id_catalogociuo);
         $("#id_personaci").val(id_personaci);
         $("#id_representanteci").val(id_representanteci);
         $("#nombre_personaci").val(nombre_personaci);
         $("#apellido_personaci").val(apellido_personaci);
+        $("#ocupacion_solicitado").val(id_catalogociuo);
         if(sexo_personaci == 'M'){
             document.getElementById('masculino').checked = 1;
             document.getElementById('femenino').checked = 0;
@@ -337,6 +439,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         }else{
             document.getElementById('si').checked = 0;
             document.getElementById('no').checked = 1;
+        }
+        if(menor_edad == 0){
+            document.getElementById('menor_edad').checked = 0;
+        }else{
+            document.getElementById('menor_edad').checked = 1;
         }
         $("#direccion_personaci").val(direccion_personaci);
         $("#discapacidad_personaci").val(discapacidad_personaci);
@@ -418,14 +525,27 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             combo_estados_civiles('');
             combo_profesiones('');
             combo_municipio2('');
+            combo_doc_identidad('');
             $("#band2").val('save');
             $("#modal_representante").modal('show');
         }
 
     }
 
-    function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
-  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante, band){
+    function cambiar_editar2(
+      id_representante,
+      dui_representante,
+      nombres_representante,
+      acreditacion_representante,
+      tipo_representante,
+      estado_representante,
+      id_estado_civil,
+      id_titulo_academico,
+      id_municipio,
+      f_nacimiento_representante,
+      id_tipo_doc,
+      band
+      ){
   $("#id_representante").val(id_representante);
   $("#dui_representante").val(dui_representante);
   $("#nombres_representante").val(nombres_representante);
@@ -436,7 +556,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   combo_estados_civiles(id_estado_civil);
   combo_profesiones(id_titulo_academico);
   combo_municipio2(id_municipio);
-  // alert(id_municipio)
+  combo_doc_identidad(id_tipo_doc);
   $("#band4").val(band);
 
   if(band == "edit"){
@@ -910,7 +1030,30 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#establecimiento").val('').trigger('change.select2');
     }
 
+    function imprimir_ficha_pdf(id_expedienteci, id_personaci){
+        var params = { 'id_expedienteci': id_expedienteci, 'id_personaci': id_personaci };
+        var url = "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/imprimir_ficha_pdf"
+        OpenWindowWithPost(url, params, "_BLANK")
+    }
 
+    function OpenWindowWithPost(url, params, target){
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", url);
+        form.setAttribute("target", target);
+        for (var i in params) {
+            if (params.hasOwnProperty(i)) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = i;
+                input.value = params[i];
+                form.appendChild(input);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+    }
 </script>
 <input type="hidden" id="id_empresaci" name="id_empresaci">
 <input type="hidden" id="address" name="">
@@ -922,7 +1065,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de mediación de Conflictos persona jurídica </h3>
+                <h3 class="text-themecolor m-b-0 m-t-0">Solicitud de mediación de conflictos persona jurídica </h3>
             </div>
         </div>
 
@@ -944,7 +1087,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <div class="card-actions text-white">
                             <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
                         </div>
-                        <h4 class="card-title m-b-0 text-white">Listado de Solicitudes</h4>
+                        <h4 class="card-title m-b-0 text-white">Listado de solicitudes</h4>
                     </div>
                     <div class="card-body b-t">
                         <div id="cnt_form1" class="cnt_form">
@@ -1006,14 +1149,19 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <h5>Apellidos: <span class="text-danger">*</span></h5>
                                     <input type="text" id="apellido_personaci" name="apellido_personaci" class="form-control" placeholder="Apellidos de la persona" required="">
                                 </div>
-                                <div class="form-group col-lg-4">
-                                    <center>
-                                    <h5>Seleccione el sexo:</h5>
+                                <div class="form-group col-lg-2">
+                                    <h5>Sexo:</h5>
                                     <input name="sexo_personaci" type="radio" id="masculino" checked="" value="M">
                                     <label for="masculino">Hombre</label><br>
                                     <input name="sexo_personaci" type="radio" id="femenino" value="F">
                                     <label for="femenino">Mujer</label>
-                                    </center>
+                                </div>
+                                <div class="form-group col-lg-2">
+                                  <h5>Discapacidad:</h5>
+                                  <input name="discapacidad_personaci" type="radio" id="si" value="1">
+                                  <label for="si">Si</label><br>
+                                  <input name="discapacidad_personaci" type="radio" id="no" checked="" value="0">
+                                  <label for="no">No</label>
                                 </div>
                             </div>
                             <div class="row">
@@ -1021,22 +1169,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <h5>Dirección: <span class="text-danger">*</span></h5>
                                     <textarea type="text" id="direccion_personaci" name="direccion_personaci" class="form-control" placeholder="Dirección completa" required=""></textarea>
                                 </div>
-                                <div class="form-group col-lg-4">
-                                    <center>
-                                    <h5>Posee discapacidad:</h5>
-                                    <input name="discapacidad_personaci" type="radio" id="si" value="1">
-                                    <label for="si">Si</label><br>
-                                    <input name="discapacidad_personaci" type="radio" id="no" checked="" value="0">
-                                    <label for="no">No</label>
-                                    </center>
-                                </div>
+
+                                <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
+
                             </div>
                             <div class="row">
-                                <div class="form-group col-lg-4">
+                                <div class="form-group col-lg-3">
                                     <h5>Teléfono: </h5>
                                     <input data-mask="9999-9999" type="text" id="telefono_personaci" name="telefono_personaci" class="form-control" placeholder="Número de Telefóno">
                                 </div>
-                                <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                <div class="form-group col-lg-4 col-sm- <?php if($navegatorless){ echo "pull-left"; } ?>">
                                     <h5>Municipio: <span class="text-danger">*</span></h5>
                                     <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
                                         <option value=''>[Seleccione el municipio]</option>
@@ -1050,6 +1192,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                         ?>
                                     </select>
                                 </div>
+
+                                <div class="col-lg-3 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_ecivil_solicitado"></div>
+
+                                <div class="form-group col-lg-2">
+                                    <h5>Menor de edad: </h5>
+                                    <div class="switch">
+                                    <label>NO<input id="menor_edad" name="menor_edad" type="checkbox" value="0"><span class="lever"></span>SI</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="form-group col-lg-8" style="height: 83px;">
+                                  <h5>Ocupación según DUI:<span class="text-danger">*</span></h5>
+                                  <textarea type="text" id="ocupacion_solicitado" name="ocupacion_solicitado" class="form-control" placeholder="Ocupación según DUI" required=""></textarea>
+                                  <div class="help-block"></div>
+                              </div>
                             </div>
                             </blockquote>
                             <div class="pull-left">
@@ -1083,10 +1241,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso 3</button>&emsp;
                                 Información de la solicitud
                             </h3><hr class="m-t-0 m-b-30">
-                            <span class="etiqueta">Motivo de la solicitud</span>
+                            <span class="etiqueta">Datos de la solicitud</span>
                             <blockquote class="m-t-0">
                                 <div class="row">
-                                    <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                    <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
                                         <h5>Motivo de la solicitud: <span class="text-danger">*</span></h5>
                                         <div class="controls">
                                             <select id="motivo_expedienteci" name="motivo_expedienteci" class="custom-select" required style="width: 100%">
@@ -1096,7 +1254,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                         <h5>Causa: <span class="text-danger">*</span></h5>
                                         <select id="causa_expedienteci" name="causa_expedienteci" class="select2" style="width: 100%" required>
                                             <option value=''>[Seleccione la causa]</option>
@@ -1110,18 +1268,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             ?>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-lg-12">
-                                        <h5>Descripción del motivo:<span class="text-danger">*</h5>
-                                        <textarea type="text" id="descripmotivo_expedienteci" name="descripmotivo_expedienteci" class="form-control" placeholder="Descipción del motivo"></textarea>
-                                    </div>
-                                </div>
-                            </blockquote>
-                            <span class="etiqueta">Asignación de persona delegada</span>
-                            <blockquote class="m-t-0">
-                                <div class="row">
-                                    <div class="form-group col-lg-6">
+                                    <div class="form-group col-lg-4">
                                         <h5>Persona delegada:<span class="text-danger">*</h5>
                                         <select id="id_personal" name="id_personal" class="select2" style="width: 100%" required="">
                                         <option value="">[Todas las personas empleadas]</option>
@@ -1134,6 +1281,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                             }
                                         ?>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-12">
+                                        <h5>Descripción del motivo:<span class="text-danger">*</h5>
+                                        <textarea type="text" id="descripmotivo_expedienteci" rows="10" name="descripmotivo_expedienteci" class="form-control" placeholder="Descipción del motivo"></textarea>
                                     </div>
                                 </div>
                             </blockquote>
@@ -1229,6 +1382,52 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <div id="cnt_modal_acciones"></div>
 
+<!--INICIO MODAL GENERAR ACTA -->
+<div class="modal fade" id="modal_actas_tipo" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Emitir acta:</h4>
+      </div>
+
+      <div class="modal-body" id="">
+          <input type="hidden" id="id_expedienteci_copia2" name="id_expedienteci_copia2" value="">
+          <input type="hidden" id="id_audiencia" name="id_audiencia" value="">
+          <input type="hidden" id="cuenta_audiencias" name="cuenta_audiencias" value="">
+          <div class="row">
+            <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                <h5>Seleccione el tipo de acta: <span class="text-danger">*</span></h5>
+                <div class="controls">
+                  <!-- Tipo 1: Engloba 4 posibilidades primera y segunda fecha, con presencia del trabajador y sin el trabajador -->
+                  <select id="tipo_acta" name="tipo_acta" class="custom-select col-4" onchange="nav(this.value)" required>
+                    <option value="">[Seleccione]</option>
+                    <option id="pf_st" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/1/')?>">Acta de audiencia</option>
+                    <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
+                    <option id="inasistencia" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Acta segunda audiencia</option>
+                    <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option>
+                    <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor/a público</option>
+                     -->
+                    <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
+                    <option id="esquela" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
+                    <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
+                    <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor/a</option>
+                    <option id="segunda_sin" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Segunda cita PN-PJ sin defensor/a</option> -->
+                    <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Desistimiento de persona natural a persona juridica</option> -->
+                  </select>
+                </div>
+            </div>
+          </div>
+          <div align="right">
+            <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
+          <!--  <button type="button" onclick="generar_actas_tipo();" class="btn waves-effect waves-light btn-success2"> Generar
+          </button> !-->
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--FIN MODAL GENERAR ACTA -->
+
 <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
 <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
@@ -1257,14 +1456,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 </div>
                 <div class="row">
-                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>DUI: <span class="text-danger">*</span></h5>
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Número doc identidad: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
                       </div>
                   </div>
+                </div>
 
-                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                <div class="row">
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Tipo: <span class="text-danger">*</span></h5>
                       <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
                           <option value=''>[Seleccione el tipo]</option>
@@ -1274,11 +1477,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </select>
                   </div>
 
-                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
                 </div>
+
                 <div class="row">
-
-
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Acreditación: <span class="text-danger">*</span></h5>
                       <div class="controls">
@@ -1295,7 +1497,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                     <h5>Estado: <span class="text-danger">*</span></h5>
-                    <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%" required="">
+                    <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%">
                         <option class="m-l-50" value="1">Activo</option>
                         <option class="m-l-50" value="0">Inactivo</option>
                     </select>
@@ -1688,11 +1890,20 @@ $(function(){
         });
     });
 
+    $("#menor_edad").click(function(){
+      if (this.checked==true) {
+        this.value=1;
+      }else {
+        this.value=0;
+      }
+    });
+
     $("#formajax4").on("submit", function(e){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax4"));
         formData.append("id_empresaci", $('#establecimiento').val());
+        formData.append("ocupacion_solicitado", $('#ocupacion_solicitado').val());
         formData.append("id_representanteci", $('#id_representanteci').val());
         formData.append("id_personaci", $('#id_personaci').val());
         formData.append("band4", $('#bandx').val());

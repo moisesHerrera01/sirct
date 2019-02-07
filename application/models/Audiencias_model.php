@@ -7,7 +7,7 @@ class Audiencias_model extends CI_Model {
 		parent::__construct();
 	}
 
-		public function obtener_audiencias($id, $orden=FALSE, $estado=FALSE) {
+		public function obtener_audiencias($id, $orden=FALSE, $estado=FALSE, $id_audiencia=FALSE) {
 
 			$this->db->select(
 												'f.id_expedienteci,
@@ -18,20 +18,43 @@ class Audiencias_model extends CI_Model {
 												 f.numero_fechasaudienciasci,
 												 f.id_representaci,
 												 f.id_defensorlegal,
+												 UPPER(CONCAT_WS(" ",d.nombre_representantepersonaci,d.apellido_representantepersonaci)) defensor,
+												 UPPER(r.nombres_representante) representante_asiste,
+												 r.dui_representante representante_asiste_dui,
+												 UPPER(dt.departamento) representante_asiste_depto,
+												 UPPER(m.municipio) representante_asiste_municipio,
+												 UPPER(ta.titulo_academico) representante_asiste_profesion,
+												 UPPER(r.acreditacion_representante) representante_asiste_acreditacion,
+												 UPPER(f.detalle_resultado) detalle_resultado,
+												 d.dui_representantepersonaci dui_defensor,
+												 UPPER(d.acreditacion_representantepersonaci) acreditacion_defensor,
 												 f.id_delegado,
 												 f.tipo_pago,
 												 f.asistieron,
 												 f.resultado,
+												 CONCAT_WS(" ",e.primer_nombre,e.segundo_nombre,e.primer_apellido,e.segundo_apellido,e.apellido_casada) delegado_audiencia,
 												 (select count(*) from sct_fechasaudienciasci fe where fe.id_expedienteci=f.id_expedienteci) AS cuenta,
-												 (select e.id_estadosci from sct_expedienteci e where e.id_expedienteci=f.id_expedienteci) AS estado'
+												 (select e.id_estadosci from sct_expedienteci e where e.id_expedienteci=f.id_expedienteci) AS estado,
+												 na.nivel_academico representante_asiste_nacademico,
+												 r.sexo_representante'
 											  )
 						 ->from('sct_fechasaudienciasci f')
+						 ->join('sge_representante r','r.id_representante=f.id_representaci','left')
+						 ->join('sir_titulo_academico ta','ta.id_titulo_academico=r.id_titulo_academico','left')
+						 ->join('sir_nivel_academico na','na.id_nivel_academico=ta.id_nivel_academico','left')
+						 ->join('sir_empleado e','e.id_empleado=f.id_delegado','left')
+						 ->join('org_municipio m','m.id_municipio=e.id_muni_residencia','left')
+						 ->join('org_departamento dt','dt.id_departamento = m.id_departamento_pais','left')
+						 ->join('sct_representantepersonaci d','d.id_representantepersonaci=f.id_defensorlegal','left')
 						 ->where('f.id_expedienteci', $id)
 						 ->order_by('f.estado_audiencia','desc')
 						 ->order_by('f.id_fechasaudienciasci','asc');
 			if ($orden && $estado) {
 				$this->db->where('f.estado_audiencia',$estado)
 								 ->where('f.numero_fechasaudienciasci',$orden);
+			}
+			if ($id_audiencia) {
+				$this->db->where('f.id_fechasaudienciasci',$id_audiencia);
 			}
 			$query=$this->db->get();
 			if ($query->num_rows() > 0) {

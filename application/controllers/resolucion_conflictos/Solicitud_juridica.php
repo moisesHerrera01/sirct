@@ -5,9 +5,8 @@ class Solicitud_juridica extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('solicitud_juridica_model');
-		$this->load->model('expedientes_model');
-		$this->load->model('delegados_model');
+		$this->load->model(array('solicitud_juridica_model','expedientes_model','delegados_model','solicitudes_model'));
+
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -41,6 +40,159 @@ class Solicitud_juridica extends CI_Controller {
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/vista_expediente', $data);
 	}
 
+	public function imprimir_ficha_pdf() {
+		$persona = $this->solicitud_juridica_model->obtener_personaci($this->input->post('id_personaci'));
+		$expediente = $this->solicitud_juridica_model->obtener_registros_expedientes( $this->input->post('id_expedienteci') );
+		$expediente = $expediente->result()[0];
+
+		$html = "<table width='100%' style='border-outline: 1px; border-collapse: collapse;'><tbody>
+				<tr>
+					<td align='right'>
+					<p style='font-size: 18px;'><small>N&uacute;mero de caso:</small> <b>$expediente->numerocaso_expedienteci</b><br></p>
+					<b>Fecha y hora de creaci&oacute;n del expediente:</b> ".date("d-m-Y h:i:s A", strtotime($expediente->fechacrea_expedienteci))."</td>
+				</tr>
+		</tbody></table><br>";
+
+		$html .= "
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td align='center'><span style='font-weight: bold; font-size: 14px;'>Información de la persona solicitante</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td colspan='3'>
+							<b>N&uacute;mero de Inscripci&oacute;n de empresa: </b>$expediente->numinscripcion_empresa
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Nombre de la empresa: </b>$expediente->nombre_empresa
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Actividad: </b>$expediente->actividad_catalogociiu
+						</td>
+					</tr>
+					<tr>
+						<td colspan='3'>
+							<b>Dirección: </b>$expediente->direccion_empresa
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Municipio: </b>$expediente->municipio
+						</td>
+						<td>
+							<b>Teléfono: </b>$expediente->telefono_empresa
+						</td>
+
+						<td>
+							<b>Persona representante: </b>$expediente->nombres_representante
+						</td>
+					</tr>
+				</tbody>
+			</table><br>";
+
+		$html .= "
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td align='center'><span style='font-weight: bold; font-size: 14px;'>Información de la persona solicitada</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td>
+							<b>N&uacute;mero de DUI: </b>$expediente->dui_personaci
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Nombre de la persona solicitante: </b>$expediente->nombre_personaci $expediente->apellido_personaci
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Teléfono: </b>$expediente->telefono_personaci
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Municipio: </b>$expediente->municipio
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Dirección: </b>$expediente->direccion_personaci
+						</td>
+					</tr>
+				</tbody>
+			</table><br>";
+
+		$html .= "
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td align='center'><span style='font-weight: bold; font-size: 14px;'>Información de la solicitud</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table width='100%' style='border: 1px solid black;'>
+				<tbody>
+					<tr>
+						<td>
+							<b>Persona delegada asignada: </b>$expediente->nombre_delegado_actual
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Motivo de la solicitud: </b>".(($expediente->motivo_expedienteci==1) ? "Despido de hecho o injustificado" : "Conflictos laborales")."
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Descripción del motivo: </b>$expediente->descripmotivo_expedienteci
+						</td>
+					</tr>
+
+				</tbody>
+			</table>";
+
+		$titles = array(
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',
+				'DIRECCIÓN GENERAL DE TRABAJO',
+				'FICHA DE EXPEDIENTE');
+
+		$this->load->library('mpdf');
+		$this->mpdf=new mPDF('c','letter','10','Arial',10,10,30,17,3,9);
+
+	 	$header = head_table_html($titles, $data, 'pdf');
+
+	 	$this->mpdf->SetHTMLHeader($header);
+
+	 	$pie = piePagina($this->session->userdata('usuario'));
+		$this->mpdf->setFooter($pie);
+
+		$stylesheet = file_get_contents(base_url().'assets/css/bootstrap.min.css');
+		$this->mpdf->AddPage('P','','','','',10,10,30,17,5,10);
+		$this->mpdf->SetTitle($titles[2]);
+		$this->mpdf->WriteHTML($stylesheet,1);  // The parameter 1 tells that this iscss/style only and no body/html/
+		$this->mpdf->WriteHTML($html);
+		$this->mpdf->Output($titles[2].date(" - Ymd_His").'.pdf','I');
+
+		//$this->load->view('resolucion_conflictos/solicitudes_ajax/vista_expediente', $data);
+	}
+
   	public function combo_establecimiento() {
 		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento',
 			array(
@@ -57,7 +209,8 @@ class Solicitud_juridica extends CI_Controller {
 			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
 			'dui_representante' => ($this->input->post('dui_representante')),
 			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
-			'tipo_representante' => $this->input->post('tipo_representante')
+			'tipo_representante' => $this->input->post('tipo_representante'),
+			'id_doc_identidad'=> $this->input->post('rep_tipo_doc')
 			);
       		echo $this->solicitud_juridica_model->insertar_representante($data);
 		}else if($this->input->post('band2') == "edit"){
@@ -67,7 +220,8 @@ class Solicitud_juridica extends CI_Controller {
 			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
 			'dui_representante' => ($this->input->post('dui_representante')),
 			'acreditacion_representante' => ($this->input->post('acreditacion_representante')),
-			'tipo_representante' => $this->input->post('tipo_representante')
+			'tipo_representante' => $this->input->post('tipo_representante'),
+			'id_doc_identidad'=> $this->input->post('rep_tipo_doc')
 			);
 			echo $this->solicitud_juridica_model->editar_representante($data);
 		}else if($this->input->post('band2') == "delete"){
@@ -89,7 +243,8 @@ class Solicitud_juridica extends CI_Controller {
 			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
 			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
 			'id_municipio' => $this->input->post('id_municipio'),
-			'direccion_empresa' => mb_strtoupper($this->input->post('direccion_empresa'))
+			'direccion_empresa' => mb_strtoupper($this->input->post('direccion_empresa')),
+			'id_empleado' => $this->session->userdata('id_empleado')
 			);
       		echo $this->solicitud_juridica_model->insertar_establecimiento($data);
 		}else if($this->input->post('band') == "edit"){
@@ -126,7 +281,10 @@ class Solicitud_juridica extends CI_Controller {
 			'id_empresaci' => $this->input->post('id_empresaci'),
 			'discapacidad_personaci' => $this->input->post('discapacidad'),
 			'id_usuario' => $this->session->userdata('id_usuario'),
-			'fecha_modifica' => date('Y-m-d')
+			'fecha_modifica' => date('Y-m-d'),
+			'menor_edad' => $this->input->post('menor_edad'),
+			'ecivil' => $this->input->post('ecivil'),
+			'nacionalidad_personaci' => $this->input->post('nacionalidad')
 			);
 			echo $this->solicitud_juridica_model->insertar_solicitado($data);
 
@@ -141,7 +299,10 @@ class Solicitud_juridica extends CI_Controller {
 			'sexo_personaci' => $this->input->post('sexo_personaci'),
 			'discapacidad_personaci' => $this->input->post('discapacidad_personaci'),
 			'id_usuario' => $this->session->userdata('id_usuario'),
-			'fecha_modifica' => date('Y-m-d')
+			'fecha_modifica' => date('Y-m-d'),
+			'menor_edad' => $this->input->post('menor_edad'),
+			'ecivil' => $this->input->post('ecivil'),
+			'nacionalidad_personaci' => $this->input->post('nacionalidad')
 			);
 			echo $this->solicitud_juridica_model->editar_solicitado($data);
 
@@ -165,12 +326,16 @@ class Solicitud_juridica extends CI_Controller {
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
 			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci')),
 			'id_usuario' => $this->session->userdata('id_usuario'),
-			'fecha_modifica' => date('Y-m-d')
+			'fechacrea_expedienteci' => date('Y-m-d H:i:s'),
+			'fecha_modifica' => date('Y-m-d'),
+			'tiposolicitud_expedienteci' => 3,
+			'id_estadosci' =>1,
+			'ocupacion' => $this->input->post('ocupacion_solicitado')
 			);
 			echo $id_expedienteci = $this->solicitud_juridica_model->insertar_expediente($data);
 			$id_expedienteci = explode(',',$id_expedienteci);
 			$delegado = array(
-				'id_expedienteci' => $id_expedienteci,
+				'id_expedienteci' => $id_expedienteci[1],
 				'id_personal' => $data['id_personal'],
 				'fecha_cambio_delegado' => date('Y-m-d'),
 				'id_rol_guarda' => $this->session->userdata('id_rol'),
@@ -190,7 +355,8 @@ class Solicitud_juridica extends CI_Controller {
 			'motivo_expedienteci' => $this->input->post('motivo_expedienteci'),
 			'descripmotivo_expedienteci' => mb_strtoupper($this->input->post('descripmotivo_expedienteci')),
 			'id_usuario' => $this->session->userdata('id_usuario'),
-			'fecha_modifica' => date('Y-m-d')
+			'fecha_modifica' => date('Y-m-d'),
+			'ocupacion' => $this->input->post('ocupacion_solicitado')
 			);
 			echo $this->solicitud_juridica_model->editar_expediente($data);
 
@@ -246,6 +412,27 @@ class Solicitud_juridica extends CI_Controller {
         unlink($_SERVER['DOCUMENT_ROOT'].'/'.$this->config->item("nombre_base").'/files/generate/'.$nombreWord.'.docx');
 
     }
+
+		public function combo_tipo_doc() {
+			$data = $this->solicitudes_model->obtener_tipo_documentos();
+			$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_tipo_doc',
+				array(
+					'id' => $this->input->post('id'),
+					'doc_identidad' => $data
+				)
+			);
+		}
+
+		public function combo_ecivil_solicitado() {
+			$estados = $this->expedientes_model->obtener_estados_civiles();
+			$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_ecivil_solicitado',
+				array(
+					'id' => $this->input->post('id'),
+					'estados' => $estados
+				)
+			);
+
+		}
 
     private function random() {
         $alpha = "123qwertyuiopa456sdfghjklzxcvbnm789";

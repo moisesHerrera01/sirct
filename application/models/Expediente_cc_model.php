@@ -57,6 +57,7 @@ class Expediente_cc_model extends CI_Model {
     public function expedientes_diferencia_laboral($id_expedienteci){
       $this->db->select(
                         'e.id_expedienteci,
+                         e.forma_pago,
                          e.numerocaso_expedienteci,
                          e.id_empresaci,
                          e.id_estadosci,
@@ -68,6 +69,7 @@ class Expediente_cc_model extends CI_Model {
                          s.id_sindicato,
                          s.id_municipio,
                          s.nombre_sindicato,
+                         s.abreviatura_sindicato,
                          s.direccion_sindicato,
                          s.telefono_sindicato,
                          s.totalafiliados_sindicato,
@@ -76,10 +78,19 @@ class Expediente_cc_model extends CI_Model {
                          mu.id_municipio municipio_empresa,
                          cat.id_catalogociiu,
                          e.causa_expedienteci,
-                         d.nombre_delegado_actual'
+                         d.nombre_delegado_actual,
+                         ms.nombre_motivo,
+                         re.nombres_representante rlegal_empresa,
+                         re.sexo_representante,
+                         na.nivel_academico rlegal_nivel_academico,
+                         es.nombre_empresa'
                        )
                ->from('sct_expedienteci e')
+               ->join('sct_motivo_solicitud ms','ms.id_motivo_solicitud=e.motivo_expedienteci')
                ->join('sge_empresa es','es.id_empresa=e.id_empresaci')
+               ->Join('sge_representante re ', 're.id_empresa = es.id_empresa AND re.tipo_representante=1','left')
+               ->join('sir_titulo_academico ta','ta.id_titulo_academico=re.id_titulo_academico','left')
+  						 ->join('sir_nivel_academico na','na.id_nivel_academico=ta.id_nivel_academico','left')
                ->join('sge_catalogociiu cat','cat.id_catalogociiu=es.id_catalogociiu')
                ->join('org_municipio mu','mu.id_municipio=es.id_municipio')
                ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci')
@@ -93,6 +104,7 @@ class Expediente_cc_model extends CI_Model {
                     WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
                                                 FROM sct_delegado_exp de2
                                                 WHERE de2.id_expedienteci=de.id_expedienteci
+                                                AND de2.id_personal <> 0
                                                )
                   ) d" , "d.id_expedienteci=e.id_expedienteci")
                ->where('e.id_expedienteci',$id_expedienteci);
@@ -107,17 +119,20 @@ class Expediente_cc_model extends CI_Model {
     public function obtener_expediente_indemnizacion($id) {
       $this->db->select('
                   a.id_expedienteci,
+                  UPPER(a.forma_pago) forma_pago,
+                  a.id_personal,
                   a.numerocaso_expedienteci,
                   a.fechacrea_expedienteci,
                   a.fechaconflicto_personaci,
                   b.nombre_personaci,
                   b.apellido_personaci,
                   b.funciones_personaci,
-                  c.nombre_empresa,
+                  UPPER(c.nombre_empresa) nombre_empresa,
                   c.numinscripcion_empresa,
                   c.direccion_empresa,
                   c.telefono_empresa,
                   c.direccion_empresa,
+                  UPPER(c.abreviatura_empresa) abreviatura_empresa,
                   d.municipio,
                   e.actividad_catalogociiu,
                   e.grupo_catalogociiu,
@@ -137,7 +152,7 @@ class Expediente_cc_model extends CI_Model {
                ->join('sge_empresa c', 'a.id_empresaci = c.id_empresa')
                ->join('org_municipio d', 'c.id_municipio = d.id_municipio')
                ->join('sge_catalogociiu e', 'c.id_catalogociiu = e.id_catalogociiu', 'left')
-               ->join('sge_representante f', 'c.id_empresa = f.id_empresa', 'left')
+               ->Join('sge_representante f ', 'c.id_empresa = f.id_empresa AND f.tipo_representante=1','left')
                ->join('sir_empleado g','g.id_empleado = a.id_personal')
                ->join('sct_personaci h', 'a.id_expedienteci = h.id_expedienteci')
                ->join("(
@@ -148,13 +163,14 @@ class Expediente_cc_model extends CI_Model {
                     WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
                                                 FROM sct_delegado_exp de2
                                                 WHERE de2.id_expedienteci=de.id_expedienteci
+                                                AND de2.id_personal <> 0
                                                )
                   ) d" , "d.id_expedienteci=a.id_expedienteci")
                ->where("a.id_expedienteci", $id)
                ->limit(1)
                ->order_by('h.id_personaci', 'DESC');
 
-      $query=$this->db->get();
+      $query = $this->db->get();
 
 			if ($query->num_rows() > 0) {
 					return  $query;
@@ -180,7 +196,7 @@ class Expediente_cc_model extends CI_Model {
     public function obtener_resultados(){
       $this->db->select('*')
                ->from('sct_resultadosci')
-               ->where('id_tipo_solicitud>3');
+               ->where('id_tipo_solicitud',"5");
       $query = $this->db->get();
       if ($query->num_rows() > 0) {
         return $query;

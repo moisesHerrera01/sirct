@@ -18,6 +18,15 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <?php } ?>
     }
 
+    function nav(value) {
+      var id_expedienteci = $("#id_expedienteci_copia2").val();
+      var id_audiencia = $("#id_audiencia").val();
+      if (value != "") { location.href = value+id_expedienteci+'/'+id_audiencia; }
+      swal({ title: "¡Acta generada éxitosamente!", type: "success", showConfirmButton: true });
+      $("#modal_actas_tipo").modal("hide");
+      tabla_audiencias($("#id_expedienteci_copia2").val());
+    }
+
     function convert_lim_text(lim) {
         var tlim = "-" + lim + "d";
         return tlim;
@@ -52,6 +61,73 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         tablasolicitudes();
       });
     }
+
+
+    function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
+      $.ajax({
+        url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_actas",
+        type: "post",
+        dataType: "html",
+        data: {id : id_expedienteci,res:resultado }
+      })
+      .done(function(res){
+        $('#cnt_modal_actas').html(res);
+        $('#modal_actas').modal('show');
+        $("#solicitud_pn_pj").hide();
+        $("#sc_conciliada_pago").hide();
+        $("#pc_sin_conciliar").hide();
+        $("#inasistencia").hide();
+
+      if (cuenta_audiencias>1) {
+        $("#solicitud_pn_pj").show();
+        $("#esquela").show();
+      }
+      if (estado=="2") {
+        if (resultado=="1" || resultado=="2" || resultado=="7") {
+          $("#pf_st").show();
+        }else if (resultado=="12") {
+          $("#pc_sin_conciliar").show();
+        }else if (resultado=="10") {
+          $("#sc_conciliada_pago").show();
+        }else if (resultado=="23"){
+          $("#inasistencia").show();
+        }
+      }
+      $("#id_expedienteci_copia2").val(id_expedienteci);
+      $("#id_audiencia").val(id_audiencia);
+      $("#tipo_acta").val('').trigger('');
+      $("#modal_actas_tipo").modal("show");
+      });
+    }
+
+
+    // function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
+    //       // alert(posee_trabajador)
+    //       $("#solicitud_pn_pj").hide();
+    //       $("#sc_conciliada_pago").hide();
+    //       $("#pc_sin_conciliar").hide();
+    //       $("#inasistencia").hide();
+    //
+    //     if (cuenta_audiencias>1) {
+    //       $("#solicitud_pn_pj").show();
+    //       $("#esquela").show();
+    //     }
+    //     if (estado=="2") {
+    //       if (resultado=="1" || resultado=="2" || resultado=="7") {
+    //         $("#pf_st").show();
+    //       }else if (resultado=="12") {
+    //         $("#pc_sin_conciliar").show();
+    //       }else if (resultado=="10") {
+    //         $("#sc_conciliada_pago").show();
+    //       }else if (resultado=="23"){
+    //         $("#inasistencia").show();
+    //       }
+    //     }
+    //     $("#id_expedienteci_copia2").val(id_expedienteci);
+    //     $("#id_audiencia").val(id_audiencia);
+    //     $("#tipo_acta").val('').trigger('');
+    //     $("#modal_actas_tipo").modal("show");
+    // }
 
     function combo_establecimiento(seleccion){
       $.ajax({
@@ -150,12 +226,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function cerrar_mantenimiento() {
+        $("#modal_actas_tipo").modal('hide');
         $("#cnt_tabla").show(0);
         $("#cnt_tabla_solicitudes").show(0);
         $("#cnt_form_main").hide(0);
         $("#cnt_actions").hide(0);
         $("#cnt_actions").remove('.card');
-        $("#cnt_tabla_solicitantes").remove('.card')
+        $("#cnt_tabla_solicitantes").remove('.card');
         $("#modal_delegado").modal('hide');
         $("#modal_estado").modal('hide');
         $('#title_paso3').show();
@@ -659,15 +736,28 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             data: {id : id_persona}
         })
         .done(function(res){
-            console.log(res)
-            $('#cnt_actions').html(res);
-            $("#cnt_actions").show(0);
+            //console.log(res)
+            $('#cnt_actions_pagos').html(res);
+            $("#cnt_actions_pagos").show(0);
             $("#cnt_tabla").hide(0);
             $("#cnt_tabla_solicitudes").hide(0);
             $("#cnt_form_main").hide(0);
             tabla_pagos(id_persona);
         });
     }
+
+    function abrir_solicitantes(id_expediente) {
+        $("#modal_actas_tipo").modal('hide');
+        $("#cnt_form_main").hide(0);
+        $("#cnt_actions").hide(0);
+        $("#cnt_actions").remove('.card');
+        $("#cnt_tabla_solicitantes").remove('.card');
+        $("#modal_delegado").modal('hide');
+        $("#modal_estado").modal('hide');
+        $("#cnt_actions_pagos").hide(0);
+        $("#cnt_actions_pagos").remove('.card');
+        gestionar_solicitantes(id_expediente);
+    };
 
     function tabla_pagos(id_persona){
         if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -997,6 +1087,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             </div>
 
             <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
+            <div class="col-lg-12" id="cnt_actions_pagos" style="display:none;"></div>
             <div class="col-lg-1"></div>
             <div class="col-lg-12" id="cnt_tabla">
                 <div class="card">
@@ -1069,6 +1160,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <div style="display:none;">
     <button id="submit_ubi" name="submit_ubi" type="button">clicks</button>
 </div>
+
+<div id="cnt_modal_actas"></div>
 
 <!--INICIA MODAL DE ESTABLECIMIENTOS -->
   <div class="modal fade" id="modal_establecimiento" role="dialog">

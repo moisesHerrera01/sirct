@@ -27,6 +27,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <input type="hidden" id="id_expedienteci" name="id_expedienteci" value="<?= $id?>">
           <input type="hidden" id="id_fechasaudienciasci" name="id_fechasaudienciasci" value="<?= $id_audiencia?>">
+          <input type="hidden" id="id_sindicato" name="id_sindicato" value="<?php (isset($id_sindicato)) ? $id_sindicato : "" ; ?>">
 
           <div class="row">
             <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_resultados"></div>
@@ -86,6 +87,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <button type="button" onclick="pagos(<?= $id ?>);" class="btn waves-effect waves-light btn-info">Registrar</button>
             </div>
 
+            <div id="mod_pago" class="form-group col-lg-8 col-sm-8" style="height: 83px; display:none;*/">
+                <h5>Modalidad pago:</h5>
+                <textarea type="text" id="modalidad_pago" name="modalidad_pago" class="form-control" placeholder="Especifique banco y/o forma"></textarea>
+                <div class="help-block"></div>
+            </div>
+
             <div  id="especifique" class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
               <h5>Especifique : <span class="text-danger">*</span></h5>
               <div class="controls">
@@ -97,6 +104,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </select>
               </div>
             </div>
+
+            <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_directivos"></div>
+
           </div>
 
           <div align="right" id="btnadd1">
@@ -120,6 +130,8 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax4"));
         formData.append("fecha_pago", $("#fecha_pago").val());
+        formData.append("directivos_audiencia", $("#directivo").val().toString());
+        formData.append("id_sindicato", $("#id_sindicato").val());
         $('#modal_resolucion').modal('hide');
 
         $.ajax({
@@ -163,9 +175,11 @@ function mostrar(){
   $("#p_pago").hide(0);
   $("#f_pago").hide(0);
   $("#fhpago").hide(0);
+  $("#mod_pago").hide(0);
   $("#det_resultado").show(0);
   $("#asist").show(0);
   $("#tipo_conciliacion").removeAttr("required");
+  $("#modalidad_pago").removeAttr("required");
   $("#monto_pago").removeAttr("required");
   $("#inasistencia").removeAttr("required");
   $("#primer_pago").removeAttr("required");
@@ -213,6 +227,7 @@ function mostrar(){
       $("#fecha_pago").attr("required",'required');
       break;
     case '3':
+    case '23':
       $("#det_resultado").hide(0);
       $("#detalle_resultado").removeAttr("required");
       $("#especifique").show(500);
@@ -250,6 +265,10 @@ function mostrar(){
     case '10':
         $("#tipo_conciliacion").attr("required",'required');
         $("#tipo_cc").show();
+        $("#numero_folios").removeAttr("required");
+        $("#num_folios").hide(0);
+        //$("#modalidad_pago").attr("required",'required');
+        $("#mod_pago").show();
       break;
     case '6':
         $("#representante_empresa").removeAttr("required");
@@ -260,6 +279,10 @@ function mostrar(){
         $("#representante_empresa").removeAttr("required");
         $("#asistieron").removeAttr("required");
         $("#defensor").removeAttr("required");
+      break;
+    case '12':
+        $("#numero_folios").removeAttr("required");
+        $("#num_folios").hide(0);
       break;
     default:
   }

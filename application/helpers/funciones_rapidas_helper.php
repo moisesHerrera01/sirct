@@ -336,9 +336,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 		/* Ej: calcular_edad("1945-11-22")*/
 		function calcular_edad( $fecha ) {
-			$fecha = explode("-",$fecha);
-			if(count($fecha) == 3){
-				list($Y,$m,$d) = $fecha;
+			$fecha2 = explode("-",$fecha);
+			if(count($fecha2) == 3 && $fecha != "0000-00-00" && $fecha != "1969-12-31"){
+				list($Y,$m,$d) = $fecha2;
 				return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
 			}else{
 				return "N/A";
@@ -459,6 +459,59 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			}
 		}
 		return $depto;
+	}
+
+	function convertir_a_ordinal($numero) {
+		$listaUnidadesOrdinales = array ( // Letras de los ordinales entre 0º y 19º
+			"ningún", "primera", "segunda", "tercera", "cuarta", "quinta", "sexta", "séptima", "octava", "novena",
+			"décima", "undécima", "duodécima", "decimotercera", "decimocuarta", "decimoquinta", "decimosexta", "decimoséptima", "decimoctava", "decimonovena"
+		);
+		return $listaUnidadesOrdinales[$numero];
+	}
+
+	function AbreviaturaTitulo($titulo='', $sexo) {
+		$abr_grd = '';
+		switch ($titulo) {
+			case 'LICENCIATURAS':
+				$abr_grd = 'Lic';
+				if ('F' == $sexo) {
+					$abr_grd .= 'da';
+				}
+				$abr_grd .= '.';
+				return $abr_grd;
+				break;
+
+			case 'INGENIERÍAS':
+				$abr_grd = 'Ing';
+				if ('F' == $sexo) {
+					$abr_grd .= 'a';
+				}
+				$abr_grd .= '.';
+				return $abr_grd;
+				break;
+
+			case 'ARQUITECTURA':
+				$abr_grd = 'Arq';
+				$abr_grd .= '.';
+				return $abr_grd;
+				break;
+			case 'DOCTORADOS':
+				$abr_grd = 'Lic';
+				if ('F' == $sexo) {
+					$abr_grd .= 'da';
+				}
+				$abr_grd .= '.';
+				return $abr_grd;
+
+				default:
+				$abr_grd = 'Lic';
+				if ('F' == $sexo) {
+					$abr_grd .= 'da';
+				}
+				$abr_grd .= '.';
+				return $abr_grd;
+				break;
+		}
 	}
 
 ?>

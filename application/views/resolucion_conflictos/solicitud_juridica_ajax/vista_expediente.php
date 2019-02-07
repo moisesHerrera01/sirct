@@ -16,10 +16,13 @@
                 <i class="mdi mdi-window-close"></i>
             </a>
         </div>
-        <h4 class="card-title m-b-0 text-white">Información de  Expediente</h4>
+        <h4 class="card-title m-b-0 text-white">Información del expediente</h4>
     </div>
 
     <div class="card-body b-t" style="padding-top: 7px;">
+      <div align="right">
+          <button class="btn btn-secondary" onclick="imprimir_ficha_pdf('<?= $expediente->id_expedienteci ?>', '<?= $personaci->id_personaci ?>')"><span class="mdi mdi-file-pdf"></span> Imprimir ficha</button>
+        </div><br>
         <blockquote class="m-t-0">
             <table class="table no-border">
                 <tbody>

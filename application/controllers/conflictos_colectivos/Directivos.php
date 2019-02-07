@@ -10,6 +10,7 @@ class Directivos extends CI_Controller {
 
   public function tabla_directivos(){
 		$data['directivos'] = $this->directivos_model->obtener_directivos_sindicato($this->input->get('id_sindicato'));
+		$data['sindicato'] = $this->input->get('id_sindicato');
     $this->load->view('conflictos_colectivos/sindicatos_ajax/tabla_directivos',$data);
   }
 
@@ -22,10 +23,15 @@ class Directivos extends CI_Controller {
 			'dui_directivo' => $this->input->post('dui_directivo'),
 			'tipo_directivo' => $this->input->post('tipo_directivo'),
 			'acreditacion_directivo' => $this->input->post('acreditacion_directivo'),
-			'sexo_directivo' => $this->input->post('sexo_directivo')
+			'sexo_directivo' => $this->input->post('sexo_directivo'),
+			'ocupacion_directivo' => $this->input->post('ocupacion_directivo'),
+			'municipio_directivo' => $this->input->post('municipio_directivo'),
+			'fnacimiento_directivo' => date("Y-m-d",strtotime($this->input->post('fnacimiento_directivo'))),
+			'estado_directivo' => 1
 			);
-			$this->directivos_model->insertar_directivo($data);
+			$id_directivo = $this->directivos_model->insertar_directivo($data);
 			echo $data['id_sindicato'];
+			$this->directivos_model->insertar_directivo_audiencia(array('id_directivo' => $id_directivo,'tipo_asistencia'=>1 ));
 
 		}else if($this->input->post('band2') == "edit"){
 
@@ -37,7 +43,10 @@ class Directivos extends CI_Controller {
 				'dui_directivo' => $this->input->post('dui_directivo'),
 				'tipo_directivo' => $this->input->post('tipo_directivo'),
 				'acreditacion_directivo' => $this->input->post('acreditacion_directivo'),
-				'sexo_directivo' => $this->input->post('sexo_directivo')
+				'sexo_directivo' => $this->input->post('sexo_directivo'),
+				'ocupacion_directivo' => $this->input->post('ocupacion_directivo'),
+				'municipio_directivo' => $this->input->post('municipio_directivo'),
+				'fnacimiento_directivo' => date("Y-m-d",strtotime($this->input->post('fnacimiento_directivo')))
 			);
 			$this->directivos_model->editar_directivo($data);
 			echo $data['id_sindicato'];
@@ -66,5 +75,37 @@ class Directivos extends CI_Controller {
 		);
 			echo $this->directivos_model->editar_directivo($data);
 	}
+
+	public function combo_directivos() {
+		$directivos = $this->directivos_model->obtener_directivos_sindicato($this->input->post('id_sindicato'));
+		$this->load->view('conflictos_colectivos/sindicatos_ajax/combo_directivos',
+			array(
+				'id' => $this->input->post('id'),
+				'id_sindicato' => $this->input->post('id_sindicato'),
+				'directivos' => $directivos
+			)
+		);
+	}
+
+	public function modal_directivos(){
+		$this->load->view('conflictos_colectivos/sindicatos_ajax/modal_directivo',
+			array(
+				'id_directivo' => $this->input->post('id_directivo'),
+				'tipo' => $this->input->post('tipo'),
+				'id_sindicato' => $this->input->post('id_sindicato')
+			));
+	}
+
+	public function combo_municipio() {
+
+	$this->load->view('conflictos_colectivos/sindicatos_ajax/combo_municipio_directivo',
+		array(
+			'id' => $this->input->post('id'),
+			'municipio' => $this->db->get('org_municipio')
+		)
+	);
+
+}
+
 }
 ?>

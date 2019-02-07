@@ -5,11 +5,12 @@ class Audiencias extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("expedientes_model","audiencias_model","pagos_model","login_model"));
+		$this->load->model(array("expedientes_model","audiencias_model","pagos_model","login_model","directivos_model"));
 	}
 
   public function programar_audiencias(){
     $data['expediente'] = $this->expedientes_model->obtener_expediente( $this->input->post('id') );
+		$data['id_sindicato'] = $this->input->post('id_sindicato');
     $this->load->view('resolucion_conflictos/solicitudes_ajax/programar_audiencias', $data);
   }
 
@@ -50,6 +51,9 @@ class Audiencias extends CI_Controller {
 		}
     $data['audiencia'] = $this->audiencias_model->obtener_audiencias( $this->input->get('id_expedienteci') );
 		$data['tipo'] = $tipo;
+		if ($this->input->get('id_sindicato')) {
+			$data['id_sindicato'] = $this->input->get('id_sindicato');
+		}
     $this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_audiencias',$data);
   }
 
@@ -124,6 +128,18 @@ class Audiencias extends CI_Controller {
 	}
 
 	public function gestionar_resolucion_audiencia() {
+		$directivos = explode(",", $this->input->post('directivos_audiencia'));
+		$sindicato = $this->input->post('id_sindicato');
+		foreach ($directivos as $d) {
+			$this->directivos_model->insertar_directivo_audiencia(
+				array(
+					'id_directivo' =>$d,
+					'id_audiencia'=> $this->input->post('id_fechasaudienciasci'),
+					'id_expedienteci' => $this->input->post('id_expedienteci'),
+					'tipo_asistencia' => 2));
+		}
+
+
 		$data['id_fechasaudienciasci'] = $this->input->post('id_fechasaudienciasci');
 		$data['tipo_pago'] = $this->input->post('tipo_conciliacion');
 		$data['id_expedienteci'] = $this->input->post('id_expedienteci');
@@ -137,13 +153,17 @@ class Audiencias extends CI_Controller {
 		$data['id_defensorlegal'] = $this->input->post('defensor');
 		$data['id_representaci'] = $this->input->post('representante_empresa');
 		$data['id_delegado'] = $this->input->post('delegado');
-		$resultado = $this->audiencias_model->editar_audiencia($data);
+		//$resultado = $this->audiencias_model->editar_audiencia($data);
 		echo $resultado;
 		if ($resultado == "exito") {
-			$this->expedientes_model->editar_expediente(array(
+			$exp= array(
 			'id_expedienteci' => $this->input->post('id_expedienteci'),
 			'id_estadosci' => "2"
-		));
+			);
+			if ($this->input->post('resolucion')=="10") {
+				$exp['forma_pago'] = $this->input->post('modalidad_pago');
+			}
+			//$this->expedientes_model->editar_expediente($exp);
 		}
 		$data2 = array(
 						'id_expedienteci' => $data['id_expedienteci'],
@@ -165,7 +185,8 @@ class Audiencias extends CI_Controller {
 			$this->load->view('resolucion_conflictos/solicitudes_ajax/resolucion_expediente',
 			array(
 				'id' => $this->input->post('id'),
-				'id_audiencia' => $this->input->post('id_audiencia')
+				'id_audiencia' => $this->input->post('id_audiencia'),
+				'id_sindicato' => $this->input->post('id_sindicato')
 			));
 		}
 

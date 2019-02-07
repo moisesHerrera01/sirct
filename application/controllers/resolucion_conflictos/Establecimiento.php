@@ -52,7 +52,8 @@ class Establecimiento extends CI_Controller {
                 'telefono_empresa' => $this->input->post('telefono_establecimiento'),
                 'id_catalogociiu' => $this->input->post('act_economica'),
                 'id_municipio' => $this->input->post('municipio2'),
-				'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
+				'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento'),
+				'id_empleado' => $this->session->userdata('id_empleado')
             );
 			echo $this->establecimiento_model->insertar_establecimiento($data);
 		}else if($this->input->post('band3') == "edit"){

@@ -5,9 +5,7 @@ class Solicitudes extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('solicitudes_model');
-		$this->load->model('expedientes_model');
-		$this->load->model('expedientes_model');
+		$this->load->model(array('solicitudes_model','expedientes_model','expedientes_model','solicitud_juridica_model'));
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -57,18 +55,17 @@ class Solicitudes extends CI_Controller {
 
 			$data2  = array(
 				'numero_partida' =>$this->input->post('numero_partida'),
-				'folio_partida' =>$this->input->post('folio_partida'),
+				'id_municipio_partida' =>$this->input->post('municipio_partida'),
 				'libro_partida' =>$this->input->post('libro_partida'),
-				'asiento_partida' =>$this->input->post('asiento_partida'),
-				'anio_partida' =>$this->input->post('numero_partida')
+				'id_municipio_menor' =>$this->input->post('municipio_menor'),
+				'fecha_partida' => date("Y-m-d",strtotime($this->input->post('fecha_partida')))
 			 );
 			if ($this->input->post('numero_partida')!='') {
 				$id_partida = $this->solicitudes_model->insertar_partida($data2);
 				$data['id_partida'] = $id_partida;
 			}
 
-
-			echo $this->solicitudes_model->insertar_solicitud($data);
+			echo json_encode(array('id_personaci' => $this->solicitudes_model->insertar_solicitud($data),'id_partida'=>$id_partida ));
 
 		}else if($this->input->post('band1') == "edit"){
 
@@ -91,7 +88,7 @@ class Solicitudes extends CI_Controller {
 			'posee_representante' => 0,
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 			'discapacidad' => $this->input->post('discapacidad_desc'),
-			'id_partida' =>$this->input->post('id_partida'),
+			// 'id_partida' =>$this->input->post('id_partida'),
 			'id_usuario' => $this->session->userdata('id_usuario'),
 			'fecha_modifica' => date('Y-m-d')
 			);
@@ -99,14 +96,15 @@ class Solicitudes extends CI_Controller {
 			$data2  = array(
 				'id_partida' =>$this->input->post('id_partida'),
 				'numero_partida' =>$this->input->post('numero_partida'),
-				'folio_partida' =>$this->input->post('folio_partida'),
+				'id_municipio_partida' =>$this->input->post('municipio_partida'),
 				'libro_partida' =>$this->input->post('libro_partida'),
-				'asiento_partida' =>$this->input->post('asiento_partida'),
-				'anio_partida' =>$this->input->post('numero_partida')
+				'id_municipio_menor' =>$this->input->post('municipio_menor'),
+				'fecha_partida' => date("Y-m-d",strtotime($this->input->post('fecha_partida'))),
+				'fnacimiento_menor' => date("Y-m-d",strtotime($this->input->post('fnacimiento_menor'))),
 			 );
 
 			$this->solicitudes_model->editar_partida($data2);
-			echo $this->solicitudes_model->editar_solicitud($data);
+			echo json_encode(array('id_personaci' => $this->solicitudes_model->editar_solicitud($data),'id_partida'=>$data2['id_partida'] ));
 
 		}
 	}
@@ -123,6 +121,9 @@ class Solicitudes extends CI_Controller {
 			'id_estado_civil' => $this->input->post('estado_civil'),
 			'id_titulo_academico' => $this->input->post('profesion'),
 			'f_nacimiento_representante' => date("Y-m-d",strtotime($this->input->post('f_nacimiento_representante'))),
+			'sexo_representante' => $this->input->post('sexo'),
+			'estado_representante' => 1,
+			'id_doc_identidad' => $this->input->post('rep_tipo_doc')
 			);
       		echo $this->solicitud_juridica_model->insertar_representante($data);
 		}else if($this->input->post('band4') == "edit"){
@@ -137,6 +138,8 @@ class Solicitudes extends CI_Controller {
 			'id_estado_civil' => $this->input->post('estado_civil'),
 			'id_titulo_academico' => $this->input->post('profesion'),
 			'f_nacimiento_representante' => date("Y-m-d",strtotime($this->input->post('f_nacimiento_representante'))),
+			'sexo_representante' => $this->input->post('sexo'),
+			'id_doc_identidad' => $this->input->post('rep_tipo_doc')
 			);
 			echo $this->solicitud_juridica_model->editar_representante($data);
 		}else if($this->input->post('band4') == "delete"){

@@ -42,7 +42,8 @@ class Expediente extends CI_Controller {
 								'tipo_representante_menor' => $this->input->post('acompaniante'),
 								'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
 								'id_usuario' => $this->session->userdata('id_usuario'),
-								'fecha_modifica' => date('Y-m-d')
+								'fecha_modifica' => date('Y-m-d'),
+								'id_partida' => $this->input->post('id_partida')
             );
 						if ($this->input->post('nombres_jefe')!='') {
 							$id_empleador = $this->empleadores_model->insertar_empleador($data3);
@@ -98,7 +99,8 @@ class Expediente extends CI_Controller {
 					'tipo_representante_menor' => $this->input->post('acompaniante'),
 					'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
 					'id_usuario' => $this->session->userdata('id_usuario'),
-					'fecha_modifica' => date('Y-m-d')
+					'fecha_modifica' => date('Y-m-d'),
+					'id_partida' => $this->input->post('id_partida')
 			);
 
 			$data = array(
@@ -231,6 +233,26 @@ class Expediente extends CI_Controller {
 
 		}
 
+		public function combo_municipio_menor() {
+			$municipios = $this->expedientes_model->obtener_municipios();
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_municipio_menor',
+				array(
+					'id' => $this->input->post('id'),
+					'municipios' => $municipios
+				)
+			);
+		}
+
+		public function combo_municipio_partida() {
+			$municipios = $this->expedientes_model->obtener_municipios();
+			$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_municipio_partida',
+				array(
+					'id' => $this->input->post('id'),
+					'municipios' => $municipios
+				)
+			);
+		}
+
 		public function registros_expedientes() {
 
 			print json_encode(
@@ -354,7 +376,7 @@ class Expediente extends CI_Controller {
 				<tr>
 					<td align='right'>
 					<p style='font-size: 18px;'><small>N&uacute;mero de caso:</small> <b>$expediente->numerocaso_expedienteci</b><br></p>
-					<b>Fecha y hora de creaci&oacute;n del expediente:</b> ".date("d-M-Y h:i:s A", strtotime($expediente->fechacrea_expedienteci))."</td>
+					<b>Fecha y hora de creaci&oacute;n del expediente:</b> ".date("d-m-Y h:i:s A", strtotime($expediente->fechacrea_expedienteci))."</td>
 				</tr>
 		</tbody></table><br>";
 

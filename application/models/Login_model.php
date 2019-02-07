@@ -37,7 +37,7 @@ class Login_model extends CI_Model {
 	function get_data_user($data){
 		// $query = $this->db->query("SELECT * FROM org_usuario WHERE usuario = '".$data['usuario']."' AND estado = 1");
 
-		$this->db->select('o.id_usuario,o.usuario,o.nombre_completo,e.nr,r.nombre_rol,r.id_rol')
+		$this->db->select('o.id_usuario,o.usuario,o.nombre_completo,e.nr,r.nombre_rol,r.id_rol, e.id_empleado')
 						 ->from('org_usuario o')
 						 ->join('org_usuario_rol ur','ur.id_usuario=o.id_usuario')
 						 ->join('org_rol r','r.id_rol=ur.id_rol')

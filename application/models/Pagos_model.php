@@ -126,4 +126,44 @@ class Pagos_model extends CI_Model {
 				return FALSE;
 		}
 	}
+
+	public function obtener_pagos_personas($id_expedienteci,$numero){
+		$this->db->select('UPPER(CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci)) trabajador,
+											 f.montopago_fechaspagosci
+											')
+						 ->from('sct_fechaspagosci f')
+						 ->join('sct_personaci p','p.id_personaci=f.id_persona')
+						 ->join('sct_expedienteci e','e.id_expedienteci=p.id_expedienteci')
+						 ->join('sir_empleado em','em.id_empleado=e.id_personal')
+						 ->where('e.id_expedienteci',$id_expedienteci)
+						 ->where('f.numero_pago',$numero)
+						 ->group_by('f.id_fechaspagosci');
+		$query = $this->db->get();
+		return $query;
+	}
+
+	public function obtener_numero_pagos($id_personaci){
+		$this->db->select('COUNT(f.id_fechaspagosci) cantidad')
+						 ->from('sct_fechaspagosci f')
+						 ->join('sct_personaci p','p.id_personaci=f.id_persona')
+						 ->where('f.id_persona',$id_personaci);
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->row();
+		}else {
+			return FALSE;
+		}
+	}
+
+	public function obtener_cantidad_actas_pagos($id_expedienteci){
+		$this->db->select('f.numero_pago')
+						 ->from('sct_fechaspagosci f')
+						 ->join('sct_personaci p','p.id_personaci=f.id_persona')
+						 ->join('sct_expedienteci e','e.id_expedienteci=p.id_expedienteci')
+						 ->where('e.id_expedienteci',$id_expedienteci)
+						 ->group_by('f.numero_pago');
+		$query = $this->db->get();
+
+		return $query;
+	}
 }
