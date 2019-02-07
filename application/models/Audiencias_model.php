@@ -76,9 +76,11 @@ class Audiencias_model extends CI_Model {
 													ELSE e.tiposolicitud_expedienteci END) AS tipo,
 												CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) delegado,
 												CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona,
-												d.nombre_delegado_actual')
+												d.nombre_delegado_actual,
+												emp.nombre_empresa')
 					->from('sct_fechasaudienciasci f')
 					->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
+					->join('sge_empresa emp','emp.id_empresa=e.id_empresaci','left')
 					->join('sct_personaci p','p.id_personaci=e.id_personaci','left')
 					->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
 					->join('sir_empleado em','em.id_empleado=e.id_personal')
@@ -90,6 +92,7 @@ class Audiencias_model extends CI_Model {
 								WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 																						FROM sct_delegado_exp de2
 																						WHERE de2.id_expedienteci=de.id_expedienteci
+																						AND de2.id_personal <> 0
 																					 )
 							) d" , "d.id_expedienteci=e.id_expedienteci")
 					->group_by('f.id_fechasaudienciasci');
@@ -113,6 +116,12 @@ class Audiencias_model extends CI_Model {
 							 ->where("(f.hora_fechasaudienciasci + INTERVAL 1 hour)>=",$hora)
 							 ->where('f.fecha_fechasaudienciasci',$fecha);
 		}
+
+		$this->db->where("f.id_fechasaudienciasci =(SELECT fa.id_fechasaudienciasci
+																							  FROM sct_fechasaudienciasci fa
+																							  WHERE fa.id_expedienteci=f.id_expedienteci AND fa.estado_audiencia=1
+										 														LIMIT 1)
+										 OR f.estado_audiencia = 2");
 		$query=$this->db->get();
 		if ($query->num_rows() > 0) {
 				return $query;

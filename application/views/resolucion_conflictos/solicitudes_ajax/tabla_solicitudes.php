@@ -128,7 +128,7 @@
                                         <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar delegado/a</a>
                                         <?php  } ?>
 
-                                      <?php if ($fila->id_partida !=NULL || $fila->id_partida !=" ") { ?>
+                                      <?php if ($fila->id_doc_identidad==4) { ?>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_menor/1/'.$fila->id_expedienteci)?>">Solicitud menor edad</a>
                                     <?php }else{ ?>
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/'.$fila->id_expedienteci)?>">Acta de solicitud</a>

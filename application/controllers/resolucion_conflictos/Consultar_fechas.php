@@ -22,7 +22,7 @@ class Consultar_fechas extends CI_Controller {
 		}else {
 			$tipo = 2;
 		}
-    	$data = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('nr'),FALSE,FALSE,$tipo );
+    $data = $this->audiencias_model->obtener_audiencias_delegado( $this->input->get('nr'),FALSE,FALSE,$tipo );
 		$data2= $this->pagos_model->obtener_pagos_delegado($this->input->get('nr'),$tipo);
 
 		if ($data!=FALSE && $data!=NULL) {
@@ -35,10 +35,12 @@ class Consultar_fechas extends CI_Controller {
 				 $id = $au->id_fechasaudienciasci;
 				 $tipo = strtoupper($au->tipo);
 				 $delegado = $au->nombre_delegado_actual;
-				if ($au->tiposolicitud_expedienteci=='1' || $au->tiposolicitud_expedienteci == '5') {
+				if ($au->tiposolicitud_expedienteci=='1' || $au->tiposolicitud_expedienteci == '5' || $au->tiposolicitud_expedienteci == '2') {
 				 	$solicitante = strtoupper($au->persona);
 				}elseif ($au->tiposolicitud_expedienteci == '4') {
 					$solicitante = strtoupper($au->nombre_sindicato);
+				}elseif ($au->tiposolicitud_expedienteci == '3') {
+					$solicitante = strtoupper($au->nombre_empresa);
 				}
 
 				$ColorClass = "bg-success bg-opacity";
@@ -154,7 +156,7 @@ class Consultar_fechas extends CI_Controller {
 		}else {
 			$tipo = 2;
 		}
-    	$citas = $this->audiencias_model->obtener_audiencias_delegado( $data["id_delegado"],FALSE,FALSE,$tipo,$data["fecha"]);
+    	$citas = $this->audiencias_model->obtener_audiencias_delegado( $data["id_delegado"],$data["fecha"],FALSE,$tipo);
 		$pagos = $this->pagos_model->obtener_pagos_delegado($data["id_delegado"],$tipo,$data["fecha"]);
 
 		$cuerpo = "<h5 aligh='center'>CITAS DE AUDIENCIAS</h5>";
@@ -162,13 +164,13 @@ class Consultar_fechas extends CI_Controller {
 		if($citas){
 			foreach ($citas->result() as $rows) {
 				$solicitante = "";
-				if ($rows->tiposolicitud_expedienteci=='1' || $rows->tiposolicitud_expedienteci=='3' || $rows->tiposolicitud_expedienteci == '5') {
+				if ($rows->tiposolicitud_expedienteci=='1' || $rows->tiposolicitud_expedienteci == '2' || $rows->tiposolicitud_expedienteci == '5') {
 					$solicitante = strtoupper($rows->persona);
 				}elseif ($rows->tiposolicitud_expedienteci == '4') {
 					$solicitante = strtoupper($rows->nombre_sindicato);
-				}/*elseif ($rows->tiposolicitud_expedienteci == '3') {
+				}elseif ($rows->tiposolicitud_expedienteci == '3') {
 					$solicitante = strtoupper($rows->nombre_empresa);
-				}*/
+				}
 				$cell_row = array(
 					$rows->numerocaso_expedienteci,
 					$rows->delegado,

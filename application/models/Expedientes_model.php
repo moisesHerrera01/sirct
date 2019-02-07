@@ -58,6 +58,7 @@ class Expedientes_model extends CI_Model {
 												 pa.id_municipio_partida,
 												 pa.fecha_partida,
 												 pa.libro_partida,
+												 pa.fnacimiento_menor,
 												 TIMESTAMPDIFF(YEAR,pa.fnacimiento_menor,CURDATE()) edad_menor,
 												 TIMESTAMPDIFF(YEAR,p.fnacimiento_personaci,CURDATE()) edad_solicitante,
 												 CASE
