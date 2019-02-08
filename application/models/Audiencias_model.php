@@ -103,9 +103,9 @@ class Audiencias_model extends CI_Model {
 			$this->db->where('f.fecha_fechasaudienciasci', $fecha);
 		}
 		if ($tipo==1) {
-			$this->db->where('e.id_personaci<>0');
+			$this->db->where('e.tiposolicitud_expedienteci<4');
 		}else {
-			$this->db->where('e.id_personaci=0');
+			$this->db->where('e.tiposolicitud_expedienteci>3');
 		}
 		if ($fecha && $hora) {
 			$hora_fin = date('H:i:s',strtotime($hora.'+ 1 hours'));
@@ -117,11 +117,11 @@ class Audiencias_model extends CI_Model {
 							 ->where('f.fecha_fechasaudienciasci',$fecha);
 		}
 
-		$this->db->where("f.id_fechasaudienciasci =(SELECT fa.id_fechasaudienciasci
+		$this->db->where("(f.id_fechasaudienciasci =(SELECT fa.id_fechasaudienciasci
 																							  FROM sct_fechasaudienciasci fa
 																							  WHERE fa.id_expedienteci=f.id_expedienteci AND fa.estado_audiencia=1
 										 														LIMIT 1)
-										 OR f.estado_audiencia = 2");
+										 OR f.estado_audiencia = 2)");
 		$query=$this->db->get();
 		if ($query->num_rows() > 0) {
 				return $query;
