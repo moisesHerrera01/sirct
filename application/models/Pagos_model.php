@@ -48,9 +48,9 @@ class Pagos_model extends CI_Model {
 				$this->db->where("DATE_FORMAT(f.fechapago_fechaspagosci, '%Y-%m-%d') = ", $fecha);
 				}
 				if ($tipo==1) {
-					$this->db->where('e.id_personaci<>0');
+					$this->db->where('e.tiposolicitud_expedienteci<4');
 				}else {
-					$this->db->where('e.id_personaci=0');
+					$this->db->where('e.tiposolicitud_expedienteci>3');
 				}
 
 		$sql[] = '('.$this->db->get_compiled_select().')';
@@ -72,6 +72,11 @@ class Pagos_model extends CI_Model {
 				->group_by('f.id_fechaspagosci');
 		if ($id_delegado) {
 			$this->db->where('em.nr', $id_delegado);
+		}
+		if ($tipo==1) {
+			$this->db->where('e.tiposolicitud_expedienteci<4');
+		}else {
+			$this->db->where('e.tiposolicitud_expedienteci>3');
 		}
 		if ($fecha) {
 			$this->db->where("DATE_FORMAT(f.fechapago_fechaspagosci, '%Y-%m-%d') = ", $fecha);

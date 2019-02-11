@@ -195,8 +195,8 @@ class Consultar_fechas extends CI_Controller {
 					$rows->numerocaso_expedienteci,
 					$rows->nombre_completo,
 					$rows->persona,
-					$rows->montopago_fechaspagosci,
-					"$".date("h:i A",strtotime($rows->fechapago_fechaspagosci))
+					"$".$rows->montopago_fechaspagosci,
+					date("h:i A",strtotime($rows->fechapago_fechaspagosci))
 				);
 				$cuerpo .= table_row($cell_row);
 			}
