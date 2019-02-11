@@ -546,7 +546,11 @@ class Acta extends CI_Controller {
       $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
       $templateWord->setValue('mes_conflicto', mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
       $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
-      $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
+      $templateWord->setValue('delegado_audiencias',$expediente->delegado_expediente);
+      $templateWord->setValue('direccion_empresa',$expediente->direccion_empresa);
+      $templateWord->setValue('nombre_delegado',$expediente->nombre_delegado_elabora);
+      $templateWord->setValue('direccion_rep_menor',$expediente->direccion_personaci);
+
 
       $nombreWord = $this->random();
 

@@ -72,9 +72,9 @@ class Reportes_individuales extends CI_Controller {
 		);
 
 		$titles = array(
-				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
-				'DIRECCIÓN GENERAL DE TRABAJO', 
-				'INFORME DE RELACIONES INDIVIDUALES', 
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',
+				'DIRECCIÓN GENERAL DE TRABAJO',
+				'INFORME DE RELACIONES INDIVIDUALES',
 				periodo($data));
 
 		$titles_head = array(
@@ -90,7 +90,7 @@ class Reportes_individuales extends CI_Controller {
 			'Edad',
 			'Personas con discapacidad',
 			'Persona solicitada',
-			'Causas',	
+			'Causas',
 			'Rama económica',
 			'Actividad económica',
 			'Resolución',
@@ -109,7 +109,7 @@ class Reportes_individuales extends CI_Controller {
 		 	$header = head_table_html($titles, $data, 'pdf');
 
 		 	$this->mpdf->SetHTMLHeader($header);
-		 	
+
 		 	$body .= $this->relaciones_individuales_html($data, $titles_head);
 
 		 	$pie = piePagina($this->session->userdata('usuario'));
@@ -165,7 +165,7 @@ class Reportes_individuales extends CI_Controller {
 
 	function relaciones_individuales_excel($data, $titulos, $titles_table_head){
 		$this->load->library('phpe');
-		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE); 
+		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE);
 		$estilo = array( 'borders' => array( 'outline' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) ) );
 
 		if (PHP_SAPI == 'cli') die('Este reporte solo se ejecuta en un navegador web');
@@ -184,7 +184,7 @@ class Reportes_individuales extends CI_Controller {
 
 		//MODIFICANDO ANCHO DE LAS COLUMNAS 18
 		PhpExcelSetColumnWidth($this->objPHPExcel,
-			$width = array(5,10,30,15,15,30,5,5,10,5,12,30,10,30,30,10,15,20), 
+			$width = array(5,10,30,15,15,30,5,5,10,5,12,30,10,30,30,10,15,20),
 			$letradesde, $letrahasta);
 
 		//AGREGAMOS LOS TITULOS DEL REPORTE
@@ -227,8 +227,8 @@ class Reportes_individuales extends CI_Controller {
 		}
 
 		/************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	****************************/
-		
-		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true); 
+
+		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
 
 		$f+=3;
 
@@ -264,9 +264,9 @@ class Reportes_individuales extends CI_Controller {
 		);
 
 		$titles = array(
-				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
-				'DIRECCIÓN GENERAL DE TRABAJO', 
-				'INFORME DE RENUNCIA VOLUNTARIA', 
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',
+				'DIRECCIÓN GENERAL DE TRABAJO',
+				'INFORME DE RENUNCIA VOLUNTARIA',
 				periodo($data));
 
 		$titles_head = array( 'N° Exp', 'Depto', 'Delegado', 'Fecha inicio', 'Fecha fin',
@@ -286,7 +286,7 @@ class Reportes_individuales extends CI_Controller {
 		 	$header = head_table_html($titles, $data, 'pdf');
 
 		 	$this->mpdf->SetHTMLHeader($header);
-		 	
+
 		 	$body .= $this->renuncia_voluntaria_html($data, $titles_head);
 
 		 	$pie = piePagina($this->session->userdata('usuario'));
@@ -332,7 +332,7 @@ class Reportes_individuales extends CI_Controller {
 				);
 				$cuerpo .= table_row($cell_row);
 			}
-			
+
 		}else{
 			$cuerpo .= no_rows(count($titles_head));
 		}
@@ -343,7 +343,7 @@ class Reportes_individuales extends CI_Controller {
 
 	function renuncia_voluntaria_excel($data, $titulos, $titles_table_head){
 		$this->load->library('phpe');
-		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE); 
+		error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE);
 		$estilo = array( 'borders' => array( 'outline' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) ) );
 
 		if (PHP_SAPI == 'cli') die('Este reporte solo se ejecuta en un navegador web');
@@ -362,7 +362,7 @@ class Reportes_individuales extends CI_Controller {
 
 		//MODIFICANDO ANCHO DE LAS COLUMNAS 18
 		PhpExcelSetColumnWidth($this->objPHPExcel,
-			$width = array(5,10,30,15,15,30,5,5,10,5,12,30,10,30,30,10,15,20), 
+			$width = array(5,10,30,15,15,30,5,5,10,5,12,30,10,30,30,10,15,20),
 			$letradesde, $letrahasta);
 
 		//AGREGAMOS LOS TITULOS DEL REPORTE
@@ -405,8 +405,8 @@ class Reportes_individuales extends CI_Controller {
 		}
 
 		/************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	****************************/
-		
-		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true); 
+
+		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
 
 		$f+=3;
 
@@ -441,9 +441,9 @@ class Reportes_individuales extends CI_Controller {
 		);
 
 		$titles = array(
-				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
-				'OFICINA DE ESTADÍSTICA E INFORMACIÓN LABORAL', 
-				'CONSOLIDADO DE SOLICITUDES', 
+				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL',
+				'OFICINA DE ESTADÍSTICA E INFORMACIÓN LABORAL',
+				'CONSOLIDADO DE SOLICITUDES',
 				periodo($data));
 
 		$titles_head = array( 'N° Exp', 'Depto', 'Delegado', 'Fecha inicio', 'Fecha fin',
@@ -465,7 +465,7 @@ class Reportes_individuales extends CI_Controller {
 		 	$header = head_table_html($titles, $data, 'pdf');
 
 		 	$this->mpdf->SetHTMLHeader($header);
-		 	
+
 		 	$body .= $textadd;
 		 	$body .= $this->consolidado_html($data, $titles_head);
 
@@ -721,16 +721,16 @@ class Reportes_individuales extends CI_Controller {
 
 
 		/********************************** TOTAL DE ASESORIAS ************************************/
-		$masc = 0; $feme = 0;
-		$registros = $this->reportes_individuales_model->registros_consolidado_expedientes_pendientes($data);
-		if($registros->num_rows()>0){
-			foreach ($registros->result() as $rows) {
-				$masc+=$rows->cant_masc;
-				$feme+=$rows->cant_feme;
-			}
-		}else{ $total = 0; }
-		$cuerpo .= table_header(array('ASESORIAS', 'TOTAL: ?', 'MUJERES: ?', 'HOMBRES: ?'));
-		$cuerpo .= table_footer()."<br>";
+		// $masc = 0; $feme = 0;
+		// $registros = $this->reportes_individuales_model->registros_consolidado_expedientes_pendientes($data);
+		// if($registros->num_rows()>0){
+		// 	foreach ($registros->result() as $rows) {
+		// 		$masc+=$rows->cant_masc;
+		// 		$feme+=$rows->cant_feme;
+		// 	}
+		// }else{ $total = 0; }
+		// $cuerpo .= table_header(array('ASESORIAS', 'TOTAL: ?', 'MUJERES: ?', 'HOMBRES: ?'));
+		// $cuerpo .= table_footer()."<br>";
 
 
 		return $cuerpo;
