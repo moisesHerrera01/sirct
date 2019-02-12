@@ -135,7 +135,6 @@ class Reportes_individuales_model extends CI_Model {
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
 			->where("ecc.id_expedienteci NOT IN(SELECT ecc.id_expedienteci FROM sct_fechasaudienciasci fea
 				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
@@ -166,7 +165,6 @@ class Reportes_individuales_model extends CI_Model {
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
 			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 																		 FROM sct_delegado_exp de2
@@ -203,7 +201,6 @@ class Reportes_individuales_model extends CI_Model {
 																								 AND de.id_personal IN(".$data["id_delegado"].")) ecc
 																								 ON mv.id_motivo_solicitud=ecc.causa_expedienteci")
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci','LEFT')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal','LEFT')
 			->where('mv.id_tipo_solicitud<4')
 			->group_by('mv.id_motivo_solicitud')
 			->order_by('mv.id_motivo_solicitud');
@@ -229,7 +226,6 @@ class Reportes_individuales_model extends CI_Model {
 							AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)) id_resultado
 						FROM sct_expedienteci ecc
 						JOIN sct_personaci p ON p.id_personaci = ecc.id_personaci
-						JOIN sir_empleado emp ON emp.id_empleado = ecc.id_personal
 						JOIN sct_delegado_exp de ON de.id_expedienteci = ecc.id_expedienteci
 						WHERE (de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 																				FROM sct_delegado_exp de2
@@ -258,7 +254,6 @@ class Reportes_individuales_model extends CI_Model {
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
 			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 																		 FROM sct_delegado_exp de2
@@ -281,20 +276,31 @@ class Reportes_individuales_model extends CI_Model {
   		$fecha_actual = date("Ym", strtotime($data["anio"]."-".$data["value"]."-01"));
 
   		$this->db->select(" 'EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES' AS texto,
-  			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
+  		COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
 			COALESCE(COUNT(p.sexo_personaci),0) cant_total")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																	   WHERE de2.id_expedienteci=de.id_expedienteci
+																	   AND de2.id_personal <> 0
+																     )"
+						 )
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
 			->where('ecc.motivo_expedienteci = 1')
-			->where("ecc.id_personal IN(".$data["id_delegado"].")")
 			->where("ecc.id_expedienteci IN(SELECT ecc.id_expedienteci FROM sct_fechasaudienciasci fea
 				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
 				AND fea.id_expedienteci = ecc.id_expedienteci
-				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND (fa.estado_audiencia=2 AND fea.resultado IN(1,2,4,5,6,8)) AND DATE_FORMAT(fea.fecha_resultado, '%Y%m') = '".$fecha_actual."' ))");
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
+																				 FROM sct_fechasaudienciasci fa
+																				 WHERE fa.id_expedienteci=fea.id_expedienteci
+																				 AND (fa.estado_audiencia=2
+																				 AND fea.resultado IN(1,2,4,5,6,8))
+																				 AND DATE_FORMAT(fea.fecha_resultado, '%Y%m') = '".$fecha_actual."' ))");
 
         return $query=$this->db->get();
     }
@@ -303,20 +309,30 @@ class Reportes_individuales_model extends CI_Model {
   		$fecha_actual = date("Ym", strtotime($data["anio"]."-".$data["value"]."-01"));
 
   		$this->db->select(" 'EXPEDIENTES PENDIENTES PARA EL PRÓXIMO MES' AS texto,
-  			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
+  		COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
 			COALESCE(COUNT(p.sexo_personaci),0) cant_total")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																	   WHERE de2.id_expedienteci=de.id_expedienteci
+																	   AND de2.id_personal <> 0
+																     )"
+						 )
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3')
-			->where("ecc.id_personal IN(".$data["id_delegado"].")")
 			->where("ecc.id_expedienteci IN(SELECT ecc.id_expedienteci FROM sct_fechasaudienciasci fea
 				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
 				AND fea.id_expedienteci = ecc.id_expedienteci
-				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND (fa.estado_audiencia=2 AND fea.resultado IN(1,2,7)) AND DATE_FORMAT(fea.fecha_resultado, '%Y%m') = '".$fecha_actual."' ))");
-
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
+																				 FROM sct_fechasaudienciasci fa
+																				 WHERE fa.id_expedienteci=fea.id_expedienteci
+																				 AND (fa.estado_audiencia=2
+																				 AND fea.resultado IN(1,2,7))
+																				 AND DATE_FORMAT(fea.fecha_resultado, '%Y%m') = '".$fecha_actual."' ))");
         return $query=$this->db->get();
     }
 
@@ -333,9 +349,15 @@ class Reportes_individuales_model extends CI_Model {
 			")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sct_fechaspagosci AS fp', 'fp.id_expedienteci = ecc.id_expedienteci')
-			->where("ecc.id_personal IN(".$data["id_delegado"].")")
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																	   WHERE de2.id_expedienteci=de.id_expedienteci
+																	   AND de2.id_personal <> 0
+																     )"
+						 )
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where("DATE_FORMAT(fp.fechapago_fechaspagosci, '%Y%m') = '".$fecha_actual."'")
 			->where('(ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3)');
 
@@ -353,10 +375,16 @@ class Reportes_individuales_model extends CI_Model {
 			COALESCE(COUNT(p.sexo_personaci),0) cant_total")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																	   WHERE de2.id_expedienteci=de.id_expedienteci
+																	   AND de2.id_personal <> 0
+																     )"
+						 )
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('ecc.tiposolicitud_expedienteci = 2')
-			->where("ecc.id_personal IN(".$data["id_delegado"].")")
 			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
 					 WHERE fa.id_expedienteci=fea.id_expedienteci)')
 			->where("(YEAR(fea.fecha_resultado) = '".$fecha_actual[0]."' AND MONTH(fea.fecha_resultado) = '".$fecha_actual[1]."')")
@@ -365,7 +393,4 @@ class Reportes_individuales_model extends CI_Model {
 
         return $query=$this->db->get();
     }
-
-
-
 }
