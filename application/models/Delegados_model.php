@@ -39,7 +39,10 @@ class Delegados_model extends CI_Model {
 						 ->from('sir_empleado e')
 						 ->join('sct_delegado_exp d','d.id_personal=e.id_empleado')
 						 ->where('d.id_expedienteci',$id_expedienteci)
-						 ->where("d.id_delegado_exp = (SELECT MAX(de.id_delegado_exp) FROM sct_delegado_exp de WHERE de.id_expedienteci=d.id_expedienteci)");
+						 ->where("d.id_delegado_exp = (SELECT MAX(de.id_delegado_exp)
+						  														 FROM sct_delegado_exp de
+																					 WHERE de.id_expedienteci=d.id_expedienteci
+																					 AND de.id_personal <> 0)");
     $query = $this->db->get();
 		if ($query->num_rows() > 0) {
 			return $query->row();
