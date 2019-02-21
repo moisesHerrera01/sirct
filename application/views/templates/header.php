@@ -302,7 +302,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="javascrip:window.open('../../../password', '_blank')" ><i class="mdi mdi-account-key"></i> Cambiar mi contraseña</a></li>
+                                    <li><a target="_blank" href="javascript:window.open('../../../password')"><i class="mdi mdi-account-key"></i> Cambiar mi contraseña</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="#" onclick="cerrar_sesion(1000);"><i class="fa fa-lock"></i> Bloquear sesión</a></li>
                                     <li role="separator" class="divider"></li>
