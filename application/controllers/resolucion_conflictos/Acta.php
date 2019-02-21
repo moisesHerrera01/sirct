@@ -543,27 +543,14 @@ class Acta extends CI_Controller {
       }
       $templateWord->setValue('salario_menor', $pago);
 
-
-
-      $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));
-      $mes_conflicto = mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci))));
-      $anio_conflicto = anio(date('Y', strtotime($expediente->fechaconflicto_personaci)));
-
-      $templateWord->setValue('direccion_empresa', mb_strtoupper($expediente->direccion_empresa));
-      $templateWord->setValue('direccion_solicitante', mb_strtoupper($expediente->direccion_personaci));
-
-      $templateWord->setValue('edad', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(calcular_edad(date("Y-m-d", strtotime($expediente->fnacimiento_personaci))))));
-
-      $templateWord->setValue('nacionalidad_persona', $expediente->nacionalidad);
-      $templateWord->setValue('nombre_empleador', $expediente->nombre_empleador.' '.$expediente->apellido_empleador);
-      $templateWord->setValue('funciones_persona', $expediente->funciones_personaci);
-      $templateWord->setValue('horario_persona', $expediente->horarios_personaci);
-      $templateWord->setValue('salario_solicitante', '$'.number_format( $expediente->salario_personaci,2));
-      $templateWord->setValue('forma_pago', $expediente->formapago_personaci);
       $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
       $templateWord->setValue('mes_conflicto', mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
       $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
-      $templateWord->setValue('nombre_delegado',$expediente->delegado_expediente);
+      $templateWord->setValue('delegado_audiencias',$expediente->delegado_expediente);
+      $templateWord->setValue('direccion_empresa',$expediente->direccion_empresa);
+      $templateWord->setValue('nombre_delegado',$expediente->nombre_delegado_elabora);
+      $templateWord->setValue('direccion_rep_menor',$expediente->direccion_personaci);
+
 
       $nombreWord = $this->random();
 

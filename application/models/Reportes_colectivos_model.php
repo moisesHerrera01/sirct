@@ -15,13 +15,13 @@ class Reportes_colectivos_model extends CI_Model {
 			CONCAT_WS(' ', emp.primer_nombre, emp.segundo_nombre, emp.tercer_nombre, emp.primer_apellido, emp.segundo_apellido, emp.apellido_casada) delegado,
 			(SELECT COUNT(p2.sexo_personaci) FROM sct_personaci AS p2 WHERE p2.sexo_personaci = 'M' AND p2.id_expedienteci = ecc.id_expedienteci) cant_masc,
 			(SELECT COUNT(p2.sexo_personaci) FROM sct_personaci AS p2 WHERE p2.sexo_personaci = 'F' AND p2.id_expedienteci = ecc.id_expedienteci) cant_feme,
-			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_expedienteci ecc2 JOIN sct_personaci AS p2 ON p2.id_expedienteci = ecc2.id_expedienteci JOIN sct_fechaspagosci AS fp ON fp.id_persona = p2.id_personaci AND p2.sexo_personaci = 'M' WHERE ecc2.id_expedienteci = ecc.id_expedienteci) monto_masc,			
+			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_expedienteci ecc2 JOIN sct_personaci AS p2 ON p2.id_expedienteci = ecc2.id_expedienteci JOIN sct_fechaspagosci AS fp ON fp.id_persona = p2.id_personaci AND p2.sexo_personaci = 'M' WHERE ecc2.id_expedienteci = ecc.id_expedienteci) monto_masc,
 			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_expedienteci ecc2 JOIN sct_personaci AS p2 ON p2.id_expedienteci = ecc2.id_expedienteci JOIN sct_fechaspagosci AS fp ON fp.id_persona = ecc2.id_personaci AND p2.sexo_personaci = 'F' WHERE ecc2.id_expedienteci = ecc.id_expedienteci) monto_feme,
 			ecc.fechacrea_expedienteci fecha_inicio,
 			COALESCE((SELECT fea.fecha_resultado FROM sct_fechasaudienciasci fea
-				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
-				AND fea.id_expedienteci = ecc.id_expedienteci 
-				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'N/A') fecha_fin,
+			JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+			AND fea.id_expedienteci = ecc.id_expedienteci
+			AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'N/A') fecha_fin,
 			CONCAT_WS(' ',p.nombre_personaci,p.apellido_personaci) solicitante,
 			TIMESTAMPDIFF(YEAR,p.fnacimiento_personaci,CURDATE()) AS edad,
 			(SELECT COUNT(p2.sexo_personaci) FROM sct_personaci AS p2 WHERE p2.discapacidad_personaci = 1 AND p2.id_expedienteci = ecc.id_expedienteci) discapacidadci,
@@ -32,18 +32,25 @@ class Reportes_colectivos_model extends CI_Model {
 			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp WHERE fp.id_expedienteci = ecc.id_expedienteci) AS monto,
 			COALESCE((SELECT r.resultadoci FROM sct_fechasaudienciasci fea
 				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
-				AND fea.id_expedienteci = ecc.id_expedienteci 
-				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'Pendiente 99') resultadoci")
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'Pendiente') resultadoci")
 			->from('sct_expedienteci AS ecc')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
 			->join('sct_fechaspagosci AS fp', 'fp.id_expedienteci = ecc.id_expedienteci','LEFT')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
+			->join('sir_empleado emp','emp.id_empleado = de.id_personal')
 			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
 			->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
 			->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
 			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
-			//->where("ecc.id_personal IN(".$data["id_delegado"].")")
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																		 WHERE de2.id_expedienteci=de.id_expedienteci
+																		 AND de2.id_personal <> 0
+																		 )"
+						 )
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('ecc.tiposolicitud_expedienteci > 3')
 			->group_by('ecc.id_expedienteci');
 
@@ -64,8 +71,6 @@ class Reportes_colectivos_model extends CI_Model {
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
 	 	}
 
-	 	//echo $this->db->get_compiled_select();
-
         return $query=$this->db->get();
     }
 
@@ -80,8 +85,8 @@ class Reportes_colectivos_model extends CI_Model {
 			ecc.fechacrea_expedienteci fecha_inicio,
 			COALESCE((SELECT r.resultadoci FROM sct_fechasaudienciasci fea
 				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
-				AND fea.id_expedienteci = ecc.id_expedienteci 
-				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'Pendiente 99') resultadoci,
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'Pendiente') resultadoci,
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_personaci = ecc.id_personaci AND p2.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' AND p2.sexo_personaci = 'M') AS aniosm16,
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_personaci = ecc.id_personaci AND p2.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p2.sexo_personaci = 'M') AS aniosm30,
 			(SELECT COUNT(*) FROM sct_personaci AS p2 WHERE p2.id_personaci = ecc.id_personaci AND p2.fnacimiento_personaci < '".$anios50."' AND p2.sexo_personaci = 'M') AS aniosm50,
@@ -255,14 +260,29 @@ class Reportes_colectivos_model extends CI_Model {
 
 		$this->db->select("COALESCE(COUNT(ecc.id_expedienteci),0) cant_total")
 			->from('sct_expedienteci AS ecc')
-			->join('sir_empleado emp','emp.id_empleado = ecc.id_personal')
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
 			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
+			->where("ecc.id_expedienteci NOT IN(SELECT ecc.id_expedienteci
+																					FROM sct_fechasaudienciasci fea
+																					JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado
+																					WHERE estado_audiencia=2
+																					AND fea.id_expedienteci = ecc.id_expedienteci
+																					AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
+																																					 FROM sct_fechasaudienciasci fa
+																																					 WHERE fa.id_expedienteci=fea.id_expedienteci
+																																					 AND (fa.estado_audiencia=2
+																																					 AND fea.resultado IN(10,12,13,14,15,16,19,20,21,22,25,26,27))
+																																					 OR DATE_FORMAT(fea.fecha_resultado, '%Y%m') > '".$fecha_menor."' ))")
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																	   WHERE de2.id_expedienteci=de.id_expedienteci
+																	   AND de2.id_personal <> 0
+																     )"
+						 )
 			->where('ecc.tiposolicitud_expedienteci>3')
-			->where('fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa
-					 WHERE fea.id_expedienteci=fa.id_expedienteci)')
-			->where("DATE_FORMAT(ecc.fechacrea_expedienteci, '%Y%m') = '".$fecha_menor."'")
-			->where("(fea.estado_audiencia = 1 OR fea.resultado IN(1,4,5,6,7,8))");
+			->where("de.id_personal IN(".$data["id_delegado"].")")
+			->where("DATE_FORMAT(ecc.fechacrea_expedienteci, '%Y%m') <= '".$fecha_menor."'");;
        return $this->db->get();
     }
 
@@ -271,7 +291,15 @@ class Reportes_colectivos_model extends CI_Model {
 
 		$this->db->select("COALESCE(COUNT(DISTINCT ecc.id_expedienteci),0) cant_total")
 			->from('sct_expedienteci ecc')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																	   WHERE de2.id_expedienteci=de.id_expedienteci
+																	   AND de2.id_personal <> 0
+																     )"
+						 )
 			->where('ecc.tiposolicitud_expedienteci>3')
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')");
 
         return $query=$this->db->get();
@@ -282,8 +310,15 @@ class Reportes_colectivos_model extends CI_Model {
 
 		$this->db->select("mv.nombre_motivo, (SELECT COUNT(DISTINCT e.id_expedienteci)
 																					FROM sct_expedienteci e
-																					WHERE e.causa_expedienteci=mv.id_motivo_solicitud
+																					JOIN sct_delegado_exp de ON de.id_expedienteci = e.id_expedienteci
+																					WHERE (de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																																			FROM sct_delegado_exp de2
+																																			WHERE de2.id_expedienteci = de.id_expedienteci
+																																			AND de2.id_personal <> 0
+																																		 ))
+																					AND e.causa_expedienteci=mv.id_motivo_solicitud
 																					AND e.tiposolicitud_expedienteci>3
+																					AND de.id_personal IN(".$data["id_delegado"].")
 																					AND YEAR(e.fechacrea_expedienteci)=".$fecha_actual[0]."
 																					AND MONTH(e.fechacrea_expedienteci)=".$fecha_actual[1].") cant_total")
 						->from('sct_motivo_solicitud mv')
@@ -294,16 +329,23 @@ class Reportes_colectivos_model extends CI_Model {
     }
 
   	function registros_consolidado_casos_finalizados($data){
-  		$fecha_actual = date("Ym", strtotime($data["anio"]."-".$data["value"]."-01"));
+  	$fecha_actual = date("Ym", strtotime($data["anio"]."-".$data["value"]."-01"));
 
 		$this->db->select(" UPPER(res.resultadoci) resultado,	(SELECT COUNT(f.id_expedienteci)
 																					FROM sct_fechasaudienciasci f
-																					WHERE f.resultado=res.id_resultadoci
+																					JOIN sct_delegado_exp de ON de.id_expedienteci = f.id_expedienteci
+																					WHERE (de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																																			FROM sct_delegado_exp de2
+																																			WHERE de2.id_expedienteci = de.id_expedienteci
+																																			AND de2.id_personal <> 0
+																																		 ))
+																					AND f.resultado=res.id_resultadoci
+																					AND de.id_personal IN(".$data["id_delegado"].")
 																					AND f.id_fechasaudienciasci=(SELECT MAX(fa.id_fechasaudienciasci)
 																																			 FROM sct_fechasaudienciasci fa
 																					 		 										 		 WHERE fa.id_expedienteci=f.id_expedienteci
 																																			 AND fa.estado_audiencia=2)
-																					AND DATE_FORMAT(f.fecha_fechasaudienciasci, '%Y%m') = '".$fecha_actual."'
+																																			 AND DATE_FORMAT(f.fecha_fechasaudienciasci, '%Y%m') = '".$fecha_actual."'
 																					) cant_total")
 						->from('sct_resultadosci AS res')
 						->where('res.id_tipo_solicitud>3')
@@ -322,6 +364,13 @@ class Reportes_colectivos_model extends CI_Model {
 			->from('sct_expedienteci AS ecc')
 			->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																	   WHERE de2.id_expedienteci=de.id_expedienteci
+																	   AND de2.id_personal <> 0
+																     )")
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('ecc.tiposolicitud_expedienteci>3')
 			->where('(fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci)
 																						 FROM sct_fechasaudienciasci fa
@@ -340,6 +389,13 @@ class Reportes_colectivos_model extends CI_Model {
 			->from('sct_expedienteci AS ecc')
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
 			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																	   WHERE de2.id_expedienteci=de.id_expedienteci
+																	   AND de2.id_personal <> 0
+																     )")
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('ecc.tiposolicitud_expedienteci>3')
 			->where('fea.resultado IN (10,12,16)')
 			->where('fea.estado_audiencia',2)
@@ -362,6 +418,13 @@ class Reportes_colectivos_model extends CI_Model {
 			->from('sct_expedienteci AS ecc')
 			->join('sct_personaci p ', 'p.id_expedienteci = ecc.id_expedienteci')
 			->join('sct_fechaspagosci AS fp', 'fp.id_persona = p.id_personaci')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																	   WHERE de2.id_expedienteci=de.id_expedienteci
+																	   AND de2.id_personal <> 0
+																     )")
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('(ecc.tiposolicitud_expedienteci>3)')
 			->where("(YEAR(ecc.fechacrea_expedienteci) = '".$fecha_actual[0]."' AND MONTH(ecc.fechacrea_expedienteci) = '".$fecha_actual[1]."')");
 
@@ -375,6 +438,13 @@ class Reportes_colectivos_model extends CI_Model {
 			->from('sct_expedienteci AS ecc')
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
 			->join('sct_resultadosci res','res.id_resultadoci=fea.resultado')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																		 WHERE de2.id_expedienteci=de.id_expedienteci
+																		 AND de2.id_personal <> 0
+																		 )")
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('ecc.tiposolicitud_expedienteci>3')
 			->where('fea.resultado NOT IN (10,12,16)')
 			->where('fea.estado_audiencia',2)
@@ -389,13 +459,18 @@ class Reportes_colectivos_model extends CI_Model {
 		$this->db->select("COALESCE(COUNT(fea.id_fechasaudienciasci),0) cant_total")
 			->from('sct_expedienteci AS ecc')
 			->join('sct_fechasaudienciasci fea','fea.id_expedienteci=ecc.id_expedienteci')
+			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																		 FROM sct_delegado_exp de2
+																		 WHERE de2.id_expedienteci=de.id_expedienteci
+																		 AND de2.id_personal <> 0
+																		 )")
+			->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('ecc.tiposolicitud_expedienteci>3')
 			->where('fea.tipo_pago',2)
 			->where("(YEAR(fea.fecha_resultado) = '".$fecha_actual[0]."' AND MONTH(fea.fecha_resultado) = '".$fecha_actual[1]."')");
 
 				return $this->db->get();
 		}
-
-
 
 }

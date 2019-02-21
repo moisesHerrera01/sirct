@@ -52,12 +52,14 @@ class Expedientes_model extends CI_Model {
 												 re.acreditacion_representante acreditacion_representante_exp,
 												 f.numero_folios,
 												 d.nombre_delegado_actual,
+												 el.nombre_delegado_elabora,
 												 d.delegado_actual,
 												 pa.numero_partida,
 												 pa.id_municipio_menor,
 												 pa.id_municipio_partida,
 												 pa.fecha_partida,
 												 pa.libro_partida,
+												 pa.fnacimiento_menor,
 												 TIMESTAMPDIFF(YEAR,pa.fnacimiento_menor,CURDATE()) edad_menor,
 												 TIMESTAMPDIFF(YEAR,p.fnacimiento_personaci,CURDATE()) edad_solicitante,
 												 CASE
@@ -112,6 +114,18 @@ class Expedientes_model extends CI_Model {
 																												 AND de2.id_personal <> 0
 																												)
 													 ) d" , "d.id_expedienteci=e.id_expedienteci")
+												 ->join("(
+															 SELECT de.id_expedienteci,de.id_personal delegado_elabora,
+															 CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_elabora
+															 FROM sct_delegado_exp de
+															 JOIN org_usuario u ON u.id_usuario = de.id_usuario_guarda
+															 JOIN sir_empleado emp ON emp.id_empleado=u.id_empleado
+															 WHERE de.id_delegado_exp = (SELECT MIN(de2.id_delegado_exp)
+																													 FROM sct_delegado_exp de2
+																													 WHERE de2.id_expedienteci=de.id_expedienteci
+																													 AND de2.id_personal <> 0
+																													)
+														 ) el" , "el.id_expedienteci=e.id_expedienteci")
 						 					 ->where('e.id_expedienteci', $id_expedienteci);
 		 	if ($id_audiencia) {
 		 		$this->db->where('f.id_fechasaudienciasci',$id_audiencia);

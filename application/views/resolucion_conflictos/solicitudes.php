@@ -2362,8 +2362,8 @@ $(function(){
               $("#id_personaci").val(res.id_personaci);
               $("#id_persona").val(res.id_personaci);
               $("#id_partida").val(res.id_partida);
-              alert($("#id_personaci").val())
-              alert($("#id_partida").val())
+              // alert($("#id_personaci").val())
+              // alert($("#id_partida").val())
               // $("#band1").val( $("#band").val() );
               $("#band1").val('edit');
               // $("#band2").val( $("#band").val() );
