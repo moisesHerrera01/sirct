@@ -153,7 +153,7 @@ class Audiencias extends CI_Controller {
 		$data['id_defensorlegal'] = $this->input->post('defensor');
 		$data['id_representaci'] = $this->input->post('representante_empresa');
 		$data['id_delegado'] = $this->input->post('delegado');
-		//$resultado = $this->audiencias_model->editar_audiencia($data);
+		$resultado = $this->audiencias_model->editar_audiencia($data);
 		echo $resultado;
 		if ($resultado == "exito") {
 			$exp= array(
@@ -163,7 +163,7 @@ class Audiencias extends CI_Controller {
 			if ($this->input->post('resolucion')=="10") {
 				$exp['forma_pago'] = $this->input->post('modalidad_pago');
 			}
-			//$this->expedientes_model->editar_expediente($exp);
+			$this->expedientes_model->editar_expediente($exp);
 		}
 		$data2 = array(
 						'id_expedienteci' => $data['id_expedienteci'],

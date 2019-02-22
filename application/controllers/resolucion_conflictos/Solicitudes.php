@@ -60,6 +60,7 @@ class Solicitudes extends CI_Controller {
 				'id_municipio_menor' =>$this->input->post('municipio_menor'),
 				'fecha_partida' => date("Y-m-d",strtotime($this->input->post('fecha_partida')))
 			 );
+			 $id_partida = 0;
 			if ($this->input->post('numero_partida')!='') {
 				$id_partida = $this->solicitudes_model->insertar_partida($data2);
 				$data['id_partida'] = $id_partida;
