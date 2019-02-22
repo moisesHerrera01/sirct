@@ -549,13 +549,13 @@ class Expediente extends CI_Controller {
 				'FICHA DE EXPEDIENTE');
 
 		$this->load->library('mpdf');
-		$this->mpdf=new mPDF('c','letter','10','Arial',10,10,30,17,3,9);
+		$this->mpdf = new \Mpdf\Mpdf();
 
-	 	$header = head_table_html($titles, $data, 'pdf');
+		$header = head_table_html($titles, $titles, 'pdf');
 
-	 	$this->mpdf->SetHTMLHeader($header);
+		$this->mpdf->SetHTMLHeader($header);
 
-	 	$pie = piePagina($this->session->userdata('usuario'));
+		$pie = piePagina($this->session->userdata('usuario'));
 		$this->mpdf->setFooter($pie);
 
 		$stylesheet = file_get_contents(base_url().'assets/css/bootstrap.min.css');

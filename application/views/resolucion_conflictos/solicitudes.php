@@ -1461,9 +1461,9 @@ function volver(num) {
                         </div>
                         <div class="row">
                           <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                              <h5>Estudios realizados: <span class="text-danger">*</span></h5>
+                              <h5>Estudios realizados: </h5>
                               <div class="controls">
-                                <select id="estudios" name="estudios" class="custom-select col-4" onchange="" required>
+                                <select id="estudios" name="estudios" class="custom-select col-4" onchange="">
                                   <option value="">[Seleccione]</option>
                                   <option value="Sin estudio">Sin estudio</option>
                                   <option value="Educacion Básica">Educacion Básica</option>
@@ -2411,6 +2411,7 @@ $(function(){
         var formData = new FormData(document.getElementById("formajax2"));
         formData.append("id_partida", $('#id_partida').val());
         formData.append("id_personaci", $('#id_personaci').val());
+        formData.append("id_persona", $('#id_persona').val());
         formData.append("id_empresaci", $('#establecimiento').val());
         formData.append("id_representante", $('#id_representante').val());
         formData.append("id_representanteci", $('#id_representanteci').val());
@@ -2432,6 +2433,8 @@ $(function(){
           processData: false
         })
         .done(function(res){
+            // alert($('#id_personaci').val())
+            // alert($('#id_persona').val())
             if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
@@ -2489,6 +2492,8 @@ $("#formajax3").on("submit", function(e){
     var formData = new FormData(document.getElementById("formajax3"));
     formData.append("dato", "valor");
     formData.append("id_partida", $('#id_partida').val());
+    formData.append("id_personaci", $('#id_personaci').val());
+    formData.append("id_persona", $('#id_persona').val());
     $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/gestionar_establecimiento",
         type: "post",
@@ -2525,6 +2530,8 @@ $("#formajax8").on("submit", function(e){
     var f = $(this);
     var formData = new FormData(document.getElementById("formajax8"));
     formData.append("dato", "valor");
+    formData.append("id_personaci", $('#id_personaci').val());
+    formData.append("id_persona", $('#id_persona').val());
     $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/representante_persona/gestionar_representantes",
         type: "post",

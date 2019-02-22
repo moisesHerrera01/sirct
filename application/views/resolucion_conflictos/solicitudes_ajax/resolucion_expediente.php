@@ -129,9 +129,14 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax4"));
+        if (typeof($("#directivo").val())!="undefined") {
+          formData.append("directivos_audiencia", $("#directivo").val().toString());
+          formData.append("id_sindicato", $("#id_sindicato").val());
+        }
+        // alert(typeof($("#directivo").val()))
         formData.append("fecha_pago", $("#fecha_pago").val());
-        formData.append("directivos_audiencia", $("#directivo").val().toString());
-        formData.append("id_sindicato", $("#id_sindicato").val());
+
+
         $('#modal_resolucion').modal('hide');
 
         $.ajax({
