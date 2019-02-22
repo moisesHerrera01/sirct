@@ -171,7 +171,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function combo_establecimiento(seleccion){
         $.ajax({
-            async: true,
+          async: true,
           url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_establecimiento",
           type: "post",
           dataType: "html",
@@ -248,12 +248,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function ocultar_pn(){
       var value = $("#tipo_establecimiento").val();
       if (value==1) {
-        $("#razon_social").removeAttr("required");
+        //$("#razon_social").removeAttr("required");
         $("#abre_establecimiento").removeAttr("required");
         $('#ocultar_pn').hide(500);
       }else {
          $('#ocultar_pn').show(500);
-         $("#razon_social").attr("required",'required');
+         //$("#razon_social").attr("required",'required');
          $("#abre_establecimiento").attr("required",'required');
       }
     }
@@ -1534,20 +1534,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </select>
                     </div>
                 </div>
-
-                <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
-                    <div class="controls">
-                        <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required>
-                    </div>
-                </div>
               </div>
 
-                <div class="row" id="ocultar_pn">
-                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                <div class="row">
+                  <!-- <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Raz&oacute;n social de la parte empleadora:</h5>
                       <div class="controls">
                           <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control">
+                      </div>
+                  </div> -->
+
+                  <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required>
                       </div>
                   </div>
 

@@ -1530,16 +1530,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Tipo de inscripción: <span class="text-danger">*</span></h5>
                         <select id="tiposolicitud_empresa" name="tiposolicitud_empresa" class="form-control custom-select"  style="width: 100%" required="">
-                            <option class="m-l-50" value="1">INSCRIPCIÓN PERSONA NATURAL</option>
-                            <option class="m-l-50" value="2">INSCRIPCIÓN PERSONA JURÍDICA</option>
+                            <option class="m-l-50" value="1">PERSONA NATURAL</option>
+                            <option class="m-l-50" value="2">PERSONA JURÍDICA</option>
                         </select>
                     </div>
-                  <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                  <!-- <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                       <h5>Razón social o denominación: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" placeholder="Razón social" id="razon_social" name="razon_social" class="form-control" required="">
                       </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="row">
                   <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -1549,9 +1549,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Abreviatura: <span class="text-danger">*</span></h5>
+                      <h5>Abreviatura: </h5>
                       <div class="controls">
-                          <input type="text" placeholder="Abreviatura" id="abreviatura_empresa" name="abreviatura_empresa" class="form-control" required="">
+                          <input type="text" placeholder="Abreviatura" id="abreviatura_empresa" name="abreviatura_empresa" class="form-control">
                       </div>
                   </div>
                 </div>
