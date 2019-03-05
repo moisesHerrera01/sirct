@@ -1009,6 +1009,7 @@ function alertFunc() {
 function cambiar_nuevo() {
     open_form(1);
     /*Inicio Solicitante*/
+    $("#email").val('');
     $("#id_personaci").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
     $("#nombres").val('');
@@ -1125,7 +1126,7 @@ function cambiar_editar(id_expedienteci,bandera){
     })
     .done(function(res){
       result = JSON.parse(res)[0];
-
+      $("#email").val(result.email);
       $("#id_personaci").val(result.id_personaci);
       $("#id_expedienteci").val(result.id_expedienteci);
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
@@ -1522,6 +1523,13 @@ function volver(num) {
 
                         </div>
                         <div class="row">
+                          <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                              <h5>Dirección de correo electrónico: </h5>
+                              <input type="email" id="email" name="email" class="form-control" placeholder="example@dominio.com">
+                              <div class="help-block"></div>
+                          </div>
+                        </div>
+                        <div class="row">
                        <div id="ocultar_div" class="form-group col-lg-8" style="height: 83px; display: none;">
                            <h5>Discapacidad:</h5>
                            <textarea type="text" id="discapacidad_desc" name="discapacidad_desc" class="form-control" placeholder="Ingrese la discapacidad"></textarea>
@@ -1762,13 +1770,13 @@ function volver(num) {
 
                                 <div class="row">
                                   <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Ocupación según DUI:<span class="text-danger">*</span></h5>
-                                      <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI" required=""></textarea>
+                                      <h5>Ocupación según DUI:</h5>
+                                      <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI"></textarea>
                                       <div class="help-block"></div>
                                   </div>
 
                                   <div class="form-group col-lg-4" style="height: 83px;">
-                                      <h5>Salario($):<span class="text-danger">*</span></h5>
+                                      <h5>Salario($):</h5>
                                       <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01" min="1">
                                       <div class="help-block"></div>
                                   </div>
@@ -1776,15 +1784,15 @@ function volver(num) {
 
                                 <div class="row">
                                   <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Funciones:<span class="text-danger">*</span></h5>
-                                      <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones laborales" required=""></textarea>
+                                      <h5>Funciones:</h5>
+                                      <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones laborales"></textarea>
                                       <div class="help-block"></div>
                                   </div>
 
                                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                      <h5>Forma de pago: <span class="text-danger">*</span></h5>
+                                      <h5>Forma de pago: </h5>
                                       <div class="controls">
-                                        <select id="forma_pago" name="forma_pago" class="custom-select col-4" onchange="" required>
+                                        <select id="forma_pago" name="forma_pago" class="custom-select col-4" onchange="">
                                           <option value="">[Seleccione]</option>
                                           <option value="Diario">Diario</option>
                                           <option value="Semanal">Semanal</option>
@@ -2093,28 +2101,10 @@ function volver(num) {
                           <h5>Nombre de la persona: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
+
                           </div>
                       </div>
 
-                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                        <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
-                        <div class="help-block"></div>
-                    </div>
-
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc_rep"></div>
-
-                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                          <h5>Número doc identidad: <span class="text-danger">*</span></h5>
-                          <div class="controls">
-                              <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
-                          </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
                       <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Tipo: <span class="text-danger">*</span></h5>
                           <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
@@ -2125,23 +2115,52 @@ function volver(num) {
                           </select>
                       </div>
 
-                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
+                    <!-- <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                        <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
+                        <div class="help-block"></div>
+                    </div> -->
+
                     </div>
+                    <!-- <div class="row">
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc_rep"></div>
+
+                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Número doc identidad: <span class="text-danger">*</span></h5>
+                          <div class="controls">
+                              <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
+                          </div>
+                      </div>
+                    </div> -->
 
                     <div class="row">
+                      <!-- <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Tipo: <span class="text-danger">*</span></h5>
+                          <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
+                              <option value=''>[Seleccione el tipo]</option>
+                              <option class="m-l-50" value="1">Legal</option>
+                              <option class="m-l-50" value="2">Designado</option>
+                              <option class="m-l-50" value="3">Apoderado</option>
+                          </select>
+                      </div> -->
+
+                      <!-- <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div> -->
+                    </div>
+
+                    <!-- <div class="row">
                       <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Acreditación: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <textarea id="acreditacion_representante" name="acreditacion_representante" class="form-control"></textarea>
                           </div>
                       </div>
-                    </div>
+                    </div> -->
 
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
 
                       <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
-                    </div>
+                    </div> -->
 
                     <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Estado: <span class="text-danger">*</span></h5>

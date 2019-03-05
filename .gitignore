@@ -2,3 +2,5 @@
 application/config/constants\.php
 
 application/config/config\.php
+
+application/third_party/vendor/

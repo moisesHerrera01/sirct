@@ -129,7 +129,9 @@ class Consultar_fechas extends CI_Controller {
 			echo $body;
 		}else if($this->input->post('report_type') == "pdf"){
 			$this->load->library('mpdf');
-			$this->mpdf=new mPDF('c','letter','10','Arial',10,10,35,17,3,9);
+
+			//$this->mpdf=new mPDF('c','letter','10','Arial',10,10,35,17,3,9);
+			$this->mpdf = new \Mpdf\Mpdf();
 
 		 	$header = head_table_html($titles, $data, 'pdf');
 
