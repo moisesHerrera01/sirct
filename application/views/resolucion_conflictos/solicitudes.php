@@ -133,36 +133,34 @@ function cambiar_update_post(id_personaci,bandera){
     })
     .done(function(res){
       result = JSON.parse(res)[0];
-
+      $("#email").val(result.email);
       $("#id_personaci").val(result.id_personaci);
       $("#id_expedienteci").val(result.id_expedienteci);
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
       $("#nombres").val(result.nombre_personaci);
       $("#conocido_por").val(result.conocido_por);
       $("#apellidos").val(result.apellido_personaci);
-      $("#dui").val(result.dui_personaci);
       $("#telefono").val(result.telefono_personaci);
       $("#telefono2").val(result.telefono2_personaci);
       $("#municipio").val(result.id_municipio).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
-      $("#fecha_nacimiento").datepicker("setDate", result.fnacimiento_personaci);
+      $("#fecha_nacimiento").datepicker("setDate", moment(result.fnacimiento_personaci).format("DD-MM-YYYY"));
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
       $("#discapacidad_desc").val(result.discapacidad);
       /*Inicio partida nacimiento*/
-      if(result.discapacidad_personaci==0){
-          $("#ocultar_div").hide();
-      }else{
-          $("#ocultar_div").show();
-      }
+
       if (result.id_doc_identidad!=1) {
         $('#dui').mask('', {reverse: true});
         $('#dui').unmask();
         if (result.id_doc_identidad==4) {
           $('#partida_div').show();
           $('#tipo_aco').show(500);
-          $('#div_numero_doc_identidad').hide();
-          $("#dui").removeAttr("required");
+          // $('#div_numero_doc_identidad').hide();
+          // $("#dui").removeAttr("required");
+          $('#dui').mask('99999999-9', {reverse: true});
+          $('#div_numero_doc_identidad').show();
+          $("#dui").attr("required",'required');
         }else {
           $('#partida_div').hide();
           $('#tipo_aco').hide(500);
@@ -176,17 +174,24 @@ function cambiar_update_post(id_personaci,bandera){
          $('#div_numero_doc_identidad').show();
          $("#dui").attr("required",'required');
       }
-      $("#id_partida").val(result.id_partida);
-      $("#numero_partida").val(result.numero_partida);
-      $("#folio_partida").val(result.folio_partida);
-      $("#libro_partida").val(result.libro_partida);
-      $("#asiento_partida").val(result.asiento_partida);
-      $("#anio_partida").val(result.anio_partida);
-      /*Fin partida de nacimiento*/
+
+      $("#dui").val(result.dui_personaci);
+
+      $("#id_partida").val('');
+      $("#numero_partida").val('');
+      $("#folio_partida").val('');
+      $("#libro_partida").val('');
+      $("#asiento_partida").val('');
+      $("#anio_partida").val('');
+      combo_municipio_menor();
+      combo_municipio_partida();
+
       if (result.discapacidad_personaci=='1') {
           document.getElementById('si').checked = true;
+          $("#ocultar_div").show(500);
       }else {
           document.getElementById('no').checked = true;
+          $("#ocultar_div").hide(500);
       }
       if (result.posee_representante=='1') {
         document.getElementById('si_posee').checked =true;
@@ -195,8 +200,10 @@ function cambiar_update_post(id_personaci,bandera){
       }
       if (result.sexo_personaci=='M') {
         document.getElementById('masculino').checked =true;
+        $("#embarazada").hide(500);
       }else {
         document.getElementById('femenino').checked =true;
+        $("#embarazada").show(500);
       }
       if (result.pertenece_lgbt=='1') {
         document.getElementById('si_lgbt').checked =true;
@@ -246,7 +253,6 @@ function cambiar_update_post(id_personaci,bandera){
 
       $("#btnadd").show(0);
       $("#btnedit").hide(0);
-      $("#ocultar_div").hide();
 
       $("#cnt_tabla").hide(0);
       $("#cnt_form_main").show(0);
