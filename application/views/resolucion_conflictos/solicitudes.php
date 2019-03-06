@@ -362,6 +362,8 @@ function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,p
         $("#inasistencia").show();
       }else if (resultado=="4"){
         $("#desistimiento").show();
+      }else if (resultado=="9"){
+        $("#pendiente").show();
       }
     }
     $("#id_expedienteci_copia2").val(id_expedienteci);
@@ -1454,7 +1456,7 @@ function volver(num) {
                               </div>
                               <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                   <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy" readonly="">
+                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd-mm-yyyy" data-mask = "99-99-9999">
                                   <div class="help-block"></div>
                               </div>
                         </div>
@@ -2267,8 +2269,8 @@ function volver(num) {
                         <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
                         <option id="inasistencia" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Acta segunda audiencia</option>
                         <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option>
-                        <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor/a público</option>
-                         -->
+                        <option id="pendiente" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/10/')?>">Pendiente segunda cita</option>
+
                         <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
                         <option id="esquela" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
                         <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
@@ -2706,8 +2708,6 @@ function audiencias(id_empresaci, id_expedienteci, origen) {
 function ocultar(){
   var value = $("#id_doc_identidad").val();
   if (value!=1) {
-    $('#dui').mask('', {reverse: true});
-    $('#dui').unmask();
     if (value==4) {
       $('#partida_div').show(500);
       $('#tipo_aco').show(500);
@@ -2717,6 +2717,8 @@ function ocultar(){
       $('#div_numero_doc_identidad').show(500);
       $("#dui").attr("required",'required');
     }else {
+      $('#dui').mask('', {reverse: true});
+      $('#dui').unmask();
       $('#partida_div').hide(500);
       $('#tipo_aco').hide(500);
       $('#div_numero_doc_identidad').show(500);

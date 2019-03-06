@@ -193,6 +193,9 @@ class Acta extends CI_Controller {
           case '9':
             $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_RV_NCNP.docx');
             break;
+          case '10':
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/PENDIENTE_SEGUNDA_CITA.docx');
+            break;
           default:
             // code...
             break;
@@ -211,7 +214,7 @@ class Acta extends CI_Controller {
         $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,1);
         $primera= $audiencias->result()[0];
 
-        if ($caso<7) {
+        if ($caso<7 || $caso==10) {
           $segunda= $audiencias->result()[1];
           $templateWord->setValue('minuto_audiencia2', minuto(INTVAL(date('i', strtotime($segunda->hora_fechasaudienciasci)))));
           $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
@@ -227,7 +230,7 @@ class Acta extends CI_Controller {
         $templateWord->setValue('acreditacion_representante_exp', mb_strtoupper($expediente->acreditacion_representante_exp));
         $templateWord->setValue('numero_folios', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras($expediente->numero_folios)));
 
-        if ($caso<5) {
+        if ($caso<5 || $caso==10) {
               $templateWord->setValue('representante_persona', mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci));
               $templateWord->setValue('dui_defensor', mb_strtoupper(convertir_dui($expediente->dui_representantepersonaci)));
               $templateWord->setValue('tipo_representante', mb_strtoupper($expediente->tipo_representante_empresa));
@@ -398,8 +401,12 @@ class Acta extends CI_Controller {
             header("Content-Disposition: attachment; filename='ACTA_RV_ST_".date('dmy_His').".docx'");
             break;
           case '9':
-            header("Content-Disposition: attachment; filename='ACTA_RV_NCNP_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=ACTA_RV_NCNP_".date('dmy_His').".docx");
             break;
+          case '10':
+            header("Content-Disposition: attachment; filename=PENDIENTE_SEGUNDA_CITA_".date('dmy_His').".docx");
+            break;
+
           default:
             break;
         }
