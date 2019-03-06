@@ -510,6 +510,7 @@ function cerrar_combo_establecimiento() {
     $("#tipo_establecimiento").val('');
     $("#razon_social").val('');
     $("#nombre_establecimiento").val('');
+    $("#email_establecimiento").val('');
     $("#abre_establecimiento").val('');
     $("#dir_establecimiento").val('');
     $("#telefono_establecimiento").val('');
@@ -1543,8 +1544,8 @@ function volver(num) {
                         <blockquote class="m-t-0">
                           <div class="row">
                             <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Nombre del menor: </h5>
-                                <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre del menor">
+                                <h5>Nombre del menor: <span class="text-danger">*</span></h5>
+                                <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre del menor" required="">
                                 <div class="help-block"></div>
                             </div>
 
@@ -1574,9 +1575,9 @@ function volver(num) {
                             </div>
 
                             <div class="form-group col-lg-2 col-sm-2 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Número partida:</h5>
+                                <h5>Núm. partida:<span class="text-danger">*</span></h5>
                                 <div class="controls">
-                                    <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
+                                    <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control" required="">
                                 </div>
                             </div>
 
@@ -2003,7 +2004,15 @@ function volver(num) {
                       </div>
                   </div>
                 </div>
-
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Dirección de correo electrónico: </h5>
+                      <div class="controls">
+                          <input type="text" placeholder="example@dominio.com" id="email_establecimiento" name="email_establecimiento" class="form-control">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_actividad_economica"></div>
                 </div>
@@ -2085,7 +2094,7 @@ function volver(num) {
     <!--FIN MODAL DE PROCURADOR -->
 
     <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
-    <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
 

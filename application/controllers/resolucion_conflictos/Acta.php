@@ -524,7 +524,7 @@ class Acta extends CI_Controller {
       $templateWord->setValue('edad_menor', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras($expediente->edad_menor)));
       $templateWord->setValue('municipio_menor', $expediente->municipio_menor);
       $templateWord->setValue('municipio_partida', $expediente->municipio_partida);
-      $templateWord->setValue('libro_partida', $expediente->libro_partida);
+      $templateWord->setValue('libro_partida', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(($expediente->libro_partida))));
       $templateWord->setValue('dia_partida', dia(date('d', strtotime($expediente->fecha_partida))));
       $templateWord->setValue('mes_partida', mb_strtoupper(mes(date('m', strtotime($expediente->fecha_partida)))));
       $templateWord->setValue('anio_partida', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras((date('Y', strtotime($expediente->fecha_partida))))));
@@ -535,13 +535,22 @@ class Acta extends CI_Controller {
       $templateWord->setValue('nombres_menor', $expediente->nombres_menor);
       $templateWord->setValue('nombre_empresa', $expediente->nombre_empresa);
       $templateWord->setValue('rep_legal_empresa', $expediente->representante_legal);
-      $templateWord->setValue('forma_pago_menor', $expediente->formapago_personaci);
-      if (substr($expediente->salario_personaci,-3)==".00") {
-        $pago = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($expediente->salario_personaci,0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
-      }else {
-        $pago = mb_strtoupper(CifrasEnLetras::convertirEurosEnLetras(number_format($expediente->salario_personaci,2,',','')));
+      // $templateWord->setValue('forma_pago_menor', $expediente->formapago_personaci);
+      $salario_pago="";
+      if ($expediente->salario_personaci !=0 && $expediente->salario_personaci!=NULL) {
+        if (substr($expediente->salario_personaci,-3)==".00") {
+          $pago = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($expediente->salario_personaci,0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
+        }else {
+          $pago = mb_strtoupper(CifrasEnLetras::convertirEurosEnLetras(number_format($expediente->salario_personaci,2,',','')));
+        }
+        $salario_pago = "devengando un salario de $pago, mensuales, el cual le era pagado en forma $expediente->formapago_personaci,";
       }
-      $templateWord->setValue('salario_menor', $pago);
+      $notificar_correo = "";
+      if ($expediente->correoelectronico_empresa!="" && $expediente->correoelectronico_empresa!=NULL) {
+        $notificar_correo = ", o mediante su dirección de correo electrónico $expediente->correoelectronico_empresa";
+      }
+      $templateWord->setValue('notificar_correo', $notificar_correo);
+      $templateWord->setValue('salario_menor', $salario_pago);
 
       $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
       $templateWord->setValue('mes_conflicto', mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
