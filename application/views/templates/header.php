@@ -64,7 +64,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 </head>
 <script>
-    var minutos = 15; var warning = 9.90; var danger = 3;
+    var minutos = 30; var warning = 9.90; var danger = 3;
 
     $(document).ready(function() {
         $("#password_val").val(""); localStorage["ventanasvyp"]++;
