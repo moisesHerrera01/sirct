@@ -316,7 +316,7 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax6"));
-
+        var hora;
         $.ajax({
           url: "<?php echo site_url(); ?>/resolucion_conflictos/audiencias/gestionar_audiencia",
           type: "post",
@@ -373,10 +373,12 @@ $(function(){
                     });
                     /*FIN Validar si pedir motivo*/
                   }else {
+                    hora = formData.get('hora_audiencia')
                     cambiar_nuevo5();
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
                     $('#formajax6').trigger("reset");
                     cambiar();
+                    $("#hora_audiencia").val(hora);
                   }
                 }else if($("#band4").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });

@@ -3,6 +3,7 @@
             <table id="myTable" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
+                      <th>N°</th>
                       <th width="130px">Número de expediente</th>
                       <th>Nombre solicitante</th>
                       <th>Nombre solicitado</th>
@@ -82,9 +83,10 @@
                         $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
                         $rango_consulta = obtener_rango($segmentos=2, $permiso=1);
                         /*********** Fin de consulta de permisos *********************************/
-
+                        $i=1;
                         foreach ($solicitudes->result() as $fila) {
                           echo "<tr>";
+                            echo "<td>".$i."</td>";
                             echo "<td>".$fila->numero."</td>";
                             echo "<td>".$fila->nombre_personaci.' '.$fila->apellido_personaci."</td>";
                             echo "<td>".$fila->nombre_empresa."</td>";
@@ -152,6 +154,7 @@
                               </div>
                               <?php
                             }
+                            $i++;
                             echo "</td>";
                             echo "</tr>";
                         }

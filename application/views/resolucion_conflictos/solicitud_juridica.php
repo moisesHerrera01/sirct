@@ -59,6 +59,37 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       }
     }
 
+    function ocultar_campos_rep(){
+      var value = $("#tipo_representante").val();
+      $('#ocultar_campos').show(500);
+      $("#rep_tipo_doc").attr("required",'required');
+      $("#f_nacimiento_representante").attr("required",'required');
+      $("#dui_representante").attr("required",'required');
+      $("#acreditacion_representante").attr("required",'required');
+      $("#profesion").attr("required",'required');
+      $("#municipio_representante").attr("required",'required');
+      $("#estado_civil").attr("required",'required');
+      if (value==1) {
+        $('#ocultar_campos').hide(500);
+        $("#rep_tipo_doc").removeAttr("required");
+        $("#f_nacimiento_representante").removeAttr("required");
+        $("#dui_representante").removeAttr("required");
+        $("#acreditacion_representante").removeAttr("required");
+        $("#profesion").removeAttr("required");
+        $("#municipio_representante").removeAttr("required");
+        $("#estado_civil").removeAttr("required");
+      }else {
+        $('#ocultar_campos').show(500);
+        $("#rep_tipo_doc").attr("required",'required');
+        $("#f_nacimiento_representante").attr("required",'required');
+        $("#dui_representante").attr("required",'required');
+        $("#acreditacion_representante").attr("required",'required');
+        $("#profesion").attr("required",'required');
+        $("#municipio_representante").attr("required",'required');
+        $("#estado_civil").attr("required",'required');
+      }
+    }
+
     function combo_ecivil_solicitado(seleccion){
       $.ajax({
         url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_ecivil_solicitado",
@@ -1166,8 +1197,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             </div>
                             <div class="row">
                                 <div class="form-group col-lg-8">
-                                    <h5>Dirección: <span class="text-danger">*</span></h5>
-                                    <textarea type="text" id="direccion_personaci" name="direccion_personaci" class="form-control" placeholder="Dirección completa" required=""></textarea>
+                                    <h5>Dirección: </h5>
+                                    <textarea type="text" id="direccion_personaci" name="direccion_personaci" class="form-control" placeholder="Dirección completa"></textarea>
                                 </div>
 
                                 <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
@@ -1179,8 +1210,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                     <input data-mask="9999-9999" type="text" id="telefono_personaci" name="telefono_personaci" class="form-control" placeholder="Número de Telefóno">
                                 </div>
                                 <div class="form-group col-lg-4 col-sm- <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Municipio: <span class="text-danger">*</span></h5>
-                                    <select id="municipio" name="municipio" class="select2" style="width: 100%" required>
+                                    <h5>Municipio: </h5>
+                                    <select id="municipio" name="municipio" class="select2" style="width: 100%">
                                         <option value=''>[Seleccione el municipio]</option>
                                         <?php
                                             $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
@@ -1204,8 +1235,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             </div>
                             <div class="row">
                               <div class="form-group col-lg-8" style="height: 83px;">
-                                  <h5>Ocupación según DUI:<span class="text-danger">*</span></h5>
-                                  <textarea type="text" id="ocupacion_solicitado" name="ocupacion_solicitado" class="form-control" placeholder="Ocupación según DUI" required=""></textarea>
+                                  <h5>Ocupación según DUI:</h5>
+                                  <textarea type="text" id="ocupacion_solicitado" name="ocupacion_solicitado" class="form-control" placeholder="Ocupación según DUI"></textarea>
                                   <div class="help-block"></div>
                               </div>
                             </div>
@@ -1448,13 +1479,25 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </div>
                   </div>
 
-                <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Tipo: <span class="text-danger">*</span></h5>
+                      <select onchange="ocultar_campos_rep()" id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
+                          <option value=''>[Seleccione el tipo]</option>
+                          <option class="m-l-50" value="1">Legal</option>
+                          <option class="m-l-50" value="2">Designado</option>
+                          <option class="m-l-50" value="3">Apoderado</option>
+                      </select>
+                  </div>
+
+                <!-- <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                     <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
                     <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
                     <div class="help-block"></div>
-                </div>
+                </div> -->
 
                 </div>
+
+                <div id="ocultar_campos">
                 <div class="row">
                   <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
 
@@ -1467,7 +1510,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
 
                 <div class="row">
-                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                      <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
+                      <div class="help-block"></div>
+                  </div>
+
+                  <!-- <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Tipo: <span class="text-danger">*</span></h5>
                       <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
                           <option value=''>[Seleccione el tipo]</option>
@@ -1475,7 +1524,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                           <option class="m-l-50" value="2">Designado</option>
                           <option class="m-l-50" value="3">Apoderado</option>
                       </select>
-                  </div>
+                  </div> -->
 
                   <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
                 </div>
@@ -1503,6 +1552,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     </select>
                 </div>
             </div>
+          </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
                 <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Aceptar</button>
@@ -1530,16 +1580,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Tipo de inscripción: <span class="text-danger">*</span></h5>
                         <select id="tiposolicitud_empresa" name="tiposolicitud_empresa" class="form-control custom-select"  style="width: 100%" required="">
-                            <option class="m-l-50" value="1">INSCRIPCIÓN PERSONA NATURAL</option>
-                            <option class="m-l-50" value="2">INSCRIPCIÓN PERSONA JURÍDICA</option>
+                            <option class="m-l-50" value="1">PERSONA NATURAL</option>
+                            <option class="m-l-50" value="2">PERSONA JURÍDICA</option>
                         </select>
                     </div>
-                  <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                  <!-- <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                       <h5>Razón social o denominación: <span class="text-danger">*</span></h5>
                       <div class="controls">
                           <input type="text" placeholder="Razón social" id="razon_social" name="razon_social" class="form-control" required="">
                       </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="row">
                   <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -1549,9 +1599,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Abreviatura: <span class="text-danger">*</span></h5>
+                      <h5>Abreviatura: </h5>
                       <div class="controls">
-                          <input type="text" placeholder="Abreviatura" id="abreviatura_empresa" name="abreviatura_empresa" class="form-control" required="">
+                          <input type="text" placeholder="Abreviatura" id="abreviatura_empresa" name="abreviatura_empresa" class="form-control">
                       </div>
                   </div>
                 </div>

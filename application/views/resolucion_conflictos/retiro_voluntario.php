@@ -67,8 +67,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
-          // rv_ncnp
-          // alert(posee_trabajador)
           $("#solicitud_pn_pj").hide();
           $("#pf_st").hide();
           $("#multa").hide();
@@ -76,6 +74,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           $("#rv_ambas_partes").hide();
           $("#rv_solo_trabajador").hide();
           $("#desistimiento").hide();
+          $("#rv_ncnp").hide()
 
         if (cuenta_audiencias>1) {
           $("#solicitud_pn_pj").show();
@@ -171,7 +170,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function combo_establecimiento(seleccion){
         $.ajax({
-            async: true,
+          async: true,
           url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_establecimiento",
           type: "post",
           dataType: "html",
@@ -248,13 +247,44 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function ocultar_pn(){
       var value = $("#tipo_establecimiento").val();
       if (value==1) {
-        $("#razon_social").removeAttr("required");
+        //$("#razon_social").removeAttr("required");
         $("#abre_establecimiento").removeAttr("required");
         $('#ocultar_pn').hide(500);
       }else {
          $('#ocultar_pn').show(500);
-         $("#razon_social").attr("required",'required');
+         //$("#razon_social").attr("required",'required');
          $("#abre_establecimiento").attr("required",'required');
+      }
+    }
+
+    function ocultar_campos_rep(){
+      var value = $("#tipo_representante").val();
+      $('#ocultar_campos').show(500);
+      $("#rep_tipo_doc").attr("required",'required');
+      $("#f_nacimiento_representante").attr("required",'required');
+      $("#dui_representante").attr("required",'required');
+      $("#acreditacion_representante").attr("required",'required');
+      $("#profesion").attr("required",'required');
+      $("#municipio_representante").attr("required",'required');
+      $("#estado_civil").attr("required",'required');
+      if (value==1) {
+        $('#ocultar_campos').hide(500);
+        $("#rep_tipo_doc").removeAttr("required");
+        $("#f_nacimiento_representante").removeAttr("required");
+        $("#dui_representante").removeAttr("required");
+        $("#acreditacion_representante").removeAttr("required");
+        $("#profesion").removeAttr("required");
+        $("#municipio_representante").removeAttr("required");
+        $("#estado_civil").removeAttr("required");
+      }else {
+        $('#ocultar_campos').show(500);
+        $("#rep_tipo_doc").attr("required",'required');
+        $("#f_nacimiento_representante").attr("required",'required');
+        $("#dui_representante").attr("required",'required');
+        $("#acreditacion_representante").attr("required",'required');
+        $("#profesion").attr("required",'required');
+        $("#municipio_representante").attr("required",'required');
+        $("#estado_civil").attr("required",'required');
       }
     }
 
@@ -1402,9 +1432,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor/a público</option>
                      -->
                     <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
-                    <option id="rv_ambas_partes" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Acta renuncia volunataria</option>
-                    <option id="rv_solo_trabajador" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Acta renuncia volunataria</option>
-                    <option id="rv_ncnp" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/9/')?>">Acta renuncia volunataria</option>
+                    <option id="rv_ambas_partes" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/7/')?>">Acta renuncia volunataria ambas partes</option>
+                    <option id="rv_solo_trabajador" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/8/')?>">Acta renuncia volunataria solo trabajador</option>
+                    <option id="rv_ncnp" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/9/')?>">Acta renuncia volunataria Ninguna de las partes</option>
                     <option id="esquela" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
                     <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
                     <option id="segunda_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Segunda cita PN-PJ con defensor/a</option>
@@ -1445,22 +1475,33 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                           </div>
                       </div>
 
-                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <!-- <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
                         <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
                         <div class="help-block"></div>
+                    </div> -->
+
+                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Tipo: <span class="text-danger">*</span></h5>
+                        <select onchange="ocultar_campos_rep()" id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
+                            <option value=''>[Seleccione el tipo]</option>
+                            <option class="m-l-50" value="1">Legal</option>
+                            <option class="m-l-50" value="2">Designado</option>
+                            <option class="m-l-50" value="3">Apoderado</option>
+                        </select>
                     </div>
 
                     </div>
+                    <div id="ocultar_campos">
                     <div class="row">
-                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>DUI: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
                           </div>
                       </div>
 
-                      <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <!-- <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Tipo: <span class="text-danger">*</span></h5>
                           <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
                               <option value=''>[Seleccione el tipo]</option>
@@ -1468,9 +1509,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                               <option class="m-l-50" value="2">Designado</option>
                               <option class="m-l-50" value="3">Apoderado</option>
                           </select>
-                      </div>
+                      </div> -->
 
-                      <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
                     </div>
                     <div class="row">
 
@@ -1495,6 +1536,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <option class="m-l-50" value="1">Activo</option>
                             <option class="m-l-50" value="0">Inactivo</option>
                         </select>
+                    </div>     
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1534,20 +1576,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </select>
                     </div>
                 </div>
-
-                <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
-                    <div class="controls">
-                        <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required>
-                    </div>
-                </div>
               </div>
 
-                <div class="row" id="ocultar_pn">
-                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                <div class="row">
+                  <!-- <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Raz&oacute;n social de la parte empleadora:</h5>
                       <div class="controls">
                           <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control">
+                      </div>
+                  </div> -->
+
+                  <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required>
                       </div>
                   </div>
 

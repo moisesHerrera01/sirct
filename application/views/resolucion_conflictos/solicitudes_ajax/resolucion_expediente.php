@@ -260,12 +260,12 @@ function mostrar(){
       $("#numero_folios").removeAttr("required");
       $("#div_combo_representante_empresa").hide(0);
       $("#representante_empresa").removeAttr("required");
-      $("#div_combo_delegado2").hide(0);
-      $("#delegado").removeAttr("required");
-      $("#div_combo_defensores").hide(0);
-      $("#defensor").removeAttr("required");
-      $("#asist").hide(500);
-      $("#asistieron").removeAttr("required");
+      // $("#div_combo_delegado2").hide(0);
+      // $("#delegado").removeAttr("required");
+      // $("#div_combo_defensores").hide(0);
+      // $("#defensor").removeAttr("required");
+      // $("#asist").hide(500);
+      // $("#asistieron").removeAttr("required");
       break;
     case '10':
         $("#tipo_conciliacion").attr("required",'required');

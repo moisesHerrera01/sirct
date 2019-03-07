@@ -64,6 +64,7 @@ class Historial_persona extends CI_Controller {
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 			'id_doc_identidad' => $this->input->post('id_doc_identidad'),
 			'discapacidad' => $this->input->post('discapacidad_desc'),
+			'email' => $this->input->post('email'),
 			'id_usuario' => $this->session->userdata('id_usuario'),
 			'fecha_modifica' => date('Y-m-d')
 			);
@@ -91,6 +92,7 @@ class Historial_persona extends CI_Controller {
 			'posee_representante' => 0,
 			'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 			'discapacidad' => $this->input->post('discapacidad_desc'),
+			'email' => $this->input->post('email'),
 			'id_usuario' => $this->session->userdata('id_usuario'),
 			'fecha_modifica' => date('Y-m-d')
 			);

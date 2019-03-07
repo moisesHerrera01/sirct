@@ -5,7 +5,7 @@
             if(!empty($nacionalidad)){
             foreach ($nacionalidad->result() as $fila) {
         ?>
-            <option  value="<?php echo $fila->id_nacionalidad ?>" <?php if($fila->id_nacionalidad==$id){?> selected  <?php }?>>
+            <option  value="<?php echo $fila->id_nacionalidad ?>" <?php if($fila->id_nacionalidad==$id || ($fila->nacionalidad=="SALVADOREÑA" && empty($id))){?> selected  <?php }?>>
         <?php
             echo $fila->nacionalidad;
         ?>

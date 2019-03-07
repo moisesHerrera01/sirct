@@ -133,36 +133,34 @@ function cambiar_update_post(id_personaci,bandera){
     })
     .done(function(res){
       result = JSON.parse(res)[0];
-
+      $("#email").val(result.email);
       $("#id_personaci").val(result.id_personaci);
       $("#id_expedienteci").val(result.id_expedienteci);
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
       $("#nombres").val(result.nombre_personaci);
       $("#conocido_por").val(result.conocido_por);
       $("#apellidos").val(result.apellido_personaci);
-      $("#dui").val(result.dui_personaci);
       $("#telefono").val(result.telefono_personaci);
       $("#telefono2").val(result.telefono2_personaci);
       $("#municipio").val(result.id_municipio).trigger('change.select2');
       $("#direccion").val(result.direccion_personaci);
-      $("#fecha_nacimiento").datepicker("setDate", result.fnacimiento_personaci);
+      $("#fecha_nacimiento").datepicker("setDate", moment(result.fnacimiento_personaci).format("DD-MM-YYYY"));
       $("#estudios").val(result.estudios_personaci);
       $("#nacionalidad").val(result.nacionalidad_personaci);
       $("#discapacidad_desc").val(result.discapacidad);
       /*Inicio partida nacimiento*/
-      if(result.discapacidad_personaci==0){
-          $("#ocultar_div").hide();
-      }else{
-          $("#ocultar_div").show();
-      }
+
       if (result.id_doc_identidad!=1) {
         $('#dui').mask('', {reverse: true});
         $('#dui').unmask();
         if (result.id_doc_identidad==4) {
           $('#partida_div').show();
           $('#tipo_aco').show(500);
-          $('#div_numero_doc_identidad').hide();
-          $("#dui").removeAttr("required");
+          // $('#div_numero_doc_identidad').hide();
+          // $("#dui").removeAttr("required");
+          $('#dui').mask('99999999-9', {reverse: true});
+          $('#div_numero_doc_identidad').show();
+          $("#dui").attr("required",'required');
         }else {
           $('#partida_div').hide();
           $('#tipo_aco').hide(500);
@@ -176,17 +174,24 @@ function cambiar_update_post(id_personaci,bandera){
          $('#div_numero_doc_identidad').show();
          $("#dui").attr("required",'required');
       }
-      $("#id_partida").val(result.id_partida);
-      $("#numero_partida").val(result.numero_partida);
-      $("#folio_partida").val(result.folio_partida);
-      $("#libro_partida").val(result.libro_partida);
-      $("#asiento_partida").val(result.asiento_partida);
-      $("#anio_partida").val(result.anio_partida);
-      /*Fin partida de nacimiento*/
+
+      $("#dui").val(result.dui_personaci);
+
+      $("#id_partida").val('');
+      $("#numero_partida").val('');
+      $("#folio_partida").val('');
+      $("#libro_partida").val('');
+      $("#asiento_partida").val('');
+      $("#anio_partida").val('');
+      combo_municipio_menor();
+      combo_municipio_partida();
+
       if (result.discapacidad_personaci=='1') {
           document.getElementById('si').checked = true;
+          $("#ocultar_div").show(500);
       }else {
           document.getElementById('no').checked = true;
+          $("#ocultar_div").hide(500);
       }
       if (result.posee_representante=='1') {
         document.getElementById('si_posee').checked =true;
@@ -195,8 +200,10 @@ function cambiar_update_post(id_personaci,bandera){
       }
       if (result.sexo_personaci=='M') {
         document.getElementById('masculino').checked =true;
+        $("#embarazada").hide(500);
       }else {
         document.getElementById('femenino').checked =true;
+        $("#embarazada").show(500);
       }
       if (result.pertenece_lgbt=='1') {
         document.getElementById('si_lgbt').checked =true;
@@ -246,7 +253,6 @@ function cambiar_update_post(id_personaci,bandera){
 
       $("#btnadd").show(0);
       $("#btnedit").hide(0);
-      $("#ocultar_div").hide();
 
       $("#cnt_tabla").hide(0);
       $("#cnt_form_main").show(0);
@@ -356,6 +362,8 @@ function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,p
         $("#inasistencia").show();
       }else if (resultado=="4"){
         $("#desistimiento").show();
+      }else if (resultado=="9"){
+        $("#pendiente").show();
       }
     }
     $("#id_expedienteci_copia2").val(id_expedienteci);
@@ -510,6 +518,7 @@ function cerrar_combo_establecimiento() {
     $("#tipo_establecimiento").val('');
     $("#razon_social").val('');
     $("#nombre_establecimiento").val('');
+    $("#email_establecimiento").val('');
     $("#abre_establecimiento").val('');
     $("#dir_establecimiento").val('');
     $("#telefono_establecimiento").val('');
@@ -1009,6 +1018,7 @@ function alertFunc() {
 function cambiar_nuevo() {
     open_form(1);
     /*Inicio Solicitante*/
+    $("#email").val('');
     $("#id_personaci").val('');
     $("#nr").val($("#nr_search").val()).trigger('change.select2');
     $("#nombres").val('');
@@ -1125,7 +1135,7 @@ function cambiar_editar(id_expedienteci,bandera){
     })
     .done(function(res){
       result = JSON.parse(res)[0];
-
+      $("#email").val(result.email);
       $("#id_personaci").val(result.id_personaci);
       $("#id_expedienteci").val(result.id_expedienteci);
       $("#nr").val($("#nr_search").val()).trigger('change.select2');
@@ -1446,7 +1456,7 @@ function volver(num) {
                               </div>
                               <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                   <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy" readonly="">
+                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd-mm-yyyy" data-mask = "99-99-9999">
                                   <div class="help-block"></div>
                               </div>
                         </div>
@@ -1522,6 +1532,13 @@ function volver(num) {
 
                         </div>
                         <div class="row">
+                          <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                              <h5>Dirección de correo electrónico: </h5>
+                              <input type="email" id="email" name="email" class="form-control" placeholder="example@dominio.com">
+                              <div class="help-block"></div>
+                          </div>
+                        </div>
+                        <div class="row">
                        <div id="ocultar_div" class="form-group col-lg-8" style="height: 83px; display: none;">
                            <h5>Discapacidad:</h5>
                            <textarea type="text" id="discapacidad_desc" name="discapacidad_desc" class="form-control" placeholder="Ingrese la discapacidad"></textarea>
@@ -1535,7 +1552,7 @@ function volver(num) {
                         <blockquote class="m-t-0">
                           <div class="row">
                             <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Nombre del menor: </h5>
+                                <h5>Nombre del menor: <span class="text-danger">*</span></h5>
                                 <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre del menor">
                                 <div class="help-block"></div>
                             </div>
@@ -1566,7 +1583,7 @@ function volver(num) {
                             </div>
 
                             <div class="form-group col-lg-2 col-sm-2 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Número partida:</h5>
+                                <h5>Núm. partida:<span class="text-danger">*</span></h5>
                                 <div class="controls">
                                     <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
                                 </div>
@@ -1762,13 +1779,13 @@ function volver(num) {
 
                                 <div class="row">
                                   <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Ocupación según DUI:<span class="text-danger">*</span></h5>
-                                      <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI" required=""></textarea>
+                                      <h5>Ocupación según DUI:</h5>
+                                      <textarea type="text" id="ocupacion" name="ocupacion" class="form-control" placeholder="Ocupación según DUI"></textarea>
                                       <div class="help-block"></div>
                                   </div>
 
                                   <div class="form-group col-lg-4" style="height: 83px;">
-                                      <h5>Salario($):<span class="text-danger">*</span></h5>
+                                      <h5>Salario($):</h5>
                                       <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01" min="1">
                                       <div class="help-block"></div>
                                   </div>
@@ -1776,15 +1793,15 @@ function volver(num) {
 
                                 <div class="row">
                                   <div class="form-group col-lg-8" style="height: 83px;">
-                                      <h5>Funciones:<span class="text-danger">*</span></h5>
-                                      <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones laborales" required=""></textarea>
+                                      <h5>Funciones:</h5>
+                                      <textarea type="text" id="funciones" name="funciones" class="form-control" placeholder="Funciones laborales"></textarea>
                                       <div class="help-block"></div>
                                   </div>
 
                                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                      <h5>Forma de pago: <span class="text-danger">*</span></h5>
+                                      <h5>Forma de pago: </h5>
                                       <div class="controls">
-                                        <select id="forma_pago" name="forma_pago" class="custom-select col-4" onchange="" required>
+                                        <select id="forma_pago" name="forma_pago" class="custom-select col-4" onchange="">
                                           <option value="">[Seleccione]</option>
                                           <option value="Diario">Diario</option>
                                           <option value="Semanal">Semanal</option>
@@ -1950,20 +1967,20 @@ function volver(num) {
                       </select>
                     </div>
                 </div>
-
-                <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                    <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
-                    <div class="controls">
-                        <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required>
-                    </div>
-                </div>
               </div>
 
-                <div class="row" id="ocultar_pn">
-                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                <div class="row">
+                  <!-- <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Raz&oacute;n social de la parte empleadora:</h5>
                       <div class="controls">
                           <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control">
+                      </div>
+                  </div> -->
+
+                  <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required>
                       </div>
                   </div>
 
@@ -1995,7 +2012,15 @@ function volver(num) {
                       </div>
                   </div>
                 </div>
-
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Dirección de correo electrónico: </h5>
+                      <div class="controls">
+                          <input type="text" placeholder="example@dominio.com" id="email_establecimiento" name="email_establecimiento" class="form-control">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_actividad_economica"></div>
                 </div>
@@ -2077,7 +2102,7 @@ function volver(num) {
     <!--FIN MODAL DE PROCURADOR -->
 
     <!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
-    <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
 
@@ -2093,28 +2118,10 @@ function volver(num) {
                           <h5>Nombre de la persona: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
+
                           </div>
                       </div>
 
-                    <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                        <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                        <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
-                        <div class="help-block"></div>
-                    </div>
-
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc_rep"></div>
-
-                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                          <h5>Número doc identidad: <span class="text-danger">*</span></h5>
-                          <div class="controls">
-                              <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
-                          </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
                       <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Tipo: <span class="text-danger">*</span></h5>
                           <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
@@ -2125,23 +2132,52 @@ function volver(num) {
                           </select>
                       </div>
 
-                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
+                    <!-- <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                        <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
+                        <div class="help-block"></div>
+                    </div> -->
+
                     </div>
+                    <!-- <div class="row">
+                      <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc_rep"></div>
+
+                      <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Número doc identidad: <span class="text-danger">*</span></h5>
+                          <div class="controls">
+                              <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
+                          </div>
+                      </div>
+                    </div> -->
 
                     <div class="row">
+                      <!-- <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <h5>Tipo: <span class="text-danger">*</span></h5>
+                          <select id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
+                              <option value=''>[Seleccione el tipo]</option>
+                              <option class="m-l-50" value="1">Legal</option>
+                              <option class="m-l-50" value="2">Designado</option>
+                              <option class="m-l-50" value="3">Apoderado</option>
+                          </select>
+                      </div> -->
+
+                      <!-- <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div> -->
+                    </div>
+
+                    <!-- <div class="row">
                       <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                           <h5>Acreditación: <span class="text-danger">*</span></h5>
                           <div class="controls">
                               <textarea id="acreditacion_representante" name="acreditacion_representante" class="form-control"></textarea>
                           </div>
                       </div>
-                    </div>
+                    </div> -->
 
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
 
                       <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
-                    </div>
+                    </div> -->
 
                     <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                         <h5>Estado: <span class="text-danger">*</span></h5>
@@ -2233,8 +2269,8 @@ function volver(num) {
                         <option id="multa" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/2/')?>">Acta de audiencia: multa</option>
                         <option id="inasistencia" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Acta segunda audiencia</option>
                         <option id="desistimiento" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/4/')?>">Acta de desistimiento</option>
-                        <!-- <option id="diferido_con" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/3/')?>">Conciliada pago diferido con defensor/a público</option>
-                         -->
+                        <option id="pendiente" style="display: none;" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/10/')?>">Pendiente segunda cita</option>
+
                         <option id="solicitud_pn_pj" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/5/')?>">Acta de solicitud</option>
                         <option id="esquela" value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_tipo/6/')?>">Acta de esquela</option>
                         <!-- <option value="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta/')?>">Ficha de persona natural a persona juridica</option>
@@ -2670,10 +2706,10 @@ function audiencias(id_empresaci, id_expedienteci, origen) {
 // }
 
 function ocultar(){
+  $("#nombre_acompaniante").removeAttr("required");
+  $("#fnacimiento_menor").removeAttr("required");
   var value = $("#id_doc_identidad").val();
   if (value!=1) {
-    $('#dui').mask('', {reverse: true});
-    $('#dui').unmask();
     if (value==4) {
       $('#partida_div').show(500);
       $('#tipo_aco').show(500);
@@ -2681,10 +2717,16 @@ function ocultar(){
       // $("#dui").removeAttr("required");
       $('#dui').mask('99999999-9', {reverse: true});
       $('#div_numero_doc_identidad').show(500);
+      $("#nombre_acompaniante").attr("required",'required');
       $("#dui").attr("required",'required');
+      $("#fnacimiento_menor").attr("required",'required');
     }else {
+      $('#dui').mask('', {reverse: true});
+      $('#dui').unmask();
       $('#partida_div').hide(500);
       $('#tipo_aco').hide(500);
+      $("#nombre_acompaniante").removeAttr("required");
+      $("#fnacimiento_menor").removeAttr("required");
       $('#div_numero_doc_identidad').show(500);
       $("#dui").attr("required",'required');
     }
@@ -2692,6 +2734,8 @@ function ocultar(){
      $('#dui').mask('99999999-9', {reverse: true});
      $('#partida_div').hide(500);
      $('#tipo_aco').hide(500);
+     $("#nombre_acompaniante").removeAttr("required");
+     $("#fnacimiento_menor").removeAttr("required");
      $('#div_numero_doc_identidad').show(500);
      $("#dui").attr("required",'required');
   }
@@ -2717,12 +2761,12 @@ function ocultar_tipo_doc_rep(){
 function ocultar_pn(){
   var value = $("#tipo_establecimiento").val();
   if (value==1) {
-    $("#razon_social").removeAttr("required");
+    // $("#razon_social").removeAttr("required");
     $("#abre_establecimiento").removeAttr("required");
     $('#ocultar_pn').hide(500);
   }else {
      $('#ocultar_pn').show(500);
-     $("#razon_social").attr("required",'required');
+     // $("#razon_social").attr("required",'required');
      $("#abre_establecimiento").attr("required",'required');
   }
 }

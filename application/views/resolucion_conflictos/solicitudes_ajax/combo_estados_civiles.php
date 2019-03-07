@@ -1,4 +1,4 @@
-<h5>Estado civil: <span class="text-danger">*</span></h5>
+<h5>Estado familiar: <span class="text-danger">*</span></h5>
 <select id="estado_civil" name="estado_civil" required class="select2" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php

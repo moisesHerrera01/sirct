@@ -17,7 +17,8 @@ class Expedientes_model extends CI_Model {
 
 	public function obtener_registros_expedientes($id_expedienteci,$id_audiencia=FALSE) {
 
-			$this->db->select("n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,ep.*,p.*,
+			$this->db->select("n.*,e.*,rp.*,f.*,m.*,em.*,c.*,r.*,ep.*,p.*,p.email,
+												 em.correoelectronico_empresa,
 												 p.discapacidad,
 												 e.id_expedienteci,
 												 e.ocupacion,

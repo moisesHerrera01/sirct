@@ -32,6 +32,7 @@ class Solicitudes extends CI_Controller {
 
 		if($this->input->post('band1') == "save"){
 			$data = array(
+			'email' => $this->input->post('email'),
 			'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
 			'conocido_por' => $this->input->post('conocido_por'),
@@ -71,6 +72,7 @@ class Solicitudes extends CI_Controller {
 		}else if($this->input->post('band1') == "edit"){
 
 			$data = array(
+			'email' => $this->input->post('email'),	
 			'id_personaci' => $this->input->post('id_personaci'),
 			'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
