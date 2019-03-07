@@ -421,6 +421,7 @@ class Acta extends CI_Controller {
 
 
     public function generar_acta_juridico($caso,$id_expedienteci,$id_audiencia=FALSE){
+
       $exp = $this->solicitud_juridica_model->obtener_registros_expedientes($id_expedienteci)->result()[0];
 
       $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci,FALSE,1);
@@ -433,6 +434,23 @@ class Acta extends CI_Controller {
       $PHPWord = new PHPWord();
       $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PJ.docx');
 
+      if ($exp->tiposolicitud_empresa==2) {
+        $persona = "a la Sociedad";
+      }else {
+        $persona = "al Sr(a)";
+      }
+    if ($caso==2) {
+      $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER al Sr(a): $exp->nombre_personaci $exp->apellido_personaci, que en las diligencias promovidas por ".$persona." $exp->nombre_empresa representado(a) legalmente por $exp->rep_legal se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
+      $cuerpo_esquela="’’’’’’’’’’’’EMAYARI’’’’’’’’’’ANTE MI XCM SRIA.’’’’’’’’’RUBRICAS’’’’’’’";
+      $pie_esquela="Y para que le sirva de legal notificación y citación, se expide la presente esquela en ________________, a las _____________horas y ________________ minutos del día __________________ del mes de ___________ de dos mil ______________.";
+      $templateWord->setValue('encabezado_esquela', $encabezado_esquela);
+      $templateWord->setValue('cuerpo_esquela',$cuerpo_esquela);
+      $templateWord->setValue('pie_esquela', $pie_esquela);
+    }else {
+      $templateWord->setValue('encabezado_esquela', "");
+      $templateWord->setValue('cuerpo_esquela',"");
+      $templateWord->setValue('pie_esquela', "");
+    }
       $templateWord->setValue('no_expediente', $exp->numerocaso_expedienteci);
       $templateWord->setValue('departamento', departamento($exp->numerocaso_expedienteci));
 

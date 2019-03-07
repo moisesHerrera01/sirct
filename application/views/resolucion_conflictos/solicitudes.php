@@ -1553,7 +1553,7 @@ function volver(num) {
                           <div class="row">
                             <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                 <h5>Nombre del menor: <span class="text-danger">*</span></h5>
-                                <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre del menor" required="">
+                                <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre del menor">
                                 <div class="help-block"></div>
                             </div>
 
@@ -1585,7 +1585,7 @@ function volver(num) {
                             <div class="form-group col-lg-2 col-sm-2 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                 <h5>Núm. partida:<span class="text-danger">*</span></h5>
                                 <div class="controls">
-                                    <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control" required="">
+                                    <input type="text" placeholder="Número partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
                                 </div>
                             </div>
 
@@ -2706,6 +2706,8 @@ function audiencias(id_empresaci, id_expedienteci, origen) {
 // }
 
 function ocultar(){
+  $("#nombre_acompaniante").removeAttr("required");
+  $("#fnacimiento_menor").removeAttr("required");
   var value = $("#id_doc_identidad").val();
   if (value!=1) {
     if (value==4) {
@@ -2715,12 +2717,16 @@ function ocultar(){
       // $("#dui").removeAttr("required");
       $('#dui').mask('99999999-9', {reverse: true});
       $('#div_numero_doc_identidad').show(500);
+      $("#nombre_acompaniante").attr("required",'required');
       $("#dui").attr("required",'required');
+      $("#fnacimiento_menor").attr("required",'required');
     }else {
       $('#dui').mask('', {reverse: true});
       $('#dui').unmask();
       $('#partida_div').hide(500);
       $('#tipo_aco').hide(500);
+      $("#nombre_acompaniante").removeAttr("required");
+      $("#fnacimiento_menor").removeAttr("required");
       $('#div_numero_doc_identidad').show(500);
       $("#dui").attr("required",'required');
     }
@@ -2728,6 +2734,8 @@ function ocultar(){
      $('#dui').mask('99999999-9', {reverse: true});
      $('#partida_div').hide(500);
      $('#tipo_aco').hide(500);
+     $("#nombre_acompaniante").removeAttr("required");
+     $("#fnacimiento_menor").removeAttr("required");
      $('#div_numero_doc_identidad').show(500);
      $("#dui").attr("required",'required');
   }
