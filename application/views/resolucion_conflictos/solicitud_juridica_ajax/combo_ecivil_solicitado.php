@@ -1,5 +1,5 @@
-<h5>Estado civil: <span class="text-danger">*</span></h5>
-<select id="ecivil" name="ecivil" required class="select2" onchange=""  style="width: 100%">
+<h5>Estado civil: </h5>
+<select id="ecivil" name="ecivil" class="select2" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php
             if(!empty($estados)){
