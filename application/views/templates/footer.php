@@ -63,6 +63,7 @@
     <script src="<?php echo base_url(); ?>assets/js/buttons.print.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/ion-rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/ion-rangeslider/js/ion-rangeSlider/ion.rangeSlider-init.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/select2/dist/js/i18n/es.js" type="text/javascript"></script>
 <?php } ?>
 
 </body>

@@ -130,27 +130,61 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     // }
 
     function combo_establecimiento(seleccion){
-      $.ajax({
-        // async: true,
-        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
-        type: "post",
-        dataType: "html",
-        data: {id : seleccion}
-      })
-      .done(function(res){
-        $('#div_combo_establecimiento').html(res);
-        $("#establecimiento").select2({
-
-          'language': {
-            noResults: function () {
-              return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
-            }
-          },
-          'escapeMarkup': function (markup) {
-            return markup;
-          }
+        $.ajax({
+          async: true,
+          url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
+          type: "post",
+          dataType: "json",
+          data: {id : seleccion}
+        })
+        .done(function(res){
+            $.when($('#div_combo_establecimiento').html(res.modal) ).then(function( data, textStatus, jqXHR ) {
+                $("#establecimiento").select2({
+                  ajax: {
+                    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_empresa",
+                    dataType: 'json',
+                    data: function (params) {
+                      return {
+                        s: params.term,
+                        page: params.page
+                      };
+                    },
+                    processResults: function (data, params) {
+                      if ((data.items)==false) {
+                        data.items = [{
+                          id:0,
+                          text:function () {
+                                  return '<div align="right"><a href="javascript:;" title="Agregar nuevo registro" class="btn btn-success2"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
+                              }
+                        }];
+                      }
+                      params.page = params.page || 1;
+                      return {
+                        results: data.items,
+                        pagination: {
+                          more: (params.page * 30) < data.total_count
+                        }
+                      };
+                    },
+                     cache: true
+                  },
+                  'language': 'es',
+                  'escapeMarkup': function (markup) { return markup; }
+                });
+                $('#establecimiento').on('select2:select', function (e) {
+                  var data = e.params.data;
+                  if (data.id == 0) {
+                    cerrar_combo_establecimiento();
+                    $('#modal_establecimiento').modal('show');
+                  }
+                });
+                //tabla_representantes()
+                if (seleccion != '') {
+                  var newOption = new Option(res.establecimiento.nombre_empresa,res.establecimiento.id_empresa, true, true);
+                  $('#establecimiento').append(newOption).trigger('change');
+                }
+            });
         });
-      });
     }
 
     function combo_actividad_economica() {
