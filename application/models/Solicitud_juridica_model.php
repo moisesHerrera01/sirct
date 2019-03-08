@@ -258,7 +258,7 @@ class Solicitud_juridica_model extends CI_Model {
 			->join('org_municipio mp','mp.id_municipio=p.id_municipio','LEFT')
 			->join('org_departamento dp','dp.id_departamento=mp.id_departamento_pais','LEFT')
 			->join('sge_representante r ', ' r.id_representante = e.id_representanteci')
-			->join('org_municipio m','m.id_municipio=p.id_municipio')
+			->join('org_municipio m','m.id_municipio=p.id_municipio','LEFT')
 			->join("(
 						SELECT de.id_expedienteci,de.id_personal delegado_actual,
 						CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual

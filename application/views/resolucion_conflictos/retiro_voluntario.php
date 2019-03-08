@@ -995,7 +995,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
-  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante, band){
+  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante,id_tipo_doc, band){
       $("#id_representante").val(id_representante);
       $("#dui_representante").val(dui_representante);
       $("#nombres_representante").val(nombres_representante);
@@ -1536,7 +1536,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <option class="m-l-50" value="1">Activo</option>
                             <option class="m-l-50" value="0">Inactivo</option>
                         </select>
-                    </div>     
+                    </div>
                     </div>
                 </div>
                 <div class="modal-footer">
