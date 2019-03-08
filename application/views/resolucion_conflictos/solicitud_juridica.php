@@ -70,7 +70,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#municipio_representante").attr("required",'required');
       $("#estado_civil").attr("required",'required');
       if (value==1) {
-        $('#ocultar_campos').hide(500);
+        //$('#ocultar_campos').hide(500);
         $("#rep_tipo_doc").removeAttr("required");
         $("#f_nacimiento_representante").removeAttr("required");
         $("#dui_representante").removeAttr("required");
@@ -873,7 +873,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         //console.log(res)
         $('#cnt_actions').html(res);
         $("#cnt_actions").show(0);
-        $("#cnt_tabla").hide(0);
+        $("#c#cnt_tabla").hide(0);
         //$("#cnt_tabla_solicitudes").hide(0);
         $("#cnt_form_main").hide(0);
         combo_defensores();
