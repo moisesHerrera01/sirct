@@ -14,6 +14,7 @@ class Reportes_individuales_model extends CI_Model {
 			CONCAT_WS(' ', emp.primer_nombre, emp.segundo_nombre, emp.tercer_nombre, emp.primer_apellido, emp.segundo_apellido, emp.apellido_casada) delegado,
 			CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE '' END cant_masc,
 			CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE '' END cant_feme,
+			IF ((ecc.id_empleador !=0 && ecc.id_empleador IS NOT NULL),1,'') cant_empleador,
 			ecc.fechacrea_expedienteci fecha_inicio,
 			COALESCE((SELECT fea.fecha_resultado FROM sct_fechasaudienciasci fea
 				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
@@ -78,6 +79,7 @@ class Reportes_individuales_model extends CI_Model {
 			CONCAT_WS(' ', emp.primer_nombre, emp.segundo_nombre, emp.tercer_nombre, emp.primer_apellido, emp.segundo_apellido, emp.apellido_casada) delegado,
 			CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE '' END cant_masc,
 			CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE '' END cant_feme,
+			IF ((ecc.id_empleador !=0 && ecc.id_empleador IS NOT NULL),1,'') cant_empleador,
 			ecc.fechacrea_expedienteci fecha_inicio,
 			ecc.fechacrea_expedienteci fecha_fin,
 			CONCAT_WS(' ',p.nombre_personaci,p.apellido_personaci) solicitante,

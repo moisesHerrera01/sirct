@@ -189,10 +189,10 @@ class Expedientes_model extends CI_Model {
 	}
 
 
-  public function obtener_expediente($id, $id_persona = false) {
+  public function obtener_expediente($id, $id_persona = false, $delegado_nuevo = 108) {
 
       $this->db->select(
-											  'e.id_expedienteci,
+											  "e.id_expedienteci,
 												 e.numerocaso_expedienteci,
 												 e.tiposolicitud_expedienteci,
 												 e.tipocociliacion_expedienteci,
@@ -204,19 +204,22 @@ class Expedientes_model extends CI_Model {
 												 ep.segundo_apellido,
 												 ep.nr,
 												 ep.id_empleado,
+												 d.nombre_delegado_actual,
 												 p.id_personaci,
 												 p.nombre_personaci,
 												 p.apellido_personaci,
 												 em.id_empresa,
 												 em.nombre_empresa,
 												 s.nombre_sindicato,
-												 nombre_delegado_actual'
+												 nombre_delegado_actual,
+												 (SELECT CONCAT_WS(' ',primer_nombre,segundo_nombre,tercer_nombre,primer_apellido,segundo_apellido)
+												  FROM sir_empleado
+													WHERE id_empleado = $delegado_nuevo) delegado_nuevo"
 												)
              ->from('sct_expedienteci e')
 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci','left')
 						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci')
 						 ->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
-						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 						 ->join("(
 									 SELECT de.id_expedienteci,de.id_personal delegado_actual,
 									 CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
@@ -228,6 +231,7 @@ class Expedientes_model extends CI_Model {
 																							 AND de2.id_personal <> 0
 																							)
 								 ) d" , "d.id_expedienteci=e.id_expedienteci")
+						 ->join('sir_empleado ep','ep.id_empleado=d.delegado_actual')
 						 ->group_by('e.id_expedienteci')
 						 ->where('e.id_expedienteci', $id);
 	  $query=$this->db->get();

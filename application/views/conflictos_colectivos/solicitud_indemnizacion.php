@@ -131,7 +131,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function combo_establecimiento(seleccion){
         $.ajax({
-          async: true,
+          // async: true,
           url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
           type: "post",
           dataType: "json",

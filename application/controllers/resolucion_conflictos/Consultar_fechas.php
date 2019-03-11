@@ -118,7 +118,7 @@ class Consultar_fechas extends CI_Controller {
 			'N° Exp',
 			'Delegado',
 			'Solicitante',
-			'Estado',
+			'Resolución',
 			'Hora'
 		);
 
@@ -177,7 +177,7 @@ class Consultar_fechas extends CI_Controller {
 					$rows->numerocaso_expedienteci,
 					$rows->delegado,
 					$solicitante,
-					'resultado',
+					$rows->resultado,
 					date("h:i A",strtotime($rows->hora_fechasaudienciasci))
 				);
 				$cuerpo .= table_row($cell_row);

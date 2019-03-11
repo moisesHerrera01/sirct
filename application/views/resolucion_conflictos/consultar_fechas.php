@@ -107,7 +107,7 @@ function tablasolicitudes(){
       OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/Consultar_fechas/imprimir_citas_del_dia_pdf", param, "_blank");
     }
 
-    
+
   }
 
   function castDate(date){
@@ -159,7 +159,7 @@ function tablasolicitudes(){
       background: #1e88e5;
   }
 
-  a.fc-day-grid-event.fc-draggable:hover { 
+  a.fc-day-grid-event.fc-draggable:hover {
     width: 160px;
     position: relative;
     z-index: 3;
@@ -176,7 +176,7 @@ function tablasolicitudes(){
   .bg-success.bg-opacity:hover{
         background-color: #40afaa !important;
   }
- 
+
   .bg-success2.bg-opacity{
         background-color: #989898a8 !important;
   }
@@ -271,7 +271,7 @@ function tablasolicitudes(){
 <!--INICIO MODAL DE EVENTO CALENDARIO -->
 <!-- ============================================================== -->
 <div id="calendarModal" class="modal fade">
-<div class="modal-dialog">
+<div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title">Detalles de la audiencia</h4>
@@ -279,50 +279,50 @@ function tablasolicitudes(){
         </div>
         <div id="modalBody" class="modal-body">
           <div class="row">
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-4" style="height: 20px;">
               N&uacute;mero de caso:
             </div>
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-8" style="height: 20px;">
                   <h5 id="numero_caso_exp"></h5>
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-4" style="height: 20px;">
               Tipo de solicitud:
             </div>
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-8" style="height: 20px;">
                   <h5 id="tipo_sol"></h5>
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-4" style="height: 20px;">
               Nombre delegado/a:
             </div>
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-8" style="height: 20px;">
                   <h5 id="delegado"></h5>
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-4" style="height: 20px;">
               Nombre de solicitante:
             </div>
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-8" style="height: 20px;">
                   <h5 id="persona"></h5>
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-4" style="height: 20px;">
               Fecha y hora de inicio:
             </div>
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-8" style="height: 20px;">
                   <h5 id="inicio"></h5>
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-4" style="height: 20px;">
               Fecha y hora de fin:
             </div>
-            <div class="form-group col-lg-6" style="height: 20px;">
+            <div class="form-group col-lg-8" style="height: 20px;">
                   <h5 id="fin"></h5>
             </div>
           </div>
@@ -389,7 +389,7 @@ $(document).ready(function () {
               $('#eventUrl').attr('href',event.url);
               $('#calendarModal').modal();
           },
-          
+
         header: {
             left: 'prev,next today',
             center: 'title',
