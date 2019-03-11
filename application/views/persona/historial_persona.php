@@ -328,7 +328,6 @@ function cambiar_nuevo() {
 function cambiar_nuevo2(){
     $("#id_empresa").val('');
     $("#tiposolicitud_empresa").val('1');
-    $("#id_oficina").val('').trigger('change.select2');
     $("#nombre_empresa").val('');
     $("#abreviatura_empresa").val('');
     $("#telefono_empresa").val('');
@@ -338,10 +337,7 @@ function cambiar_nuevo2(){
     $("#id_municipio").val('').trigger('change.select2');
     $("#correoelectronico_empresa").val('');
     $("#direccion_empresa").val('');
-    $("#activobalance_empresa").val('');
-    $("#capitalsocial_empresa").val('');
-    $("#trabajadores_adomicilio_empresa").val('');
-    $("#tipo_empresa").val('');
+
     $("#estado_empresa").val('1');
     $("#band2").val('save');
 
@@ -806,7 +802,7 @@ function volver(num) {
                                 <input type="hidden" id="band2" name="band2" value="save">
                                 <input type="hidden" id="id_empresa" name="id_empresa" value="">
 
-                                <span class="etiqueta">Expediente</span>
+                                <span class="etiqueta">Parte empleadora</span>
                                 <blockquote class="m-t-0">
                                   <div class="row">
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -816,25 +812,7 @@ function volver(num) {
                                         <option class="m-l-50" value="2">Inscripción persona jurídica</option>
                                       </select>
                                     </div>
-                                    <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Oficina: <span class="text-danger">*</span></h5>
-                                        <select id="id_oficina" name="id_oficina" class="select2" style="width: 100%" required>
-                                            <option value=''>[Seleccione la oficina]</option>
-                                            <?php 
-                                                $oficina = $this->db->query("SELECT * FROM sge_oficina WHERE estado_oficina = 1 ORDER BY nombre_oficina");
-                                                if($oficina->num_rows() > 0){
-                                                    foreach ($oficina->result() as $fila2) {              
-                                                       echo '<option class="m-l-50" value="'.$fila2->id_oficina.'">'.$fila2->nombre_oficina.'</option>';
-                                                    }
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
                                   </div>
-                                </blockquote>
-
-                                <span class="etiqueta">Parte empleadora</span>
-                                <blockquote class="m-t-0">
                                   <div class="row">
                                     <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                         <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
@@ -843,48 +821,19 @@ function volver(num) {
                                   </div>
                                   <div class="row">
                                     <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Abreviatura: <span class="text-danger">*</span></h5>
+                                        <h5>Abreviatura: </h5>
                                         <div class="controls">
-                                            <input type="text" id="abreviatura_empresa" name="abreviatura_empresa" class="form-control" required="">
+                                            <input type="text" id="abreviatura_empresa" name="abreviatura_empresa" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Teléfono: <span class="text-danger">*</span></h5>
+                                        <h5>Teléfono:</h5>
                                         <div class="controls">
-                                            <input type="text" id="telefono_empresa" name="telefono_empresa" data-mask="9999-9999" class="form-control" required="">
+                                            <input type="text" id="telefono_empresa" name="telefono_empresa" data-mask="9999-9999" class="form-control" >
                                         </div>
                                     </div>
                                   </div>
                                   <div class="row">
-                                    <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Total centros de trabajo:</h5>
-                                        <div class="controls">
-                                            <input type="number" min="0" id="numtotal_empresa" name="numtotal_empresa" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>Actividad económica: <span class="text-danger">*</span></h5>
-                                        <select id="id_catalogociiu" name="id_catalogociiu" class="select2" style="width: 100%" required>
-                                            <option value=''>[Seleccione la actividad]</option>
-                                            <?php 
-                                                $catalogociiu = $this->db->query("SELECT * FROM sge_catalogociiu ORDER BY actividad_catalogociiu");
-                                                if($catalogociiu->num_rows() > 0){
-                                                    foreach ($catalogociiu->result() as $fila2) {              
-                                                       echo '<option class="m-l-50" value="'.$fila2->id_catalogociiu.'">'.$fila2->actividad_catalogociiu.'</option>';
-                                                    }
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="form-group col-lg-3 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                        <h5>NIT:</h5>
-                                        <div class="controls">
-                                            <input type="text" id="nit_empresa" name="nit_empresa" class="form-control" data-mask="9999-999999-999-9">
-                                        </div>
-                                        <label for="nit_empresa"></label>
-                                    </div>
                                     <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                         <h5>Municipio: <span class="text-danger">*</span></h5>
                                         <select id="id_municipio" name="id_municipio" class="select2" style="width: 100%" required>
@@ -899,7 +848,7 @@ function volver(num) {
                                             ?>
                                         </select>
                                     </div>
-                                    <div class="form-group col-lg-5 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                    <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                         <h5>Correo Electrónico:</h5>
                                         <div class="controls">
                                             <input type="text" id="correoelectronico_empresa" name="correoelectronico_empresa" class="form-control">
@@ -910,6 +859,22 @@ function volver(num) {
                                     <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                         <h5>Dirección completa: <span class="text-danger">*</span></h5>
                                         <textarea type="text" id="direccion_empresa" name="direccion_empresa" class="form-control" placeholder="Dirección completa de la empresa"></textarea>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                        <h5>Actividad económica: <span class="text-danger">*</span></h5>
+                                        <select id="id_catalogociiu" name="id_catalogociiu" class="select2" style="width: 100%" required>
+                                            <option value=''>[Seleccione la actividad]</option>
+                                            <?php 
+                                                $catalogociiu = $this->db->query("SELECT * FROM sge_catalogociiu ORDER BY actividad_catalogociiu");
+                                                if($catalogociiu->num_rows() > 0){
+                                                    foreach ($catalogociiu->result() as $fila2) {              
+                                                       echo '<option class="m-l-50" value="'.$fila2->id_catalogociiu.'">'.$fila2->actividad_catalogociiu.'</option>';
+                                                    }
+                                                }
+                                            ?>
+                                        </select>
                                     </div>
                                   </div>
                                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>" style="display: none;">
@@ -1022,8 +987,6 @@ function volver(num) {
   function ocultar(){
   var value = $("#id_doc_identidad").val();
   if (value!=1) {
-    $('#dui').mask('', {reverse: true});
-    $('#dui').unmask();
     if (value==4) {
       $('#partida_div').show(500);
       $('#tipo_aco').show(500);
@@ -1033,6 +996,8 @@ function volver(num) {
       $('#div_numero_doc_identidad').show(500);
       $("#dui").attr("required",'required');
     }else {
+      $('#dui').mask('', {reverse: true});
+      $('#dui').unmask();
       $('#partida_div').hide(500);
       $('#tipo_aco').hide(500);
       $('#div_numero_doc_identidad').show(500);
@@ -1161,10 +1126,12 @@ $("#formajax2").on("submit", function(e){
         if(res[0] == "exito"){
             if($("#band2").val() == "save"){
                 $("#id_empresa").val(res[1])
-                swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                $.toast({ heading: '¡Registro exitoso!', text: 'Los datos de la persona solicitante fueron registrados', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
             }else if($("#band2").val() == "edit"){
-                swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                $.toast({ heading: '¡Modificación exitosa!', text: 'Los datos de la persona solicitante fueron modificados', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
             }
+            cerrar_mantenimiento()
+            visualizar_empresa(res[1])
         }else{
             swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
         }
