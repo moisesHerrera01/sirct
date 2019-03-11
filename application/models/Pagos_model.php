@@ -27,19 +27,27 @@ class Pagos_model extends CI_Model {
 	public function obtener_pagos_delegado($id_delegado,$tipo=FALSE,$fecha=FALSE) {
 	  	$this->db->select('s.nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
 			e.tiposolicitud_expedienteci,
-			(CASE WHEN e.tiposolicitud_expedienteci=1 THEN "Persona natural"
-				WHEN e.tiposolicitud_expedienteci=2 THEN "Retiro voluntario"
-				WHEN e.tiposolicitud_expedienteci=3 THEN "Persona jurídica"
-				WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
-				WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
-				ELSE e.tiposolicitud_expedienteci END) AS tipo,
+			ms.nombre_motivo tipo,
 			CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
 			CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
 				->from('sct_fechaspagosci f')
 				->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
-				->join('sir_empleado em','em.id_empleado=e.id_personal')
+				// ->join('sir_empleado em','em.id_empleado=e.id_personal')
 				->join('sct_personaci p','p.id_personaci=e.id_personaci','left')
 				->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
+				->join('sct_motivo_solicitud ms','ms.id_motivo_solicitud=e.causa_expedienteci','left')
+				->join("(
+							SELECT de.id_expedienteci,de.id_personal delegado_actual,emp.nr nr_delegado_actual,
+							CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
+							FROM sct_delegado_exp de
+							JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
+							WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																					FROM sct_delegado_exp de2
+																					WHERE de2.id_expedienteci=de.id_expedienteci
+																					AND de2.id_personal <> 0
+																				 )
+						) d" , "d.id_expedienteci=e.id_expedienteci")
+				->join('sir_empleado em','em.id_empleado=d.delegado_actual')
 				->group_by('f.id_fechaspagosci');
 				if ($id_delegado) {
 				$this->db->where('em.nr', $id_delegado);
@@ -57,18 +65,26 @@ class Pagos_model extends CI_Model {
 
 		$this->db->select('p.apellido_personaci nombre_sindicato,e.numerocaso_expedienteci,e.id_expedienteci,f.id_fechaspagosci,f.fechapago_fechaspagosci,f.montopago_fechaspagosci,
 			e.tiposolicitud_expedienteci,
-			(CASE WHEN e.tiposolicitud_expedienteci=1 THEN "Persona natural"
-				WHEN e.tiposolicitud_expedienteci=2 THEN "Retiro voluntario"
-				WHEN e.tiposolicitud_expedienteci=3 THEN "Persona jurídica"
-				WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
-				WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
-				ELSE e.tiposolicitud_expedienteci END) AS tipo,
+			ms.nombre_motivo tipo,
 			CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) nombre_completo,
 			CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona')
 				->from('sct_fechaspagosci f')
 				->join('sct_personaci p', 'p.id_personaci = f.id_persona')
 				->join('sct_expedienteci` e ', ' e.id_expedienteci = p.id_expedienteci')
-				->join('sir_empleado em', 'em.id_empleado = e.id_personal')
+				// ->join('sir_empleado em', 'em.id_empleado = e.id_personal')
+				->join('sct_motivo_solicitud ms','ms.id_motivo_solicitud=e.causa_expedienteci','left')
+				->join("(
+							SELECT de.id_expedienteci,de.id_personal delegado_actual,emp.nr nr_delegado_actual,
+							CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
+							FROM sct_delegado_exp de
+							JOIN sir_empleado emp ON emp.id_empleado=de.id_personal
+							WHERE de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+																					FROM sct_delegado_exp de2
+																					WHERE de2.id_expedienteci=de.id_expedienteci
+																					AND de2.id_personal <> 0
+																				 )
+						) d" , "d.id_expedienteci=e.id_expedienteci")
+				->join('sir_empleado em','em.id_empleado=d.delegado_actual')
 				->group_by('f.id_fechaspagosci');
 		if ($id_delegado) {
 			$this->db->where('em.nr', $id_delegado);

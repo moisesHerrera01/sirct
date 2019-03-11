@@ -66,24 +66,19 @@ class Audiencias_model extends CI_Model {
 	}
 
 	public function obtener_audiencias_delegado($id_delegado,$fecha=FALSE,$hora=FALSE,$tipo=FALSE) {
-		$this->db->select('s.nombre_sindicato,e.motivo_expedienteci,e.numerocaso_expedienteci,f.id_expedienteci,f.id_fechasaudienciasci,
+		$this->db->select("s.nombre_sindicato,e.motivo_expedienteci,e.numerocaso_expedienteci,f.id_expedienteci,f.id_fechasaudienciasci,
 												f.fecha_fechasaudienciasci,f.hora_fechasaudienciasci,tiposolicitud_expedienteci,
-												(CASE WHEN e.tiposolicitud_expedienteci=1 THEN "Persona natural"
-													WHEN e.tiposolicitud_expedienteci=2 THEN "Retiro voluntario"
-													WHEN e.tiposolicitud_expedienteci=3 THEN "Persona jurídica"
-													WHEN e.tiposolicitud_expedienteci=4 THEN "Diferencias laborales"
-													WHEN e.tiposolicitud_expedienteci=5 THEN "Indemnización y Prestaciones Laborales"
-													ELSE e.tiposolicitud_expedienteci END) AS tipo,
-												CONCAT_WS(" ",em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) delegado,
-												CONCAT_WS(" ",p.nombre_personaci,p.apellido_personaci) persona,
+												ms.nombre_motivo tipo,
+												CONCAT_WS(' ',em.primer_nombre,em.segundo_nombre,em.primer_apellido,em.segundo_apellido) delegado,
+												CONCAT_WS(' ',p.nombre_personaci,p.apellido_personaci) persona,
+												COALESCE(r.resultadoci,'Aún no se registra resolución' ) resultado,
 												d.nombre_delegado_actual,
-												emp.nombre_empresa')
+												emp.nombre_empresa")
 					->from('sct_fechasaudienciasci f')
 					->join('sct_expedienteci e','e.id_expedienteci=f.id_expedienteci')
 					->join('sge_empresa emp','emp.id_empresa=e.id_empresaci','left')
 					->join('sct_personaci p','p.id_personaci=e.id_personaci','left')
 					->join('sge_sindicato s','s.id_expedientecc=e.id_expedienteci','left')
-					->join('sir_empleado em','em.id_empleado=e.id_personal')
 					->join("(
 								SELECT de.id_expedienteci,de.id_personal delegado_actual,emp.nr nr_delegado_actual,
 								CONCAT_WS(' ',emp.primer_nombre,emp.segundo_nombre,emp.tercer_nombre,emp.primer_apellido,emp.segundo_apellido,emp.apellido_casada) nombre_delegado_actual
@@ -95,6 +90,9 @@ class Audiencias_model extends CI_Model {
 																						AND de2.id_personal <> 0
 																					 )
 							) d" , "d.id_expedienteci=e.id_expedienteci")
+				  ->join('sir_empleado em','em.id_empleado=d.delegado_actual')
+					->join('sct_resultadosci r','r.id_resultadoci = f.resultado','left')
+					->join('sct_motivo_solicitud ms','ms.id_motivo_solicitud=e.causa_expedienteci','left')
 					->group_by('f.id_fechasaudienciasci');
 		if ($id_delegado) {
 			$this->db->where('d.nr_delegado_actual', $id_delegado);

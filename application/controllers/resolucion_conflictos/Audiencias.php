@@ -5,7 +5,7 @@ class Audiencias extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("expedientes_model","audiencias_model","pagos_model","login_model","directivos_model"));
+		$this->load->model(array("expedientes_model","audiencias_model","pagos_model","login_model","directivos_model","delegados_model"));
 	}
 
   public function programar_audiencias(){
@@ -164,6 +164,18 @@ class Audiencias extends CI_Controller {
 				$exp['forma_pago'] = $this->input->post('modalidad_pago');
 			}
 			$this->expedientes_model->editar_expediente($exp);
+			$exp = $this->expedientes_model->obtener_expediente($data['id_expedienteci'],false,$data['id_delegado'])->result()[0];
+			if ($exp->id_empleado!=$data['id_delegado']) {
+				$data = array(
+					'id_expedienteci' => $this->input->post('id_expedienteci'),
+					'id_personal' => $this->input->post('delegado'),
+					'fecha_cambio_delegado' => date("Y-m-d"),
+					'id_rol_guarda' => $this->session->userdata('id_rol'),
+					'id_usuario_guarda' => $this->session->userdata('id_usuario'),
+					'cambios' => "SE REASIGNA EXPEDIENTE DE '$exp->nombre_delegado_actual' A '$exp->delegado_nuevo'"
+				);
+				echo $this->delegados_model->insertar_delegado_exp($data);
+			}
 		}
 		$data2 = array(
 						'id_expedienteci' => $data['id_expedienteci'],

@@ -574,20 +574,55 @@ function combo_establecimiento(seleccion){
       async: true,
       url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_establecimiento",
       type: "post",
-      dataType: "html",
+      dataType: "json",
       data: {id : seleccion}
     })
     .done(function(res){
-        $.when($('#div_combo_establecimiento').html(res) ).then(function( data, textStatus, jqXHR ) {
+        $.when($('#div_combo_establecimiento').html(res.modal) ).then(function( data, textStatus, jqXHR ) {
             $("#establecimiento").select2({
-
-                'language': {
-                    noResults: function () {
-                        return '<div align="right"><a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevo registro" class="btn btn-success2" onClick="cerrar_combo_establecimiento()"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
+              ajax: {
+                url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_empresa",
+                dataType: 'json',
+                data: function (params) {
+                  return {
+                    s: params.term,
+                    page: params.page
+                  };
+                },
+                processResults: function (data, params) {
+                  if ((data.items)==false) {
+                    data.items = [{
+                      id:0,
+                      text:function () {
+                              return '<div align="right"><a href="javascript:;" title="Agregar nuevo registro" class="btn btn-success2"><span class="mdi mdi-plus"></span>Agregar nuevo registro</a></div>';
+                          }
+                    }];
+                  }
+                  params.page = params.page || 1;
+                  return {
+                    results: data.items,
+                    pagination: {
+                      more: (params.page * 30) < data.total_count
                     }
-                }, 'escapeMarkup': function (markup) { return markup; }
+                  };
+                },
+                 cache: true
+              },
+              'language': 'es',
+              'escapeMarkup': function (markup) { return markup; }
+            });
+            $('#establecimiento').on('select2:select', function (e) {
+              var data = e.params.data;
+              if (data.id == 0) {
+                cerrar_combo_establecimiento();
+                $('#modal_establecimiento').modal('show');
+              }
             });
             tabla_representantes()
+            if (seleccion != '') {
+              var newOption = new Option(res.establecimiento.nombre_empresa,res.establecimiento.id_empresa, true, true);
+              $('#establecimiento').append(newOption).trigger('change');
+            }
         });
     });
 }
@@ -976,6 +1011,7 @@ function tabla_audiencias(id_expedienteci){
 
 function tabla_representantes(){
     var id_empresa = $("#establecimiento").val();
+    //console.log(id_empresa);
     var id_representanteci = $("#id_representanteci").val();
     if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
     }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
@@ -2348,7 +2384,7 @@ $("#formajax5").on("submit", function(e){
         processData: false
     })
     .done(function(res){
-      console.log(res)
+      //console.log(res)
         if(res == "exito"){
             if($("#band4").val() == "save"){
                 swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
@@ -2540,7 +2576,7 @@ $("#formajax3").on("submit", function(e){
         processData: false
     })
     .done(function(res){
-      console.log(res)
+      //console.log(res)
       res = res.split(",");
         if(res[0] == "exito"){
             if($("#band3").val() == "save"){
@@ -2578,7 +2614,7 @@ $("#formajax8").on("submit", function(e){
         processData: false
     })
     .done(function(res){
-      console.log(res)
+      //console.log(res)
       res = res.split(",");
         if(res[0] == "exito"){
             if($("#band6").val() == "save"){
@@ -2798,5 +2834,5 @@ $(function(){
         $('#f_nacimiento_representante').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
         $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
     });
-    });
+  });
 </script>

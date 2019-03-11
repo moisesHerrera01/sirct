@@ -5,7 +5,7 @@ class Solicitud_juridica extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array('solicitud_juridica_model','expedientes_model','delegados_model','solicitudes_model'));
+		$this->load->model(array('solicitud_juridica_model','expedientes_model','delegados_model','solicitudes_model','establecimiento_model'));
 
 		$this->load->library('FPDF/fpdf');
 	}
@@ -194,12 +194,17 @@ class Solicitud_juridica extends CI_Controller {
 	}
 
   	public function combo_establecimiento() {
-		$this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento',
-			array(
-				'id' => $this->input->post('id'),
-				'establecimiento' => $this->db->get('sge_empresa')
-			)
-		);
+		echo json_encode (array(
+		'modal' => $this->load->view('resolucion_conflictos/solicitud_juridica_ajax/combo_establecimiento','',TRUE),
+		'establecimiento'=>$this->establecimiento_model->obtener_empresa($this->input->post('id'))
+	 ));
+	}
+
+	public function combo_empresa() {
+		echo json_encode( array(
+			'items' => $this->establecimiento_model->obtener_empresas($this->input->get('s'), $this->input->get('page')),
+			'total_count' => $this->establecimiento_model->cantidad_empresas()
+		));
 	}
 
 	public function gestionar_representante(){

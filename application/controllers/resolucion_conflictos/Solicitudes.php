@@ -5,7 +5,7 @@ class Solicitudes extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array('solicitudes_model','expedientes_model','expedientes_model','solicitud_juridica_model'));
+		$this->load->model(array('solicitudes_model','expedientes_model','expedientes_model','solicitud_juridica_model','establecimiento_model'));
 		$this->load->library('FPDF/fpdf');
 	}
 
@@ -72,7 +72,7 @@ class Solicitudes extends CI_Controller {
 		}else if($this->input->post('band1') == "edit"){
 
 			$data = array(
-			'email' => $this->input->post('email'),	
+			'email' => $this->input->post('email'),
 			'id_personaci' => $this->input->post('id_personaci'),
 			'nombre_personaci' => $this->input->post('nombres'),
 			'apellido_personaci' => $this->input->post('apellidos'),
@@ -155,20 +155,11 @@ class Solicitudes extends CI_Controller {
 	}
 
 	public function combo_establecimiento() {
-
-		$this->db->select("*");
-		$this->db->group_by('e.nombre_empresa');
-		$query = $this->db->get('sge_empresa e');
-
-		$data = $query->result();
-
-		$this->load->view('resolucion_conflictos/solicitudes_ajax/combo_establecimiento',
-			array(
-				'id' => $this->input->post('id'),
-				'establecimiento' => $query
-			)
-		);
-	}
+	echo json_encode (array(
+	'modal' => $this->load->view('resolucion_conflictos/solicitudes_ajax/combo_establecimiento','',TRUE),
+	'establecimiento'=>$this->establecimiento_model->obtener_empresa($this->input->post('id'))
+ ));
+}
 
 	public function combo_nacionalidades() {
 		$data = $this->solicitudes_model->obtener_nacionalidades();

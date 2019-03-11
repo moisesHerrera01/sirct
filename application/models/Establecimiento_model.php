@@ -61,7 +61,7 @@ class Establecimiento_model extends CI_Model {
 		public function obtener_respresentante_mayor($id) {
 			$this->db->select('a.id_representante, nombres_representante')
 				->from('sge_representante a')
-				->where("id_representante = ( 
+				->where("id_representante = (
 						SELECT max(b.id_representante) FROM sge_representante b WHERE b.id_empresa = $id
 					)");
 			$query=$this->db->get();
@@ -71,7 +71,38 @@ class Establecimiento_model extends CI_Model {
 				return FALSE;
 			}
 		}
-		
+
+		public function obtener_empresas($search = '' , $final = 30) {
+				$this->db->select('id_empresa id, abreviatura_empresa text')
+						->from('sge_empresa')
+						->like('nombre_empresa', $search)
+						->limit(30, $final);
+
+				$query=$this->db->get();
+				if ($query->num_rows() > 0) {
+						return $query->result();
+				}
+				else {
+						return FALSE;
+				}
+		}
+
+		public function obtener_empresa($id_empresa){
+			$this->db->select('id_empresa,nombre_empresa')
+							 ->from('sge_empresa')
+							 ->where('id_empresa',$id_empresa);
+			$query = $this->db->get()->row();
+			return $query;
+		}
+
+		public function cantidad_empresas() {
+				$this->db->select()
+						->from('sge_empresa');
+
+				$query=$this->db->get();
+				return $query->num_rows();
+		}
+
 }
 
 ?>
