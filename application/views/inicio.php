@@ -218,6 +218,7 @@ function redireccionar_retiro_voluntario(tipo){
                                             <h3 class="card-title">Estadística por estado </h3>
                                             <h3 align="center" class="text-muted" style="z-index:0; left:50%; top: 60%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">
                                                 Activos <br> <?php 
+                                                $porcentaje = "0.00";
                                                 if($row->total != 0){
                                                     $porcentaje = number_format( (($row->discapacitado/$row->total)*100), 2, '.', ''); 
                                                 }
