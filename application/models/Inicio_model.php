@@ -34,7 +34,7 @@ class Inicio_model extends CI_Model {
 			SUM(CASE WHEN p.discapacidad_personaci = 1 THEN 1 END) discapacitado,
 			SUM(CASE WHEN p.discapacidad_personaci <> 1 THEN 1 END) nodiscapacitado,
 
-			COUNT(p.id_expedienteci) total,
+			COUNT(ecc.id_expedienteci) total,
 
 			SUM(CASE WHEN p.pertenece_lgbt = 1 THEN 1 END) lgtbi,
 			SUM(CASE WHEN p.pertenece_lgbt <> 1 THEN 1 END) nolgtbi,
@@ -73,7 +73,7 @@ class Inicio_model extends CI_Model {
 			->group_by('ecc.tiposolicitud_expedienteci')
 			->order_by('ecc.tiposolicitud_expedienteci', 'ASC');
 
-		if($data["tipo"] == "mensual"){
+		/*if($data["tipo"] == "mensual"){
 			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
 					->where('MONTH(ecc.fechacrea_expedienteci)', $data["value"]);
 	 	}else if($data["tipo"] == "trimestral"){
@@ -88,7 +88,7 @@ class Inicio_model extends CI_Model {
  			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
 	 	}else{
 	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
-	 	}
+	 	}*/
 
     return $query=$this->db->get();
     }
