@@ -299,9 +299,9 @@ chart3 = new Chart(ctx3, {
 
     // The data for our dataset
     data: {
-        labels: ['Hombres', 'Mujeres'],
+        labels: ["Hombres", "Mujeres"],
         datasets: [{
-            backgroundColor: [<?= $color[0].",".$color[1] ?>],
+            backgroundColor: ["<?= $color[0]?>","<?= $color[1] ?>"],
             data: [<?= $row->discapacitado.','.$row->nodiscapacitado ?>],
         }]
     },
