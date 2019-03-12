@@ -18,8 +18,15 @@ class Inicio extends CI_Controller {
 			$tipo = 2;
 		}
 
-		$data['tipo_asociacion'] = $this->inicio_model->obtener_estadistica_tipo_asociacion();
-		$data['clase_asociacion'] = $this->inicio_model->obtener_estadistica_clase_asociacion();
+		$data = array(
+			'anio' => 2019,//$this->input->post('anio'),
+			'tipo' => "",//$this->input->post('tipo'),
+			'value' => "mensual",//$this->input->post('value'),
+			'value2' => "03",//$this->input->post('value2'),
+			'id_delegado' => ""//$this->input->post('id_delegado')
+		);
+
+		$data['contadores'] = $this->inicio_model->registros_relaciones_individuales($data);
 		$data['tipo_rol'] = $tipo;
 		$this->load->view('templates/header');
 		$this->load->view('inicio', $data);

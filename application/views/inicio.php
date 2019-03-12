@@ -1,4 +1,13 @@
-<?php $color = array('#26c6da', '#1e88e5', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'); ?>
+<?php
+// Características del navegador
+$ua=$this->config->item("navegator");
+$navegatorless = false;
+if(floatval($ua['version']) < $this->config->item("last_version")){
+    $navegatorless = true;
+}
+?>
+<?php $color = array('#26c6da', '#1e88e5', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4');
+$color2 = array('#26c6da', 'rgb(255, 99, 132)', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'); ?>
 <script type="text/javascript">
 
     function iniciar(){
@@ -9,7 +18,6 @@
         $("#cnt_options").hide(inteval);
         $("#cnt_indicadores").show(inteval);
         toogle_buttons2();
-        chart2.update();
     }
 
     function toogle_Options2(interval){
@@ -103,6 +111,8 @@ function redireccionar_retiro_voluntario(tipo){
                 <!-- ============================================================== -->
                 <!-- Start Page Content -->
                 <!-- ============================================================== -->
+
+
         <div id="cnt_options">
             <div class="row">
                 <?php if($tipo_rol == 1){ //MEDIACIÓN INDIVIDUAL ?>
@@ -179,72 +189,79 @@ function redireccionar_retiro_voluntario(tipo){
         </div>
 
             <div id="cnt_indicadores" >
-                <div class="row">
 
-	                <div class="col-lg-12">
-	                    <div class="card">
-	                        <div class="card-body">
-	                            <h4 align="center">ESTADÍSTICAS POR TIPO DE SOLICITUD</h4>
-	                            <div class="d-flex flex-row" align="center">
-	                            <?php
-	                            	$total = 0;
-	                            	if($clase_asociacion->num_rows() > 0){
-	                                    foreach ($clase_asociacion->result() as $fila_ca) { $total += $fila_ca->cantidad; }
-	                                }
-	                                if($total == 0){
-	                                	$total = 1;
-	                                }
-	                                if($clase_asociacion->num_rows() > 0){
-	                                    foreach ($clase_asociacion->result() as $fila_ca) {
-	                            ?>
-	                                <div class="p-0 b-r" align="center" style="width: 50%;">
-	                                    <h6 class="font-light"><?=$fila_ca->nombre?></h6><h6><?=$fila_ca->cantidad?></h6><h6><?php echo number_format((($fila_ca->cantidad/$total)*100),2); ?>%</h6>
-	                                </div>
-
-	                            <?php } }?>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-
-					<div class="col-lg-12">
-						<div class="row">
-		                    <div class="col-md-12 col-lg-12">
-		                        <div class="card">
-		                            <div class="card-body" style="position: relative;">
-		                                <h3 class="card-title">Estadísticas por estado </h3>
-		                                <h3 align="center" class="text-muted" style="z-index: 0; left:50%; top: 60%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">Estados</h3>
-	                                    <div style="margin-left: 10px; margin-right: 10px;">
-	                                        <canvas id="myChart2" style="min-height: 200px;"></canvas>
-	                                    </div>
-		                            </div>
-		                            <div>
-		                                <hr class="m-t-0 m-b-0">
-		                            </div>
-		                            <div class="card-body text-center ">
-		                                <ul class="list-inline m-b-0">
-		                                	<?php
-		                                	$cont = 0;
-                                            $arrayName = array('Esperando audiencia', 'Con resultado', 'Archivado', 'Inactivo');
-		                                	for($i =0; $i<4; $i++){
-        									?>
-        										<li>
-			                                        <h6 style="color: <?=$color[$cont]?>;">
-			                                        	<i class="fa fa-circle font-10 m-r-10 "></i><?=$arrayName[$cont]?>
-			                                        </h6>
-		                                        </li>
-        									<?php $cont++;}  ?>
-		                                </ul>
-		                            </div>
-		                        </div>
-		                    </div>
-
-
-
-						</div>
-                    </div>
-
+                <div class="row col-lg-12">
+                    <ul class="nav nav-tabs customtab2 <?php if($navegatorless){ echo "pull-left"; } ?>" role="tablist" style='width: 100%;'>
+                        <li class="nav-item <?php if($navegatorless){ echo "pull-left"; } ?>">
+                            <a class="nav-link active" data-toggle="tab" href="#tab_persona_natural">
+                                <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                                <span class="hidden-xs-down">MEDIACIÓN INDIVIDUAL</span></a>
+                        </li>
+                        <li class="nav-item <?php if($navegatorless){ echo "pull-left"; } ?>">
+                            <a class="nav-link" data-toggle="tab" href="#tab_persona_juridica">
+                                <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                                <span class="hidden-xs-down">MEDIACIÓN COLECTIVA</span></a>
+                        </li>
+                    </ul>
                 </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_persona_natural" role="tabpanel">
+                        <div class="p-20">
+                            <?php
+                            if($contadores->num_rows() > 0){
+                                $row = $contadores->row();
+                            ?>
+                            <div class="row">
+                                <div class="col-md-3 col-lg-3">
+                                    <div class="card">
+                                        <div class="card-body" style="position: relative;">
+                                            <h3 class="card-title">Estadística por estado </h3>
+                                            <h3 align="center" class="text-muted" style="z-index:0; left:50%; top: 60%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">
+                                                Activos <br> <?php 
+                                                if($row->total != 0){
+                                                    $porcentaje = number_format( (($row->discapacitado/$row->total)*100), 2, '.', ''); 
+                                                }
+                                                $split = explode('.',$porcentaje);
+                                                if($split[1] == "00"){
+                                                    echo $split[0]."%";
+                                                }else{
+                                                    echo $porcentaje."%";
+                                                }?>
+                                            </h3>
+                                            <div style="margin-left: 10px; margin-right: 10px;">
+                                                <canvas id="myChart3" style="height: 200px;"></canvas>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <hr class="m-t-0 m-b-0">
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <ul class="list-inline m-b-0">
+                                                <li>
+                                                    <h6 style="color: <?=$color2[0]?>;">
+                                                        <i class="fa fa-circle font-10 m-r-10 ">Discapacitado</i>
+                                                    </h6> 
+                                                </li>
+                                                <li>
+                                                    <h6 style="color: <?=$color2[1]?>;">
+                                                        <i class="fa fa-circle font-10 m-r-10 "></i>No Discapacitado
+                                                    </h6> 
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="tab_persona_juridica" role="tabpanel">
+                        <div id="cnt_tabla_persona_juridica">MEDIACIÓN COLECTIVA</div>
+                    </div>
+                </div>
+
 
 
                 <!-- ============================================================== -->
@@ -269,86 +286,27 @@ function redireccionar_retiro_voluntario(tipo){
 <script src="<?php echo base_url(); ?>assets/plugins/echarts/echarts-all.js"></script>
 <script type="text/javascript">
 
-var ctx2;
-var chart2;
+var ctx3;
+var chart3;
 
 $( document ).ready(function() {
 
-ctx2 = document.getElementById('myChart2').getContext('2d');
-chart2 = new Chart(ctx2, {
+ctx3 = document.getElementById('myChart3').getContext('2d');
+chart3 = new Chart(ctx3, {
     // The type of chart we want to create
-    type: 'bar',
+    type: 'doughnut',
 
     // The data for our dataset
     data: {
-        labels: [<?php
-	$contador = 0;
-	if($tipo_asociacion->num_rows() > 0){
-        foreach ($tipo_asociacion->result() as $fila_sa) {
-        	$contador++;
-        	if($tipo_asociacion->num_rows() == $contador){echo '"'.mb_substr($fila_sa->nombre, 0, 25).'.."';}else{echo '"'.mb_substr($fila_sa->nombre, 0, 25).'..",';} }
-    }
-?>],
-        datasets: [
-        {
-            label: "Esp. Audiencia",
-            backgroundColor: "<?php echo $color[0]; ?>",
-            data: [
-                <?php if($tipo_asociacion->num_rows() > 0){
-                    foreach ($tipo_asociacion->result() as $fila_sa) {
-                        echo $fila_sa->estado1.", ";
-                        }
-                    }
-            ?>
-            ]
-        },
-        {
-            label: "Con resultado",
-            backgroundColor: "<?php echo $color[1]; ?>",
-            data: [
-                <?php if($tipo_asociacion->num_rows() > 0){
-                    foreach ($tipo_asociacion->result() as $fila_sa) {
-                        echo $fila_sa->estado2.", ";
-                        }
-                    }
-            ?>
-            ]
-        },
-        {
-            label: "Archivado",
-            backgroundColor: "<?php echo $color[2]; ?>",
-            data: [
-                <?php if($tipo_asociacion->num_rows() > 0){
-                    foreach ($tipo_asociacion->result() as $fila_sa) {
-                        echo $fila_sa->estado3.", ";
-                        }
-                    }
-            ?>
-            ]
-        },
-        {
-            label: "Inactivo",
-            backgroundColor: "<?php echo $color[3]; ?>",
-            data: [
-                <?php if($tipo_asociacion->num_rows() > 0){
-                    foreach ($tipo_asociacion->result() as $fila_sa) {
-                        echo $fila_sa->estado4.", ";
-                        }
-                    }
-            ?>
-            ]
-        }
-    ]
+        labels: ['Hombres', 'Mujeres'],
+        datasets: [{
+            backgroundColor: [<?= $color[0].",".$color[1] ?>],
+            data: [<?= $row->discapacitado.','.$row->nodiscapacitado ?>],
+        }]
     },
 
     // Configuration options go here
-    options: { maintainAspectRatio: false, cutoutPercentage: 75, legend: { display: false}, scales: {
-        yAxes: [{
-            ticks: {
-                beginAtZero: true
-            }
-        }]
-    } }
+    options: { maintainAspectRatio: false, cutoutPercentage: 75, legend: { display: false} }
 
 });
 
