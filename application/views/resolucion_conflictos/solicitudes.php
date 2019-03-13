@@ -1593,14 +1593,6 @@ function volver(num) {
                                 <div class="help-block"></div>
                             </div>
 
-
-
-                            <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Folio partida:</h5>
-                                <div class="controls">
-                                    <input type="text" placeholder="Folio partida nacimiento" id="folio_partida" name="folio_partida" class="form-control">
-                                </div>
-                            </div> -->
                             <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio_menor"></div>
 
                             <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
@@ -1625,22 +1617,7 @@ function volver(num) {
                                 </div>
                             </div>
 
-                            <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Asiento partida: <span class="text-danger">*</span></h5>
-                                <div class="controls">
-                                    <input type="text" placeholder="Asiento partida nacimiento" id="asiento_partida" name="asiento_partida" class="form-control">
-                                </div>
-                            </div> -->
-
                             <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio_partida"></div>
-
-                            <!-- <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                <h5>Año exp. partida: </h5>
-                                <div class="controls">
-                                    <input type="text" placeholder="Año partida nacimiento" id="anio_partida" name="anio_partida" class="form-control">
-                                    <div class="help-block"></div>
-                                </div>
-                            </div> -->
 
                             <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                 <h5>Fecha exp. partida: <span class="text-danger">*</span></h5>
@@ -1650,7 +1627,6 @@ function volver(num) {
                           </div>
                         </blockquote>
                       </div>
-
                           <div class="pull-left">
                               <button type="button" class="btn waves-effect waves-light btn-default" onclick="cerrar_mantenimiento();"><i class="mdi mdi-chevron-left"></i> Salir</button>
                           </div>
@@ -2505,8 +2481,6 @@ $(function(){
           processData: false
         })
         .done(function(res){
-            // alert($('#id_personaci').val())
-            // alert($('#id_persona').val())
             if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{

@@ -14,6 +14,36 @@
       });
     }
 
+    function combo_municipio_partida(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_municipio_partida",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_municipio_partida').html(res);
+        $("#municipio_partida").select2();
+      });
+
+    }
+
+    function combo_municipio_menor(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_municipio_menor",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_municipio_menor').html(res);
+        $("#municipio_menor").select2();
+      });
+
+    }
+
     function combo_nacionalidades(seleccion){
 
       $.ajax({
@@ -73,7 +103,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         </div>
 
                         <div class="row">
-                          <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                          <div class="form-group col-lg-8 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                               <h5>Conocido por: </h5>
                               <input type="text" id="conocido_por" name="conocido_por" class="form-control" placeholder="Conocido por">
                               <div class="help-block"></div>
@@ -85,50 +115,64 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <div class="help-block"></div>
                             </div>
 
-                            <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
 
+                          <div id="tipo_aco" style="display: none;" class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                              <h5>Parentezco: </h5>
+                              <div class="controls">
+                                <select id="acompaniante" name="acompaniante" class="custom-select col-4">
+                                  <option value="">[Seleccione el tipo]</option>
+                                  <option value="0">hijo(a)</option>
+                                  <option value="1">nieto(a)</option>
+                                  <option value="2">sobrino(a)</option>
+                                  <option value="3">Otro</option>
+                                </select>
+                              </div>
+                          </div>
                         </div>
 
                         <div id="partida_div" style="display: none;">
                           <div class="row">
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Número:</h5>
-                                <div class="controls">
-                                    <input type="text" placeholder="N° partida nacimiento" id="numero_partida" name="numero_partida" class="form-control">
-                                </div>
+                              <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Nombre del menor: <span class="text-danger">*</span></h5>
+                                  <input type="text" id="nombre_acompaniante" name="nombre_acompaniante" class="form-control" placeholder="Nombre del menor">
+                                  <div class="help-block"></div>
+                              </div>
+
+                              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio_menor"></div>
+
+                              <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Fecha nacimiento menor: <span class="text-danger">*</span></h5>
+                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" class="form-control" id="fnacimiento_menor" name="fnacimiento_menor" placeholder="dd/mm/yyyy" readonly="">
+                                  <div class="help-block"></div>
+                              </div>
                             </div>
 
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Folio:</h5>
-                                <div class="controls">
-                                    <input type="text" placeholder="Folio partida nacimiento" id="folio_partida" name="folio_partida" class="form-control">
-                                </div>
-                            </div>
+                            <div class="row">
+                              <div class="form-group col-lg-2 col-sm-2 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Libro: <span class="text-danger">*</span></h5>
+                                  <div class="controls">
+                                      <input type="text" placeholder="L. partida" id="libro_partida" name="libro_partida" class="form-control">
+                                  </div>
+                              </div>
 
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Libro: <span class="text-danger">*</span></h5>
-                                <div class="controls">
-                                    <input type="text" placeholder="Libro partida nacimiento" id="libro_partida" name="libro_partida" class="form-control">
-                                </div>
-                            </div>
-                          </div>
+                              <div class="form-group col-lg-2 col-sm-2 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Número:<span class="text-danger">*</span></h5>
+                                  <div class="controls">
+                                      <input type="text" placeholder="N. partida" id="numero_partida" name="numero_partida" class="form-control">
+                                  </div>
+                              </div>
 
-                          <div class="row">
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                <h5>Asiento: <span class="text-danger">*</span></h5>
-                                <div class="controls">
-                                    <input type="text" placeholder="Asiento partida nacimiento" id="asiento_partida" name="asiento_partida" class="form-control">
-                                </div>
-                            </div>
+                              <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio_partida"></div>
 
-                            <div class="form-group col-lg-4 col-sm-4 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                                <h5>Año: </h5>
-                                <div class="controls">
-                                    <input type="text" placeholder="Año partida nacimiento" id="anio_partida" name="anio_partida" class="form-control">
-                                    <div class="help-block"></div>
-                                </div>
+                              <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                                  <h5>Fecha exp. partida: <span class="text-danger">*</span></h5>
+                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_partida" name="fecha_partida" placeholder="dd/mm/yyyy" readonly="">
+                                  <div class="help-block"></div>
+                              </div>
                             </div>
-                          </div>
                         </div>
 
                         <div class="row">
@@ -186,6 +230,15 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                 <div class="help-block"></div>
                           </div>
 
+                          <div id="embarazada" class="form-group col-lg-2" style="height: 83px; display: none;">
+                              <h5>Embarazada:</h5>
+                              <input name="embarazada" type="radio" id="si_e" value='1'>
+                              <label for="si_e">Si </label><Br>
+                              <input name="embarazada" type="radio" id="no_e" checked="" value='0'>
+                              <label for="no_e">No</label>
+                         <div class="help-block"></div>
+                     </div>
+
                          <div class="form-group col-lg-2" style="height: 83px;">
                              <h5>LGTBI:</h5>
                              <input name="pertenece_lgbt" type="radio" id="si_lgbt" value='1'>
@@ -216,9 +269,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                  <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_nacionalidad"></div>
 
                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                     <h5>Estudios realizados: <span class="text-danger">*</span></h5>
+                     <h5>Estudios realizados: </h5>
                      <div class="controls">
-                       <select id="estudios" name="estudios" class="custom-select col-4" onchange="" required>
+                       <select id="estudios" name="estudios" class="custom-select col-4" onchange="">
                          <option value="">[Seleccione]</option>
                          <option value="Sin estudio">Sin estudio</option>
                          <option value="Educacion Básica">Educacion Básica</option>
@@ -385,6 +438,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             e.preventDefault();
             var f = $(this);
             var formData = new FormData(document.getElementById("formajax4"));
+            formData.append("embarazada", $('#embarazada').val());
 
             $.ajax({
                 url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/gestionar_solicitante",
@@ -502,6 +556,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#direccion').val('');
         $('#discapacidad_solicitante').val('');
         $('#sexo_solicitante').val('');
+        $('#embarazada').val('');
 
         $('#nombre_representacion_solicitante').val('');
         $('#apellido_representacion_solicitante').val('');
@@ -520,12 +575,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         combo_nacionalidades();
 
         //Inicio Partida de nacimiento
-        $("#id_partida").val('');
-        $("#numero_partida").val('');
-        $("#folio_partida").val('');
-        $("#libro_partida").val('');
-        $("#asiento_partida").val('');
-        $("#anio_partida").val('');
+        combo_municipio_menor();
+        combo_municipio_partida();
+        $("#fecha_partida").val();
+        $("#fnacimiento_menor").val();
+        $("#id_partida").val();
+        $("#numero_partida").val();
+        $("#folio_partida").val();
+        $("#libro_partida").val();
+        $("#asiento_partida").val();
+        $("#anio_partida").val();
+        $("#nombre_acompaniante").val();
+        $("#acompaniante").val();
         //Fin Partida de nacimiento
 
         $("#modal_solicitante").modal("show");
@@ -580,19 +641,56 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             }else {
               document.getElementById('no_lgbt').checked =true;
             }
+
+            if (result.embarazada=='1') {
+              document.getElementById('si_e').checked =true;
+            }else {
+              document.getElementById('no_e').checked =true;
+            }
             $("#discapacidad_desc").val(result.discapacidad);
             $("#estudios").val(result.estudios_personaci);
             $("#conocido_por").val(result.conocido_por);
             combo_doc_identidad(result.id_doc_identidad);
             combo_nacionalidades(result.nacionalidad_personaci);
 
+            if (result.id_doc_identidad!=1) {
+              $('#dui').mask('', {reverse: true});
+              $('#dui').unmask();
+              if (result.id_doc_identidad==4) {
+                $('#partida_div').show();
+                $('#tipo_aco').show(500);
+                // $('#div_numero_doc_identidad').hide();
+                // $("#dui").removeAttr("required");
+                $('#dui').mask('99999999-9', {reverse: true});
+                $('#div_numero_doc_identidad').show();
+                $("#dui").attr("required",'required');
+              }else {
+                $('#partida_div').hide();
+                $('#tipo_aco').hide(500);
+                $('#div_numero_doc_identidad').show();
+                $("#dui").attr("required",'required');
+              }
+            }else {
+               $('#dui').mask('99999999-9', {reverse: true});
+               $('#partida_div').hide();
+               $('#tipo_aco').hide(500);
+               $('#div_numero_doc_identidad').show();
+               $("#dui").attr("required",'required');
+            }
+
             //Inicio Partida de nacimiento
+            combo_municipio_menor(result.id_municipio_partida);
+            combo_municipio_partida(result.id_municipio_menor);
+            $("#fecha_partida").datepicker("setDate", moment(result.fecha_partida).format("DD-MM-YYYY"));
+            $("#fnacimiento_menor").datepicker("setDate", moment(result.fnacimiento_menor).format("DD-MM-YYYY"));
             $("#id_partida").val(result.id_partida);
             $("#numero_partida").val(result.numero_partida);
             $("#folio_partida").val(result.folio_partida);
             $("#libro_partida").val(result.libro_partida);
             $("#asiento_partida").val(result.asiento_partida);
             $("#anio_partida").val(result.anio_partida);
+            $("#nombre_acompaniante").val(result.nombre_representante_menor);
+            $("#acompaniante").val(result.tipo_representante_menor);
             //Fin Partida de nacimiento
 
             $(".modal-header").children("h4").html("Editar Solicitante");
@@ -604,6 +702,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     $(function () {
         $(document).ready(function () {
+          $('#fnacimiento_menor').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
+          $('#fecha_partida').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
+
             $("input[name=discapacidad_solicitante]").click(function(evento){
                 var valor = $(this).val();
                 if(valor == 0){
@@ -612,6 +713,15 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     $("#ocultar_div").show(500);
                 }
             });
+
+            $("input[name=sexo_solicitante]").click(function(evento){
+                  var valor = $(this).val();
+                  if(valor == "M"){
+                      $("#embarazada").hide(500);
+                  }else{
+                      $("#embarazada").show(500);
+                  }
+          });
 
             $('#fecha_nacimiento').datepicker({
                 format: 'dd-mm-yyyy',
@@ -712,22 +822,36 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function ocultar(){
+      $("#nombre_acompaniante").removeAttr("required");
+      $("#fnacimiento_menor").removeAttr("required");
       var value = $("#id_doc_identidad").val();
       if (value!=1) {
-        $('#dui').mask('', {reverse: true});
-        $('#dui').unmask();
         if (value==4) {
           $('#partida_div').show(500);
-          $('#div_numero_doc_identidad').hide(500);
-          $("#dui").removeAttr("required");
+          $('#tipo_aco').show(500);
+          // $('#div_numero_doc_identidad').hide(500);
+          // $("#dui").removeAttr("required");
+          $('#dui').mask('99999999-9', {reverse: true});
+          $('#div_numero_doc_identidad').show(500);
+          $("#nombre_acompaniante").attr("required",'required');
+          $("#dui").attr("required",'required');
+          $("#fnacimiento_menor").attr("required",'required');
         }else {
+          $('#dui').mask('', {reverse: true});
+          $('#dui').unmask();
           $('#partida_div').hide(500);
+          $('#tipo_aco').hide(500);
+          $("#nombre_acompaniante").removeAttr("required");
+          $("#fnacimiento_menor").removeAttr("required");
           $('#div_numero_doc_identidad').show(500);
           $("#dui").attr("required",'required');
         }
       }else {
          $('#dui').mask('99999999-9', {reverse: true});
          $('#partida_div').hide(500);
+         $('#tipo_aco').hide(500);
+         $("#nombre_acompaniante").removeAttr("required");
+         $("#fnacimiento_menor").removeAttr("required");
          $('#div_numero_doc_identidad').show(500);
          $("#dui").attr("required",'required');
       }

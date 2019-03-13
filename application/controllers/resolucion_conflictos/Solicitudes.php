@@ -54,13 +54,14 @@ class Solicitudes extends CI_Controller {
 			'fecha_modifica' => date('Y-m-d')
 			);
 
-			$data2  = array(
-				'numero_partida' =>$this->input->post('numero_partida'),
-				'id_municipio_partida' =>$this->input->post('municipio_partida'),
-				'libro_partida' =>$this->input->post('libro_partida'),
-				'id_municipio_menor' =>$this->input->post('municipio_menor'),
-				'fecha_partida' => date("Y-m-d",strtotime($this->input->post('fecha_partida')))
-			 );
+			 $data2  = array(
+				 'numero_partida' =>$this->input->post('numero_partida'),
+				 'id_municipio_partida' =>$this->input->post('municipio_partida'),
+				 'libro_partida' =>$this->input->post('libro_partida'),
+				 'id_municipio_menor' =>$this->input->post('municipio_menor'),
+				 'fecha_partida' => date("Y-m-d",strtotime($this->input->post('fecha_partida'))),
+				 'fnacimiento_menor' => date("Y-m-d",strtotime($this->input->post('fnacimiento_menor'))),
+				);
 			 $id_partida = 0;
 			if ($this->input->post('numero_partida')!='') {
 				$id_partida = $this->solicitudes_model->insertar_partida($data2);

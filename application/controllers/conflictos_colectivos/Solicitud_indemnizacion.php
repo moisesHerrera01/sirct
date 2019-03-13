@@ -168,19 +168,25 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 				'id_doc_identidad' => $this->input->post('id_doc_identidad'),
 				'id_usuario' => $this->session->userdata('id_usuario'),
-				'fecha_modifica' => date('Y-m-d')
+				'embarazada' => $this->session->userdata('embarazada'),
+				'fecha_modifica' => date('Y-m-d'),
+				'tipo_representante_menor' => $this->input->post('acompaniante'),
+				'nombre_representante_menor' => $this->input->post('nombre_acompaniante')
 			);
 
 			$data2  = array(
 				'numero_partida' =>$this->input->post('numero_partida'),
-				'folio_partida' =>$this->input->post('folio_partida'),
+				'id_municipio_partida' =>$this->input->post('municipio_partida'),
 				'libro_partida' =>$this->input->post('libro_partida'),
-				'asiento_partida' =>$this->input->post('asiento_partida'),
-				'anio_partida' =>$this->input->post('numero_partida')
+				'id_municipio_menor' =>$this->input->post('municipio_menor'),
+				'fecha_partida' => date("Y-m-d",strtotime($this->input->post('fecha_partida'))),
+				'fnacimiento_menor' => date("Y-m-d",strtotime($this->input->post('fnacimiento_menor'))),
 			 );
-
+			$id_partida = 0;
+		 if ($this->input->post('numero_partida')!='') {
 			 $id_partida = $this->solicitudes_model->insertar_partida($data2);
 			 $data['id_partida'] = $id_partida;
+		 }
 
 			echo $this->Persona_cc_model->insertar_persona_conflicto($data);
 
@@ -205,17 +211,21 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'nacionalidad_personaci'=> $this->input->post('nacionalidad'),
 				'id_partida' => $this->input->post('id_partida'),
 				'id_usuario' => $this->session->userdata('id_usuario'),
-				'fecha_modifica' => date('Y-m-d')
+				'embarazada' => $this->session->userdata('embarazada'),
+				'fecha_modifica' => date('Y-m-d'),
+				'tipo_representante_menor' => $this->input->post('acompaniante'),
+				'nombre_representante_menor' => $this->input->post('nombre_acompaniante')
 			);
 
-			$data2  = array(
-				'id_partida' =>$this->input->post('id_partida'),
-				'numero_partida' =>$this->input->post('numero_partida'),
-				'folio_partida' =>$this->input->post('folio_partida'),
-				'libro_partida' =>$this->input->post('libro_partida'),
-				'asiento_partida' =>$this->input->post('asiento_partida'),
-				'anio_partida' =>$this->input->post('numero_partida')
-			 );
+			 $data2  = array(
+				 'id_partida' =>$this->input->post('id_partida'),
+				 'numero_partida' =>$this->input->post('numero_partida'),
+				 'id_municipio_partida' =>$this->input->post('municipio_partida'),
+				 'libro_partida' =>$this->input->post('libro_partida'),
+				 'id_municipio_menor' =>$this->input->post('municipio_menor'),
+				 'fecha_partida' => date("Y-m-d",strtotime($this->input->post('fecha_partida'))),
+				 'fnacimiento_menor' => date("Y-m-d",strtotime($this->input->post('fnacimiento_menor'))),
+				);
 
 			$this->solicitudes_model->editar_partida($data2);
 
