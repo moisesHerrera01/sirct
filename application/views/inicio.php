@@ -18,12 +18,16 @@ $color2 = array('#26c6da', 'rgb(255, 99, 132)', '#7460ee', '#ffb22b', '#fc4b6c',
         $("#cnt_options").hide(inteval);
         $("#cnt_indicadores").show(inteval);
         toogle_buttons2();
+        var obj= $("#myChart3");
+        document.getElementById("myChart3").style.height = "200px";
     }
 
     function toogle_Options2(interval){
         $("#cnt_options").show(interval);
         $("#cnt_indicadores").hide(interval);
         toogle_buttons();
+        var obj= $("#myChart3");
+        document.getElementById("myChart3").style.height = "200px";
     }
 
     function toogle_buttons(){
@@ -37,80 +41,79 @@ $color2 = array('#26c6da', 'rgb(255, 99, 132)', '#7460ee', '#ffb22b', '#fc4b6c',
     }
 
     function OpenWindowWithPost(url, params){
-    var form = document.createElement("form");
-    form.setAttribute("method", "post");
-    form.setAttribute("action", url);
-    form.setAttribute("target", "_SELF");
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", url);
+        form.setAttribute("target", "_SELF");
 
-    for (var i in params) {
-        if (params.hasOwnProperty(i)) {
-            var input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = i;
-            input.value = params[i];
-            form.appendChild(input);
+        for (var i in params) {
+            if (params.hasOwnProperty(i)) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = i;
+                input.value = params[i];
+                form.appendChild(input);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+    }
+
+    function redireccionar_despido_hecho(tipo){
+        if(tipo == "1"){
+            var param = { 'tipo_solicitud' : '1', 'band_mantto' : 'save' };
+            OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
+        }else{
+            var param = { 'tipo_solicitud' : '1', 'band_mantto' : 'save' };
+            OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);
         }
     }
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-}
 
-
-function redireccionar_despido_hecho(tipo){
-    if(tipo == "1"){
-        var param = { 'tipo_solicitud' : '1', 'band_mantto' : 'save' };
-        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
-    }else{
-        var param = { 'tipo_solicitud' : '1', 'band_mantto' : 'save' };
-        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);
+    function redireccionar_colectivo(tipo){
+            var param = { 'band_mantto' : 'save' };
+            OpenWindowWithPost("<?php echo site_url(); ?>/conflictos_colectivos/"+tipo, param);
     }
-}
 
-function redireccionar_colectivo(tipo){
-        var param = { 'band_mantto' : 'save' };
-        OpenWindowWithPost("<?php echo site_url(); ?>/conflictos_colectivos/"+tipo, param);
-}
-
-function redireccionar_diferencia_laboral(tipo){
-    if(tipo == "1"){
-        var param = { 'tipo_solicitud' : '2', 'band_mantto' : 'save' };
-        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
-    }else{
-        var param = { 'tipo_solicitud' : '2', 'band_mantto' : 'save' };
-        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);
+    function redireccionar_diferencia_laboral(tipo){
+        if(tipo == "1"){
+            var param = { 'tipo_solicitud' : '2', 'band_mantto' : 'save' };
+            OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes", param);
+        }else{
+            var param = { 'tipo_solicitud' : '2', 'band_mantto' : 'save' };
+            OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica", param);
+        }
     }
-}
 
-function redireccionar_retiro_voluntario(tipo){
-    var param = { 'tipo_solicitud' : '3', 'band_mantto' : 'save' };
-    OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario", param);
-}
+    function redireccionar_retiro_voluntario(tipo){
+        var param = { 'tipo_solicitud' : '3', 'band_mantto' : 'save' };
+        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/retiro_voluntario", param);
+    }
 
 </script>
 <!-- ============================================================== -->
-        <!-- Page wrapper  -->
+<!-- Page wrapper  -->
+<!-- ============================================================== -->
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-lg-12 align-self-center">
+                <h3 class="text-themecolor pull-left">INICIO </h3>
+
+                <div class="pull-right">
+                <div id="btn_indicador" style="display: none;"><button class="btn btn-info" onclick="toogle_Options(500);"><span class="mdi mdi-chart-bar"></span> Indicadores</button></div>
+                <div id="btn_menu"><button class="btn btn-info" onclick="toogle_Options2(500);"><span class="mdi mdi-apps"></span> Menú opciones</button></div>
+            </div>
+
+            </div>
+        </div>
+
         <!-- ============================================================== -->
-        <div class="page-wrapper">
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
-                <div class="row page-titles">
-                    <div class="col-lg-12 align-self-center">
-                        <h3 class="text-themecolor pull-left">INICIO </h3>
-
-                        <div class="pull-right">
-                        <div id="btn_indicador" style="display: none;"><button class="btn btn-info" onclick="toogle_Options(500);"><span class="mdi mdi-chart-bar"></span> Indicadores</button></div>
-                        <div id="btn_menu"><button class="btn btn-info" onclick="toogle_Options2(500);"><span class="mdi mdi-apps"></span> Menú opciones</button></div>
-                    </div>
-
-                    </div>
-                </div>
-
-                <!-- ============================================================== -->
-                <!-- Start Page Content -->
-                <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
 
 
         <div id="cnt_options">
@@ -188,99 +191,100 @@ function redireccionar_retiro_voluntario(tipo){
             </div>
         </div>
 
-            <div id="cnt_indicadores" >
+        <div id="cnt_indicadores" >
 
-                <div class="row col-lg-12">
-                    <ul class="nav nav-tabs customtab2 <?php if($navegatorless){ echo "pull-left"; } ?>" role="tablist" style='width: 100%;'>
-                        <li class="nav-item <?php if($navegatorless){ echo "pull-left"; } ?>">
-                            <a class="nav-link active" data-toggle="tab" href="#tab_persona_natural">
-                                <span class="hidden-sm-up"><i class="ti-home"></i></span>
-                                <span class="hidden-xs-down">MEDIACIÓN INDIVIDUAL</span></a>
-                        </li>
-                        <li class="nav-item <?php if($navegatorless){ echo "pull-left"; } ?>">
-                            <a class="nav-link" data-toggle="tab" href="#tab_persona_juridica">
-                                <span class="hidden-sm-up"><i class="ti-home"></i></span>
-                                <span class="hidden-xs-down">MEDIACIÓN COLECTIVA</span></a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab_persona_natural" role="tabpanel">
-                        <div class="p-20">
-                            <?php
-                            if($contadores->num_rows() > 0){
-                                $row = $contadores->row();
-                            ?>
-                            <div class="row">
-                                <div class="col-md-3 col-lg-3">
-                                    <div class="card">
-                                        <div class="card-body" style="position: relative;">
-                                            <h3 class="card-title">Estadística por estado </h3>
-                                            <h3 align="center" class="text-muted" style="z-index:0; left:50%; top: 60%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">
-                                                Activos <br> <?php 
-                                                $porcentaje = "0.00";
-                                                if($row->total != 0){
-                                                    $porcentaje = number_format( (($row->discapacitado/$row->total)*100), 2, '.', ''); 
-                                                }
-                                                $split = explode('.',$porcentaje);
-                                                if($split[1] == "00"){
-                                                    echo $split[0]."%";
-                                                }else{
-                                                    echo $porcentaje."%";
-                                                }?>
-                                            </h3>
-                                            <div style="margin-left: 10px; margin-right: 10px;">
-                                                <canvas id="myChart3" style="height: 200px;"></canvas>
-                                            </div>
+            <div class="row col-lg-12">
+                <ul class="nav nav-tabs customtab2 <?php if($navegatorless){ echo "pull-left"; } ?>" role="tablist" style='width: 100%;'>
+                    <li class="nav-item <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <a class="nav-link active" data-toggle="tab" href="#tab_persona_natural">
+                            <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                            <span class="hidden-xs-down">MEDIACIÓN INDIVIDUAL</span></a>
+                    </li>
+                    <li class="nav-item <?php if($navegatorless){ echo "pull-left"; } ?>">
+                        <a class="nav-link" data-toggle="tab" href="#tab_persona_juridica">
+                            <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                            <span class="hidden-xs-down">MEDIACIÓN COLECTIVA</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_persona_natural" role="tabpanel">
+                    <div class="p-20">
+                        <?php
+                        if($contadores->num_rows() > 0){
+                            $row = $contadores->row();
+                        ?>
+                        <div class="row">
+                            <div class="col-md-3 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body" style="position: relative;">
+                                        <h3 class="card-title">Estadística por estado </h3>
+                                        <h3 align="center" class="text-muted" style="z-index:0; left:50%; top: 60%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">
+                                            Discapacitados <br> 
+                                            <?php 
+                                            $porcentaje = "0.00";
+                                            if($row->total != 0){
+                                                $porcentaje = number_format( (($row->discapacitado/$row->total)*100), 2, '.', ''); 
+                                            }
+                                            $split = explode('.',$porcentaje);
+                                            if($split[1] == "00"){
+                                                echo $split[0]."%";
+                                            }else{
+                                                echo $porcentaje."%";
+                                            }?>
+                                        </h3>
+                                        <div style="margin-left: 10px; margin-right: 10px;">
+                                            <canvas id="myChart3" style="height: 200px;"></canvas>
                                         </div>
-                                        <div>
-                                            <hr class="m-t-0 m-b-0">
-                                        </div>
-                                        <div class="card-body text-center">
-                                            <ul class="list-inline m-b-0">
-                                                <li>
-                                                    <h6 style="color: <?=$color2[0]?>;">
-                                                        <i class="fa fa-circle font-10 m-r-10 ">Discapacitado</i>
-                                                    </h6> 
-                                                </li>
-                                                <li>
-                                                    <h6 style="color: <?=$color2[1]?>;">
-                                                        <i class="fa fa-circle font-10 m-r-10 "></i>No Discapacitado
-                                                    </h6> 
-                                                </li>
-                                            </ul>
-                                        </div>
+                                    </div>
+                                    <div>
+                                        <hr class="m-t-0 m-b-0">
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <ul class="list-inline m-b-0">
+                                            <li>
+                                                <h6 style="color: <?=$color2[0]?>;">
+                                                    <i class="fa fa-circle font-10 m-r-10 "></i> Discapacitado
+                                                </h6> 
+                                            </li>
+                                            <li>
+                                                <h6 style="color: <?=$color2[1]?>;">
+                                                    <i class="fa fa-circle font-10 m-r-10 "></i> No Discapacitado
+                                                </h6> 
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
-                            <?php
-                            }
-                            ?>
                         </div>
-                    </div>
-                    <div class="tab-pane  p-20" id="tab_persona_juridica" role="tabpanel">
-                        <div id="cnt_tabla_persona_juridica">MEDIACIÓN COLECTIVA</div>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
-
-
-
-                <!-- ============================================================== -->
-                <!-- End PAge Content -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Right sidebar -->
-                <!-- ============================================================== -->
+                <div class="tab-pane  p-20" id="tab_persona_juridica" role="tabpanel">
+                    <div id="cnt_tabla_persona_juridica">MEDIACIÓN COLECTIVA</div>
+                </div>
             </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
-            <!-- ============================================================== -->
 
+
+
+            <!-- ============================================================== -->
+            <!-- End PAge Content -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Right sidebar -->
+            <!-- ============================================================== -->
         </div>
-        <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
-        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Container fluid  -->
+    <!-- ============================================================== -->
+
+</div>
+<!-- ============================================================== -->
+<!-- End Page wrapper  -->
+<!-- ============================================================== -->
 
 
 <script src="<?php echo base_url(); ?>assets/js/Chart.min.js"></script>
@@ -299,9 +303,9 @@ chart3 = new Chart(ctx3, {
 
     // The data for our dataset
     data: {
-        labels: ["Hombres", "Mujeres"],
+        labels: ["Con discapacidad", "Sin discapacidad"],
         datasets: [{
-            backgroundColor: ["<?= $color[0]?>","<?= $color[1] ?>"],
+            backgroundColor: ["<?= $color2[0]?>","<?= $color2[1] ?>"],
             data: [<?= $row->discapacitado.','.$row->nodiscapacitado ?>],
         }]
     },
