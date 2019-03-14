@@ -222,9 +222,9 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                     <div class="card-body">
                                         <h3 class="card-title">PERSONAS POR RANGO DE EDAD </h3>
                                         <div class="row">
-                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
-                                                <h4>TOTAL: <?= $row->anios16." de ".$row->total ?><br>
-                                                    <?= cast_porcent($row->anios16,$row->total)."%" ?>
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(15%);" align="center">
+                                                <h4><?= $row->anios16." de ".$row->total ?> <br>
+                                                <small style="font-size: 12px;">personas tienen entre 16 y 30 años</small>
                                                 </h4>
                                             </div>
                                             <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
@@ -232,8 +232,8 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                             </div>
                                             <div class="col-lg-6">
                                                 <?php 
-                                                    $aniosm16 = cast_porcent($row->aniosm16,$row->totalm);
-                                                    $aniosf16 = cast_porcent($row->aniosf16,$row->totalf); 
+                                                    $aniosm16 = cast_porcent($row->aniosm16,$row->anios16);
+                                                    $aniosf16 = cast_porcent($row->aniosf16,$row->anios16); 
                                                 ?>
                                                 <label class="m-b-0">Hombres: <?= $row->aniosm16." de ".$row->anios16 ?></label>
                                                 <div class="progress m-b-5">
@@ -247,9 +247,9 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                         </div>
                                         <hr class="divider">
                                         <div class="row">
-                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
-                                                <h4>TOTAL: <?= $row->anios30." de ".$row->total ?><br>
-                                                    <?= cast_porcent($row->anios30,$row->total)."%" ?>
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(15%);" align="center">
+                                                <h4><?= $row->anios30." de ".$row->total ?><br> 
+                                                <small style="font-size: 12px;">personas tienen entre 30 y 50 años</small>
                                                 </h4>
                                             </div>
                                             <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
@@ -272,9 +272,9 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                         </div>
                                         <hr class="divider">
                                         <div class="row">
-                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
-                                                <h4>TOTAL: <?= $row->anios50." de ".$row->total ?><br>
-                                                    <?= cast_porcent($row->anios50,$row->total)."%" ?>
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(15%);" align="center">
+                                                <h4><?= $row->anios50." de ".$row->total ?> <br>
+                                                <small style="font-size: 12px;">personas tienen más de 50 años</small>
                                                 </h4>
                                             </div>
                                             <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
@@ -304,9 +304,9 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                     <div class="card-body">
                                         <h3 class="card-title">PERSONAS DISCAPACITADAS </h3>
                                         <div class="row">
-                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
-                                                <h4>TOTAL: <?= $row->discapacitado." de ".$row->total ?><br>
-                                                    <?= number_format(($row->discapacitado/$row->total)*100,2)."%" ?>
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(15%);" align="center">
+                                                <h4><?= $row->discapacitado." de ".$row->total ?><br>
+                                                    <small style="font-size: 12px;">personas possen discapacidad</small>
                                                 </h4>
                                             </div>
                                             <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
@@ -333,9 +333,9 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                     <div class="card-body">
                                         <h3 class="card-title">PERSONAS LGBTI </h3>
                                         <div class="row">
-                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
-                                                <h4>TOTAL: <?= $row->lgbti." de ".$row->total ?><br>
-                                                    <?= number_format(($row->lgbti/$row->total)*100,2)."%" ?>
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(15%);" align="center">
+                                                <h4><?= $row->lgbti." de ".$row->total ?><br>
+                                                    <small style="font-size: 12px;">personas pertenecen a grupo LGBTI</small>
                                                 </h4>
                                             </div>
                                             <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
