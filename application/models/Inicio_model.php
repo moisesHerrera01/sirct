@@ -61,10 +61,47 @@ class Inicio_model extends CI_Model {
 
 			(SELECT SUM(fp.montopago_fechaspagosci) FROM sct_fechaspagosci AS fp WHERE fp.id_expedienteci = ecc.id_expedienteci) AS monto,
 
-			COALESCE((SELECT r.resultadoci FROM sct_fechasaudienciasci fea
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
 				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
 				AND fea.id_expedienteci = ecc.id_expedienteci
-				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), 'Pendiente') resultadoci")
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 0 THEN 1 ELSE 0 END) pendientes,
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 1 THEN 1 ELSE 0 END) conciliados,
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 2 THEN 1 ELSE 0 END) noconciliados,
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 3 THEN 1 ELSE 0 END) inasistencias,
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 4 THEN 1 ELSE 0 END) desistidas,
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 5 THEN 1 ELSE 0 END) amultados,
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 6 THEN 1 ELSE 0 END) nonotificados,
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 7 THEN 1 ELSE 0 END) reinstalo,
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 8 THEN 1 ELSE 0 END) notificado,
+			SUM(CASE WHEN COALESCE((SELECT r.id_resultadoci FROM sct_fechasaudienciasci fea
+				JOIN sct_resultadosci r ON r.id_resultadoci=fea.resultado WHERE estado_audiencia=2
+				AND fea.id_expedienteci = ecc.id_expedienteci
+				AND fea.id_fechasaudienciasci = (SELECT MAX(fa.id_fechasaudienciasci) FROM sct_fechasaudienciasci fa WHERE fa.id_expedienteci=fea.id_expedienteci AND fa.estado_audiencia=2)), '0') = 9 THEN 1 ELSE 0 END) segundacita,
+			")
 
 			->from('sct_expedienteci AS ecc')
 			->join('sct_motivo_solicitud mv','mv.id_motivo_solicitud=ecc.causa_expedienteci')
