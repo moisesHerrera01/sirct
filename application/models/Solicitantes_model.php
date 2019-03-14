@@ -66,9 +66,17 @@ class Solicitantes_model extends CI_Model {
 
     public function obtener_solicitante($id) {
 
-        $this->db->select('a.*, c.*, a.ocupacion, a.formapago_personaci, a.funciones_personaci, a.salario_personaci, a.horarios_personaci')
+        $this->db->select('a.*, c.*, a.ocupacion, a.formapago_personaci, a.funciones_personaci, a.salario_personaci,
+				 									 a.horarios_personaci, p.id_municipio_partida, p.id_municipio_menor, p.fecha_partida,
+													 p.fnacimiento_menor,
+													 p.id_partida,
+													 p.numero_partida,
+													 p.libro_partida,
+													 a.nombre_representante_menor,
+													 a.tipo_representante_menor')
                 ->from('sct_personaci a')
                 ->join('sct_expedienteci c', 'a.id_expedienteci = c.id_expedienteci')
+								->join('sct_partida p','p.id_partida = a.id_partida','left')
                 ->where('a.id_personaci', $id);
         $query=$this->db->get();
 

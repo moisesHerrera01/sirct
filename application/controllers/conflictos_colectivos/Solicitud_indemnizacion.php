@@ -171,7 +171,9 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'embarazada' => $this->session->userdata('embarazada'),
 				'fecha_modifica' => date('Y-m-d'),
 				'tipo_representante_menor' => $this->input->post('acompaniante'),
-				'nombre_representante_menor' => $this->input->post('nombre_acompaniante')
+				'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
+				'id_usuario' => $this->session->userdata('id_usuario'),
+				'fecha_modifica' => date('Y-m-d')
 			);
 
 			$data2  = array(
@@ -214,7 +216,10 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'embarazada' => $this->session->userdata('embarazada'),
 				'fecha_modifica' => date('Y-m-d'),
 				'tipo_representante_menor' => $this->input->post('acompaniante'),
-				'nombre_representante_menor' => $this->input->post('nombre_acompaniante')
+				'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
+				'id_expedienteci' => $this->input->post('id_expediente'),
+				'id_usuario' => $this->session->userdata('id_usuario'),
+				'fecha_modifica' => date('Y-m-d')
 			);
 
 			 $data2  = array(
