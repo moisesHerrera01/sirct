@@ -1221,7 +1221,7 @@ function cambiar_editar(id_expedienteci,bandera){
       $("#dui").val(result.dui_personaci);
       $("#id_partida").val(result.id_partida);
       $("#numero_partida").val(result.numero_partida);
-      $("#folio_partida").val(result.folio_partida);
+      // $("#folio_partida").val(result.folio_partida);
       $("#libro_partida").val(result.libro_partida);
       $("#asiento_partida").val(result.asiento_partida);
       $("#anio_partida").val(result.anio_partida);

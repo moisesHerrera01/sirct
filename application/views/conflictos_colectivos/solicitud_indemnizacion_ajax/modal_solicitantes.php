@@ -79,6 +79,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="row">
                     <input type="hidden" id="id_expediente3" name="id_expediente" value="<?=$id?>">
                     <input type="hidden" name="id_persona" id="id_persona1">
+                    <input type="hidden" name="id_partida" id="id_partida">
                     <input type="hidden" id="band4" name="band4" value="save">
 
                     <span class="etiqueta">Datos de la persona solicitante</span>
@@ -685,9 +686,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#fnacimiento_menor").datepicker("setDate", moment(result.fnacimiento_menor).format("DD-MM-YYYY"));
             $("#id_partida").val(result.id_partida);
             $("#numero_partida").val(result.numero_partida);
-            $("#folio_partida").val(result.folio_partida);
+            // $("#folio_partida").val(result.folio_partida);
             $("#libro_partida").val(result.libro_partida);
-            $("#asiento_partida").val(result.asiento_partida);
+            // $("#asiento_partida").val(result.asiento_partida);
             $("#anio_partida").val(result.anio_partida);
             $("#nombre_acompaniante").val(result.nombre_representante_menor);
             $("#acompaniante").val(result.tipo_representante_menor);
