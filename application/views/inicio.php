@@ -6,8 +6,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $navegatorless = true;
 }
 ?>
-<?php $color = array('#26c6da', '#1e88e5', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4');
-$color2 = array('#26c6da', 'rgb(255, 99, 132)', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'); ?>
+<?php $color = array('#b5999c', '#8a1111', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4');
+$color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'); ?>
 <script type="text/javascript">
 
     function iniciar(){
@@ -18,16 +18,18 @@ $color2 = array('#26c6da', 'rgb(255, 99, 132)', '#7460ee', '#ffb22b', '#fc4b6c',
         $("#cnt_options").hide(inteval);
         $("#cnt_indicadores").show(inteval);
         toogle_buttons2();
-        var obj= $("#myChart3");
-        document.getElementById("myChart3").style.height = "200px";
+        document.getElementById("chart_discapacitados").style.height = "200px";
+        document.getElementById("chart_lgbti").style.height = "200px";
+        document.getElementById("chart_sexo").style.height = "200px";
     }
 
     function toogle_Options2(interval){
         $("#cnt_options").show(interval);
         $("#cnt_indicadores").hide(interval);
         toogle_buttons();
-        var obj= $("#myChart3");
-        document.getElementById("myChart3").style.height = "200px";
+        document.getElementById("chart_discapacitados").style.height = "200px";
+        document.getElementById("chart_lgbti").style.height = "200px";
+        document.getElementById("chart_sexo").style.height = "200px";
     }
 
     function toogle_buttons(){
@@ -215,47 +217,150 @@ $color2 = array('#26c6da', 'rgb(255, 99, 132)', '#7460ee', '#ffb22b', '#fc4b6c',
                             $row = $contadores->row();
                         ?>
                         <div class="row">
-                            <div class="col-md-3 col-lg-3">
+                            <div class="col-md-6">
                                 <div class="card">
-                                    <div class="card-body" style="position: relative;">
-                                        <h3 class="card-title">Estadística por estado </h3>
-                                        <h3 align="center" class="text-muted" style="z-index:0; left:50%; top: 60%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">
-                                            Discapacitados <br> 
-                                            <?php 
-                                            $porcentaje = "0.00";
-                                            if($row->total != 0){
-                                                $porcentaje = number_format( (($row->discapacitado/$row->total)*100), 2, '.', ''); 
-                                            }
-                                            $split = explode('.',$porcentaje);
-                                            if($split[1] == "00"){
-                                                echo $split[0]."%";
-                                            }else{
-                                                echo $porcentaje."%";
-                                            }?>
-                                        </h3>
-                                        <div style="margin-left: 10px; margin-right: 10px;">
-                                            <canvas id="myChart3" style="height: 200px;"></canvas>
+                                    <div class="card-body">
+                                        <h3 class="card-title">PERSONAS POR RANGO DE EDAD </h3>
+                                        <div class="row">
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <h4>TOTAL: <?= $row->anios16." de ".$row->total ?><br>
+                                                    <?= cast_porcent($row->anios16,$row->total)."%" ?>
+                                                </h4>
+                                            </div>
+                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <div class="round round-lg align-self-center round-info"><i class="mdi mdi-human-child"></i></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <?php 
+                                                    $aniosm16 = cast_porcent($row->aniosm16,$row->totalm);
+                                                    $aniosf16 = cast_porcent($row->aniosf16,$row->totalf); 
+                                                ?>
+                                                <label class="m-b-0">Hombres: <?= $row->aniosm16." de ".$row->anios16 ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($aniosm16) ?>%; height:15px;" role="progressbar"><?= ($aniosm16) ?>%</div>
+                                                </div>
+                                                <label class="m-b-0">Mujeres: <?= $row->aniosf16." de ".$row->anios16 ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($aniosf16) ?>%; height:15px;" role="progressbar"><?= ($aniosf16) ?>%</div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <hr class="m-t-0 m-b-0">
-                                    </div>
-                                    <div class="card-body text-center">
-                                        <ul class="list-inline m-b-0">
-                                            <li>
-                                                <h6 style="color: <?=$color2[0]?>;">
-                                                    <i class="fa fa-circle font-10 m-r-10 "></i> Discapacitado
-                                                </h6> 
-                                            </li>
-                                            <li>
-                                                <h6 style="color: <?=$color2[1]?>;">
-                                                    <i class="fa fa-circle font-10 m-r-10 "></i> No Discapacitado
-                                                </h6> 
-                                            </li>
-                                        </ul>
+                                        <hr class="divider">
+                                        <div class="row">
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <h4>TOTAL: <?= $row->anios30." de ".$row->total ?><br>
+                                                    <?= cast_porcent($row->anios30,$row->total)."%" ?>
+                                                </h4>
+                                            </div>
+                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <div class="round round-lg align-self-center round-info"><i class="mdi mdi-walk"></i></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <?php 
+                                                    $aniosm30 = cast_porcent($row->aniosm30,$row->anios30);
+                                                    $aniosf30 = cast_porcent($row->aniosf30,$row->anios30); 
+                                                ?>
+                                                <label class="m-b-0">Hombres: <?= $row->aniosm30." de ".$row->anios30 ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($aniosm30) ?>%; height:15px;" role="progressbar"><?= ($aniosm30) ?>%</div>
+                                                </div>
+                                                <label class="m-b-0">Mujeres: <?= $row->aniosf30." de ".$row->anios30 ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($aniosf30) ?>%; height:15px;" role="progressbar"><?= ($aniosf30) ?>%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="divider">
+                                        <div class="row">
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <h4>TOTAL: <?= $row->anios50." de ".$row->total ?><br>
+                                                    <?= cast_porcent($row->anios50,$row->total)."%" ?>
+                                                </h4>
+                                            </div>
+                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <div class="round round-lg align-self-center round-info"><i class="mdi mdi-incognito"></i></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <?php 
+                                                    $aniosm50 = cast_porcent($row->aniosm50,$row->anios50);
+                                                    $aniosf50 = cast_porcent($row->aniosf50,$row->anios50); 
+                                                ?>
+                                                <label class="m-b-0">Hombres: <?= $row->aniosm50." de ".$row->anios50 ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($aniosm50) ?>%; height:15px;" role="progressbar"><?= ($aniosm50) ?>%</div>
+                                                </div>
+                                                <label class="m-b-0">Mujeres: <?= $row->aniosf50." de ".$row->anios50 ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($aniosf50) ?>%; height:15px;" role="progressbar"><?= ($aniosf50) ?>%</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3 class="card-title">PERSONAS DISCAPACITADAS </h3>
+                                        <div class="row">
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <h4>TOTAL: <?= $row->discapacitado." de ".$row->total ?><br>
+                                                    <?= number_format(($row->discapacitado/$row->total)*100,2)."%" ?>
+                                                </h4>
+                                            </div>
+                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <div class="round round-lg align-self-center round-info"><i class="fa fa-wheelchair"></i></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <?php 
+                                                    $discapmasc = cast_porcent($row->discapacitadom,$row->totalm);
+                                                    $discapfeme = cast_porcent($row->discapacitadof,$row->totalf); 
+                                                ?>
+                                                <label class="m-b-0">Hombres: <?= $row->discapacitadom." de ".$row->totalm ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($discapmasc) ?>%; height:15px;" role="progressbar"><?= ($discapmasc) ?>%</div>
+                                                </div>
+                                                <label class="m-b-0">Mujeres: <?= $row->discapacitadof." de ".$row->totalf ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($discapfeme) ?>%; height:15px;" role="progressbar"><?= ($discapfeme) ?>%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3 class="card-title">PERSONAS LGBTI </h3>
+                                        <div class="row">
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <h4>TOTAL: <?= $row->lgbti." de ".$row->total ?><br>
+                                                    <?= number_format(($row->lgbti/$row->total)*100,2)."%" ?>
+                                                </h4>
+                                            </div>
+                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <div class="round round-lg align-self-center round-primary"><i class="mdi mdi-gender-transgender"></i></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <?php 
+                                                    $lgbtimasc = cast_porcent($row->lgbtim,$row->totalm);
+                                                    $lgbtifeme = cast_porcent($row->lgbtif,$row->totalf); 
+                                                ?>
+                                                <label class="m-b-0">Hombres: <?= $row->lgbtim." de ".$row->totalm ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($lgbtimasc) ?>%; height:15px;" role="progressbar"><?= ($lgbtimasc) ?>%</div>
+                                                </div>
+                                                <label class="m-b-0">Mujeres: <?= $row->lgbtif." de ".$row->totalf ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($lgbtifeme) ?>%; height:15px;" role="progressbar"><?= ($lgbtifeme) ?>%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                         <?php
                         }
@@ -289,33 +394,3 @@ $color2 = array('#26c6da', 'rgb(255, 99, 132)', '#7460ee', '#ffb22b', '#fc4b6c',
 
 <script src="<?php echo base_url(); ?>assets/js/Chart.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/echarts/echarts-all.js"></script>
-<script type="text/javascript">
-
-var ctx3;
-var chart3;
-
-$( document ).ready(function() {
-
-ctx3 = document.getElementById('myChart3').getContext('2d');
-chart3 = new Chart(ctx3, {
-    // The type of chart we want to create
-    type: 'doughnut',
-
-    // The data for our dataset
-    data: {
-        labels: ["Con discapacidad", "Sin discapacidad"],
-        datasets: [{
-            backgroundColor: ["<?= $color2[0]?>","<?= $color2[1] ?>"],
-            data: [<?= $row->discapacitado.','.$row->nodiscapacitado ?>],
-        }]
-    },
-
-    // Configuration options go here
-    options: { maintainAspectRatio: false, cutoutPercentage: 75, legend: { display: false} }
-
-});
-
-});
-
-
-</script>

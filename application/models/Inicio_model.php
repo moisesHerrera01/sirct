@@ -18,26 +18,34 @@ class Inicio_model extends CI_Model {
 
 			CONCAT_WS(' ', emp.primer_nombre, emp.segundo_nombre, emp.tercer_nombre, emp.primer_apellido, emp.segundo_apellido, emp.apellido_casada) delegado,
 
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 ELSE 0 END),0) cant_masc,
-			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 ELSE 0 END),0) cant_feme,
-
 			COALESCE(SUM(CASE WHEN ecc.id_empleador !=0 AND ecc.id_empleador IS NOT NULL THEN 1 ELSE 0 END),0) cant_empleador,
 
 			COALESCE(SUM(CASE WHEN p.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' AND p.sexo_personaci = 'M' THEN 1 END),0) aniosm16,
 			COALESCE(SUM(CASE WHEN p.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p.sexo_personaci = 'M' THEN 1 END),0) aniosm30,
 			COALESCE(SUM(CASE WHEN p.fnacimiento_personaci < '".$anios50."' AND p.sexo_personaci = 'M' THEN 1 END),0) aniosm50,
-
 			COALESCE(SUM(CASE WHEN p.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' AND p.sexo_personaci = 'F' THEN 1 END),0) aniosf16,
 			COALESCE(SUM(CASE WHEN p.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' AND p.sexo_personaci = 'F' THEN 1 END),0) aniosf30,
 			COALESCE(SUM(CASE WHEN p.fnacimiento_personaci < '".$anios50."' AND p.sexo_personaci = 'F' THEN 1 END),0) aniosf50,
 
+			COALESCE(SUM(CASE WHEN p.fnacimiento_personaci BETWEEN '".$anios30."' AND '".$anios16."' THEN 1 END),0) anios16,
+			COALESCE(SUM(CASE WHEN p.fnacimiento_personaci BETWEEN '".$anios50."' AND '".$anios30."' THEN 1 END),0) anios30,
+			COALESCE(SUM(CASE WHEN p.fnacimiento_personaci < '".$anios50."' THEN 1 END),0) anios50,
+
+			COALESCE(SUM(CASE WHEN p.discapacidad_personaci = 1 AND p.sexo_personaci = 'M' THEN 1 END),0) discapacitadom,
+			COALESCE(SUM(CASE WHEN p.discapacidad_personaci <> 1 AND p.sexo_personaci = 'M' THEN 1 END),0) nodiscapacitadom,
+			COALESCE(SUM(CASE WHEN p.discapacidad_personaci = 1 AND p.sexo_personaci = 'F' THEN 1 END),0) discapacitadof,
+			COALESCE(SUM(CASE WHEN p.discapacidad_personaci <> 1 AND p.sexo_personaci = 'F' THEN 1 END),0) nodiscapacitadof,
 			COALESCE(SUM(CASE WHEN p.discapacidad_personaci = 1 THEN 1 END),0) discapacitado,
-			COALESCE(SUM(CASE WHEN p.discapacidad_personaci <> 1 THEN 1 END),0) nodiscapacitado,
 
+			COALESCE(SUM(CASE WHEN p.pertenece_lgbt = 1 AND p.sexo_personaci = 'M' THEN 1 END),0) lgbtim,
+			COALESCE(SUM(CASE WHEN p.pertenece_lgbt <> 1 AND p.sexo_personaci = 'M' THEN 1 END),0) nolgbtim,
+			COALESCE(SUM(CASE WHEN p.pertenece_lgbt = 1 AND p.sexo_personaci = 'F' THEN 1 END),0) lgbtif,
+			COALESCE(SUM(CASE WHEN p.pertenece_lgbt <> 1 AND p.sexo_personaci = 'F' THEN 1 END),0) nolgbtif,
+			COALESCE(SUM(CASE WHEN p.pertenece_lgbt = 1 THEN 1 END),0) lgbti,
+
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 END),0) totalm,
+			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 END),0) totalf,
 			COALESCE(COUNT(ecc.id_expedienteci),0) total,
-
-			COALESCE(SUM(CASE WHEN p.pertenece_lgbt = 1 THEN 1 END),0) lgtbi,
-			COALESCE(SUM(CASE WHEN p.pertenece_lgbt <> 1 THEN 1 END),0) nolgtbi,
 
 			ecc.fechacrea_expedienteci fecha_inicio,
 
