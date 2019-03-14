@@ -314,14 +314,14 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                             </div>
                                             <div class="col-lg-6">
                                                 <?php 
-                                                    $discapmasc = cast_porcent($row->discapacitadom,$row->totalm);
-                                                    $discapfeme = cast_porcent($row->discapacitadof,$row->totalf); 
+                                                    $discapmasc = cast_porcent($row->discapacitadom,$row->discapacitado);
+                                                    $discapfeme = cast_porcent($row->discapacitadof,$row->discapacitado); 
                                                 ?>
-                                                <label class="m-b-0">Hombres: <?= $row->discapacitadom." de ".$row->totalm ?></label>
+                                                <label class="m-b-0">Hombres: <?= $row->discapacitadom." de ".$row->discapacitado ?></label>
                                                 <div class="progress m-b-5">
                                                     <div class="progress-bar bg-success2" style="width: <?= intval($discapmasc) ?>%; height:15px;" role="progressbar"><?= ($discapmasc) ?>%</div>
                                                 </div>
-                                                <label class="m-b-0">Mujeres: <?= $row->discapacitadof." de ".$row->totalf ?></label>
+                                                <label class="m-b-0">Mujeres: <?= $row->discapacitadof." de ".$row->discapacitado ?></label>
                                                 <div class="progress m-b-5">
                                                     <div class="progress-bar bg-success2" style="width: <?= intval($discapfeme) ?>%; height:15px;" role="progressbar"><?= ($discapfeme) ?>%</div>
                                                 </div>
@@ -343,16 +343,45 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                             </div>
                                             <div class="col-lg-6">
                                                 <?php 
-                                                    $lgbtimasc = cast_porcent($row->lgbtim,$row->totalm);
-                                                    $lgbtifeme = cast_porcent($row->lgbtif,$row->totalf); 
+                                                    $lgbtimasc = cast_porcent($row->lgbtim,$row->lgbti);
+                                                    $lgbtifeme = cast_porcent($row->lgbtif,$row->lgbti); 
                                                 ?>
-                                                <label class="m-b-0">Hombres: <?= $row->lgbtim." de ".$row->totalm ?></label>
+                                                <label class="m-b-0">Hombres: <?= $row->lgbtim." de ".$row->lgbti ?></label>
                                                 <div class="progress m-b-5">
                                                     <div class="progress-bar bg-success2" style="width: <?= intval($lgbtimasc) ?>%; height:15px;" role="progressbar"><?= ($lgbtimasc) ?>%</div>
                                                 </div>
                                                 <label class="m-b-0">Mujeres: <?= $row->lgbtif." de ".$row->totalf ?></label>
                                                 <div class="progress m-b-5">
                                                     <div class="progress-bar bg-success2" style="width: <?= intval($lgbtifeme) ?>%; height:15px;" role="progressbar"><?= ($lgbtifeme) ?>%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3 class="card-title">MUJERES EMBARAZADAS </h3>
+                                        <div class="row">
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(15%);" align="center">
+                                                <h4><?= $row->embarazada." de ".$row->totalf ?><br>
+                                                    <small style="font-size: 12px;">mujeres embarazadas</small>
+                                                </h4>
+                                            </div>
+                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
+                                                <div class="round round-lg align-self-center round-primary"><i class="mdi mdi-gender-transgender"></i></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <?php 
+                                                    $embarazada = cast_porcent($row->embarazada,$row->totalf);
+                                                    $noembarazada = cast_porcent($row->noembarazada,$row->totalf); 
+                                                ?>
+                                                <label class="m-b-0">Embarazadas: <?= $row->embarazada." de ".$row->totalf ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($embarazada) ?>%; height:15px;" role="progressbar"><?= ($embarazada) ?>%</div>
+                                                </div>
+                                                <label class="m-b-0">No embarazadas: <?= $row->noembarazada." de ".$row->totalf ?></label>
+                                                <div class="progress m-b-5">
+                                                    <div class="progress-bar bg-success2" style="width: <?= intval($noembarazada) ?>%; height:15px;" role="progressbar"><?= ($noembarazada) ?>%</div>
                                                 </div>
                                             </div>
                                         </div>

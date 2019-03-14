@@ -43,6 +43,9 @@ class Inicio_model extends CI_Model {
 			COALESCE(SUM(CASE WHEN p.pertenece_lgbt <> 1 AND p.sexo_personaci = 'F' THEN 1 END),0) nolgbtif,
 			COALESCE(SUM(CASE WHEN p.pertenece_lgbt = 1 THEN 1 END),0) lgbti,
 
+			COALESCE(SUM(CASE WHEN ecc.embarazada = 1 AND p.sexo_personaci = 'F' THEN 1 END),0) embarazada,
+			COALESCE(SUM(CASE WHEN (ecc.embarazada = 0 OR ecc.embarazada IS NULL) AND p.sexo_personaci = 'F' THEN 1 END),0) noembarazada,
+
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'M' THEN 1 END),0) totalm,
 			COALESCE(SUM(CASE WHEN p.sexo_personaci = 'F' THEN 1 END),0) totalf,
 			COALESCE(COUNT(ecc.id_expedienteci),0) total,
