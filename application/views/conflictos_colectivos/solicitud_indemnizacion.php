@@ -129,6 +129,41 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     //     $("#modal_actas_tipo").modal("show");
     // }
 
+    function validar_establecimiento(){
+        var establecimiento = $("#establecimiento").val();
+        var registros = $("#tabla_representante tbody tr.table-active");
+
+        if(establecimiento == "" /*|| registros.length == 0*/){
+            if(establecimiento == ""){
+                swal({ title: "Seleccione la parte empleadora", text: "No se ha seleccionado la parte empleadora.", type: "warning", showConfirmButton: true });
+            /*}else{
+                swal({ title: "Seleccione una persona representante", text: "Agregue o seleccione una persona representante de la lista.", type: "warning", showConfirmButton: true });
+            */}
+        }else{
+            open_form(2);
+        }
+    }
+
+    function tabla_representantes(){
+        var id_empresa = $("#establecimiento").val();
+        //console.log(id_empresa);
+        var id_representanteci = $("#id_representanteci").val();
+        if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
+        }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla_representantes").innerHTML=xmlhttpB.responseText;
+                $('[data-toggle="tooltip"]').tooltip();
+                $('#myTable2').DataTable();
+                if(id_empresa != ""){
+                      verificar_empresa_completa(id_empresa);
+                  }
+            }
+        }
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
+        xmlhttpB.send();
+    }
+
     function combo_establecimiento(seleccion){
         $.ajax({
           // async: true,
@@ -178,7 +213,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     $('#modal_establecimiento').modal('show');
                   }
                 });
-                //tabla_representantes()
+                tabla_representantes()
                 if (seleccion != '') {
                   var newOption = new Option(res.establecimiento.nombre_empresa,res.establecimiento.id_empresa, true, true);
                   $('#establecimiento').append(newOption).trigger('change');
@@ -972,24 +1007,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <input type="hidden" id="estado" name="estado" value="1">
                             <input type="hidden" id="id_expediente" name="id_expediente" value="">
 
-                            <span class="etiqueta">Información del solicitado</span>
+                            <span class="etiqueta">Seleccionar delegado y parte empleadora</span>
                             <blockquote class="m-t-0">
 
                                 <div class="row">
-                                    <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
-                                        id="div_combo_establecimiento"></div>
+                                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
+                                          id="div_combo_delegado"></div>
+                                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
+                                      id="div_combo_establecimiento"></div>
                                 </div>
 
                             </blockquote>
 
-                            <span class="etiqueta">Asignaci&oacute;n de expediente</span>
+                            <span class="etiqueta">Personas representantes</span>
                             <blockquote class="m-t-0">
-
-                                <div class="row">
-                                    <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
-                                        id="div_combo_delegado"></div>
-                                </div>
-
+                                <div id="cnt_tabla_representantes"></div>
                             </blockquote>
 
                             <div align="right" id="btnadd1">
@@ -1553,6 +1585,43 @@ function ocultar_pn(){
                 }
             });
 
+        });
+    });
+
+    $("#formajax5").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax5"));
+        formData.append("id_empresa", $('#establecimiento').val());
+        formData.append("id_partida", $('#id_partida').val());
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_representante",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+        .done(function(res){
+          //console.log(res)
+            if(res == "exito"){
+                if($("#band4").val() == "save"){
+                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                }else if($("#band4").val() == "edit"){
+                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                }else{
+                    if($("#estado_representante").val() == '1'){
+                        swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
+                    }else{
+                        swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
+                    }
+                }
+                $("#modal_representante").modal('hide');
+                tabla_representantes();
+            }else{
+                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }
         });
     });
 

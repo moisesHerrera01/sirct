@@ -618,13 +618,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
             $('#nombre_solicitante').val(result.nombre_personaci);
             $('#apellido_solicitante').val(result.apellido_personaci);
-            $('#dui').val(result.dui_personaci);
             $('#fecha_nacimiento').val(`${fecha.getDate()}-${fecha.getMonth() + 1}-${fecha.getFullYear()}`);
             $('#telefono').val(result.telefono_personaci);
             $("#municipio_solicitante").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
             $('#direccion').val(result.direccion_personaci);
             $('#discapacidad_solicitante').val(result.discapacidad_personaci);
-            $('#sexo_solicitante').val(result.sexo_personaci);
+            // $('#sexo_solicitante').val(result.sexo_personaci);
 
             $('#nombre_representacion_solicitante').val(result.nombre_representantepersonaci);
             $('#apellido_representacion_solicitante').val(result.apellido_representantepersonaci);
@@ -648,6 +647,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             }else {
               document.getElementById('no_e').checked =true;
             }
+            if (result.sexo_personaci=='M') {
+              document.getElementById('masculino').checked =true;
+            }else {
+              document.getElementById('femenino').checked =true;
+            }
+
             $("#discapacidad_desc").val(result.discapacidad);
             $("#estudios").val(result.estudios_personaci);
             $("#conocido_por").val(result.conocido_por);
@@ -678,6 +683,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                $('#div_numero_doc_identidad').show();
                $("#dui").attr("required",'required');
             }
+            $('#dui').val(result.dui_personaci);
 
             //Inicio Partida de nacimiento
             combo_municipio_menor(result.id_municipio_partida);

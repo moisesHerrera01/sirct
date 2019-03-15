@@ -34,7 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			}
 			return $numero;
 		}
-		
+
 	}
 
 	function generar_boton_normal($opciones,$funcion,$color,$icono,$title, $title2){
@@ -277,7 +277,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			if ($arrayMinutos[$minutos]=='CERO') {
 				return "";
 			}else {
-				return 'con '.$arrayMinutos[$minutos].' minutos';
+				return 'con '.$arrayMinutos[$minutos].' MINUTOS';
 			}
 		}
 

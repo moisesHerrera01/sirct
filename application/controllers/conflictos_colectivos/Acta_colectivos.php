@@ -30,7 +30,7 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        header("Content-Disposition: attachment; filename='FichaSolicitud_DifL_".date('dmy_His').".docx'");
+        header("Content-Disposition: attachment; filename=FichaSolicitud_DifL_".date('dmy_His').".docx");
         header('Cache-Control: max-age=0');
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
         $objWriter->save('php://output');
@@ -78,7 +78,7 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        header("Content-Disposition: attachment; filename='ActaSolicitudDifL_".date('dmy_His').".docx'");
+        header("Content-Disposition: attachment; filename=ActaSolicitudDifL_".date('dmy_His').".docx");
         header('Cache-Control: max-age=0');
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
         $objWriter->save('php://output');
@@ -91,9 +91,10 @@ class Acta_colectivos extends CI_Controller {
         $segunda= $audiencias->result()[1];
         $solicitantes = $this->solicitantes_model->obtener_solicitantes_expediente_acta( $id_expedienteci );
         $concat_solicitantes='';
+        $solicitante1 = $solicitantes->result()[0];
         foreach ($solicitantes->result() as $d) {
             $concat_solicitantes .=  $d->nombre_solicitante .', de '. mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras( $d->edad)) .' años de edad, '. $d->ocupacion
-                . ', del domicilio de '. $d->direccion_personaci .', departamento de '. $d->departamento
+                . ', del domicilio de '. $d->municipio .', departamento de '. $d->departamento
                 . ', con documento Único de Identidad Número: '. convertir_dui($d->dui_personaci);
         }
         $this->load->library("phpword");
@@ -104,7 +105,7 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->setValue('direccion_empresa', $expediente->direccion_empresa);
         $templateWord->setValue('nombre_representante', $expediente->nombres_representante);
         $templateWord->setValue('persona_conflicto',$expediente->nombre_personaci .' '. $expediente->apellido_personaci);
-        $templateWord->setValue('direccion_solicitante', $expediente->direccion_solicitante);
+        $templateWord->setValue('direccion_solicitante', $solicitante1->direccion_personaci);
         $templateWord->setValue('horario_solicitante',convertir_numeros_cadena($expediente->horarios_solicitante));
         $templateWord->setValue('nombre_delegado',$expediente->delegado);
         $templateWord->setValue('solicitantes',$concat_solicitantes);
@@ -131,7 +132,7 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        header("Content-Disposition: attachment; filename='ActaSolicitud_colectivos_".date('dmy_His').".docx'");
+        header("Content-Disposition: attachment; filename=ActaSolicitud_colectivos_".date('dmy_His').".docx");
         header('Cache-Control: max-age=0');
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
         $objWriter->save('php://output');
@@ -175,7 +176,7 @@ class Acta_colectivos extends CI_Controller {
           $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
           $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
           header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-          header("Content-Disposition: attachment; filename='acta_pc_pendiente_".date('dmy_His').".docx'");
+          header("Content-Disposition: attachment; filename=acta_pc_pendiente_".date('dmy_His').".docx");
           header('Cache-Control: max-age=0');
           $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
           $objWriter->save('php://output');
@@ -226,7 +227,7 @@ class Acta_colectivos extends CI_Controller {
             $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
             $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
             header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-            header("Content-Disposition: attachment; filename='acta_pc_noconciliada_ct_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=acta_pc_noconciliada_ct_".date('dmy_His').".docx");
             header('Cache-Control: max-age=0');
             $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
             $objWriter->save('php://output');
@@ -277,7 +278,7 @@ class Acta_colectivos extends CI_Controller {
               $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
               $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
               header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-              header("Content-Disposition: attachment; filename='acta_sc_conciliada_pago_".date('dmy_His').".docx'");
+              header("Content-Disposition: attachment; filename=acta_sc_conciliada_pago_".date('dmy_His').".docx");
               header('Cache-Control: max-age=0');
               $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
               $objWriter->save('php://output');
@@ -345,7 +346,7 @@ class Acta_colectivos extends CI_Controller {
                 $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-                header("Content-Disposition: attachment; filename='acta_pago_".date('dmy_His').".docx'");
+                header("Content-Disposition: attachment; filename=acta_pago_".date('dmy_His').".docx");
                 header('Cache-Control: max-age=0');
                 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
                 $objWriter->save('php://output');
@@ -405,7 +406,7 @@ class Acta_colectivos extends CI_Controller {
                 $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-                header("Content-Disposition: attachment; filename='acta_pc_pendiente_scto_".date('dmy_His').".docx'");
+                header("Content-Disposition: attachment; filename=acta_pc_pendiente_scto_".date('dmy_His').".docx");
                 header('Cache-Control: max-age=0');
                 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
                 $objWriter->save('php://output');
@@ -468,7 +469,7 @@ class Acta_colectivos extends CI_Controller {
                 $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-                header("Content-Disposition: attachment; filename='acta_pc_scto_".date('dmy_His').".docx'");
+                header("Content-Disposition: attachment; filename=acta_pc_scto_".date('dmy_His').".docx");
                 header('Cache-Control: max-age=0');
                 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
                 $objWriter->save('php://output');
@@ -532,7 +533,7 @@ class Acta_colectivos extends CI_Controller {
                 $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-                header("Content-Disposition: attachment; filename='acta_sc_scto_".date('dmy_His').".docx'");
+                header("Content-Disposition: attachment; filename=acta_sc_scto_".date('dmy_His').".docx");
                 header('Cache-Control: max-age=0');
                 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
                 $objWriter->save('php://output');
@@ -596,7 +597,7 @@ class Acta_colectivos extends CI_Controller {
                 $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
                 header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-                header("Content-Disposition: attachment; filename='acta_multa_scto_".date('dmy_His').".docx'");
+                header("Content-Disposition: attachment; filename=acta_multa_scto_".date('dmy_His').".docx");
                 header('Cache-Control: max-age=0');
                 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
                 $objWriter->save('php://output');
@@ -633,7 +634,7 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        header("Content-Disposition: attachment; filename='FichaSolicitud_colectivos_".date('dmy_His').".docx'");
+        header("Content-Disposition: attachment; filename=FichaSolicitud_colectivos_".date('dmy_His').".docx");
         header('Cache-Control: max-age=0');
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
         $objWriter->save('php://output');

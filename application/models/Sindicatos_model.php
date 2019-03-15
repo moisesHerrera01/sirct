@@ -70,6 +70,7 @@ class Sindicatos_model extends CI_Model {
 		}if ($estado) {
 			$this->db->where('ex.id_estadosci',$estado);
 		}
+		$this->db->order_by('ex.fechacrea_expedienteci','DESC');
 		$query = $this->db->get();
 		if ($query->num_rows()>0) {
 			return $query;

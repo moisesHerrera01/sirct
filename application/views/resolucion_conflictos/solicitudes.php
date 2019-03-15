@@ -1011,7 +1011,7 @@ function tabla_audiencias(id_expedienteci){
 
 function tabla_representantes(){
     var id_empresa = $("#establecimiento").val();
-    //console.log(id_empresa);
+    alert(id_empresa);
     var id_representanteci = $("#id_representanteci").val();
     if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
     }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }

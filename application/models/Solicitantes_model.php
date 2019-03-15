@@ -47,7 +47,8 @@ class Solicitantes_model extends CI_Model {
                     a.ocupacion,
                     a.direccion_personaci,
                     d.departamento,
-                    a.dui_personaci
+                    a.dui_personaci,
+										c.municipio
                 ')
                 ->from('sct_personaci a')
                 ->join('org_municipio c', 'c.id_municipio = a.id_municipio')

@@ -2,6 +2,7 @@
             <table id="myTable" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
+                      <th>N°</th>
                       <th width="130px">Número de expediente</th>
                       <th>Nombre solicitante</th>
                       <th>Nombre solicitado</th>
@@ -78,7 +79,7 @@
                                                                                )
                                                   ) d ON d.id_expedienteci=e.id_expedienteci
                                               JOIN sir_empleado l on l.id_empleado=d.delegado_actual
-                                              ".$add." AND tiposolicitud_expedienteci = '3' ORDER BY e.id_expedienteci DESC");
+                                              ".$add." AND tiposolicitud_expedienteci = '3' ORDER BY e.fechacrea_expedienteci DESC");
 
                     if($solicitudes->num_rows() > 0){
 
@@ -86,9 +87,10 @@
                         $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
                         $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
                         /*********** Fin de consulta de permisos *********************************/
-
+                        $i = 1;
                         foreach ($solicitudes->result() as $fila) {
                           echo "<tr>";
+                            echo "<td>".$i."</td>";
                             echo "<td>".$fila->numero."</td>";
                             echo "<td>".$fila->nombre_empresa."</td>";
                             echo "<td>".$fila->nombre_personaci."</td>";
@@ -145,6 +147,7 @@
                             }
                             echo "</td>";
                           echo "</tr>";
+                          $i++;
                         }
                     }
                 ?>
