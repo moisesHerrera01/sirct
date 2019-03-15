@@ -14,9 +14,8 @@ class Inicio_model extends CI_Model {
 
 		$this->db->select("
 			ecc.numerocaso_expedienteci,
-			d.departamento,
 
-			CONCAT_WS(' ', emp.primer_nombre, emp.segundo_nombre, emp.tercer_nombre, emp.primer_apellido, emp.segundo_apellido, emp.apellido_casada) delegado,
+			
 
 			COALESCE(SUM(CASE WHEN ecc.id_empleador !=0 AND ecc.id_empleador IS NOT NULL THEN 1 ELSE 0 END),0) cant_empleador,
 
@@ -108,14 +107,14 @@ class Inicio_model extends CI_Model {
 			->join('sct_personaci p ', 'p.id_personaci = ecc.id_personaci')
 			->join('sge_empresa est', 'ecc.id_empresaci = est.id_empresa')
 			->join('sge_catalogociiu ciiu', 'est.id_catalogociiu = ciiu.id_catalogociiu')
-			->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
-			->join('sir_empleado emp','emp.id_empleado = de.id_personal')
-			->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
-			->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
-			->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
+			//->join('sct_delegado_exp de','de.id_expedienteci=ecc.id_expedienteci')
+			//->join('sir_empleado emp','emp.id_empleado = de.id_personal')
+			//->join('org_municipio m','m.id_municipio=emp.id_muni_residencia')
+			//->join('org_departamento d','d.id_departamento=m.id_departamento_pais')
+			/*->where("de.id_delegado_exp = (SELECT MAX(de2.id_delegado_exp)
 					 FROM sct_delegado_exp de2
 					 WHERE de2.id_expedienteci=de.id_expedienteci
-					 AND de2.id_personal <> 0 )")
+					 AND de2.id_personal <> 0 )")*/
 			//->where("de.id_personal IN(".$data["id_delegado"].")")
 			->where('(ecc.tiposolicitud_expedienteci BETWEEN 1 AND 3)')
 			->group_by('ecc.tiposolicitud_expedienteci')

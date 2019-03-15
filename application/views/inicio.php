@@ -295,7 +295,7 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                     <div class="card-body">
                                         <h3 class="card-title">EXPEDIENTES POR RESULTADO </h3>
                                         <div class="row">
-                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(15%);" align="center">
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
                                                 <?php 
                                                     $total_exp_13 = $row->pendientes + $row->conciliados + $row->noconciliados + $row->inasistencias + $row->desistidas + $row->amultados + $row->reinstalo + $row->segundacita;
                                                 ?>
@@ -303,8 +303,8 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                                 <small style="font-size: 12px;">Casos de diferencia laboral y despidos de hecho o injustificados</small>
                                                 </h4>
                                             </div>
-                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
-                                                <div class="round round-lg align-self-center round-info"><i class="mdi mdi-human-child"></i></div>
+                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(30%);" align="center">
+                                                <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-account-switch"></i></div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <?php 
@@ -353,7 +353,7 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                         </div>
                                         <hr class="divider">
                                         <div class="row">
-                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(15%);" align="center">
+                                            <div class="col-lg-4" style="position: relative; top: 50%; transform: translateY(20%);" align="center">
                                                 <?php 
                                                     $total_exp_2 = $row->nonotificados + $row->notificado;
                                                 ?>
@@ -361,8 +361,8 @@ $color2 = array('#7f6fa0', '#d0d0d1', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
                                                 <small style="font-size: 12px;">Renuncia voluntaria</small>
                                                 </h4>
                                             </div>
-                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(25%);" align="center">
-                                                <div class="round round-lg align-self-center round-info"><i class="mdi mdi-walk"></i></div>
+                                            <div class="col-lg-2" style="position: relative; top: 50%; transform: translateY(15%);" align="center">
+                                                <div class="round round-lg align-self-center bg-inverse"><i class="mdi mdi-contact-mail"></i></div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <?php 
