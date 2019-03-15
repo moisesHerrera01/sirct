@@ -120,22 +120,8 @@ class Inicio_model extends CI_Model {
 			->group_by('ecc.tiposolicitud_expedienteci')
 			->order_by('ecc.tiposolicitud_expedienteci', 'ASC');
 
-		/*if($data["tipo"] == "mensual"){
-			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
-					->where('MONTH(ecc.fechacrea_expedienteci)', $data["value"]);
-	 	}else if($data["tipo"] == "trimestral"){
- 			$tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
-	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
-					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$tminicio."' AND '".$tmfin."'");
-	 	}else if($data["tipo"] == "semestral"){
- 			$smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
- 			$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
-					->where("MONTH(ecc.fechacrea_expedienteci) BETWEEN '".$sminicio."' AND '".$smfin."'");
-	 	}else if($data["tipo"] == "periodo"){
- 			$this->db->where("ecc.fechacrea_expedienteci BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
-	 	}else{
-	 		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"]);
-	 	}*/
+		$this->db->where('YEAR(ecc.fechacrea_expedienteci)', $data["anio"])
+			->where('MONTH(ecc.fechacrea_expedienteci)', $data["mes"]);
 
     return $query=$this->db->get();
     }
