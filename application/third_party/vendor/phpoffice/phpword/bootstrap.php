@@ -15,7 +15,7 @@
  * @license     http://www.gnu.org/licenses/lgpl.txt LGPL version 3
  */
 
-$vendorDirPath = realpath($_SERVER['DOCUMENT_ROOT'] .'/sirct/application/third_party' . '/vendor');
+$vendorDirPath = realpath(__DIR__ . '/vendor');
 if (file_exists($vendorDirPath . '/autoload.php')) {
     require $vendorDirPath . '/autoload.php';
 } else {

@@ -77,15 +77,16 @@ $(function(){
         var formData = new FormData(document.getElementById("formajax11"));
         formData.append("fecha_pago", $("#fecha_pago").val());
         formData.append("tipo_conciliacion", $("#tipo_conciliacion").val());
-        alert($("#tipo_conciliacion").val())
         j = ($('#nuevo').find('input').length)/2;
         i=1;
         while (i!=(j+1)) {
           formData.append("fecha_pago"+i, $("#fecha_pago"+i).val());
           i++;
         }
-        $('#modal_pagos').modal('hide');
-        $('#modal_resolucion').modal('show');
+          // alert($("#fecha_pago1").val())
+          // alert($("#primer_pago1").val())
+        // $('#modal_pagos').modal('hide');
+        // $('#modal_resolucion').modal('show');
 
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/pagos/gestionar_pagos_modal",
@@ -103,9 +104,11 @@ $(function(){
             //     swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             // }
         });
-      $('#modal_resolucion').remove();
+      $('#modal_pagos').modal('hide');
+      $('#modal_pagos').remove();
       $('.modal-backdrop').remove();
       $('body').removeClass('modal-open');
+      $('#modal_resolucion').modal('show');
       // tablasolicitudes();
     });
 });

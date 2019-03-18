@@ -207,7 +207,6 @@ class TemplateProcessor
      */
     public function setValue($search, $replace, $limit = self::MAXIMUM_REPLACEMENTS_DEFAULT)
     {
-        $replace = str_replace('<b>', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve"> ', $replace); $replace = str_replace('</b>', '</w:t></w:r><w:r><w:t>', $replace);
         if (is_array($search)) {
             foreach ($search as &$item) {
                 $item = self::ensureMacroCompleted($item);
