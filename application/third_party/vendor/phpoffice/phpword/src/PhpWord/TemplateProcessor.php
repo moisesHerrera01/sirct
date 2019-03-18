@@ -35,6 +35,7 @@ class TemplateProcessor
      * @var mixed
      */
     protected $zipClass;
+     private $temporaryDocumentRels;
 
     /**
      * @var string Temporary document filename (with path)
@@ -72,6 +73,7 @@ class TemplateProcessor
      */
     public function __construct($documentTemplate)
     {
+
         // Temporary document filename initialization
         $this->tempDocumentFilename = tempnam(Settings::getTempDir(), 'PhpWord');
         if (false === $this->tempDocumentFilename) {
@@ -101,6 +103,7 @@ class TemplateProcessor
             $index++;
         }
         $this->tempDocumentMainPart = $this->fixBrokenMacros($this->zipClass->getFromName($this->getMainPartName()));
+        $this->temporaryDocumentRels = $this->zipClass->getFromName('word/_rels/document.xml.rels');
     }
 
     /**
@@ -207,6 +210,7 @@ class TemplateProcessor
      */
     public function setValue($search, $replace, $limit = self::MAXIMUM_REPLACEMENTS_DEFAULT)
     {
+      $replace = str_replace('<b>', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve"> ', $replace); $replace = str_replace('</b>', '</w:t></w:r><w:r><w:t>', $replace);
         if (is_array($search)) {
             foreach ($search as &$item) {
                 $item = self::ensureMacroCompleted($item);
@@ -572,5 +576,50 @@ class TemplateProcessor
         }
 
         return substr($this->tempDocumentMainPart, $startPosition, ($endPosition - $startPosition));
+    }
+
+    public function setImageValue($search, $replace){
+        // Sanity check
+        if (!file_exists($replace)) {
+            throw new \Exception("Image not found at:'$replace'");
+        }
+
+        // Delete current image
+        $this->zipClass->deleteName('word/media/' . $search);
+
+        // Add a new one
+        $this->zipClass->addFile($replace, 'word/media/' . $search);
+    }
+
+    /**
+     * Search for the labeled image's rId
+     *
+     * @param string $search
+     */
+    public function seachImagerId($search){
+        if (substr($search, 0, 2) !== '${' && substr($search, -1) !== '}') {
+            $search = '${' . $search . '}';
+        }
+        $tagPos = strpos($this->temporaryDocumentRels, $search);
+        $rIdStart = strpos($this->temporaryDocumentRels, 'r:embed="',$tagPos)+9;
+        $rId=strstr(substr($this->temporaryDocumentRels, $rIdStart),'"', true);
+        return $rId;
+    }
+
+    /**
+     * Get img filename with it's rId
+     *
+     * @param string $rId
+     */
+    public function getImgFileName($rId){
+        $tagPos = strpos($this->temporaryDocumentRels, $rId);
+        $fileNameStart = strpos($this->temporaryDocumentRels, 'Target="media/',$tagPos)+14;
+        $fileName=strstr(substr($this->temporaryDocumentRels, $fileNameStart),'"', true);
+        return $fileName;
+    }
+
+    public function setImageValueAlt($searchAlt, $replace)
+    {
+        $this->setImageValue($this->getImgFileName($this->seachImagerId($searchAlt)),$replace);
     }
 }

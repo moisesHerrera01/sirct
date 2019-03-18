@@ -165,41 +165,43 @@ class Acta extends CI_Controller {
 
         $PHPWord = new PHPWord();
 
+
         switch ($caso) {
           case '1':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/AUDIENCIA_PF.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/AUDIENCIA_PF.zip');
             break;
           case '2':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/MULTA.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/MULTA.zip');
             break;
           case '3':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SEGUNDA_CITA.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SEGUNDA_CITA.zip');
             break;
           case '4':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/DESISTIDA.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/DESISTIDA.zip');
             break;
           case '5':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_PJ_estandar.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_PJ_estandar.zip');
             break;
           case '6':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_PJ_estandar.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_PJ_estandar.zip');
             break;
           case '7':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_RV.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_RV.zip');
             break;
           case '8':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_RV_ST.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_RV_ST.zip');
             break;
           case '9':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_RV_NCNP.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/SOLICITUD_RV_NCNP.zip');
             break;
           case '10':
-            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/PENDIENTE_SEGUNDA_CITA.docx');
+            $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actaAudiencia/PENDIENTE_SEGUNDA_CITA.zip');
             break;
           default:
             // code...
             break;
         }
+        $templateWord->setImageValueAlt('image1', $_SERVER['DOCUMENT_ROOT'].'/sirct/assets/logos_vista/izq_der.jpg');
         $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
         $templateWord->setValue('departamento', departamento($expediente->numerocaso_expedienteci));
         $templateWord->setValue('hora_audiencia', hora(date('G', strtotime($expediente->hora_fechasaudienciasci))));
@@ -229,6 +231,8 @@ class Acta extends CI_Controller {
         $templateWord->setValue('depto_representante_exp', $expediente->depto_representante_exp);
         $templateWord->setValue('acreditacion_representante_exp', mb_strtoupper($expediente->acreditacion_representante_exp));
         $templateWord->setValue('numero_folios', mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras($expediente->numero_folios)));
+        $templateWord->setValue('mun_solicitante', $expediente->municipio);
+        $templateWord->setValue('depto_solicitante', $expediente->departamento);
 
         if ($caso<5 || $caso==10) {
               $templateWord->setValue('representante_persona', mb_strtoupper($expediente->nombre_representantepersonaci.' '.$expediente->apellido_representantepersonaci));
@@ -258,21 +262,21 @@ class Acta extends CI_Controller {
             }
             switch ($expediente->asistieron) {
               case '1'://defensor
-                $solicitante="en representación de el(la) trabajador(a) $nombre_solicitante ambos(as) de generales conocidas en estas diligencias, el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, quien se identifica con su documento único de identidad $dui_defensor, y acredita su personería por medio de $credencial_defensor, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
+                $solicitante="en representación de el(la) trabajador(a) <b>$nombre_solicitante</b> ambos(as) de generales conocidas en estas diligencias, el(la) Defensor(a) Público(a) Laboral Licenciado(a) <b>$representante_persona</b>, quien se identifica con su documento único de identidad <b>$dui_defensor</b>, y acredita su personería por medio de <b>$credencial_defensor</b>, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
                 break;
               case '2'://defensor y trabajador
                 if ($expediente->id_fechasaudienciasci==$primera->id_fechasaudienciasci) {
-                  $solicitante="el(la) trabajador(a) $nombre_solicitante de generales conocidas en estas diligencias, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, quien se identifica con su documento único de identidad $dui_defensor, y acredita su personería por medio de $credencial_defensor, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
+                  $solicitante="el(la) trabajador(a) <b>$nombre_solicitante</b> de generales conocidas en estas diligencias, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) <b>$representante_persona</b>, quien se identifica con su documento único de identidad <b>$dui_defensor</b>, y acredita su personería por medio de <b>$credencial_defensor</b>, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
                 }else {
                   if ($segunda->id_defensorlegal==$primera->id_defensorlegal) {
-                    $solicitante="el(la) trabajador(a) $nombre_solicitante, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, ambos(as) de generales conocidas en estas diligencias. Y ";
+                    $solicitante="el(la) trabajador(a) <b>$nombre_solicitante</b>, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) <b>$representante_persona</b>, ambos(as) de generales conocidas en estas diligencias. Y ";
                   }else {
-                    $solicitante="el(la) trabajador(a) $nombre_solicitante de generales conocidas en estas diligencias, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) $representante_persona, quien se identifica con su documento único de identidad $dui_defensor, y acredita su personería por medio de $credencial_defensor, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
+                    $solicitante="el(la) trabajador(a) <b>$nombre_solicitante</b> de generales conocidas en estas diligencias, quien se hace acompañar de el(la) Defensor(a) Público(a) Laboral Licenciado(a) <b>$representante_persona</b>, quien se identifica con su documento único de identidad <b>$dui_defensor</b>, y acredita su personería por medio de <b>$credencial_defensor</b>, la cual se agrega a estas diligencias en fotocopia simple luego de haber sido debidamente confrontada con su original,  y ";
                   }
                 }
                 break;
               case '3'://trabajador
-                $solicitante="el(la) trabajador(a) $nombre_solicitante de generales conocidas en estas diligencias,  y";
+                $solicitante="el(la) trabajador(a) <b>$nombre_solicitante</b> de generales conocidas en estas diligencias,  y";
                 break;
               default:
                 break;
@@ -293,6 +297,8 @@ class Acta extends CI_Controller {
               $templateWord->setValue('ausente',$inasistencia);
 
         }
+
+
         if ($caso==5 || $caso==6) {
             if ($expediente->tiposolicitud_empresa==2) {
               $persona = "a la Sociedad";
@@ -300,7 +306,7 @@ class Acta extends CI_Controller {
               $persona = "al Sr(a)";
             }
           if ($caso==6) {
-            $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER: ".$persona." $expediente->nombre_empresa representado(a) legalmente por $expediente->nombres_representante, que en las diligencias promovidas por el trabajador(a) $expediente->solicitante se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
+            $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER: ".$persona." <b>$expediente->nombre_empresa</b> representado(a) legalmente por <b>$expediente->nombres_representante</b>, que en las diligencias promovidas por el trabajador(a) <b>$expediente->solicitante</b> se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
             $cuerpo_esquela="’’’’’’’’’’’’EMAYARI’’’’’’’’’’ANTE MI XCM SRIA.’’’’’’’’’RUBRICAS’’’’’’’";
             $pie_esquela="Y para que le sirva de legal notificación y citación, se expide la presente esquela en ________________, a las _____________horas y ________________ minutos del día __________________ del mes de ___________ de dos mil ______________.";
             $templateWord->setValue('encabezado_esquela', $encabezado_esquela);
@@ -318,15 +324,15 @@ class Acta extends CI_Controller {
 
           if ($expediente->tiposolicitud_empresa==2) {
             if ($expediente->motivo_expedienteci==1) {
-              $tipo_empresa = "  <b>quien laboraba</b> para la Sociedad $expediente->nombre_empresa que puede abreviarse $expediente->abreviatura_empresa, representada legalemente por $expediente->representante_legal, ubicada en $expediente->direccion_empresa, DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto, en que fue despedido(a) de su trabajo sin que hasta la fecha se le haya pagado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que, ";
+              $tipo_empresa = "  quien laboraba para la Sociedad <b>$expediente->nombre_empresa</b> que puede abreviarse <b>$expediente->abreviatura_empresa</b>, representada legalemente por <b>$expediente->representante_legal</b>, ubicada en <b>$expediente->direccion_empresa</b>, <b>DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto</b>, en que fue despedido(a) de su trabajo sin que hasta la fecha se le haya pagado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que, ";
             }else {
-              $tipo_empresa = " y DICE: Que laboraba para la Sociedad $expediente->nombre_empresa que puede abreviarse $expediente->abreviatura_empresa,representada legalemente por $expediente->representante_legal, ubicada en $expediente->direccion_empresa, DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
+              $tipo_empresa = " y DICE: Que laboraba para la Sociedad <b>$expediente->nombre_empresa</b> que puede abreviarse <b>$expediente->abreviatura_empresa</b>,representada legalemente por <b>$expediente->representante_legal</b>, ubicada en <b>$expediente->direccion_empresa</b>, <b>DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto</b>, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
             }
           }else {
             if ($expediente->motivo_expedienteci==1) {
-              $tipo_empresa = "quien laboraba para el señor $expediente->nombre_empresa, que puede ser ubicado en: $expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto, en que fue despedido(a) de su trabajo sin que hasta la fecha se le cancelado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que";
+              $tipo_empresa = "quien laboraba para el señor <b>$expediente->nombre_empresa</b>, que puede ser ubicado en: <b>$expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto</b>, en que fue despedido(a) de su trabajo sin que hasta la fecha se le cancelado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que";
             }else {
-              $tipo_empresa = "y DICE Que laboraba para el señor $expediente->nombre_empresa, que puede ser ubicado en: $expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
+              $tipo_empresa = "y DICE Que laboraba para el señor <b>$expediente->nombre_empresa</b>, que puede ser ubicado en: <b>$expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto</b>, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
             }
           }
           $templateWord->setValue('direccion_empresa', mb_strtoupper($expediente->direccion_empresa));
@@ -432,7 +438,8 @@ class Acta extends CI_Controller {
       $this->load->library("CifrasEnLetras");
 
       $PHPWord = new PHPWord();
-      $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PJ.docx');
+      $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PJ.zip');
+      $templateWord->setImageValueAlt('image1', $_SERVER['DOCUMENT_ROOT'].'/sirct/assets/logos_vista/izq_der.jpg');
 
       if ($exp->tiposolicitud_empresa==2) {
         $persona = "a la Sociedad";
@@ -440,7 +447,7 @@ class Acta extends CI_Controller {
         $persona = "al Sr(a)";
       }
     if ($caso==2) {
-      $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER al Sr(a): $exp->nombre_personaci $exp->apellido_personaci, que en las diligencias promovidas por ".$persona." $exp->nombre_empresa representado(a) legalmente por $exp->rep_legal se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
+      $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER al Sr(a): <b>$exp->nombre_personaci $exp->apellido_personaci</b>, que en las diligencias promovidas por ".$persona." <b>$exp->nombre_empresa</b> representado(a) legalmente por <b>$exp->rep_legal</b> se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
       $cuerpo_esquela="’’’’’’’’’’’’EMAYARI’’’’’’’’’’ANTE MI XCM SRIA.’’’’’’’’’RUBRICAS’’’’’’’";
       $pie_esquela="Y para que le sirva de legal notificación y citación, se expide la presente esquela en ________________, a las _____________horas y ________________ minutos del día __________________ del mes de ___________ de dos mil ______________.";
       $templateWord->setValue('encabezado_esquela', $encabezado_esquela);
@@ -522,8 +529,9 @@ class Acta extends CI_Controller {
       $this->load->library("CifrasEnLetras");
 
       $PHPWord = new PHPWord();
-      $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_MENOR.docx');
+      $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/actasSolicitud/SOLICITUD_PN_MENOR.zip');
 
+      $templateWord->setImageValueAlt('image1', $_SERVER['DOCUMENT_ROOT'].'/sirct/assets/logos_vista/izq_der.jpg');
       $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
       $templateWord->setValue('departamento', departamento($expediente->numerocaso_expedienteci));
 
@@ -568,11 +576,11 @@ class Acta extends CI_Controller {
         }else {
           $pago = mb_strtoupper(CifrasEnLetras::convertirEurosEnLetras(number_format($expediente->salario_personaci,2,',','')));
         }
-        $salario_pago = "devengando un salario de $pago, mensuales, el cual le era pagado en forma $expediente->formapago_personaci,";
+        $salario_pago = "devengando un salario de <b>$pago</b>, mensuales, el cual le era pagado en forma <b>$expediente->formapago_personaci</b>,";
       }
       $notificar_correo = "";
       if ($expediente->correoelectronico_empresa!="" && $expediente->correoelectronico_empresa!=NULL) {
-        $notificar_correo = ", o mediante su dirección de correo electrónico $expediente->correoelectronico_empresa";
+        $notificar_correo = ", o mediante su dirección de correo electrónico <b>$expediente->correoelectronico_empresa</b>";
       }
       $templateWord->setValue('notificar_correo', $notificar_correo);
       $templateWord->setValue('salario_menor', $salario_pago);

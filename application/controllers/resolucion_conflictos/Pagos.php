@@ -103,12 +103,12 @@ class Pagos extends CI_Controller {
 	}
 
 	public function gestionar_pagos_modal(){
+		$this->load->library("CifrasEnLetras");
 		$monto_total = $this->input->post('monto_pago');
+		$concat_pagos = "";
 
 		$data = array(
 			'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'))),
-			// 'montopago_fechaspagosci' => $this->input->post('primer_pago'),
-			// 'indemnizacion_fechaspagosci' => $monto_total = $monto_total - $this->input->post('primer_pago'),
 			'id_expedienteci' => $this->input->post('id_expedienteci')
 		 );
 		 if ($this->input->post('tipo_conciliacion')==1) {
@@ -119,9 +119,23 @@ class Pagos extends CI_Controller {
 			 $data['indemnizacion_fechaspagosci'] = $monto_total = $monto_total - $this->input->post('primer_pago');
 		 }
 
+		 if (substr($this->input->post('primer_pago'),-3)==".00") {
+			 $pago = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($this->input->post('primer_pago'),0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
+		 }else {
+			 $pago = mb_strtoupper(CifrasEnLetras::convertirEurosEnLetras(number_format($this->input->post('primer_pago'),2,',','')));
+		 }
+		 $concat_pagos .= "LA CANTIDAD DE $pago, ";
 		 $this->pagos_model->insertar_pago($data);
 		 $i=1;
+
 		 while (!empty($this->input->post('fecha_pago'.$i))) {
+			 if (substr($this->input->post('primer_pago'.$i),-3)==".00") {
+				 $pago = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($this->input->post('primer_pago'.$i),0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
+			 }else {
+				 $pago = mb_strtoupper(CifrasEnLetras::convertirEurosEnLetras(number_format($this->input->post('primer_pago'.$i),2,',','')));
+			 }
+			 $concat_pagos .=  ", LA CANTIDAD DE $pago, ";
+
 			 $data = array(
 				 'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'.$i))),
 				 'montopago_fechaspagosci' => $this->input->post('primer_pago'.$i),
@@ -131,6 +145,7 @@ class Pagos extends CI_Controller {
 				$this->pagos_model->insertar_pago($data);
 				$i++;
 		 }
+		 echo $concat_pagos;
 	}
 
 }

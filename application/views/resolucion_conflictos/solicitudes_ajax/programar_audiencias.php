@@ -66,7 +66,7 @@ var i =1;
 function agregar(){
   var html = "<div id='fhpago"+i+"' class='form-group col-lg-5'>" +
         "<div class='controls'>" +
-          "<input type='datetime-local' class='form-control' id='fecha_pago"+i+"' nombre='fecha_pago"+i+"'>" +
+          "<input type='date' class='form-control' id='fecha_pago"+i+"' nombre='fecha_pago"+i+"'>" +
         "</div>" +
       "</div>" +
 
