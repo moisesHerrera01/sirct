@@ -143,7 +143,7 @@ class Acta extends CI_Controller {
         $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
 
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        header("Content-Disposition: attachment; filename='ficha_solicitud_pnpj_".date('dmy_His').".docx'");
+        header("Content-Disposition: attachment; filename=ficha_solicitud_pnpj_".date('dmy_His').".docx");
         header('Cache-Control: max-age=0');
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
@@ -322,11 +322,19 @@ class Acta extends CI_Controller {
           $mes_conflicto = mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci))));
           $anio_conflicto = anio(date('Y', strtotime($expediente->fechaconflicto_personaci)));
 
+          $abreviatura = "";
+          if ($expediente->abreviatura_empresa!=NULL && $expediente->abreviatura_empresa!="") {
+            $abreviatura = "que puede abreviarse <b>$expediente->abreviatura_empresa</b>";
+          }else {
+            $abreviatura = "";
+          }
+
+
           if ($expediente->tiposolicitud_empresa==2) {
             if ($expediente->motivo_expedienteci==1) {
-              $tipo_empresa = "  quien laboraba para la Sociedad <b>$expediente->nombre_empresa</b> que puede abreviarse <b>$expediente->abreviatura_empresa</b>, representada legalemente por <b>$expediente->representante_legal</b>, ubicada en <b>$expediente->direccion_empresa</b>, <b>DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto</b>, en que fue despedido(a) de su trabajo sin que hasta la fecha se le haya pagado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que, ";
+              $tipo_empresa = "  quien laboraba para la Sociedad <b>$expediente->nombre_empresa</b> $abreviatura, representada legalemente por <b>$expediente->representante_legal</b>, ubicada en <b>$expediente->direccion_empresa</b>, <b>DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto</b>, en que fue despedido(a) de su trabajo sin que hasta la fecha se le haya pagado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que, ";
             }else {
-              $tipo_empresa = " y DICE: Que laboraba para la Sociedad <b>$expediente->nombre_empresa</b> que puede abreviarse <b>$expediente->abreviatura_empresa</b>,representada legalemente por <b>$expediente->representante_legal</b>, ubicada en <b>$expediente->direccion_empresa</b>, <b>DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto</b>, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
+              $tipo_empresa = " y DICE: Que laboraba para la Sociedad <b>$expediente->nombre_empresa</b> $abreviatura,representada legalemente por <b>$expediente->representante_legal</b>, ubicada en <b>$expediente->direccion_empresa</b>, <b>DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto</b>, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
             }
           }else {
             if ($expediente->motivo_expedienteci==1) {
@@ -383,28 +391,28 @@ class Acta extends CI_Controller {
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         switch ($caso) {
           case '1':
-            header("Content-Disposition: attachment; filename='ACTA_AUDIENCIA_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=ACTA_AUDIENCIA_".date('dmy_His').".docx");
             break;
           case '2':
-            header("Content-Disposition: attachment; filename='MULTA_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=MULTA_".date('dmy_His').".docx");
             break;
           case '3':
-            header("Content-Disposition: attachment; filename='SEGUNDA_CITA_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=SEGUNDA_CITA_".date('dmy_His').".docx");
             break;
           case '4':
-            header("Content-Disposition: attachment; filename='DESISTIDA_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=DESISTIDA_".date('dmy_His').".docx");
             break;
           case '5':
-            header("Content-Disposition: attachment; filename='ACTA_SOLICITUD_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=ACTA_SOLICITUD_".date('dmy_His').".docx");
             break;
           case '6':
-            header("Content-Disposition: attachment; filename='ESQUELA_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=ESQUELA_".date('dmy_His').".docx");
             break;
           case '7':
-            header("Content-Disposition: attachment; filename='ACTA_RV".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=ACTA_RV".date('dmy_His').".docx");
             break;
           case '8':
-            header("Content-Disposition: attachment; filename='ACTA_RV_ST_".date('dmy_His').".docx'");
+            header("Content-Disposition: attachment; filename=ACTA_RV_ST_".date('dmy_His').".docx");
             break;
           case '9':
             header("Content-Disposition: attachment; filename=ACTA_RV_NCNP_".date('dmy_His').".docx");
@@ -510,7 +518,7 @@ class Acta extends CI_Controller {
       $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
 
       header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-      header("Content-Disposition: attachment; filename='SOLICITUD_PJ_".date('dmy_His').".docx'");
+      header("Content-Disposition: attachment; filename=SOLICITUD_PJ_".date('dmy_His').".docx");
       header('Cache-Control: max-age=0');
 
       $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');
@@ -601,7 +609,7 @@ class Acta extends CI_Controller {
       $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
 
       header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-      header("Content-Disposition: attachment; filename='SOLICITUD_PJ_MENOR_".date('dmy_His').".docx'");
+      header("Content-Disposition: attachment; filename=SOLICITUD_PJ_MENOR_".date('dmy_His').".docx");
       header('Cache-Control: max-age=0');
 
       $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord2, 'Word2007');

@@ -1011,7 +1011,7 @@ function tabla_audiencias(id_expedienteci){
 
 function tabla_representantes(){
     var id_empresa = $("#establecimiento").val();
-    alert(id_empresa);
+    // alert(id_empresa);
     var id_representanteci = $("#id_representanteci").val();
     if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
     }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
@@ -1798,7 +1798,7 @@ function volver(num) {
 
                                   <div class="form-group col-lg-4" style="height: 83px;">
                                       <h5>Salario($):</h5>
-                                      <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01" min="1">
+                                      <input type="number" id="salario" name="salario" class="form-control" placeholder="Salario" step="0.01">
                                       <div class="help-block"></div>
                                   </div>
                                 </div>
@@ -2772,12 +2772,12 @@ function ocultar_pn(){
   var value = $("#tipo_establecimiento").val();
   if (value==1) {
     // $("#razon_social").removeAttr("required");
-    $("#abre_establecimiento").removeAttr("required");
+    // $("#abre_establecimiento").removeAttr("required");
     $('#ocultar_pn').hide(500);
   }else {
      $('#ocultar_pn').show(500);
      // $("#razon_social").attr("required",'required');
-     $("#abre_establecimiento").attr("required",'required');
+     // $("#abre_establecimiento").attr("required",'required');
   }
 }
 

@@ -578,7 +578,7 @@ class Expediente extends CI_Controller {
 				echo "completo";
 			}
 		}else if($empresa->tiposolicitud_empresa == 2){
-			if(empty($empresa->tiposolicitud_empresa) || empty($empresa->nombre_empresa) || empty($empresa->abreviatura_empresa) || empty($empresa->direccion_empresa) || empty($empresa->id_municipio) || empty($empresa->id_catalogociiu)){
+			if(empty($empresa->tiposolicitud_empresa) || empty($empresa->nombre_empresa) || /*empty($empresa->abreviatura_empresa) ||*/ empty($empresa->direccion_empresa) || empty($empresa->id_municipio) || empty($empresa->id_catalogociiu)){
 				print json_encode( $empresa );
 			}else{
 				echo "completo";

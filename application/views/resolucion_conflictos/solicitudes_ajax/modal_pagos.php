@@ -7,7 +7,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 
-<div class="modal fade" id="modal_pagos" role="dialog">
+<div class="modal fade" id="modal_pagos" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
