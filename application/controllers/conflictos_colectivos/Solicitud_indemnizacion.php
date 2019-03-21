@@ -340,4 +340,8 @@ class Solicitud_indemnizacion extends CI_Controller {
 		$this->load->view('conflictos_colectivos/solicitud_indemnizacion_ajax/modal_actas',array('pagos' => $pagos));
 	}
 
+	public function tabla_representantes(){
+	$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_representantes');
+}
+
 }

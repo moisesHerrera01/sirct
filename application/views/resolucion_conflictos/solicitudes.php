@@ -530,6 +530,7 @@ function cerrar_combo_establecimiento() {
 }
 
     function verificar_empresa_completa(id_empresa) {
+      if($("#cnt_form4").is(":visible")){
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/verificar_empresa_completa",
             type: "POST",
@@ -538,25 +539,22 @@ function cerrar_combo_establecimiento() {
             }
         })
         .done(function (res) {
-            if(res != "completo"){
-                result = JSON.parse(res);
-                $("#id_empresaci").val(result.id_empresa);
-                $("#tipo_establecimiento").val(result.tiposolicitud_empresa);
-                $("#razon_social").val(result.razon_social);
-                $("#nombre_establecimiento").val(result.nombre_empresa);
-                $("#abre_establecimiento").val(result.abreviatura_empresa);
-                $("#dir_establecimiento").val(result.direccion_empresa);
-                $("#telefono_establecimiento").val(result.telefono_empresa);
-                $("#municipio2").val(result.id_municipio).trigger('change.select2');
-                $("#act_economica").val(result.id_catalogociiu).trigger('change.select2');
-                $("#band3").val('edit');
+            result = JSON.parse(res);
+            $("#id_empresaci").val(result.id_empresa);
+            $("#tipo_establecimiento").val(result.tiposolicitud_empresa);
+            $("#razon_social").val(result.razon_social);
+            $("#nombre_establecimiento").val(result.nombre_empresa);
+            $("#abre_establecimiento").val(result.abreviatura_empresa);
+            $("#dir_establecimiento").val(result.direccion_empresa);
+            $("#telefono_establecimiento").val(result.telefono_empresa);
+            $("#municipio2").val(result.id_municipio).trigger('change.select2');
+            $("#act_economica").val(result.id_catalogociiu).trigger('change.select2');
+            $("#band3").val('edit');
 
-                $("#modal_establecimiento").modal('show');
-                $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
-            }else{
-                $("#alert_empresa").html('');
-            }
+            $("#modal_establecimiento").modal('show');
+            $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, verifique y/o complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
         });
+      }
     }
 
     function limpiar_modal_empresa(){
@@ -616,14 +614,19 @@ function combo_establecimiento(seleccion){
               if (data.id == 0) {
                 cerrar_combo_establecimiento();
                 $('#modal_establecimiento').modal('show');
+                tabla_representantes();
+              } else {
+                tabla_representantes();
+                verificar_empresa_completa(data.id);
               }
             });
-            tabla_representantes()
             if (seleccion != '') {
               var newOption = new Option(res.establecimiento.nombre_empresa,res.establecimiento.id_empresa, true, true);
               $('#establecimiento').append(newOption).trigger('change');
+              tabla_representantes();
             }
         });
+
     });
 }
 
@@ -1011,26 +1014,22 @@ function tabla_audiencias(id_expedienteci){
 
 function tabla_representantes(){
     var id_empresa = $("#establecimiento").val();
-    // alert(id_empresa);
     var id_representanteci = $("#id_representanteci").val();
-    if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
-    }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
-    xmlhttpB.onreadystatechange=function(){
-        if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
-            document.getElementById("cnt_tabla_representantes").innerHTML=xmlhttpB.responseText;
-            $('[data-toggle="tooltip"]').tooltip();
-            $('#myTable2').DataTable();
-            if(id_empresa != ""){
-                  verificar_empresa_completa(id_empresa);
-              }
-        }
-    }
-    xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
-    xmlhttpB.send();
+
+    $.ajax({
+      url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes",
+      type: "get",
+      dataType: "html",
+      data: {id_empresa: id_empresa,id_representanteci : id_representanteci}
+    })
+    .done(function(res){
+      $('#cnt_tabla_representantes').html(res);
+      $('[data-toggle="tooltip"]').tooltip();
+      $('#myTable2').DataTable();
+    });
 }
 
 function tabla_pagos(id_expedienteci){
-  //alert(id_expedienteci);
     if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttpB=new XMLHttpRequest();
     }else{// code for IE6, IE5
@@ -1138,6 +1137,7 @@ function cambiar_nuevo() {
 
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
     combo_establecimiento('');
+    tabla_representantes();
 }
 
 function cambiar_nuevo2(){
@@ -1290,6 +1290,7 @@ function cambiar_editar(id_expedienteci,bandera){
         document.getElementById('no_e').checked =true;
       }
       combo_establecimiento(result.id_empresaci);
+      tabla_representantes();
       /*Fin expediente*/
 
       $("#band").val("edit");
@@ -1328,7 +1329,6 @@ function cambiar_editar2(id_representante, dui_representante, nombres_representa
   combo_profesiones(id_titulo_academico);
   combo_municipio2(id_municipio);
   combo_doc_identidad_rep(tipo_doc);
-  // alert(id_municipio)
   $("#band4").val(band);
 
   if(band == "edit"){
@@ -1962,7 +1962,6 @@ function volver(num) {
     <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
           <input type="hidden" id="band3" name="band3" value="save">
           <input type="hidden" id="id_empresaci" name="id_empresaci" value="">
-          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de parte empleadora</h4>
             </div>
@@ -2492,43 +2491,6 @@ $(function(){
     });
 });
 
-// $(function(){
-//     $("#formajax3").on("submit", function(e){
-//         e.preventDefault();
-//         var act_representante = $("#tabla_representante tbody tr.table-active");
-//         var f = $(this);
-//         var formData = new FormData(document.getElementById("formajax3"));
-//
-//         $.ajax({
-//           url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/gestionar_establecimiento",
-//           type: "post",
-//           dataType: "html",
-//           data: formData,
-//           cache: false,
-//           contentType: false,
-//           processData: false
-//         })
-//         .done(function(res){
-//             if(res == "fracaso"){
-//               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-//             }else{
-//               swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-//
-//               var data = {
-//                   id: res,
-//                   text: $("#nombre_establecimiento").val()
-//               };
-//
-//               var newOption = new Option(data.text, data.id, false, false);
-//               $('#establecimiento').append(newOption).trigger('change');
-//               $('#establecimiento').val(data.id).trigger("change");
-//               $('#modal_establecimiento').modal('toggle');
-//             }
-//         });
-//
-//     });
-// });
-
 $("#formajax3").on("submit", function(e){
     e.preventDefault();
 
@@ -2550,11 +2512,9 @@ $("#formajax3").on("submit", function(e){
         processData: false
     })
     .done(function(res){
-      //console.log(res)
       res = res.split(",");
         if(res[0] == "exito"){
             if($("#band3").val() == "save"){
-                //$("#id_empresa").val(res[1])
                 $("#modal_establecimiento").modal('hide');
                 $.toast({ heading: 'Registro exitoso', text: 'Registro de parte empleadora exitoso', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
                 combo_establecimiento(res[1]);

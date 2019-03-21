@@ -215,12 +215,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   if (data.id == 0) {
                     cerrar_combo_establecimiento();
                     $('#modal_establecimiento').modal('show');
+                    tabla_representantes();
+                  } else {
+                    tabla_representantes();
+                    verificar_empresa_completa(data.id);
                   }
                 });
-                tabla_representantes()
                 if (seleccion != '') {
                   var newOption = new Option(res.establecimiento.nombre_empresa,res.establecimiento.id_empresa, true, true);
                   $('#establecimiento').append(newOption).trigger('change');
+                  tabla_representantes()
                 }
             });
         });
@@ -258,24 +262,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             }
         })
         .done(function (res) {
-            if(res != "completo"){
-                result = JSON.parse(res);
-                $("#id_empresaci").val(result.id_empresa);
-                $("#tipo_establecimiento").val(result.tiposolicitud_empresa);
-                $("#razon_social").val(result.razon_social);
-                $("#nombre_establecimiento").val(result.nombre_empresa);
-                $("#abre_establecimiento").val(result.abreviatura_empresa);
-                $("#dir_establecimiento").val(result.direccion_empresa);
-                $("#telefono_establecimiento").val(result.telefono_empresa);
-                $("#municipio2").val(result.id_municipio).trigger('change.select2');
-                $("#act_economica").val(result.id_catalogociiu).trigger('change.select2');
-                $("#band3").val('edit');
+            result = JSON.parse(res);
+            $("#id_empresaci").val(result.id_empresa);
+            $("#tipo_establecimiento").val(result.tiposolicitud_empresa);
+            $("#razon_social").val(result.razon_social);
+            $("#nombre_establecimiento").val(result.nombre_empresa);
+            $("#abre_establecimiento").val(result.abreviatura_empresa);
+            $("#dir_establecimiento").val(result.direccion_empresa);
+            $("#telefono_establecimiento").val(result.telefono_empresa);
+            $("#municipio2").val(result.id_municipio).trigger('change.select2');
+            $("#act_economica").val(result.id_catalogociiu).trigger('change.select2');
+            $("#band3").val('edit');
 
-                $("#modal_establecimiento").modal('show');
-                $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
-            }else{
-                $("#alert_empresa").html('');
-            }
+            $("#modal_establecimiento").modal('show');
+            $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, verifique y/o complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
         });
     }
 
@@ -512,6 +512,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
         $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
         combo_establecimiento('');
+        tabla_representantes();
     }
 
     function cambiar_editar(id_personaci, bandera) {
@@ -553,6 +554,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     combo_actividad_economica(result.id_catalogociiu);
                     combo_municipio(result.id_municipio1);
                     combo_establecimiento(result.id_empresaci);
+                    tabla_representantes();
                     combo_nacionalidades(result.nacionalidad_personaci);
 
                     /*Fin expediente*/
@@ -938,21 +940,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     function tabla_representantes(){
         var id_empresa = $("#establecimiento").val();
         var id_representanteci = $("#id_representanteci").val();
-        if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
-        }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
-        xmlhttpB.onreadystatechange=function(){
-            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
-                document.getElementById("cnt_tabla_representantes").innerHTML=xmlhttpB.responseText;
-                $('[data-toggle="tooltip"]').tooltip();
-                $('#myTable2').DataTable();
-                if(id_empresa != ""){
-                  verificar_empresa_completa(id_empresa);
-                }
-            }
-        }
-        xmlhttpB.open("GET","<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes?id_empresa="+id_empresa+"&id_representanteci="+id_representanteci,true);
-        xmlhttpB.send();
+
+        $.ajax({
+          url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/tabla_representantes",
+          type: "get",
+          dataType: "html",
+          data: {id_empresa: id_empresa,id_representanteci : id_representanteci}
+        })
+        .done(function(res){
+          $('#cnt_tabla_representantes').html(res);
+          $('[data-toggle="tooltip"]').tooltip();
+          $('#myTable2').DataTable();
+        });
     }
+
 
     function validar_establecimiento(){
         var establecimiento = $("#establecimiento").val();
