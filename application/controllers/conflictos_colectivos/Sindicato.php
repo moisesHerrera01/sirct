@@ -5,7 +5,7 @@ class Sindicato extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-    $this->load->model( array('sindicatos_model'));
+    $this->load->model( array('sindicatos_model','solicitudes_model'));
 	}
 
 	public function index(){
@@ -68,6 +68,20 @@ class Sindicato extends CI_Controller {
 			)
 		);
 
+	}
+
+		public function tabla_representantes(){
+		$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_representantes');
+	}
+
+	public function combo_tipo_doc() {
+		$data = $this->solicitudes_model->obtener_tipo_documentos();
+		$this->load->view('conflictos_colectivos/sindicatos_ajax/combo_tipo_doc',
+			array(
+				'id' => $this->input->post('id'),
+				'doc_identidad' => $data
+			)
+		);
 	}
 }
 ?>

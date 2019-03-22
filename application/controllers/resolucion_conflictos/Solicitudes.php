@@ -114,7 +114,7 @@ class Solicitudes extends CI_Controller {
 	}
 
 	public function gestionar_representante(){
-		if($this->input->post('band4') == "save"){
+		if($this->input->post('band4') == "save" || $this->input->post('band5') == "save"){
 			$data = array(
 			'id_empresa' => $this->input->post('id_empresa'),
 			'nombres_representante' => mb_strtoupper($this->input->post('nombres_representante')),
@@ -130,7 +130,7 @@ class Solicitudes extends CI_Controller {
 			'id_doc_identidad' => $this->input->post('rep_tipo_doc')
 			);
       		echo $this->solicitud_juridica_model->insertar_representante($data);
-		}else if($this->input->post('band4') == "edit"){
+		}else if($this->input->post('band4') == "edit" || $this->input->post('band5') == "edit"){
       		$data = array(
 	    'id_representante' => $this->input->post('id_representante'),
 	    'id_empresa' => $this->input->post('id_empresa'),

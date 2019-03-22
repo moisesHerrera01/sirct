@@ -14,19 +14,16 @@ function nav(value) {
   swal({ title: "¡Acta generada éxitosamente!", type: "success", showConfirmButton: true });
   $("#modal_actas_tipo").modal("hide");
   tabla_audiencias($("#id_expedienteci_copia2").val());
-  //cerrar_mantenimiento();
 }
 
 function validar_establecimiento(){
     var establecimiento = $("#establecimiento").val();
     var registros = $("#tabla_representante tbody tr.table-active");
 
-    if(establecimiento == "" /*|| registros.length == 0*/){
-        if(establecimiento == ""){
-            swal({ title: "Seleccione la parte empleadora", text: "No se ha seleccionado la parte empleadora.", type: "warning", showConfirmButton: true });
-        /*}else{
-            swal({ title: "Seleccione una persona representante", text: "Agregue o seleccione una persona representante de la lista.", type: "warning", showConfirmButton: true });
-        */}
+    if(establecimiento == ""){
+      if(establecimiento == ""){
+          swal({ title: "Seleccione la parte empleadora", text: "No se ha seleccionado la parte empleadora.", type: "warning", showConfirmButton: true });
+        }
     }else{
         open_form(2);
     }
@@ -106,22 +103,6 @@ function iniciar(){
         $("#cnt_tabla").html("Usted no tiene permiso para este formulario.");
     <?php } ?>
 }
-
-// function seleccionar_representante(obj, id_representanteci){
-//     $("#id_representanteci").val(id_representanteci)
-//     $(obj).parent().addClass('table-active active');
-//     $(obj).parent().siblings('tr').removeClass('table-active active');
-//     var tds = $(obj).siblings('td');
-//
-//     var trs = $("#tabla_representante tbody tr");
-//     for (var i = 0; i < trs.length; i+=1) {
-//         var td = $(trs[i]).children('td');
-//         $(td[0]).html('');
-//     }
-//
-//
-//     $(tds[0]).html('<span class="round round-primary">R</span>');
-// }
 
 function cambiar_update_post(id_personaci,bandera){
   open_form(1);
@@ -314,7 +295,6 @@ function convert_lim_text(lim){
 
 function modal_delegado(id_expedienteci,id_personal) {
     $("#id_expedienteci_copia").val(id_expedienteci);
-    // $("#id_personal_copia").val(id_personal).trigger('change.select2');
     $("#modal_delegado").modal("show");
     combo_cambiar_delegado(id_personal);
 }
@@ -390,7 +370,6 @@ function generar_actas_tipo() {
       if(res !="fracaso"){
         cerrar_mantenimiento()
         tablasolicitudes();
-        //tabla_audiencias(id_expedienteci);
         swal({ title: "¡Acta generada exitosamente!", type: "success", showConfirmButton: true });
       }else{
           swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
@@ -442,19 +421,6 @@ function cambiar_estado() {
     });
 }
 
-// function resolucion(id_expedienteci) {
-//   $.ajax({
-//     url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/resolucion_expediente",
-//     type: "post",
-//     dataType: "html",
-//     data: {id : id_expedienteci}
-//   })
-//   .done(function(res){
-//     $('#cnt_modal_acciones').html(res);
-//     $('#modal_resolucion').modal('show');
-//   });
-// }
-
 var estado_pestana = "";
 function cambiar_pestana(tipo){
     estado_pestana = tipo;
@@ -485,34 +451,7 @@ function cambiar_eliminar3(estado){
     });
 }
 
-/*function combo_establecimiento(seleccion){
-
-  $.ajax({
-    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
-    type: "post",
-    dataType: "html",
-    data: {id : seleccion}
-  })
-  .done(function(res){
-    $('#div_combo_establecimiento').html(res);
-    $(".est").select2({
-
-      'language': {
-        noResults: function () {
-          return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevo registro" onClick="cerrar_combo_establecimiento()">Agregar uno nuevo</a>';
-        }
-      },
-      'escapeMarkup': function (markup) {
-        return markup;
-      }
-    });
-  });
-
-}*/
-
 function cerrar_combo_establecimiento() {
-    //var select2 = $('.select2-search__field').val();
-    //$("#nombre_establecimiento").val(select2);
 
     $("#id_empresaci").val('');
     $("#tipo_establecimiento").val('');
@@ -648,7 +587,6 @@ function combo_defensores(seleccion){
                     }
                 }, 'escapeMarkup': function (markup) { return markup; }
             });
-            //tabla_representantes()
         });
     });
 }
@@ -983,7 +921,6 @@ function tabla_delegados(id_expedienteci){
     xmlhttpB.onreadystatechange=function(){
         if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
             document.getElementById("cnt_tabla_delegados").innerHTML=xmlhttpB.responseText;
-            //$('[data-toggle="tooltip"]').tooltip();
             $('#myTable').DataTable();
         }
     }

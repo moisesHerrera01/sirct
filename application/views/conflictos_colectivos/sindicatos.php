@@ -555,7 +555,7 @@ function tabla_representantes(){
     var id_representanteci = $("#id_representanteci").val();
 
     $.ajax({
-      url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/tabla_representantes",
+      url: "<?php echo site_url(); ?>/conflictos_colectivos/sindicato/tabla_representantes",
       type: "get",
       dataType: "html",
       data: {id_empresa: id_empresa,id_representanteci : id_representanteci}
@@ -907,6 +907,104 @@ function cambiar_nuevo(){
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
     combo_establecimiento('');
     tabla_representantes();
+}
+
+function combo_estados_civiles(seleccion){
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_estados_civiles",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_estados_civiles').html(res);
+    $("#estado_civil").select2();
+  });
+}
+
+function combo_profesiones(seleccion){
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_profesiones",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_profesiones').html(res);
+    $("#profesion").select2();
+  });
+}
+
+function combo_municipio2(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_municipio2",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_municipio2').html(res);
+    $("#municipio_representante").select2();
+  });
+
+}
+
+function combo_doc_identidad(seleccion){
+
+  $.ajax({
+    url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_tipo_doc",
+    type: "post",
+    dataType: "html",
+    data: {id : seleccion}
+  })
+  .done(function(res){
+    $('#div_combo_tipo_doc').html(res);
+    $("#rep_tipo_doc").select2();
+  });
+}
+
+function cambiar_nuevo3(){
+    if($("#establecimiento").val() == ''){
+        swal({ title: "Seleccione la parte empleadora", type: "warning", showConfirmButton: true });
+    }else{
+        $("#id_representante").val('');
+        $("#nombres_representante").val('');
+        $("#dui_representante").val('');
+        $("#acreditacion_representante").val('');
+        $("#tipo_representante").val('');
+        $("#estado_representante").val('1');
+        $("#f_nacimiento_representante").val('');
+        combo_estados_civiles('');
+        combo_profesiones('');
+        combo_municipio2('');
+        combo_doc_identidad('');
+        $("#band5").val('save');
+        $("#modal_representante").modal('show');
+    }
+}
+
+function cambiar_editar3(id_representante, dui_representante, nombres_representante, acreditacion_representante,
+  tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante,tipo_doc, band){
+
+  $("#id_representante").val(id_representante);
+  $("#dui_representante").val(dui_representante);
+  $("#nombres_representante").val(nombres_representante);
+  $("#acreditacion_representante").val(acreditacion_representante);
+  $("#tipo_representante").val(tipo_representante);
+  $("#estado_representante").val(estado_representante);
+  $("#f_nacimiento_representante").val(f_nacimiento_representante);
+  combo_estados_civiles(id_estado_civil);
+  combo_profesiones(id_titulo_academico);
+  combo_municipio2(id_municipio);
+  combo_doc_identidad(tipo_doc);
+  $("#band5").val(band);
+
+  if(band == "edit"){
+        $("#modal_representante").modal('show');
+    }else{
+        cambiar_eliminar3(estado_representante);
+    }
 }
 
 function cambiar_nuevo2(sindicato){
@@ -1425,7 +1523,7 @@ function volver(num) {
         <div class="modal-content">
 
           <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-          <input type="hidden" id="band4" name="band4" value="save">
+          <input type="hidden" id="band5" name="band5" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de personas representantes</h4>
@@ -1676,6 +1774,23 @@ function ocultar_pn(){
   }
 }
 
+function ocultar_tipo_doc_rep(){
+  var value = $("#rep_tipo_doc").val();
+  if (value!=1) {
+    $('#dui_representante').mask('', {reverse: true});
+    $('#dui_representante').unmask();
+    if (value==4) {
+      $('#dui_representante').mask('99999999-9', {reverse: true});
+      $("#dui_representante").attr("required",'required');
+    }else {
+      $("#dui_representante").attr("required",'required');
+    }
+  }else {
+     $('#dui_representante').mask('99999999-9', {reverse: true});
+     $("#dui_representante").attr("required",'required');
+  }
+}
+
 $(function(){
     $("#formajax").on("submit", function(e){
         e.preventDefault();
@@ -1768,19 +1883,7 @@ $(function(){
           processData: false
         })
         .done(function(res){
-            // if(res == "fracaso"){
-            //   swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            // }else{
-            //   cerrar_mantenimiento();
-            //   if($("#band4").val() == "save"){
-            //       swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-            //   }else if($("#band4").val() == "edit"){
-            //       swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-            //   }else{
-            //       swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-            //   }
-            //   tablasolicitudes();
-            if(res == "fracaso"){
+          if(res == "fracaso"){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
               cerrar_mantenimiento();
@@ -1922,9 +2025,9 @@ $("#formajax5").on("submit", function(e){
     })
     .done(function(res){
         if(res == "exito"){
-            if($("#band4").val() == "save"){
+            if($("#band5").val() == "save"){
                 swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-            }else if($("#band4").val() == "edit"){
+            }else if($("#band5").val() == "edit"){
                 swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
             }else{
                 if($("#estado_representante").val() == '1'){

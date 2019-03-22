@@ -112,7 +112,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                             <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                 <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                                <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy" readonly="">
+                                <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd-mm-yyyy" data-mask = "99-99-9999">
                                 <div class="help-block"></div>
                             </div>
 
@@ -608,9 +608,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
             var fecha = new Date(result.fnacimiento_personaci);
 
-            $('#band4').val('edit');
-            $('#band5').val('edit');
-
             $('#id_expediente3').val(result.id_expedienteci);
             $('#id_persona1').val(id_solicitante);
             $('#id_persona2').val(id_solicitante);
@@ -618,7 +615,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
             $('#nombre_solicitante').val(result.nombre_personaci);
             $('#apellido_solicitante').val(result.apellido_personaci);
-            $('#fecha_nacimiento').val(`${fecha.getDate()}-${fecha.getMonth() + 1}-${fecha.getFullYear()}`);
+            $("#fecha_nacimiento").datepicker("setDate", moment(result.fnacimiento_personaci).format("DD-MM-YYYY"));
             $('#telefono').val(result.telefono_personaci);
             $("#municipio_solicitante").val(result.id_municipio.padStart(5,"00000")).trigger('change.select2');
             $('#direccion').val(result.direccion_personaci);
@@ -702,6 +699,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
             $(".modal-header").children("h4").html("Editar Solicitante");
             $("#modal_solicitante").modal("show");
+            $('#band4').val('edit');
+            $('#band5').val('edit');
 
         });
 
@@ -730,12 +729,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   }
           });
 
-            $('#fecha_nacimiento').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-                endDate: moment().format("DD-MM-YYYY")
-            }).datepicker("setDate", new Date());
+          $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
         });
     });
 
@@ -906,16 +900,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 $("#monto_pago").attr("required", 'required');
                 $("#fecha_pago").attr("required", 'required');
                 break;
-            // case '3':
-            //     $("#det_resultado").hide(0);
-            //     $("#detalle_resultado").removeAttr("required");
-            //     $("#especifique").show(500);
-            //     $("#inasistencia").attr("required", 'required');
-            //     break;
-            // case '5':
-            //     $("#det_resultado").hide(0);
-            //     $("#detalle_resultado").removeAttr("required");
-            //     break;
             default:
         }
     }

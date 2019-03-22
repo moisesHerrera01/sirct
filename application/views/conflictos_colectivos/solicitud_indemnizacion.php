@@ -505,6 +505,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       });
     }
 
+    function combo_doc_identidad2(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/conflictos_colectivos/sindicato/combo_tipo_doc",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_tipo_doc2').html(res);
+        $("#tipo_doc").select2();
+        // $('#dui_representante').inputmask('99999999-9');
+      });
+    }
+
     function cambiar_nuevo2(){
         if($("#establecimiento").val() == ''){
             swal({ title: "Seleccione la parte empleadora", type: "warning", showConfirmButton: true });
@@ -519,8 +534,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             combo_estados_civiles('');
             combo_profesiones('');
             combo_municipio2('');
-            combo_doc_identidad('');
-            $("#band4").val('save');
+            combo_doc_identidad2('');
+            $("#band5").val('save');
             $("#modal_representante").modal('show');
         }
 
@@ -534,12 +549,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#acreditacion_representante").val(acreditacion_representante);
       $("#tipo_representante").val(tipo_representante);
       $("#estado_representante").val(estado_representante);
-      $("#f_nacimiento_representante").val(f_nacimiento_representante);
+      $("#f_nacimiento_representante").datepicker("setDate", moment(f_nacimiento_representante).format("DD-MM-YYYY"));
       combo_estados_civiles(id_estado_civil);
       combo_profesiones(id_titulo_academico);
       combo_municipio2(id_municipio);
-      combo_doc_identidad(tipo_doc);
-      $("#band4").val(band);
+      combo_doc_identidad2(tipo_doc);
+      $("#band5").val(band);
 
       if(band == "edit"){
             $("#modal_representante").modal('show');
@@ -566,7 +581,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     var fecha = new Date(result.fechaconflicto_personaci);
 
                     /*Inicio Expediente*/
-                    $("#fecha_conflicto").val( `${fecha.getDate()}-${fecha.getMonth() + 1}-${fecha.getFullYear()}` );
+                    $("#fecha_conflicto").datepicker("setDate", moment(result.fechaconflicto_personaci).format("DD-MM-YYYY"));
                     $("#nombre_persona").val(result.nombre_personaci);
                     $("#apellido_persona").val(result.apellido_personaci);
                     $("#cago_persona").val(result.funciones_personaci);
@@ -1382,12 +1397,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </div>
 
                 <div class="row">
-                  <!-- <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Raz&oacute;n social de la parte empleadora:</h5>
-                      <div class="controls">
-                          <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control">
-                      </div>
-                  </div> -->
 
                   <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
@@ -1444,8 +1453,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
 
-          <?php echo form_open('', array('id' => 'formajax5', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-          <input type="hidden" id="band4" name="band4" value="save">
+          <?php echo form_open('', array('id' => 'formajax7', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band5" name="band5" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de personas representantes</h4>
@@ -1473,7 +1482,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <div id="ocultar_campos">
                 <div class="row">
-                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc"></div>
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc2"></div>
 
                   <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Número doc identidad: <span class="text-danger">*</span></h5>
@@ -1486,7 +1495,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="row">
                   <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                      <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy">
+                      <!-- <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy"> -->
+                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd-mm-yyyy" data-mask = "99-99-9999">
                       <div class="help-block"></div>
                   </div>
 
@@ -1717,6 +1727,23 @@ function ocultar_tipo_doc_rep(){
      $("#dui_representante").attr("required",'required');
   }
 }
+
+function ocultar_tipo_doc(){
+  var value = $("#tipo_doc").val();
+  if (value!=1) {
+    $('#dui_representante').mask('', {reverse: true});
+    $('#dui_representante').unmask();
+    if (value==4) {
+      $('#dui_representante').mask('99999999-9', {reverse: true});
+      $("#dui_representante").attr("required",'required');
+    }else {
+      $("#dui_representante").attr("required",'required');
+    }
+  }else {
+     $('#dui_representante').mask('99999999-9', {reverse: true});
+     $("#dui_representante").attr("required",'required');
+  }
+}
     $(function () {
         $("#formajax").on("submit", function (e) {
             e.preventDefault();
@@ -1823,10 +1850,10 @@ function ocultar_tipo_doc_rep(){
         });
     });
 
-    $("#formajax5").on("submit", function(e){
+    $("#formajax7").on("submit", function(e){
         e.preventDefault();
         var f = $(this);
-        var formData = new FormData(document.getElementById("formajax5"));
+        var formData = new FormData(document.getElementById("formajax7"));
         formData.append("id_empresa", $('#establecimiento').val());
         formData.append("id_partida", $('#id_partida').val());
         $.ajax({
@@ -1840,9 +1867,9 @@ function ocultar_tipo_doc_rep(){
         })
         .done(function(res){
             if(res == "exito"){
-                if($("#band4").val() == "save"){
+                if($("#band5").val() == "save"){
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                }else if($("#band4").val() == "edit"){
+                }else if($("#band5").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
                 }else{
                     if($("#estado_representante").val() == '1'){
@@ -1861,12 +1888,8 @@ function ocultar_tipo_doc_rep(){
 
     $(function () {
         $(document).ready(function () {
-            $('#fecha_conflicto').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-                endDate: moment().format("DD-MM-YYYY")
-            }).datepicker("setDate", new Date());
+          $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
+          $('#f_nacimiento_representante').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
         });
     });
 </script>
