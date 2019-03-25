@@ -136,7 +136,7 @@ function nav(value) {
 }
 
 function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci,numero_audiencia) {
- alert(numero_audiencia)
+ // alert(numero_audiencia)
   $.ajax({
     url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/modal_actas",
     type: "post",
@@ -570,7 +570,7 @@ function tabla_representantes(){
 function ocultar_campos_rep(){
   var value = $("#tipo_representante").val();
   $('#ocultar_campos').show(500);
-  $("#rep_tipo_doc").attr("required",'required');
+  $("#tipo_doc").attr("required",'required');
   $("#f_nacimiento_representante").attr("required",'required');
   $("#dui_representante").attr("required",'required');
   $("#acreditacion_representante").attr("required",'required');

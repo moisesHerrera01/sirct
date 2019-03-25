@@ -123,7 +123,8 @@
                                         <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_ficha_indemnizacion/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
                                     <?php }?>
                                     <?php if ($fila->audiencias >= 2 ) { ?>
-                                        <a class="dropdown-item" href="javascript:;" onClick="generar_acta(<?=$fila->id_expedienteci?>)">Emitir Actas</a>
+                                        <a class="dropdown-item" href="javascript:;" onClick="generar_acta(<?=$fila->id_expedienteci.',1'?>)">Acta solicitud</a>
+                                        <a class="dropdown-item" href="javascript:;" onClick="generar_acta(<?=$fila->id_expedienteci.',2'?>)">Acta esquela</a>
                                     <?php }?>
                                     <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>
                                 </div>

@@ -84,32 +84,79 @@ class Acta_colectivos extends CI_Controller {
         $objWriter->save('php://output');
         unlink($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
     }
-  public function generar_acta_indemnizacion($id_expedienteci) {
+
+  public function generar_acta_indemnizacion($id_expedienteci,$caso) {
         $expediente = $this->expediente_cc_model->obtener_expediente_indemnizacion( $id_expedienteci )->result()[0];
+        if ($expediente->tiposolicitud_empresa==2) {
+          $persona = "a la Sociedad";
+        }else {
+          $persona = "al Sr(a)";
+        }
+        $dia_conflicto = dia(date('d', strtotime($expediente->fechaconflicto_personaci)));
+        $mes_conflicto = mb_strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci))));
+        $anio_conflicto = anio(date('Y', strtotime($expediente->fechaconflicto_personaci)));
+        $abreviatura = "";
+        if ($expediente->abreviatura_empresa!=NULL && $expediente->abreviatura_empresa!="") {
+          $abreviatura = "que puede abreviarse <b>$expediente->abreviatura_empresa</b>";
+        }else {
+          $abreviatura = "";
+        }
+
         $audiencias = $this->audiencias_model->obtener_audiencias($id_expedienteci);
         $primera= $audiencias->result()[0];
         $segunda= $audiencias->result()[1];
         $solicitantes = $this->solicitantes_model->obtener_solicitantes_expediente_acta( $id_expedienteci );
-        $concat_solicitantes='';
+        $concat_solicitantes = '';
+        $concat_solicitantes2 = '';
         $solicitante1 = $solicitantes->result()[0];
         foreach ($solicitantes->result() as $d) {
-            $concat_solicitantes .=  $d->nombre_solicitante .', de '. mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras( $d->edad)) .' años de edad, '. $d->ocupacion
-                . ', del domicilio de '. $d->municipio .', departamento de '. $d->departamento
-                . ', con documento Único de Identidad Número: '. convertir_dui($d->dui_personaci);
+            $concat_solicitantes .=  '<b>'.$d->nombre_solicitante .'</b>, de <b>'. mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras( $d->edad)) .'</b> años de edad,
+              del domicilio de <b>'. $d->municipio .'</b>, departamento de <b>'. $d->departamento
+                . '</b>, con documento Único de Identidad Número: <b>'. convertir_dui($d->dui_personaci).'</b>, ';
+            $concat_solicitantes2.= $d->nombre_solicitante.', ';
         }
+
+        if ($expediente->tiposolicitud_empresa==2) {
+          $tipo_empresa = "  quienes laboraban para la Sociedad <b>$expediente->nombre_empresa</b> $abreviatura, representada legalemente por <b>$expediente->nombres_representante</b>, ubicada en <b>$expediente->direccion_empresa</b>, <b>DE LA CIUDAD DE $expediente->municipio; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto</b>, en que fueron despedidos(as) de su trabajo sin que hasta la fecha se le haya pagado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que, ";
+          $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER a los Sres(as): <b>$concat_solicitantes2</b> que en las diligencias promovidas por ".$persona." <b>$expediente->nombre_empresa</b> representado(a) legalmente por <b>$expediente->nombres_representante</b> se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
+        }else {
+          $tipo_empresa = "quienes laboraban para el señor <b>$expediente->nombre_empresa</b>, que puede ser ubicado en: <b>$expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto</b>, en que fueron despedidos(as) de su trabajo sin que hasta la fecha se le cancelado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que";
+          $encabezado_esquela="EL INFRAESCRITO SECRETARIO NOTIFICADOR DE LA DIRECCIÓN GENERAL DE TRABAJO HACE SABER a los Sres(as): <b>$concat_solicitantes2</b>, que en las diligencias promovidas por ".$persona." <b>$expediente->nombre_empresa</b> se encuentra la solicitud que literalmente dice’’’’’’’’’’’’";
+        }
+
         $this->load->library("phpword");
         $PHPWord = new PHPWord();
-        $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/ActaSolicitudIPL.docx');
+        $templateWord = $PHPWord->loadTemplate($_SERVER['DOCUMENT_ROOT'].'/sirct/files/templates/templateDocSRCCT/ActaSolicitudIPL.zip');
+        if ($caso==2) {
+          $cuerpo_esquela="’’’’’’’’’’’’EMAYARI’’’’’’’’’’ANTE MI XCM SRIA.’’’’’’’’’RUBRICAS’’’’’’’";
+          $pie_esquela="Y para que le sirva de legal notificación y citación, se expide la presente esquela en ________________, a las _____________horas y ________________ minutos del día __________________ del mes de ___________ de dos mil ______________.";
+          $templateWord->setValue('encabezado_esquela', $encabezado_esquela);
+          $templateWord->setValue('cuerpo_esquela',$cuerpo_esquela);
+          $templateWord->setValue('pie_esquela', $pie_esquela);
+        }else {
+          $templateWord->setValue('encabezado_esquela', "");
+          $templateWord->setValue('cuerpo_esquela',"");
+          $templateWord->setValue('pie_esquela', "");
+        }
+        $notificar_correo = "";
+        if ($expediente->email!="" && $expediente->email!=NULL) {
+          $notificar_correo = ", o mediante la dirección de correo electrónico <b>$expediente->email</b>";
+        }
+        $templateWord->setValue('notificar_correo', $notificar_correo);
+        $templateWord->setImageValueAlt('image1', $_SERVER['DOCUMENT_ROOT'].'/sirct/assets/logos_vista/izq_der.jpg');
         $templateWord->setValue('no_expediente', $expediente->numerocaso_expedienteci);
         $templateWord->setValue('nombre_empresa',$expediente->nombre_empresa);
         $templateWord->setValue('direccion_empresa', $expediente->direccion_empresa);
+        $templateWord->setValue('depto_solicitante', $expediente->depto_solicitante);
+        $templateWord->setValue('mun_solicitante', $expediente->mun_solicitante);
+        $templateWord->setValue('departamento', departamento($expediente->numerocaso_expedienteci));
         $templateWord->setValue('nombre_representante', $expediente->nombres_representante);
         $templateWord->setValue('persona_conflicto',$expediente->nombre_personaci .' '. $expediente->apellido_personaci);
         $templateWord->setValue('direccion_solicitante', $solicitante1->direccion_personaci);
         $templateWord->setValue('horario_solicitante',convertir_numeros_cadena($expediente->horarios_solicitante));
         $templateWord->setValue('nombre_delegado',$expediente->delegado);
         $templateWord->setValue('solicitantes',$concat_solicitantes);
-      $templateWord->setValue('info_adicional','' /*urldecode($info_adicional)*/);
+        $templateWord->setValue('info_adicional','' /*urldecode($info_adicional)*/);
         $templateWord->setValue('dia_conflicto', dia(date('d', strtotime($expediente->fechaconflicto_personaci))));
         $templateWord->setValue('mes_conflicto', strtoupper(mes(date('m', strtotime($expediente->fechaconflicto_personaci)))));
         $templateWord->setValue('anio_conflicto', anio(date('Y', strtotime($expediente->fechaconflicto_personaci))));
@@ -128,6 +175,7 @@ class Acta_colectivos extends CI_Controller {
         $templateWord->setValue('dia_audiencia2', dia(date('d', strtotime($segunda->fecha_fechasaudienciasci))));
         $templateWord->setValue('mes_audiencia2', strtoupper(mes(date('m', strtotime($segunda->fecha_fechasaudienciasci)))));
         $templateWord->setValue('anio_audiencia2', anio(date('Y', strtotime($segunda->fecha_fechasaudienciasci))));
+        $templateWord->setValue('tipo', $tipo_empresa);
         $nombreWord = $this->random();
         $templateWord->saveAs($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');
         $phpWord2 = \PhpOffice\PhpWord\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/sirct/files/generate/'.$nombreWord.'.docx');

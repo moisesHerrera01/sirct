@@ -97,10 +97,8 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 			$data = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
-			//$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
 			$data['nombre_personaci'] = $this->input->post('nombre_persona');
 			$data['apellido_personaci'] = $this->input->post('apellido_persona');
-			//$data['funciones_personaci'] = $this->input->post('cago_persona');
 
 			$data2['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
 			$data2['causa_expedienteci'] = $this->input->post('motivo');
@@ -173,7 +171,8 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'tipo_representante_menor' => $this->input->post('acompaniante'),
 				'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
 				'id_usuario' => $this->session->userdata('id_usuario'),
-				'fecha_modifica' => date('Y-m-d')
+				'fecha_modifica' => date('Y-m-d'),
+				'email' => $this->input->post('email')
 			);
 
 			$data2  = array(
@@ -219,7 +218,8 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
 				'id_expedienteci' => $this->input->post('id_expediente'),
 				'id_usuario' => $this->session->userdata('id_usuario'),
-				'fecha_modifica' => date('Y-m-d')
+				'fecha_modifica' => date('Y-m-d'),
+				'email' => $this->input->post('email')
 			);
 
 			 $data2  = array(

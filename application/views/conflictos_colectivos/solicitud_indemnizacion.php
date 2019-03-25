@@ -167,8 +167,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#municipio_representante").attr("required",'required');
       $("#estado_civil").attr("required",'required');
       if (value==1) {
-        //$('#ocultar_campos').hide(500);
-        $("#rep_tipo_doc").removeAttr("required");
+        $("#tipo_doc").removeAttr("required");
         $("#f_nacimiento_representante").removeAttr("required");
         $("#dui_representante").removeAttr("required");
         $("#acreditacion_representante").removeAttr("required");
@@ -985,29 +984,17 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         xmlhttpB.send();
     }
 
-    function generar_acta(id_expedienteci) {
-        // swal({
-        //     title: "Información Adicional para Generar Acta",
-        //     text: " Especifique el período que se detalla en las correspondientes hojas de calculos que se agregan a las presentes diligencias: *",
-        //     type: "input",
-        //     showCancelButton: true,
-        //     closeOnConfirm: false,
-        //     inputPlaceholder: "Agregar información adicional para generar acta"
-        // },
-        // function (inputValue) {
-            // if (inputValue === false) return false;
-            // if (inputValue === "") {
-            //     swal.showInputError("Se necesita información adicional para generar el acta.");
-            //     return false
-            // }
-            location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci/* + "/" + inputValue*/;
-
+    function generar_acta(id_expedienteci,tipo) {
+      if (true) {
+          location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci + '/' + tipo;
+      }else {
+        location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci + '/' + tipo;
+      }
             swal({
                 title: "¡Acta generada exitosmente!",
                 type: "success",
                 showConfirmButton: true
             });
-        // });
     }
 
     function combo_representante_empresa(seleccion,id_emp){

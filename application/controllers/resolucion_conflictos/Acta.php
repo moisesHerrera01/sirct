@@ -329,7 +329,6 @@ class Acta extends CI_Controller {
             $abreviatura = "";
           }
 
-
           if ($expediente->tiposolicitud_empresa==2) {
             if ($expediente->motivo_expedienteci==1) {
               $tipo_empresa = "  quien laboraba para la Sociedad <b>$expediente->nombre_empresa</b> $abreviatura, representada legalemente por <b>$expediente->representante_legal</b>, ubicada en <b>$expediente->direccion_empresa</b>, <b>DE LA CIUDAD DE $expediente->municipio_empresa; hasta el día $dia_conflicto de $mes_conflicto de $anio_conflicto</b>, en que fue despedido(a) de su trabajo sin que hasta la fecha se le haya pagado su correspondiente indemnización, vacación proporcional, y aguinaldo proporcional, según hoja de liquidación que se agrega a las presentes diligencias. Y es por lo anterior que, ";
@@ -343,6 +342,11 @@ class Acta extends CI_Controller {
               $tipo_empresa = "y DICE Que laboraba para el señor <b>$expediente->nombre_empresa</b>, que puede ser ubicado en: <b>$expediente->direccion_empresa, hasta el día $dia_conflicto de $mes_conflicto del año $anio_conflicto</b>, en que finalizó la relación laboral. Y con la intención de celebrar audiencia conciliatoria con la Sociedad antes mencionada, ";
             }
           }
+          $notificar_correo = "";
+          if ($expediente->email!="" && $expediente->email!=NULL) {
+            $notificar_correo = ", señala para recibir notificaciones mediante la dirección de correo electrónico <b>$expediente->email</b>";
+          }
+          $templateWord->setValue('notificar_correo', $notificar_correo);
           $templateWord->setValue('direccion_empresa', mb_strtoupper($expediente->direccion_empresa));
           $templateWord->setValue('direccion_solicitante', mb_strtoupper($expediente->direccion_personaci));
           $templateWord->setValue('hora_expediente', hora(date('G', strtotime($expediente->fechacrea_expedienteci))));

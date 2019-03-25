@@ -281,6 +281,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                        </select>
                      </div>
                  </div>
+
+                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                     <h5>Correo electrónico: </h5>
+                     <input type="email" id="email" name="email" class="form-control" placeholder="example@dominio.com">
+                     <div class="help-block"></div>
+                 </div>
                 </blockquote>
                </div>
 
@@ -558,6 +564,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $('#discapacidad_solicitante').val('');
         $('#sexo_solicitante').val('');
         $('#embarazada').val('');
+        $('#email').val('');
 
         $('#nombre_representacion_solicitante').val('');
         $('#apellido_representacion_solicitante').val('');
@@ -631,6 +638,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $('#salario').val(result.salario_personaci);
             $('#forma_pago').val(result.formapago_personaci);
             $('#horario').val(result.horarios_personaci);
+            $('#email').val(result.email);
 
             $("#telefono2").val(result.telefono2);
             if (result.pertenece_lgbt=='1') {
