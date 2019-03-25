@@ -132,6 +132,8 @@ class Expediente_cc_model extends CI_Model {
                   c.direccion_empresa,
                   c.telefono_empresa,
                   c.direccion_empresa,
+                  c.tiposolicitud_empresa,
+                  c.abreviatura_empresa,
                   UPPER(c.abreviatura_empresa) abreviatura_empresa,
                   d.municipio,
                   e.actividad_catalogociiu,
@@ -145,12 +147,19 @@ class Expediente_cc_model extends CI_Model {
                   h.formapago_personaci formapago_solicitante,
                   h.funciones_personaci funciones_solicitante,
                   h.horarios_personaci horarios_solicitante,
-                  d.nombre_delegado_actual
+                  h.email,
+                  d.nombre_delegado_actual,
+                  de.departamento,
+                  m.municipio mun_solicitante,
+                  dep.departamento depto_solicitante
               ')
                ->from('sct_expedienteci a')
                ->join('sct_personaci b', 'a.id_personaci = b.id_personaci', 'left')
                ->join('sge_empresa c', 'a.id_empresaci = c.id_empresa')
                ->join('org_municipio d', 'c.id_municipio = d.id_municipio')
+               ->join('org_municipio m','m.id_municipio = b.id_municipio','left')
+               ->join('org_departamento dep','dep.id_departamento = m.id_departamento_pais','left')
+               ->join('org_departamento de','de.id_departamento = d.id_departamento_pais')
                ->join('sge_catalogociiu e', 'c.id_catalogociiu = e.id_catalogociiu', 'left')
                ->Join('sge_representante f ', 'c.id_empresa = f.id_empresa AND f.tipo_representante=1','left')
                ->join('sir_empleado g','g.id_empleado = a.id_personal')
@@ -168,7 +177,7 @@ class Expediente_cc_model extends CI_Model {
                   ) d" , "d.id_expedienteci=a.id_expedienteci")
                ->where("a.id_expedienteci", $id)
                ->limit(1)
-               ->order_by('h.id_personaci', 'DESC');
+               ->order_by('h.id_personaci', 'ASC');
 
       $query = $this->db->get();
 

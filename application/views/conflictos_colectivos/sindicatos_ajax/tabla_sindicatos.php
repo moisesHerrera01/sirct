@@ -2,6 +2,7 @@
             <table id="myTable" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
+                      <th>N°</th>
                       <th width="130px">Número de expediente</th>
                       <th>Nombre solicitante</th>
                       <th>Nombre solicitado</th>
@@ -18,8 +19,10 @@
                         $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
                         $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
                         /*********** Fin de consulta de permisos *********************************/
+                        $i = 1;
                         foreach ($sindicatos->result() as $fila) {
                           echo "<tr>";
+                            echo "<td>".$i."</td>";
                             echo "<td>".$fila->numerocaso_expedienteci."</td>";
                             echo "<td>".$fila->nombre_sindicato."</td>";
                             echo "<td>".$fila->nombre_empresa."</td>";
@@ -90,6 +93,7 @@
                             }
                             echo "</td>";
                             echo "</tr>";
+                            $i++;
                         }
                     }
                 ?>

@@ -8,8 +8,12 @@
     <div class="card-body b-t"  style="padding-top: 7px;">
     	<div class="pull-right">
           <?php if(tiene_permiso($segmentos=2,$permiso=2)){ ?>
-            <button type="button" onclick="cambiar_nuevo2();" class="btn waves-effect waves-light btn-success2"><span class="mdi mdi-plus"></span> Nuevo registro</button>
-          <?php } ?>
+            <?php if ($this->uri->segment(2)=='sindicato') { ?>
+              <button type="button" onclick="cambiar_nuevo3();" class="btn waves-effect waves-light btn-success2"><span class="mdi mdi-plus"></span> Nuevo registro</button>
+            <?php }else{ ?>
+              <button type="button" onclick="cambiar_nuevo2();" class="btn waves-effect waves-light btn-success2"><span class="mdi mdi-plus"></span> Nuevo registro</button>
+            <?php }
+              } ?>
         </div>
         <div class="table-responsive">
 
@@ -58,9 +62,12 @@
                           $fila->id_estado_civil, $fila->id_titulo_academico,$fila->id_municipio, $fila->f_nacimiento_representante,$fila->id_doc_identidad,"edit");
 
                           if($puede_editar){
-                            echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
+                            if ($this->uri->segment(2)=="sindicato") {
+                              echo generar_boton($array,"cambiar_editar3","btn-info","fa fa-wrench","Editar");
+                            }else {
+                              echo generar_boton($array,"cambiar_editar2","btn-info","fa fa-wrench","Editar");
+                            }
                           }
-
                           echo "</td>";
                           echo "</tr>";
                         }

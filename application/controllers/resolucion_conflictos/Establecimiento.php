@@ -70,7 +70,7 @@ class Establecimiento extends CI_Controller {
                 'id_municipio' => $this->input->post('municipio2'),
 								'tiposolicitud_empresa' => $this->input->post('tipo_establecimiento')
 			);
-			echo $this->establecimiento_model->upgrade_establecimiento($data);
+			echo $this->establecimiento_model->editar_establecimiento($data);
 		}
 	}
 

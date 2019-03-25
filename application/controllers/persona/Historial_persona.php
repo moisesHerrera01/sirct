@@ -106,20 +106,13 @@ class Historial_persona extends CI_Controller {
 		if($this->input->post('band2') == "save"){
 			$data = array(
 			'tiposolicitud_empresa' => $this->input->post('tiposolicitud_empresa'),
-			'id_oficina' => $this->input->post('id_oficina'),
 			'nombre_empresa' => mb_strtoupper($this->input->post('nombre_empresa')),
 			'abreviatura_empresa' => mb_strtoupper($this->input->post('abreviatura_empresa')),
 			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
-			'numtotal_empresa' => $this->input->post('numtotal_empresa'),
 			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
-			'nit_empresa' => $this->input->post('nit_empresa'),
 			'id_municipio' => $this->input->post('id_municipio'),
 			'correoelectronico_empresa' => $this->input->post('correoelectronico_empresa'),
 			'direccion_empresa' => $this->input->post('direccion_empresa'),
-			'activobalance_empresa' => $this->input->post('activobalance_empresa'),
-			'capitalsocial_empresa' => $this->input->post('capitalsocial_empresa'),
-			'trabajadores_adomicilio_empresa' => $this->input->post('trabajadores_adomicilio_empresa'),
-			'tipo_empresa' => $this->input->post('tipo_empresa'),
 			'estado_empresa' => $this->input->post('estado_empresa'),
 			'id_empleado' => $this->session->userdata('id_empleado')
 			);
@@ -128,20 +121,13 @@ class Historial_persona extends CI_Controller {
       		$data = array(
 		    'id_empresa' => $this->input->post('id_empresa'),
 		    'tiposolicitud_empresa' => $this->input->post('tiposolicitud_empresa'),
-			'id_oficina' => $this->input->post('id_oficina'),
 			'nombre_empresa' => mb_strtoupper($this->input->post('nombre_empresa')),
 			'abreviatura_empresa' => mb_strtoupper($this->input->post('abreviatura_empresa')),
 			'telefono_empresa' => mb_strtoupper($this->input->post('telefono_empresa')),
-			'numtotal_empresa' => $this->input->post('numtotal_empresa'),
 			'id_catalogociiu' => $this->input->post('id_catalogociiu'),
-			'nit_empresa' => $this->input->post('nit_empresa'),
 			'id_municipio' => $this->input->post('id_municipio'),
 			'correoelectronico_empresa' => $this->input->post('correoelectronico_empresa'),
 			'direccion_empresa' => $this->input->post('direccion_empresa'),
-			'activobalance_empresa' => $this->input->post('activobalance_empresa'),
-			'capitalsocial_empresa' => $this->input->post('capitalsocial_empresa'),
-			'trabajadores_adomicilio_empresa' => $this->input->post('trabajadores_adomicilio_empresa'),
-			'tipo_empresa' => $this->input->post('tipo_empresa'),
 			'estado_empresa' => $this->input->post('estado_empresa')
 			);
 			echo $this->historial_persona_model->editar_establecimiento($data);

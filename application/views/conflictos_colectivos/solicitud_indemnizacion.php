@@ -100,38 +100,95 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       });
     }
 
+    function validar_establecimiento(){
+        var establecimiento = $("#establecimiento").val();
+        var registros = $("#tabla_representante tbody tr.table-active");
 
-    // function modal_actas_tipo(id_expedienteci, cuenta_audiencias,tipo_conciliacion,posee_trabajador,estado,id_audiencia,resultado,id_representaci) {
-    //       // alert(posee_trabajador)
-    //       $("#solicitud_pn_pj").hide();
-    //       $("#sc_conciliada_pago").hide();
-    //       $("#pc_sin_conciliar").hide();
-    //       $("#inasistencia").hide();
-    //
-    //     if (cuenta_audiencias>1) {
-    //       $("#solicitud_pn_pj").show();
-    //       $("#esquela").show();
-    //     }
-    //     if (estado=="2") {
-    //       if (resultado=="1" || resultado=="2" || resultado=="7") {
-    //         $("#pf_st").show();
-    //       }else if (resultado=="12") {
-    //         $("#pc_sin_conciliar").show();
-    //       }else if (resultado=="10") {
-    //         $("#sc_conciliada_pago").show();
-    //       }else if (resultado=="23"){
-    //         $("#inasistencia").show();
-    //       }
-    //     }
-    //     $("#id_expedienteci_copia2").val(id_expedienteci);
-    //     $("#id_audiencia").val(id_audiencia);
-    //     $("#tipo_acta").val('').trigger('');
-    //     $("#modal_actas_tipo").modal("show");
-    // }
+        if(establecimiento == "" /*|| registros.length == 0*/){
+            if(establecimiento == ""){
+                swal({ title: "Seleccione la parte empleadora", text: "No se ha seleccionado la parte empleadora.", type: "warning", showConfirmButton: true });
+              }
+        }else{
+            open_form(2);
+        }
+    }
+
+    function tabla_representantes(){
+        var id_empresa = $("#establecimiento").val();
+        var id_representanteci = $("#id_representanteci").val();
+
+        $.ajax({
+          url: "<?php echo site_url(); ?>/conflictos_colectivos/solicitud_indemnizacion/tabla_representantes",
+          type: "get",
+          dataType: "html",
+          data: {id_empresa: id_empresa,id_representanteci : id_representanteci}
+        })
+        .done(function(res){
+          $('#cnt_tabla_representantes').html(res);
+          $('[data-toggle="tooltip"]').tooltip();
+          $('#myTable2').DataTable();
+        });
+    }
+
+    function verificar_empresa_completa(id_empresa) {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/verificar_empresa_completa",
+            type: "POST",
+            data: {
+                id_empresa: id_empresa
+            }
+        })
+        .done(function (res) {
+            result = JSON.parse(res);
+            $("#id_empresaci").val(result.id_empresa);
+            $("#tipo_establecimiento").val(result.tiposolicitud_empresa);
+            $("#razon_social").val(result.razon_social);
+            $("#nombre_establecimiento").val(result.nombre_empresa);
+            $("#abre_establecimiento").val(result.abreviatura_empresa);
+            $("#dir_establecimiento").val(result.direccion_empresa);
+            $("#telefono_establecimiento").val(result.telefono_empresa);
+            $("#municipio2").val(result.id_municipio).trigger('change.select2');
+            $("#act_economica").val(result.id_catalogociiu).trigger('change.select2');
+            $("#band3").val('edit');
+
+            $("#modal_establecimiento").modal('show');
+            $("#alert_empresa").html('<div class="alert alert-danger"><i class="mdi mdi-alert"></i> <b>Por favor, verifique y/o complete la información de la parte empleadora</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>');
+        });
+    }
+
+    function ocultar_campos_rep(){
+      var value = $("#tipo_representante").val();
+      $('#ocultar_campos').show(500);
+      $("#rep_tipo_doc").attr("required",'required');
+      $("#f_nacimiento_representante").attr("required",'required');
+      $("#dui_representante").attr("required",'required');
+      $("#acreditacion_representante").attr("required",'required');
+      $("#profesion").attr("required",'required');
+      $("#municipio_representante").attr("required",'required');
+      $("#estado_civil").attr("required",'required');
+      if (value==1) {
+        $("#tipo_doc").removeAttr("required");
+        $("#f_nacimiento_representante").removeAttr("required");
+        $("#dui_representante").removeAttr("required");
+        $("#acreditacion_representante").removeAttr("required");
+        $("#profesion").removeAttr("required");
+        $("#municipio_representante").removeAttr("required");
+        $("#estado_civil").removeAttr("required");
+      }else {
+        $('#ocultar_campos').show(500);
+        $("#rep_tipo_doc").attr("required",'required');
+        $("#f_nacimiento_representante").attr("required",'required');
+        $("#dui_representante").attr("required",'required');
+        $("#acreditacion_representante").attr("required",'required');
+        $("#profesion").attr("required",'required');
+        $("#municipio_representante").attr("required",'required');
+        $("#estado_civil").attr("required",'required');
+      }
+    }
 
     function combo_establecimiento(seleccion){
         $.ajax({
-          // async: true,
+          async: true,
           url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
           type: "post",
           dataType: "json",
@@ -176,12 +233,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   if (data.id == 0) {
                     cerrar_combo_establecimiento();
                     $('#modal_establecimiento').modal('show');
+                    tabla_representantes();
+                  }else {
+                    tabla_representantes();
+                    verificar_empresa_completa(data.id);
                   }
                 });
-                //tabla_representantes()
                 if (seleccion != '') {
                   var newOption = new Option(res.establecimiento.nombre_empresa,res.establecimiento.id_empresa, true, true);
                   $('#establecimiento').append(newOption).trigger('change');
+                  tabla_representantes()
                 }
             });
         });
@@ -383,8 +444,122 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#id_expediente").val('');
         combo_delegado('');
         combo_establecimiento('');
+        tabla_representantes();
         /*Fin Solicitado */
 
+    }
+
+    function combo_estados_civiles(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_estados_civiles",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_estados_civiles').html(res);
+        $("#estado_civil").select2();
+      });
+    }
+
+    function combo_profesiones(seleccion){
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_profesiones",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_profesiones').html(res);
+        $("#profesion").select2();
+      });
+    }
+
+    function combo_municipio2(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/establecimiento/combo_municipio2",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_municipio2').html(res);
+        $("#municipio_representante").select2();
+      });
+
+    }
+
+    function combo_doc_identidad(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/combo_tipo_doc",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_tipo_doc').html(res);
+        $("#rep_tipo_doc").select2();
+      });
+    }
+
+    function combo_doc_identidad2(seleccion){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/conflictos_colectivos/sindicato/combo_tipo_doc",
+        type: "post",
+        dataType: "html",
+        data: {id : seleccion}
+      })
+      .done(function(res){
+        $('#div_combo_tipo_doc2').html(res);
+        $("#tipo_doc").select2();
+        // $('#dui_representante').inputmask('99999999-9');
+      });
+    }
+
+    function cambiar_nuevo2(){
+        if($("#establecimiento").val() == ''){
+            swal({ title: "Seleccione la parte empleadora", type: "warning", showConfirmButton: true });
+        }else{
+            $("#id_representante").val('');
+            $("#nombres_representante").val('');
+            $("#dui_representante").val('');
+            $("#acreditacion_representante").val('');
+            $("#tipo_representante").val('');
+            $("#estado_representante").val('1');
+            $("#f_nacimiento_representante").val('');
+            combo_estados_civiles('');
+            combo_profesiones('');
+            combo_municipio2('');
+            combo_doc_identidad2('');
+            $("#band5").val('save');
+            $("#modal_representante").modal('show');
+        }
+
+    }
+
+    function cambiar_editar2(id_representante, dui_representante, nombres_representante, acreditacion_representante,
+      tipo_representante, estado_representante,id_estado_civil,id_titulo_academico,id_municipio,f_nacimiento_representante,tipo_doc, band){
+      $("#id_representante").val(id_representante);
+      $("#dui_representante").val(dui_representante);
+      $("#nombres_representante").val(nombres_representante);
+      $("#acreditacion_representante").val(acreditacion_representante);
+      $("#tipo_representante").val(tipo_representante);
+      $("#estado_representante").val(estado_representante);
+      $("#f_nacimiento_representante").datepicker("setDate", moment(f_nacimiento_representante).format("DD-MM-YYYY"));
+      combo_estados_civiles(id_estado_civil);
+      combo_profesiones(id_titulo_academico);
+      combo_municipio2(id_municipio);
+      combo_doc_identidad2(tipo_doc);
+      $("#band5").val(band);
+
+      if(band == "edit"){
+            $("#modal_representante").modal('show');
+        }else{
+            cambiar_eliminar3(estado_representante);
+        }
     }
 
     function cambiar_editar(id_expediente, bandera) {
@@ -405,7 +580,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     var fecha = new Date(result.fechaconflicto_personaci);
 
                     /*Inicio Expediente*/
-                    $("#fecha_conflicto").val( `${fecha.getDate()}-${fecha.getMonth() + 1}-${fecha.getFullYear()}` );
+                    $("#fecha_conflicto").datepicker("setDate", moment(result.fechaconflicto_personaci).format("DD-MM-YYYY"));
                     $("#nombre_persona").val(result.nombre_personaci);
                     $("#apellido_persona").val(result.apellido_personaci);
                     $("#cago_persona").val(result.funciones_personaci);
@@ -424,6 +599,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     $("#id_expediente").val(id_expediente);
                     combo_delegado(result.id_personal);
                     combo_establecimiento(result.id_empresaci);
+                    tabla_representantes();
                     /*Fin Solicitado */
 
                     /*Fin expediente*/
@@ -442,8 +618,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $("#cnt_tabla").hide(0);
             $("#cnt_form_main").show(0);
             $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
-        } else {
-            //eliminar_reglamento();
         }
     }
 
@@ -810,29 +984,17 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         xmlhttpB.send();
     }
 
-    function generar_acta(id_expedienteci) {
-        // swal({
-        //     title: "Información Adicional para Generar Acta",
-        //     text: " Especifique el período que se detalla en las correspondientes hojas de calculos que se agregan a las presentes diligencias: *",
-        //     type: "input",
-        //     showCancelButton: true,
-        //     closeOnConfirm: false,
-        //     inputPlaceholder: "Agregar información adicional para generar acta"
-        // },
-        // function (inputValue) {
-            // if (inputValue === false) return false;
-            // if (inputValue === "") {
-            //     swal.showInputError("Se necesita información adicional para generar el acta.");
-            //     return false
-            // }
-            location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci/* + "/" + inputValue*/;
-
+    function generar_acta(id_expedienteci,tipo) {
+      if (true) {
+          location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci + '/' + tipo;
+      }else {
+        location.href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_acta_indemnizacion/')?>" + id_expedienteci + '/' + tipo;
+      }
             swal({
                 title: "¡Acta generada exitosmente!",
                 type: "success",
                 showConfirmButton: true
             });
-        // });
     }
 
     function combo_representante_empresa(seleccion,id_emp){
@@ -971,25 +1133,23 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <input type="hidden" id="band1" name="band1" value="save">
                             <input type="hidden" id="estado" name="estado" value="1">
                             <input type="hidden" id="id_expediente" name="id_expediente" value="">
+                            <input type="hidden" id="id_representanteci" name="id_representanteci" value="">
 
-                            <span class="etiqueta">Información del solicitado</span>
+                            <span class="etiqueta">Seleccionar delegado y parte empleadora</span>
                             <blockquote class="m-t-0">
 
                                 <div class="row">
-                                    <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
-                                        id="div_combo_establecimiento"></div>
+                                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
+                                          id="div_combo_delegado"></div>
+                                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
+                                      id="div_combo_establecimiento"></div>
                                 </div>
 
                             </blockquote>
 
-                            <span class="etiqueta">Asignaci&oacute;n de expediente</span>
+                            <span class="etiqueta">Personas representantes</span>
                             <blockquote class="m-t-0">
-
-                                <div class="row">
-                                    <div class="col-lg-8 form-group <?php if($navegatorless){ echo " pull-left "; } ?>"
-                                        id="div_combo_delegado"></div>
-                                </div>
-
+                                <div id="cnt_tabla_representantes"></div>
                             </blockquote>
 
                             <div align="right" id="btnadd1">
@@ -1203,12 +1363,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       <div class="modal-content">
         <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
           <input type="hidden" id="band3" name="band3" value="save">
-          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
           <input type="hidden" id="id_empresaci" name="id_empresaci" value="">
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de parte empleadora</h4>
             </div>
             <div class="modal-body" id="">
+              <div id="alert_empresa"></div>
 
               <div class="row">
                 <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo " pull-left"; } ?>">
@@ -1224,12 +1384,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </div>
 
                 <div class="row">
-                  <!-- <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Raz&oacute;n social de la parte empleadora:</h5>
-                      <div class="controls">
-                          <input type="text" placeholder="Nombre" id="razon_social" name="razon_social" class="form-control">
-                      </div>
-                  </div> -->
 
                   <div class="form-group col-lg-16 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Nombre de la parte empleadora: <span class="text-danger">*</span></h5>
@@ -1280,6 +1434,97 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   </div>
 </div>
 <!--FIN MODAL DE ESTABLECIMIENTOS -->
+
+<!--INICIO MODAL DE REPRESENTANTE EMPRESA -->
+<div id="modal_representante" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+          <?php echo form_open('', array('id' => 'formajax7', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band5" name="band5" value="save">
+          <input type="hidden" id="id_representante" name="id_representante" value="">
+            <div class="modal-header">
+                <h4 class="modal-title">Gestión de personas representantes</h4>
+            </div>
+            <div class="modal-body" id="">
+                <div class="row">
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Nombre de la persona: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="nombres_representante" name="nombres_representante" class="form-control" required="">
+                      </div>
+                  </div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Tipo: <span class="text-danger">*</span></h5>
+                      <select onchange="ocultar_campos_rep()" id="tipo_representante" name="tipo_representante" class="form-control custom-select"  style="width: 100%" required="">
+                          <option value=''>[Seleccione el tipo]</option>
+                          <option class="m-l-50" value="1">Legal</option>
+                          <option class="m-l-50" value="2">Designado</option>
+                          <option class="m-l-50" value="3">Apoderado</option>
+                      </select>
+                  </div>
+
+                </div>
+
+                <div id="ocultar_campos">
+                <div class="row">
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_tipo_doc2"></div>
+
+                  <div class="form-group col-lg-6 col-sm-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Número doc identidad: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="dui_representante" name="dui_representante" class="form-control" data-mask="99999999-9">
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-6 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
+                      <!-- <input type="date" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd/mm/yyyy"> -->
+                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="f_nacimiento_representante" name="f_nacimiento_representante" placeholder="dd-mm-yyyy" data-mask = "99-99-9999">
+                      <div class="help-block"></div>
+                  </div>
+
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_estados_civiles"></div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Acreditación: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <textarea id="acreditacion_representante" name="acreditacion_representante" class="form-control"></textarea>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_profesiones"></div>
+
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio2"></div>
+                </div>
+
+                <div style="display: none;"> class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                    <h5>Estado: <span class="text-danger">*</span></h5>
+                    <select id="estado_representante" name="estado_representante" class="form-control custom-select"  style="width: 100%">
+                        <option class="m-l-50" value="1">Activo</option>
+                        <option class="m-l-50" value="0">Inactivo</option>
+                    </select>
+                </div>
+            </div>
+          </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="submit" id="submit3" class="btn btn-info waves-effect text-white">Aceptar</button>
+            </div>
+          <?php echo form_close(); ?>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!--FIN MODAL REPRESENTANTE EMPRESA -->
 
 <!--INICIO MODAL DE DELEGADO -->
 <div class="modal fade" id="modal_delegado" role="dialog">
@@ -1452,6 +1697,40 @@ function ocultar_pn(){
      $("#abre_establecimiento").attr("required",'required');
   }
 }
+
+function ocultar_tipo_doc_rep(){
+  var value = $("#rep_tipo_doc").val();
+  if (value!=1) {
+    $('#dui_representante').mask('', {reverse: true});
+    $('#dui_representante').unmask();
+    if (value==4) {
+      $('#dui_representante').mask('99999999-9', {reverse: true});
+      $("#dui_representante").attr("required",'required');
+    }else {
+      $("#dui_representante").attr("required",'required');
+    }
+  }else {
+     $('#dui_representante').mask('99999999-9', {reverse: true});
+     $("#dui_representante").attr("required",'required');
+  }
+}
+
+function ocultar_tipo_doc(){
+  var value = $("#tipo_doc").val();
+  if (value!=1) {
+    $('#dui_representante').mask('', {reverse: true});
+    $('#dui_representante').unmask();
+    if (value==4) {
+      $('#dui_representante').mask('99999999-9', {reverse: true});
+      $("#dui_representante").attr("required",'required');
+    }else {
+      $("#dui_representante").attr("required",'required');
+    }
+  }else {
+     $('#dui_representante').mask('99999999-9', {reverse: true});
+     $("#dui_representante").attr("required",'required');
+  }
+}
     $(function () {
         $("#formajax").on("submit", function (e) {
             e.preventDefault();
@@ -1524,6 +1803,7 @@ function ocultar_pn(){
         $("#formajax3").on("submit", function(e){
             e.preventDefault();
             var f = $(this);
+            var act_representante = $("#tabla_representante tbody tr.table-active");
             var formData = new FormData(document.getElementById("formajax3"));
 
             $.ajax({
@@ -1546,7 +1826,8 @@ function ocultar_pn(){
                         combo_establecimiento(res[1]);
                     }else if($("#band3").val() == "edit"){
                         swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                        //tabla_representantes();
+                        $("#modal_establecimiento").modal('hide');
+                        combo_establecimiento($("#establecimiento").val());
                     }
                 }else{
                     swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
@@ -1556,14 +1837,46 @@ function ocultar_pn(){
         });
     });
 
+    $("#formajax7").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax7"));
+        formData.append("id_empresa", $('#establecimiento').val());
+        formData.append("id_partida", $('#id_partida').val());
+        $.ajax({
+            url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/gestionar_representante",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+        .done(function(res){
+            if(res == "exito"){
+                if($("#band5").val() == "save"){
+                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                }else if($("#band5").val() == "edit"){
+                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                }else{
+                    if($("#estado_representante").val() == '1'){
+                        swal({ title: "¡Activado exitosamente!", type: "success", showConfirmButton: true });
+                    }else{
+                        swal({ title: "¡Desactivado exitosamente!", type: "success", showConfirmButton: true });
+                    }
+                }
+                $("#modal_representante").modal('hide');
+                tabla_representantes();
+            }else{
+                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }
+        });
+    });
+
     $(function () {
         $(document).ready(function () {
-            $('#fecha_conflicto').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-                endDate: moment().format("DD-MM-YYYY")
-            }).datepicker("setDate", new Date());
+          $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
+          $('#f_nacimiento_representante').datepicker({ format: 'dd-mm-yyyy', autoclose: true, todayHighlight: true, endDate: moment().format("DD-MM-YYYY")});
         });
     });
 </script>

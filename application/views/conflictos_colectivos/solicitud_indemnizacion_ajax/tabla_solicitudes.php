@@ -2,6 +2,7 @@
     <table id="myTable" class="table table-hover product-overview" width="100%">
         <thead class="bg-info text-white">
             <tr>
+                <th>N°</th>
                 <th width="130px">Número de Expediente</th>
                 <th>Nombre Solicitado</th>
                 <th>Tipo de Solicitud</th>
@@ -30,7 +31,6 @@
                                         e.numerocaso_expedienteci AS numero,
                                         ep.nombre_empresa,
                                         e.id_empresaci,
-                                        -- e.tiposolicitud_expedienteci AS tipo,
                                         CASE
                                           WHEN e.tiposolicitud_expedienteci=5 THEN 'Indemnización y Prestaciones Laborales'
                                           ELSE e.tiposolicitud_expedienteci END AS tipo,
@@ -63,15 +63,17 @@
                                                                          )
                                             ) d ON d.id_expedienteci=e.id_expedienteci
                                         JOIN sir_empleado l ON l.id_empleado=d.delegado_actual
-                                        ".$add." AND e.tiposolicitud_expedienteci = '5' ORDER BY e.id_expedienteci DESC");
+                                        ".$add." AND e.tiposolicitud_expedienteci = '5' ORDER BY e.fechacrea_expedienteci DESC");
 
             if($solicitudes->num_rows() > 0){
                 /*********** Si hay registros consulta los permisos **********************/
                 $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
                 $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
                 /*********** Fin de consulta de permisos *********************************/
+                $i=1;
                 foreach ($solicitudes->result() as $fila) {
                     echo "<tr>";
+                    echo "<td>".$i."</td>";
                     echo "<td>".$fila->numero."</td>";
                     echo "<td>".$fila->nombre_empresa."</td>";
                     echo "<td>".$fila->tipo."</td>";
@@ -121,7 +123,8 @@
                                         <a class="dropdown-item" href="<?=base_url('index.php/conflictos_colectivos/acta_colectivos/generar_ficha_indemnizacion/'.$fila->id_expedienteci.'/')?>" >Emitir Ficha</a>
                                     <?php }?>
                                     <?php if ($fila->audiencias >= 2 ) { ?>
-                                        <a class="dropdown-item" href="javascript:;" onClick="generar_acta(<?=$fila->id_expedienteci?>)">Emitir Actas</a>
+                                        <a class="dropdown-item" href="javascript:;" onClick="generar_acta(<?=$fila->id_expedienteci.',1'?>)">Acta solicitud</a>
+                                        <a class="dropdown-item" href="javascript:;" onClick="generar_acta(<?=$fila->id_expedienteci.',2'?>)">Acta esquela</a>
                                     <?php }?>
                                     <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedienteci?>)">Inhabilitar Expediente</a>
                                 </div>
@@ -141,6 +144,7 @@
                     }
                     echo "</td>";
                     echo "</tr>";
+                    $i++;
                 }
             }
         ?>

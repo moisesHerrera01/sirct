@@ -97,10 +97,8 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 			$data = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
-			//$data['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
 			$data['nombre_personaci'] = $this->input->post('nombre_persona');
 			$data['apellido_personaci'] = $this->input->post('apellido_persona');
-			//$data['funciones_personaci'] = $this->input->post('cago_persona');
 
 			$data2['fechaconflicto_personaci'] = date("Y-m-d",strtotime($this->input->post('fecha_conflicto')));
 			$data2['causa_expedienteci'] = $this->input->post('motivo');
@@ -168,19 +166,28 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'pertenece_lgbt' => $this->input->post('pertenece_lgbt'),
 				'id_doc_identidad' => $this->input->post('id_doc_identidad'),
 				'id_usuario' => $this->session->userdata('id_usuario'),
-				'fecha_modifica' => date('Y-m-d')
+				'embarazada' => $this->session->userdata('embarazada'),
+				'fecha_modifica' => date('Y-m-d'),
+				'tipo_representante_menor' => $this->input->post('acompaniante'),
+				'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
+				'id_usuario' => $this->session->userdata('id_usuario'),
+				'fecha_modifica' => date('Y-m-d'),
+				'email' => $this->input->post('email')
 			);
 
 			$data2  = array(
 				'numero_partida' =>$this->input->post('numero_partida'),
-				'folio_partida' =>$this->input->post('folio_partida'),
+				'id_municipio_partida' =>$this->input->post('municipio_partida'),
 				'libro_partida' =>$this->input->post('libro_partida'),
-				'asiento_partida' =>$this->input->post('asiento_partida'),
-				'anio_partida' =>$this->input->post('numero_partida')
+				'id_municipio_menor' =>$this->input->post('municipio_menor'),
+				'fecha_partida' => date("Y-m-d",strtotime($this->input->post('fecha_partida'))),
+				'fnacimiento_menor' => date("Y-m-d",strtotime($this->input->post('fnacimiento_menor'))),
 			 );
-
+			$id_partida = 0;
+		 if ($this->input->post('numero_partida')!='') {
 			 $id_partida = $this->solicitudes_model->insertar_partida($data2);
 			 $data['id_partida'] = $id_partida;
+		 }
 
 			echo $this->Persona_cc_model->insertar_persona_conflicto($data);
 
@@ -205,17 +212,25 @@ class Solicitud_indemnizacion extends CI_Controller {
 				'nacionalidad_personaci'=> $this->input->post('nacionalidad'),
 				'id_partida' => $this->input->post('id_partida'),
 				'id_usuario' => $this->session->userdata('id_usuario'),
-				'fecha_modifica' => date('Y-m-d')
+				'embarazada' => $this->session->userdata('embarazada'),
+				'fecha_modifica' => date('Y-m-d'),
+				'tipo_representante_menor' => $this->input->post('acompaniante'),
+				'nombre_representante_menor' => $this->input->post('nombre_acompaniante'),
+				'id_expedienteci' => $this->input->post('id_expediente'),
+				'id_usuario' => $this->session->userdata('id_usuario'),
+				'fecha_modifica' => date('Y-m-d'),
+				'email' => $this->input->post('email')
 			);
 
-			$data2  = array(
-				'id_partida' =>$this->input->post('id_partida'),
-				'numero_partida' =>$this->input->post('numero_partida'),
-				'folio_partida' =>$this->input->post('folio_partida'),
-				'libro_partida' =>$this->input->post('libro_partida'),
-				'asiento_partida' =>$this->input->post('asiento_partida'),
-				'anio_partida' =>$this->input->post('numero_partida')
-			 );
+			 $data2  = array(
+				 'id_partida' =>$this->input->post('id_partida'),
+				 'numero_partida' =>$this->input->post('numero_partida'),
+				 'id_municipio_partida' =>$this->input->post('municipio_partida'),
+				 'libro_partida' =>$this->input->post('libro_partida'),
+				 'id_municipio_menor' =>$this->input->post('municipio_menor'),
+				 'fecha_partida' => date("Y-m-d",strtotime($this->input->post('fecha_partida'))),
+				 'fnacimiento_menor' => date("Y-m-d",strtotime($this->input->post('fnacimiento_menor'))),
+				);
 
 			$this->solicitudes_model->editar_partida($data2);
 
@@ -234,15 +249,6 @@ class Solicitud_indemnizacion extends CI_Controller {
 	public function gestionar_representante() {
 
 		if($this->input->post('band5') == "save"){
-		// 	$data = array(
-    //     'id_personaci' => $this->input->post('id_persona'),
-		// 		'nombre_representantepersonaci' => $this->input->post('nombre_representacion_solicitante'),
-		// 		'apellido_representantepersonaci' => $this->input->post('apellido_representacion_solicitante'),
-		// 		'tipo_representantepersonaci' => $this->input->post('tipo_representacion_solicitante')
-		// 	);
-		//
-		// 	$repre = $this->Representante_cc_model->insertar_representante($data);
-
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
 			$data2['funciones_personaci'] = $this->input->post('funciones');
@@ -255,14 +261,6 @@ class Solicitud_indemnizacion extends CI_Controller {
 
 		} else if ($this->input->post('band5') == "edit") {
 			echo $this->input->post('id_representante');
-			// $data = $this->Representante_cc_model->obtener_representante($this->input->post('id_representante'))->result_array()[0];
-			//
-			// $data['nombre_representantepersonaci'] = $this->input->post('nombre_representacion_solicitante');
-			// $data['apellido_representantepersonaci'] = $this->input->post('apellido_representacion_solicitante');
-			// $data['tipo_representantepersonaci'] = $this->input->post('tipo_representacion_solicitante');
-			//
-			// $this->Representante_cc_model->editar_representante($data);
-
 			$data2 = $this->Persona_cc_model->obtener_persona($this->input->post('id_persona'))->result_array()[0];
 
 			$data2['ocupacion'] = $this->input->post('ocupacion');
@@ -324,5 +322,9 @@ class Solicitud_indemnizacion extends CI_Controller {
 		$pagos = $this->pagos_model->obtener_cantidad_actas_pagos($this->input->post('id'));
 		$this->load->view('conflictos_colectivos/solicitud_indemnizacion_ajax/modal_actas',array('pagos' => $pagos));
 	}
+
+	public function tabla_representantes(){
+	$this->load->view('resolucion_conflictos/solicitudes_ajax/tabla_representantes');
+}
 
 }

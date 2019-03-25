@@ -187,4 +187,19 @@ class Pagos_model extends CI_Model {
 
 		return $query;
 	}
+
+	public function obtener_datos_pago($id_expedienteci){
+		$this->db->select("CONCAT_WS(' ',p.nombre_personaci,p.apellido_personaci) solicitante, rl.nombres_representante r_legal, em.nombre_empresa solicitado, em.tiposolicitud_empresa")
+						 ->from('sct_fechaspagosci fp')
+						 ->join('sct_expedienteci e','e.id_expedienteci = fp.id_expedienteci')
+						 ->join('sge_empresa em','em.id_empresa = e.id_empresaci','left')
+						 ->join('sge_representante rl','rl.id_empresa = em.id_empresa AND rl.tipo_representante = 1','left')
+						 ->join('sct_personaci p','p.id_personaci = e.id_personaci')
+						 // ->join('sct_fechasaudienciasci fa','fa.id_expedienteci = e.id_expedienteci','left')
+						 // ->join('sge_representante r','r.id_representante = fa.id_representaci','left')
+						 // ->where('fa.id_fechasaudienciasci','(SELECT MAX(fea.id_fechasaudienciasci) FROM sct_fechasaudienciasci fea WHERE fea.id_expedienteci=fp.id_expedienteci AND fea.id_resultadoci IN (1,10,26))')
+						 ->where('e.id_expedienteci',$id_expedienteci);
+		$query = $this->db->get();
+		return $query;
+	}
 }

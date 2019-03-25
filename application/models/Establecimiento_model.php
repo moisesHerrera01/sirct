@@ -24,26 +24,26 @@ class Establecimiento_model extends CI_Model {
 			}
 		}
 
-		function upgrade_establecimiento($data){
-			$id_sistema = $this->config->item("id_sistema");
-			if($this->db->query("INSERT INTO sge_empresa_actualizacion (
-					id_empresa, numinscripcion_empresa, id_oficina, id_municipio, id_catalogociiu, nombre_empresa,
-					abreviatura_empresa, nit_empresa, telefono_empresa, direccion_empresa, correoelectronico_empresa,
-					activobalance_empresa, capitalsocial_empresa, trabajadores_adomicilio_empresa, tipo_empresa,
-					archivo_empresa, tiposolicitud_empresa, fechacrea_empresa, fechamodf_empresa, numtotal_empresa,
-					numinscripanterior_empresa, actualizada_empresa, razon_social, id_sistema
-				) SELECT
-					id_empresa, numinscripcion_empresa, id_oficina, id_municipio, id_catalogociiu, nombre_empresa,
-					abreviatura_empresa, nit_empresa, telefono_empresa, direccion_empresa, correoelectronico_empresa,
-					activobalance_empresa, capitalsocial_empresa, trabajadores_adomicilio_empresa, tipo_empresa,
-					archivo_empresa, tiposolicitud_empresa, fechacrea_empresa, fechamodf_empresa, numtotal_empresa,
-					numinscripanterior_empresa, actualizada_empresa, razon_social, ".$id_sistema."
-				FROM sge_empresa WHERE id_empresa = '".$data["id_empresa"]."'")){
-				return $this->editar_establecimiento($data);
-			}else{
-				return "fracaso";
-			}
-		}
+		// function upgrade_establecimiento($data){
+		// 	$id_sistema = $this->config->item("id_sistema");
+		// 	if($this->db->query("INSERT INTO sge_empresa_actualizacion (
+		// 			id_empresa, numinscripcion_empresa, id_oficina, id_municipio, id_catalogociiu, nombre_empresa,
+		// 			abreviatura_empresa, nit_empresa, telefono_empresa, direccion_empresa, correoelectronico_empresa,
+		// 			activobalance_empresa, capitalsocial_empresa, trabajadores_adomicilio_empresa, tipo_empresa,
+		// 			archivo_empresa, tiposolicitud_empresa, fechacrea_empresa, fechamodf_empresa, numtotal_empresa,
+		// 			numinscripanterior_empresa, actualizada_empresa, razon_social, id_sistema
+		// 		) SELECT
+		// 			id_empresa, numinscripcion_empresa, id_oficina, id_municipio, id_catalogociiu, nombre_empresa,
+		// 			abreviatura_empresa, nit_empresa, telefono_empresa, direccion_empresa, correoelectronico_empresa,
+		// 			activobalance_empresa, capitalsocial_empresa, trabajadores_adomicilio_empresa, tipo_empresa,
+		// 			archivo_empresa, tiposolicitud_empresa, fechacrea_empresa, fechamodf_empresa, numtotal_empresa,
+		// 			numinscripanterior_empresa, actualizada_empresa, razon_social, ".$id_sistema."
+		// 		FROM sge_empresa WHERE id_empresa = '".$data["id_empresa"]."'")){
+		// 		return $this->editar_establecimiento($data);
+		// 	}else{
+		// 		return "fracaso";
+		// 	}
+		// }
 
 
 		public function obtener_representantes($id) {
@@ -73,7 +73,7 @@ class Establecimiento_model extends CI_Model {
 		}
 
 		public function obtener_empresas($search = '' , $final = 30) {
-				$this->db->select('id_empresa id, abreviatura_empresa text')
+				$this->db->select('id_empresa id, nombre_empresa text')
 						->from('sge_empresa')
 						->like('nombre_empresa', $search)
 						->limit(30, $final);

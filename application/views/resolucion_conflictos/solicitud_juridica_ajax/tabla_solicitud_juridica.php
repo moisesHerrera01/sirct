@@ -2,6 +2,7 @@
             <table id="myTable" class="table table-hover product-overview" width="100%">
                 <thead class="bg-info text-white">
                     <tr>
+                      <th>N°</th>
                       <th width="130px">Número de expediente</th>
                       <th>Nombre solicitante</th>
                       <th>Nombre solicitado</th>
@@ -78,7 +79,7 @@
                                                                                )
                                                   ) d ON d.id_expedienteci=e.id_expedienteci
                                               JOIN sir_empleado l on l.id_empleado=d.delegado_actual
-                                              ".$add." AND tiposolicitud_expedienteci = '3' ORDER BY e.id_expedienteci DESC");
+                                              ".$add." AND tiposolicitud_expedienteci = '3' ORDER BY e.fechacrea_expedienteci DESC");
 
                     if($solicitudes->num_rows() > 0){
 
@@ -86,9 +87,10 @@
                         $puede_editar = tiene_permiso($segmentos=2,$permiso=4);
                         $puede_consultar = tiene_permiso($segmentos=2,$permiso=1);
                         /*********** Fin de consulta de permisos *********************************/
-
+                        $i = 1;
                         foreach ($solicitudes->result() as $fila) {
                           echo "<tr>";
+                            echo "<td>".$i."</td>";
                             echo "<td>".$fila->numero."</td>";
                             echo "<td>".$fila->nombre_empresa."</td>";
                             echo "<td>".$fila->nombre_personaci."</td>";
@@ -126,6 +128,7 @@
                                   </button>
                                   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
                                       <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_juridico/1/'.$fila->id_expedienteci.'/')?>">Acta de solicitud</a>
+                                      <a class="dropdown-item" href="<?=base_url('index.php/resolucion_conflictos/acta/generar_acta_juridico/2/'.$fila->id_expedienteci.'/')?>">Acta de esquela</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedienteci.','.$fila->id_empresaci.','.$fila->id_personaci?>)">Visualizar</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="audiencias('<?=$fila->id_empresaci?>',<?=$fila->id_expedienteci?>, 2)">Gestionar audiencias</a>
                                       <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedienteci.','.$fila->delegado_actual?>)">Cambiar Delegado</a>
@@ -145,6 +148,7 @@
                             }
                             echo "</td>";
                           echo "</tr>";
+                          $i++;
                         }
                     }
                 ?>

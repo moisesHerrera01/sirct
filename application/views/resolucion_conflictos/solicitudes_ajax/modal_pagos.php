@@ -7,7 +7,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 
-<div class="modal fade" id="modal_pagos" role="dialog">
+<div class="modal fade" id="modal_pagos" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -27,13 +27,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <input type="number" id="monto_pago" name="monto_pago" class="form-control" placeholder="Monto total de pago " step="0.01">
                 <div class="help-block"></div>
             </div>
+
+            <div class="form-group col-lg-4" style="height: 83px;">
+                <h5>Hora de pago:</h5>
+                <input type="time" id="hora_pago" name="hora_pago" class="form-control" placeholder="Hora de audiencia" required>
+                <div class="help-block"></div>
+            </div>
+
           </div>
 
           <div class="row" id='tipo_pago'>
             <div id="fhpago" class="form-group col-lg-5 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Fecha y hora de pago: <span class="text-danger">*</span></h5>
+              <h5>Fecha de pago: <span class="text-danger">*</span></h5>
               <div class="controls">
-                <input type="datetime-local" class="form-control" id="fecha_pago" nombre="fecha_pago">
+                <input type="date" class="form-control" id="fecha_pago" nombre="fecha_pago" >
               </div>
             </div>
 
@@ -75,18 +82,14 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax11"));
-        formData.append("fecha_pago", $("#fecha_pago").val());
+        formData.append("fecha_pago", $("#fecha_pago").val()+" "+$("#hora_pago").val());
         formData.append("tipo_conciliacion", $("#tipo_conciliacion").val());
-        alert($("#tipo_conciliacion").val())
         j = ($('#nuevo').find('input').length)/2;
         i=1;
         while (i!=(j+1)) {
-          formData.append("fecha_pago"+i, $("#fecha_pago"+i).val());
+          formData.append("fecha_pago"+i, $("#fecha_pago"+i).val()+" "+$("#hora_pago").val());
           i++;
         }
-        $('#modal_pagos').modal('hide');
-        $('#modal_resolucion').modal('show');
-
         $.ajax({
             url: "<?php echo site_url(); ?>/resolucion_conflictos/pagos/gestionar_pagos_modal",
             type: "post",
@@ -98,14 +101,15 @@ $(function(){
         })
         .done(function(res){
             if(res != "fracaso"){
+                $('#detalle_resultado').val(res);
                 $.toast({ heading: 'Registro exitoso', text: 'Fechas de pagos ingresados correctamente', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
-             }//else{
-            //     swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            // }
+             }
         });
-      $('#modal_resolucion').remove();
+      $('#modal_pagos').modal('hide');
+      $('#modal_pagos').remove();
       $('.modal-backdrop').remove();
       $('body').removeClass('modal-open');
+      $('#modal_resolucion').modal('show');
       // tablasolicitudes();
     });
 });

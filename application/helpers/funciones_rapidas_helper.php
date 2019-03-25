@@ -23,6 +23,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		return $boton;
 	}
 
+	function cast_porcent($dividendo, $divisor){
+		if($dividendo == 0 || $divisor == 0){
+			return 0;
+		}else{
+			$numero = number_format($dividendo/$divisor*100,2);
+			$copia = explode(".", $numero);
+			if($copia[1] == "00"){
+				$numero = intval($numero);
+			}
+			return $numero;
+		}
+
+	}
+
 	function generar_boton_normal($opciones,$funcion,$color,$icono,$title, $title2){
 		$var = ""; $boton = "";
 		foreach ($opciones as $otro) {
@@ -263,7 +277,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			if ($arrayMinutos[$minutos]=='CERO') {
 				return "";
 			}else {
-				return 'con '.$arrayMinutos[$minutos].' minutos';
+				return 'con '.$arrayMinutos[$minutos].' MINUTOS';
 			}
 		}
 

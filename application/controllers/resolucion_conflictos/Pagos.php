@@ -103,25 +103,59 @@ class Pagos extends CI_Controller {
 	}
 
 	public function gestionar_pagos_modal(){
-		$monto_total = $this->input->post('monto_pago');
+		$this->load->library("CifrasEnLetras");
+		$monto_total = number_format($this->input->post('monto_pago'),2);
+		if (substr($monto_total,-3)==".00") {
+			$pago_total = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($monto_total,0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
+		}else {
+			$pago_total = mb_strtoupper(CifrasEnLetras::convertirEurosEnLetras(number_format($monto_total,2,',','')));
+		}
+		$i = 1;
+		$num_pago = "";
+		$cant_pagos = "";
+		$hora = "";
+		$minuto = "";
+		$pagos;
 
 		$data = array(
 			'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'))),
-			// 'montopago_fechaspagosci' => $this->input->post('primer_pago'),
-			// 'indemnizacion_fechaspagosci' => $monto_total = $monto_total - $this->input->post('primer_pago'),
 			'id_expedienteci' => $this->input->post('id_expedienteci')
 		 );
 		 if ($this->input->post('tipo_conciliacion')==1) {
+			 $concat_pagos = "manifiesta el(la) Licenciado(a) ****** que las instrucciones de su Mandante son las de pagarle en este acto al trabajador solicitante la cantidad de  $pago_total , en concepto de indemnización, vacación proporcional y aguinaldo proporcional correspondiente al período del ******* al *******.";
 			 $data['montopago_fechaspagosci'] = $this->input->post('monto_pago');
 			 $data['indemnizacion_fechaspagosci'] = 0;
 		 }else {
+			 $concat_pagos = "manifiesta el(la) Licenciado(a) ****** que las instrucciones de su Mandante son las de ofrecerle al trabajador solicitante la cantidad de $pago_total , en concepto de indemnización, vacación proporcional y aguinaldo proporcional correspondiente al período del ******* al *******. Cantidad que de ser aceptada se le pagará por medio de cantidad_pagos cuotas ****** y sucesivas, ";
 			 $data['montopago_fechaspagosci'] = $this->input->post('primer_pago');
 			 $data['indemnizacion_fechaspagosci'] = $monto_total = $monto_total - $this->input->post('primer_pago');
+			 $pagos = number_format($this->input->post('primer_pago'),2);
+			 if (substr($pagos,-3)==".00") {
+				 $pago = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($pagos,0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
+			 }else {
+				 $pago = mb_strtoupper(CifrasEnLetras::convertirEurosEnLetras(number_format($pagos,2,',','')));
+			 }
+			 $num_pago = convertir_a_ordinal($i);
+			 $dia = dia(date('d', strtotime($this->input->post('fecha_pago'))));
+			 $mes = mb_strtoupper(mes(date('m', strtotime($this->input->post('fecha_pago')))));
+			 $anio = anio(date('Y', strtotime($this->input->post('fecha_pago'))));
+			 $concat_pagos .= "LA $num_pago POR LA CANTIDAD DE $pago el día $dia de $mes de $anio ";
 		 }
-
 		 $this->pagos_model->insertar_pago($data);
-		 $i=1;
+
 		 while (!empty($this->input->post('fecha_pago'.$i))) {
+			 $pagos = number_format($this->input->post('primer_pago'.$i),2);
+			 if (substr($pagos,-3)==".00") {
+				 $pago = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($pagos,0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
+			 }else {
+				 $pago = mb_strtoupper(CifrasEnLetras::convertirEurosEnLetras(number_format($pagos,2,',','')));
+			 }
+			 $dia = dia(date('d', strtotime($this->input->post('fecha_pago'.$i))));
+			 $mes = mb_strtoupper(mes(date('m', strtotime($this->input->post('fecha_pago'.$i)))));
+			 $anio = anio(date('Y', strtotime($this->input->post('fecha_pago'.$i))));
+			 $num_pago = convertir_a_ordinal($i + 1);
+			 $concat_pagos .=  ", LA $num_pago POR LA CANTIDAD DE  $pago el día $dia de $mes de $anio ";
+
 			 $data = array(
 				 'fechapago_fechaspagosci' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_pago'.$i))),
 				 'montopago_fechaspagosci' => $this->input->post('primer_pago'.$i),
@@ -131,6 +165,22 @@ class Pagos extends CI_Controller {
 				$this->pagos_model->insertar_pago($data);
 				$i++;
 		 }
+		 $hora = hora(date('G', strtotime($this->input->post('fecha_pago'))));
+		 $minuto = minuto(INTVAL(date('i', strtotime($this->input->post('fecha_pago')))));
+		 $cant_pagos = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras($i));
+		 $datos = $this->pagos_model->obtener_datos_pago($this->input->post('id_expedienteci'))->row();
+		 if ($this->input->post('tipo_conciliacion')==1) {
+			 if ($datos->tiposolicitud_empresa==2) {
+				 $persona = "a la Sociedad";
+			 }else {
+				 $persona = "al Sr(a)";
+			 }
+			 $concat_pagos.="Y por su parte el Señor(a) $datos->solicitante dice que está de acuerdo con dicho monto y por lo tanto recibe a su entera satisfacción el pago. Asimismo hace entrega de la respectiva hoja de terminación de contrato, con la que exonera de toda responsabilidad laboral judicial y extra judicial $persona $datos->solicitado representada legalmente por el(la) Señor(a) $datos->r_legal";
+		 }else {
+		 	 $concat_pagos.="Los pagos se realizaran a las $hora horas $minuto y en estas oficinas.  Y por su parte el(la) Señor(a) $datos->solicitante dice que está de acuerdo con el monto y la forma de pago. Agrega que se hará presente los días y horas antes señalados. ";
+		 }
+		 $concat_pagos = str_replace("cantidad_pagos", $cant_pagos, $concat_pagos);
+		 echo $concat_pagos;
 	}
 
 }

@@ -264,7 +264,7 @@ class Solicitud_juridica extends CI_Controller {
 			'id_municipio' => $this->input->post('id_municipio'),
 			'direccion_empresa' => mb_strtoupper($this->input->post('direccion_empresa'))
 			);
-			echo $this->solicitud_juridica_model->upgrade_establecimiento($data);
+			echo $this->solicitud_juridica_model->editar_establecimiento($data);
 		}else if($this->input->post('band') == "delete"){
 			$data = array(
 			'id_empresa' => $this->input->post('id_empresa'),

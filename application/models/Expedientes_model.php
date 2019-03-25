@@ -28,6 +28,7 @@ class Expedientes_model extends CI_Model {
 												 e.horarios_personaci,
 												 e.fechaconflicto_personaci,
 												 m.municipio,
+												 ds.departamento,
 												 mu.municipio municipio_empresa,
 												 mur.municipio municipio_representante,
 												 tr.tipo_representante tipo_representante_empresa,
@@ -79,7 +80,9 @@ class Expedientes_model extends CI_Model {
 					 						 ->join('sir_empleado ep','ep.id_empleado=e.id_personal')
 					 						 ->join('sge_empleador emp','emp.id_empleador=e.id_empleador', 'left')
 					 						 ->join('sct_personaci p ', ' p.id_personaci = e.id_personaci')
-					 						 ->join('org_municipio m','m.id_municipio=p.id_municipio')
+					 						 ->join('org_municipio m','m.id_municipio=p.id_municipio','left')
+											 ->join('org_departamento ds','ds.id_departamento=m.id_departamento_pais','left')
+
 					 						 ->join('sct_nacionalidad n','n.id_nacionalidad=p.nacionalidad_personaci')
 					 						 ->join('sct_partida pa','pa.id_partida=e.id_partida','left')
 											 ->join('org_municipio mp','mp.id_municipio=pa.id_municipio_partida','left')

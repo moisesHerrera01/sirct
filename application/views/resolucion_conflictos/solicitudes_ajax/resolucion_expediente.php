@@ -14,7 +14,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   }
 </script>
 
-<div class="modal fade" id="modal_resolucion" role="dialog">
+<div class="modal fade" id="modal_resolucion" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -56,9 +56,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <div class="col-lg-4 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div>
 
-            <div id="det_resultado" class="form-group col-lg-12 col-sm-12" style="height: 83px;">
-                <h5>Detalle del resultado:<span class="text-danger">*</span></h5>
-                <textarea type="text" id="detalle_resultado" name="detalle_resultado" class="form-control" placeholder="Detalles del resultado" required=""></textarea>
+            <div id="det_resultado" class="form-group col-lg-12 col-sm-12" >
+                <h5>Detalle del resultado:<span class="text-danger">*</span></h5><span><small class="text-muted db">Por favor complete la información en lugar de los asteriscos de ser necesario</small></span>
+                <textarea type="text" id="detalle_resultado" name="detalle_resultado" class="form-control" placeholder="Detalles del resultado" required="" rows="6"></textarea>
                 <div class="help-block"></div>
             </div>
           </div>
