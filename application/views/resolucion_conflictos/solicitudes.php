@@ -89,8 +89,8 @@ function iniciar(){
           } elseif ($band_mantto == 'update_post') { ?>
             cambiar_update_post('<?=$id_expedienteci?>','update_post');
       <?php }else{ ?>
-          $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy'});
-          $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy'});
+          // $('#fecha_nacimiento').datepicker({ format: 'dd-mm-yyyy'});
+          // $('#fecha_conflicto').datepicker({ format: 'dd-mm-yyyy'});
           cambiar_editar('<?=$id_expedienteci?>','edit');
       <?php } ?>
   <?php }else{ ?>
@@ -1429,7 +1429,7 @@ function volver(num) {
                               </div>
                               <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                   <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd-mm-yyyy" data-mask = "99-99-9999">
+                                  <input type="text"  required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd-mm-yyyy" data-mask = "99-99-9999">
                                   <div class="help-block"></div>
                               </div>
                         </div>

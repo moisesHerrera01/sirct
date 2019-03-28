@@ -78,7 +78,7 @@ function combo_establecimiento(seleccion){
   .done(function(res){
     $('#div_combo_establecimiento').html(res);
     $(".est").select2({
-      
+
       'language': {
         noResults: function () {
           return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevo registro" onClick="cerrar_combo_establecimiento()">Agregar nuevo registro</a>';
@@ -300,7 +300,7 @@ function cambiar_nuevo() {
     combo_doc_identidad('');
     //combo_ocupacion('');
     combo_municipio();
-    
+
     /*Fin expediente*/
 
     $("#band").val("save");
@@ -561,7 +561,7 @@ function redireccionar_despido_hecho(tipo, id, band){
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/", param);
     }else{
         var param = { 'id_empresa' : id, 'tipo_solicitud' : '1', 'band_mantto' : band };
-        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);  
+        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);
     }
 }
 
@@ -571,7 +571,7 @@ function redireccionar_diferencia_laboral(tipo, id, band){
         OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/", param);
     }else{
         var param = { 'id_empresa' : id, 'tipo_solicitud' : '2', 'band_mantto' : band };
-        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);  
+        OpenWindowWithPost("<?php echo site_url(); ?>/resolucion_conflictos/solicitud_juridica/", param);
     }
 }
 
@@ -683,7 +683,7 @@ function volver(num) {
                                 </div>
                                 <div class="form-group col-lg-4 <?php if($navegatorless){ echo "pull-left"; } ?>">
                                   <h5>Fecha de nacimiento: <span class="text-danger">*</span></h5>
-                                  <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd-mm-yyyy">
+                                  <input type="text" required="" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd-mm-yyyy">
                                   <div class="help-block"></div>
                                 </div>
                               </div>
@@ -838,10 +838,10 @@ function volver(num) {
                                         <h5>Municipio: <span class="text-danger">*</span></h5>
                                         <select id="id_municipio" name="id_municipio" class="select2" style="width: 100%" required>
                                             <option value=''>[Seleccione el municipio]</option>
-                                            <?php 
+                                            <?php
                                                 $municipio = $this->db->query("SELECT * FROM org_municipio ORDER BY municipio");
                                                 if($municipio->num_rows() > 0){
-                                                    foreach ($municipio->result() as $fila2) {              
+                                                    foreach ($municipio->result() as $fila2) {
                                                        echo '<option class="m-l-50" value="'.intval($fila2->id_municipio).'">'.$fila2->municipio.'</option>';
                                                     }
                                                 }
@@ -866,10 +866,10 @@ function volver(num) {
                                         <h5>Actividad económica: <span class="text-danger">*</span></h5>
                                         <select id="id_catalogociiu" name="id_catalogociiu" class="select2" style="width: 100%" required>
                                             <option value=''>[Seleccione la actividad]</option>
-                                            <?php 
+                                            <?php
                                                 $catalogociiu = $this->db->query("SELECT * FROM sge_catalogociiu ORDER BY actividad_catalogociiu");
                                                 if($catalogociiu->num_rows() > 0){
-                                                    foreach ($catalogociiu->result() as $fila2) {              
+                                                    foreach ($catalogociiu->result() as $fila2) {
                                                        echo '<option class="m-l-50" value="'.$fila2->id_catalogociiu.'">'.$fila2->actividad_catalogociiu.'</option>';
                                                     }
                                                 }
@@ -980,7 +980,7 @@ function volver(num) {
 </div>
 
 <div id="cnt_modal_acciones"></div>
- 
+
 
 <script>
 

@@ -28,8 +28,11 @@
                 </thead>
                 <tbody>
                 <?php
-                	$id_empresa = $_GET["id_empresa"];
+                	$id_empresa = (isset($_GET["id_empresa"])) ? $_GET["id_empresa"] : '';
                   $id_representanteci = $_GET["id_representanteci"];
+                  if ($id_empresa) {
+                    // code...
+                  }
                 	$representantes = $this->db->query("SELECT * FROM sge_representante WHERE id_empresa = '".$id_empresa."'");
                   $contador=0;
                     if($representantes->num_rows() > 0){
