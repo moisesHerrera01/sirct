@@ -67,7 +67,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <div id="num_folios" class="form-group col-lg-4" style="height: 83px;">
               <h5>Número folios:<span class="text-danger">*</h5>
-              <input type="number" id="numero_folios" name="numero_folios" class="form-control" placeholder="Número folios" step="1">
+              <input type="number" id="numero_folios" name="numero_folios" class="form-control" placeholder="Número folios" step="1" min="1">
               <div class="help-block"></div>
           </div>
 

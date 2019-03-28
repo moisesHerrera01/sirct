@@ -104,7 +104,7 @@ class Pagos extends CI_Controller {
 
 	public function gestionar_pagos_modal(){
 		$this->load->library("CifrasEnLetras");
-		$monto_total = number_format($this->input->post('monto_pago'),2);
+		$monto_total = number_format($this->input->post('monto_pago'),2,'.','');
 		if (substr($monto_total,-3)==".00") {
 			$pago_total = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($monto_total,0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
 		}else {
@@ -129,7 +129,7 @@ class Pagos extends CI_Controller {
 			 $concat_pagos = "manifiesta el(la) Licenciado(a) ****** que las instrucciones de su Mandante son las de ofrecerle al trabajador solicitante la cantidad de $pago_total , en concepto de indemnización, vacación proporcional y aguinaldo proporcional correspondiente al período del ******* al *******. Cantidad que de ser aceptada se le pagará por medio de cantidad_pagos cuotas ****** y sucesivas, ";
 			 $data['montopago_fechaspagosci'] = $this->input->post('primer_pago');
 			 $data['indemnizacion_fechaspagosci'] = $monto_total = $monto_total - $this->input->post('primer_pago');
-			 $pagos = number_format($this->input->post('primer_pago'),2);
+			 $pagos = number_format($this->input->post('primer_pago'),2,'.','');
 			 if (substr($pagos,-3)==".00") {
 				 $pago = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($pagos,0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
 			 }else {
@@ -144,7 +144,7 @@ class Pagos extends CI_Controller {
 		 $this->pagos_model->insertar_pago($data);
 
 		 while (!empty($this->input->post('fecha_pago'.$i))) {
-			 $pagos = number_format($this->input->post('primer_pago'.$i),2);
+			 $pagos = number_format($this->input->post('primer_pago'.$i),2,'.','');
 			 if (substr($pagos,-3)==".00") {
 				 $pago = mb_strtoupper(CifrasEnLetras::convertirCifrasEnLetras(substr($pagos,0,-3)).' DOLARES DE LOS ESTADOS UNIDOS DE AMERICA');
 			 }else {

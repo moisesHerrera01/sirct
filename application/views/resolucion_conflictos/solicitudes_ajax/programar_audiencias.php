@@ -388,7 +388,6 @@ $(function(){
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
               tabla_audiencias(formData.get('id_expedienteci1'));
-              // $('#formajax6').trigger("reset");
             }
         });
 
