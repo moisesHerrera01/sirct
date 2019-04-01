@@ -1073,7 +1073,6 @@ function cambiar_nuevo() {
     $("#cnt_form_main").show(0);
 
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
-    combo_establecimiento('');
     tabla_representantes();
 }
 
@@ -2349,8 +2348,12 @@ $(function(){
               // alert($("#id_personaci").val())
               // alert($("#id_partida").val())
               // $("#band1").val( $("#band").val() );
+              if ($("#band1").val()=='save') {
+                 combo_establecimiento('');
+              }else if ($("#band1").val()=='edit') {
+                 combo_establecimiento($("#establecimiento").val());
+              }
               $("#band1").val('edit');
-              // $("#band2").val( $("#band").val() );
               $("#band2").val($("#bandx").val());
               if($("#band").val() == "delete"){
                 swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
