@@ -511,7 +511,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#cnt_form_main").show(0);
 
         $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Solicitud");
-        combo_establecimiento('');
+        $("#establecimiento").val('');
         tabla_representantes();
     }
 
@@ -1788,6 +1788,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     open_form(2);
                     $("#id_personaci").val(res);
                     $("#id_persona").val(res);
+                    if ($("#band1").val()=='save') {
+                       combo_establecimiento('');
+                    }else if ($("#band1").val()=='edit') {
+                       combo_establecimiento($("#establecimiento").val());
+                    }
                     $("#band1").val('edit');
                     $("#band2").val($("#bandx").val());
                 }

@@ -5,7 +5,7 @@ class Diferencias_laborales extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array('expediente_cc_model','sindicatos_model','expedientes_model'));
+		$this->load->model(array('expediente_cc_model','sindicatos_model','expedientes_model','delegados_model'));
 	}
 
 	public function gestionar_expediente() {

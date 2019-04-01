@@ -188,7 +188,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     function combo_establecimiento(seleccion){
         $.ajax({
-          async: true,
           url: "<?php echo site_url(); ?>/resolucion_conflictos/solicitudes/combo_establecimiento",
           type: "post",
           dataType: "json",
@@ -290,9 +289,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     }
 
-    function combo_delegado(seleccion) {
+    function combo_delegado(seleccion, seleccion2) {
 
         $.ajax({
+                async: true,
                 url: "<?php echo site_url(); ?>/resolucion_conflictos/expediente/combo_delegado",
                 type: "post",
                 dataType: "html",
@@ -303,6 +303,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             .done(function (res) {
                 $('#div_combo_delegado').html(res);
                 $(".select2").select2();
+                setTimeout(function () {
+                  $("#establecimiento").select2('close');
+                  combo_establecimiento(seleccion2)
+                }, 500);
             });
 
     }
@@ -419,6 +423,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         /*Fin Expediente*/
 
         /*Inicio establecimiento*/
+        combo_delegado('');
         combo_actividad_economica();
         combo_municipio();
         combo_motivos();
@@ -442,8 +447,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
         /*Inicio Solicitado */
         $("#id_expediente").val('');
-        combo_delegado('');
-        combo_establecimiento('');
+        $("#establecimiento").val('');
         tabla_representantes();
         /*Fin Solicitado */
 
@@ -597,8 +601,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                     /*Inicio Solicitado */
                     $("#id_expediente").val(id_expediente);
-                    combo_delegado(result.id_personal);
-                    combo_establecimiento(result.id_empresaci);
+                    combo_delegado(result.id_personal, result.id_empresaci);
+                    //combo_establecimiento(result.id_empresaci);
                     tabla_representantes();
                     /*Fin Solicitado */
 
