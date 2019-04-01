@@ -198,8 +198,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                         <div class="row">
                           <div class="form-group col-lg-8" style="height: 83px;">
-                              <h5>Dirección:</h5>
-                              <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa"></textarea>
+                              <h5>Dirección: <span class="text-danger">*</span></h5>
+                              <textarea type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección completa" required></textarea>
                               <div class="help-block"></div>
                           </div>
 
