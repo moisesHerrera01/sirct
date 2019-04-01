@@ -180,7 +180,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         })
         .done(function(res){
             $('#div_combo_ocupacion').html(res);
-            //$("#id_catalogociuo").select2();
             combo_establecimiento(seleccion2);
         });
     }
@@ -295,6 +294,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
     function tabla_representantes(){
+
         var id_empresa = $("#establecimiento").val();
         var id_representanteci = $("#id_representanteci").val();
 
@@ -373,19 +373,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         combo_ocupacion('');
         combo_ecivil_solicitado();
         combo_nacionalidades();
+        $("#establecimiento").val('');
+        tabla_representantes();
     }
 
     function cambiar_nuevo4(){
-        /*Inicio Solicitante*/
-        //$("#motivo_expedienteci").val('');
         $("#descripmotivo_expedienteci").val('');
         $("#id_personal").val('').trigger('change.select2');
-        /*Fin Solicitante*/
-
-        /*Inicio Solicitado*/
-
-        //
-        /*Fin Solicitado*/
         open_form(3);
         $("#band3").val("edit");
         $("#band4").val('save');
@@ -959,7 +953,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         }
                     }, 'escapeMarkup': function (markup) { return markup; }
                 });
-                //tabla_representantes()
             });
         });
     }
@@ -2053,7 +2046,6 @@ $(function(){
                     combo_defensores(res[1]);
                 }else if($("#band6").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                    // tabla_representantes();
                 }
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });

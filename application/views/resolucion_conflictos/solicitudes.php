@@ -2345,9 +2345,6 @@ $(function(){
               $("#id_personaci").val(res.id_personaci);
               $("#id_persona").val(res.id_personaci);
               $("#id_partida").val(res.id_partida);
-              // alert($("#id_personaci").val())
-              // alert($("#id_partida").val())
-              // $("#band1").val( $("#band").val() );
               if ($("#band1").val()=='save') {
                  combo_establecimiento('');
               }else if ($("#band1").val()=='edit') {
